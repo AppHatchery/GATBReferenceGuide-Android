@@ -1,0 +1,59 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.GATBReferenceGuide" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/reddish</item>
+        <item name="colorPrimaryVariant">@color/orange</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/reddish</item>
+        <item name="colorSecondaryVariant">@color/reddish</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <!--        <item name="android:fontFamily">@font/gotham_rounded_book</item>-->
+    </style>
+
+
+    <style name="Progress" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+         <item name="colorAccent">@color/reddish</item>
+     </style>
+
+
+    <style name="MaterialSearchViewStyle">
+        <!-- Background for the search bar -->
+<!--        <item name="searchBackground">@color/theme_primary</item>-->
+
+        <!-- Change voice icon -->
+        <item name="searchVoiceIcon">@drawable/ic_book</item>
+
+        <!-- Change clear text icon -->
+<!--        <item name="searchCloseIcon">@drawable/ic_action_navigation_close_inverted</item>-->
+
+        <!-- Change up icon -->
+<!--        <item name="searchBackIcon">@drawable/ic_action_navigation_arrow_back_inverted</item>-->
+
+        <!-- Change icon for the suggestions -->
+        <item name="searchSuggestionIcon">@drawable/ic_suggestion</item>
+
+        <!-- Change background for the suggestions list view -->
+        <item name="searchSuggestionBackground">@color/reddish</item>
+
+        <!-- Change text color for edit text. This will also be the color of the cursor -->
+<!--        <item name="android:textColor">@color/theme_primary_text_inverted</item>-->
+
+        <!-- Change hint text color for edit text -->
+<!--        <item name="android:textColorHint">@color/theme_secondary_text_inverted</item>-->
+
+        <!-- Hint for edit text -->
+<!--        <item name="android:hint">@string/search_hint</item>-->
+    </style>
+
+
+</resources>

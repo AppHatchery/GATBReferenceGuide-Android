@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "775187534127",
+    "firebase_url": "https://ga-tb-reference-dev-default-rtdb.firebaseio.com",
+    "project_id": "ga-tb-reference-dev",
+    "storage_bucket": "ga-tb-reference-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:775187534127:android:e95d786c9d1a8e6f3bd1da",
+        "android_client_info": {
+          "package_name": "org.apphatchery.gatbreferenceguide"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "775187534127-1jshdh3f4cn5gtrk1cs7ofj1gqjc5s80.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCg6tBMjch1bzo-1hKFU2hzOQzznflyb9M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "775187534127-1jshdh3f4cn5gtrk1cs7ofj1gqjc5s80.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:775187534127:android:44bf083b65f885d43bd1da",
+        "android_client_info": {
+          "package_name": "org.apphatchery.tBReferenceGuide"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "775187534127-1jshdh3f4cn5gtrk1cs7ofj1gqjc5s80.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCg6tBMjch1bzo-1hKFU2hzOQzznflyb9M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "775187534127-1jshdh3f4cn5gtrk1cs7ofj1gqjc5s80.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

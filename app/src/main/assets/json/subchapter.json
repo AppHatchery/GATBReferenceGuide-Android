@@ -1,0 +1,232 @@
+[
+  {
+    "chapterId": "1",
+    "subChapterTitle": "Epidemiology",
+    "url": "1_epidemiology"
+  },
+  {
+    "chapterId": "2",
+    "subChapterTitle": "Introduction",
+    "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)"
+  },
+  {
+    "chapterId": "2",
+    "subChapterTitle": "Tuberculin Skin Test (TST)",
+    "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)__a__tuberculin_skin_test"
+  },
+  {
+    "chapterId": "2",
+    "subChapterTitle": "Criteria for a Positive Tuberculin Test, by Risk Group",
+    "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)__b__criteria_for_a_positive_tuberculin_test_by_risk_group"
+  },
+  {
+    "chapterId": "2",
+    "subChapterTitle": "Two-Step Testing and the Booster Reaction",
+    "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)__c__two_step_testing_and_the_booster_reaction"
+  },
+  {
+    "chapterId": "2",
+    "subChapterTitle": "Energy Testing",
+    "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)__d__anergy_testing"
+  },
+  {
+    "chapterId": "2",
+    "subChapterTitle": "Interferon-? Release Assays (IGRAs)",
+    "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)__e__interferon-γ_release_assays_(igras)"
+  },
+  {
+    "chapterId": "2",
+    "subChapterTitle": "Targeted Testing and Diagnostic Tests for LTBI",
+    "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)__f__targeted_testing_and_diagnostic_tests_for_ltbi"
+  },
+  {
+    "chapterId": "2",
+    "subChapterTitle": "Medical Evaluation After Testing for LTBI",
+    "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)__g__medical_evaluation_after_testing_for_ltbi"
+  },
+  {
+    "chapterId": "2",
+    "subChapterTitle": "Reporting of Pediatric Positive Tests for L",
+    "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)__h__reporting_of_pediatric_positive_tests_for_ltbi"
+  },
+  {
+    "chapterId": "3",
+    "subChapterTitle": "Introduction",
+    "url": "3_treatment_of_latent_tb_infection_(ltbi)"
+  },
+  {
+    "chapterId": "3",
+    "subChapterTitle": "Treatment Regimens",
+    "url": "3_treatment_of_latent_tb_infection_(ltbi)__a__treatment_regimens"
+  },
+  {
+    "chapterId": "3",
+    "subChapterTitle": "Monitoring of Patients on Treatment for LTBI",
+    "url": "3_treatment_of_latent_tb_infection_(ltbi)__b__monitoring_of_patients_on_treatment_for_ltbi"
+  },
+  {
+    "chapterId": "3",
+    "subChapterTitle": "Contacts of MDR-TB Cases",
+    "url": "3_treatment_of_latent_tb_infection_(ltbi)__c__contacts_of_mdr_tb_cases"
+  },
+  {
+    "chapterId": "4",
+    "subChapterTitle": "Introduction",
+    "url": "4_laboratory_diagnosis_of_active_tuberculosis"
+  },
+  {
+    "chapterId": "4",
+    "subChapterTitle": "Considerations",
+    "url": "4_laboratory_diagnosis_of_active_tuberculosis__a__considerations"
+  },
+  {
+    "chapterId": "4",
+    "subChapterTitle": "Selected Diagnostic Test Characteristics",
+    "url": "4_laboratory_diagnosis_of_active_tuberculosis__b__selected_diagnostic_test_characteristics"
+  },
+  {
+    "chapterId": "4",
+    "subChapterTitle": "Laboratory Diagnosis of Pulmonary Tuberculosis",
+    "url": "4_laboratory_diagnosis_of_active_tuberculosis__c__laboratory_diagnosis_of_pulmonary_tuberculosis"
+  },
+  {
+    "chapterId": "4",
+    "subChapterTitle": "Laboratory Diagnosis of Extrapulmonary Tuberculosis",
+    "url": "4_laboratory_diagnosis_of_active_tuberculosis__d__laboratory_diagnosis_of_extrapulmary_tuberculosis"
+  },
+  {
+    "chapterId": "4",
+    "subChapterTitle": "Rapid Molecular Drug Susceptibility Tests (DST)",
+    "url": "4_laboratory_diagnosis_of_active_tuberculosis__e__rapid_molecular_drug_susceptibility_tests_(dst)"
+  },
+  {
+    "chapterId": "5",
+    "subChapterTitle": "Introduction",
+    "url": "0"
+  },
+  {
+    "chapterId": "5",
+    "subChapterTitle": "Considerations",
+    "url": "0"
+  },
+  {
+    "chapterId": "5",
+    "subChapterTitle": "Standard Therapy for Current (Active) Disease",
+    "url": "0"
+  },
+  {
+    "chapterId": "5",
+    "subChapterTitle": "Special Clinical Situations",
+    "url": "0"
+  },
+  {
+    "chapterId": "5",
+    "subChapterTitle": "Drug Resistance",
+    "url": "0"
+  },
+  {
+    "chapterId": "5",
+    "subChapterTitle": "Monitoring Patients on Therapy for Response and Adverse Events",
+    "url": "0"
+  },
+  {
+    "chapterId": "5",
+    "subChapterTitle": "TB and HIV",
+    "url": "0"
+  },
+  {
+    "chapterId": "5",
+    "subChapterTitle": "Antiretroviral Therapy (ART) and Treatment of HIV Seropositive Patients with Active Tuberculosis",
+    "url": "0"
+  },
+  {
+    "chapterId": "5",
+    "subChapterTitle": "Immune Reconstitution Inflammatory Syndrome (IRIS) Associated with Initiation of Antiretroviral Therapy During the Course of TB Therapy",
+    "url": "0"
+  },
+  {
+    "chapterId": "5",
+    "subChapterTitle": "Treatment of Extrapulmonary TB (Table 19)",
+    "url": "0"
+  },
+  {
+    "chapterId": "5",
+    "subChapterTitle": "Adjunctive Use of Corticosteroid Therapy (Table 19)",
+    "url": "0"
+  },
+  {
+    "chapterId": "6",
+    "subChapterTitle": "Introduction",
+    "url": "0"
+  },
+  {
+    "chapterId": "6",
+    "subChapterTitle": "Treatment for LTBI and Risk Factors",
+    "url": "0"
+  },
+  {
+    "chapterId": "6",
+    "subChapterTitle": "Treatment of Active TB in Pregnancy",
+    "url": "0"
+  },
+  {
+    "chapterId": "7",
+    "subChapterTitle": "Management Considerations",
+    "url": "0"
+  },
+  {
+    "chapterId": "10",
+    "subChapterTitle": "Introduction",
+    "url": "0"
+  },
+  {
+    "chapterId": "10",
+    "subChapterTitle": "Administrative Controls",
+    "url": "0"
+  },
+  {
+    "chapterId": "10",
+    "subChapterTitle": "Surveillance for Health Care Workers",
+    "url": "0"
+  },
+  {
+    "chapterId": "10",
+    "subChapterTitle": "Environmental Controls",
+    "url": "0"
+  },
+  {
+    "chapterId": "10",
+    "subChapterTitle": "Personal Respiratory Protection",
+    "url": "0"
+  },
+  {
+    "chapterId": "11",
+    "subChapterTitle": "Introduction",
+    "url": "0"
+  },
+  {
+    "chapterId": "11",
+    "subChapterTitle": "TB Surveillance in Georgia",
+    "url": "0"
+  },
+  {
+    "chapterId": "11",
+    "subChapterTitle": "TB Case Definitions for Public Health Surveillance",
+    "url": "0"
+  },
+  {
+    "chapterId": "11",
+    "subChapterTitle": "Role of the Health Department",
+    "url": "0"
+  },
+  {
+    "chapterId": "11",
+    "subChapterTitle": "Hospital Discharge Planning for Patients with Suspected or Proven TB",
+    "url": "0"
+  },
+  {
+    "chapterId": "11",
+    "subChapterTitle": "The U.S.-Mexico Binational Tuberculosis Referral Program (CureTB)",
+    "url": "0"
+  }
+]

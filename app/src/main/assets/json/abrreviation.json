@@ -1,0 +1,227 @@
+[
+  {
+    "abbrId": "1",
+    "abbreviation": "afb",
+    "meaning": "Acid-Fast Bacilli"
+  },
+  {
+    "abbrId": "2",
+    "abbreviation": "ag",
+    "meaning": "Aminogylcoside"
+  },
+  {
+    "abbrId": "3",
+    "abbreviation": "aids",
+    "meaning": "Acquired Immunodeficiency Syndrome"
+  },
+  {
+    "abbrId": "4",
+    "abbreviation": "alt",
+    "meaning": "Alanine Aminotransferase"
+  },
+  {
+    "abbrId": "5",
+    "abbreviation": "art",
+    "meaning": "Antiretroviral Therapy"
+  },
+  {
+    "abbrId": "6",
+    "abbreviation": "ast",
+    "meaning": "Aspartate Aminotransferase"
+  },
+  {
+    "abbrId": "7",
+    "abbreviation": "ats",
+    "meaning": "American Thoracic Society"
+  },
+  {
+    "abbrId": "8",
+    "abbreviation": "bcg",
+    "meaning": "Bacillus Calmette-Guerin"
+  },
+  {
+    "abbrId": "9",
+    "abbreviation": "bid",
+    "meaning": "Bis in die (Twice Daily)"
+  },
+  {
+    "abbrId": "10",
+    "abbreviation": "cbc",
+    "meaning": "Complete Blood Count"
+  },
+  {
+    "abbrId": "11",
+    "abbreviation": "cdc",
+    "meaning": "Centers for Disease Control and Prevention"
+  },
+  {
+    "abbrId": "12",
+    "abbreviation": "cns",
+    "meaning": "Central Nervous System"
+  },
+  {
+    "abbrId": "13",
+    "abbreviation": "cxr",
+    "meaning": "Chest X-Ray"
+  },
+  {
+    "abbrId": "14",
+    "abbreviation": "dst",
+    "meaning": "Drug Susceptibility Tests"
+  },
+  {
+    "abbrId": "15",
+    "abbreviation": "dth",
+    "meaning": "Delayed-type Hypersensitivity"
+  },
+  {
+    "abbrId": "16",
+    "abbreviation": "dopt",
+    "meaning": "Directly Observed Preventive Therapy"
+  },
+  {
+    "abbrId": "17",
+    "abbreviation": "dot",
+    "meaning": "Directly Observed Therapy"
+  },
+  {
+    "abbrId": "18",
+    "abbreviation": "emb",
+    "meaning": "Ethambutol"
+  },
+  {
+    "abbrId": "19",
+    "abbreviation": "fna",
+    "meaning": "Fine Needle Aspiration"
+  },
+  {
+    "abbrId": "20",
+    "abbreviation": "fqn",
+    "meaning": "Fluoroquinolone"
+  },
+  {
+    "abbrId": "21",
+    "abbreviation": "hcv",
+    "meaning": "Hepatitis C Virus"
+  },
+  {
+    "abbrId": "22",
+    "abbreviation": "hiv",
+    "meaning": "Human Immunodeficiency Virus"
+  },
+  {
+    "abbrId": "23",
+    "abbreviation": "idsa",
+    "meaning": "Infectious Diseases Society of America"
+  },
+  {
+    "abbrId": "24",
+    "abbreviation": "igra",
+    "meaning": "Interferon-\u03b3 Release Assay"
+  },
+  {
+    "abbrId": "25",
+    "abbreviation": "inh",
+    "meaning": "Isoniazid"
+  },
+  {
+    "abbrId": "26",
+    "abbreviation": "iris",
+    "meaning": "Immune reconstitution inflammatory syndrome"
+  },
+  {
+    "abbrId": "27",
+    "abbreviation": "iv",
+    "meaning": "Intravenous"
+  },
+  {
+    "abbrId": "28",
+    "abbreviation": "lft",
+    "meaning": "Liver Function Test"
+  },
+  {
+    "abbrId": "29",
+    "abbreviation": "ltbi",
+    "meaning": "Latent Tuberculosis Infection"
+  },
+  {
+    "abbrId": "30",
+    "abbreviation": "mdr",
+    "meaning": "Multidrug Resistant"
+  },
+  {
+    "abbrId": "31",
+    "abbreviation": "naat",
+    "meaning": "Nucleic Acid Amplification Test"
+  },
+  {
+    "abbrId": "32",
+    "abbreviation": "nrti",
+    "meaning": "Nucleoside Reverse Transcriptase Inhibitor"
+  },
+  {
+    "abbrId": "33",
+    "abbreviation": "nnrti",
+    "meaning": "Non-nucleoside Reverse Transcriptase Inhibitor"
+  },
+  {
+    "abbrId": "34",
+    "abbreviation": "pi",
+    "meaning": "Protease Inhibitor"
+  },
+  {
+    "abbrId": "35",
+    "abbreviation": "po",
+    "meaning": "Per os (Oral)"
+  },
+  {
+    "abbrId": "36",
+    "abbreviation": "ppd",
+    "meaning": "Purified Protein Derivative"
+  },
+  {
+    "abbrId": "37",
+    "abbreviation": "pza",
+    "meaning": "Pyrazinamide"
+  },
+  {
+    "abbrId": "38",
+    "abbreviation": "rif",
+    "meaning": "Rifampin"
+  },
+  {
+    "abbrId": "39",
+    "abbreviation": "rpt",
+    "meaning": "Rifapentine"
+  },
+  {
+    "abbrId": "40",
+    "abbreviation": "tb",
+    "meaning": "Tuberculosis"
+  },
+  {
+    "abbrId": "41",
+    "abbreviation": "tnf",
+    "meaning": "Tumor Necrosis Factor"
+  },
+  {
+    "abbrId": "42",
+    "abbreviation": "tst",
+    "meaning": "Tuberculin Skin Test"
+  },
+  {
+    "abbrId": "43",
+    "abbreviation": "tu",
+    "meaning": "Tuberculin Unit"
+  },
+  {
+    "abbrId": "44",
+    "abbreviation": "xdr",
+    "meaning": "Extensively Drug-resistant"
+  },
+  {
+    "abbrId": "45",
+    "abbreviation": "",
+    "meaning": ""
+  }
+]

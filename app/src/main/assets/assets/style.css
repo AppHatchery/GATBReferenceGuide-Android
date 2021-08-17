@@ -1,0 +1,46 @@
+table, td, th {
+    border: 1px solid #adadad;
+}
+
+.border-left-hidden {
+    border-left: hidden;
+}
+
+.border-right-hidden {
+    border-right: hidden;
+}
+
+.border-left-right-hidden {
+    border-right: hidden;
+    border-left: hidden;
+}
+
+.border-bottom-left-right-hidden {
+    border-right: hidden;
+    border-bottom: hidden;
+    border-left: hidden;
+}
+
+.reddish {
+    color: #8c352d;
+}
+
+.orange {
+    color: #ba6233;
+}
+
+a {
+    font-style: italic;
+    text-decoration: none !important;
+    color: #ba6233 !important;
+}
+
+.uk-table th {
+    padding: 16px 12px;
+    text-align: left;
+    vertical-align: bottom;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #ba6233;
+    text-transform: capitalize;
+}

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="org.apphatchery.gatbreferenceguide.ui.fragments.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_mainFragment_to_chapterFragment"
+            app:destination="@id/chapterFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_subChapterFragment"
+            app:destination="@id/subChapterFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_bodyFragment_Direct"
+            app:destination="@id/bodyFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chapterFragment"
+        android:name="org.apphatchery.gatbreferenceguide.ui.fragments.ChapterFragment"
+        android:label="ChapterFragment"
+        tools:layout="@layout/fragment_chapter_and_sub_chapter">
+        <action
+            android:id="@+id/action_chapterFragment_to_subChapterFragment"
+            app:destination="@id/subChapterFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_chapterFragment_to_bodyFragment"
+            app:destination="@id/bodyFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/subChapterFragment"
+        android:name="org.apphatchery.gatbreferenceguide.ui.fragments.SubChapterFragment"
+        android:label="SubChapterFragment"
+        tools:layout="@layout/fragment_chapter_and_sub_chapter">
+        <argument
+            android:name="chapterEntity"
+            app:argType="org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity" />
+        <action
+            android:id="@+id/action_subChapterFragment_to_bodyFragment"
+            app:destination="@id/bodyFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/bodyFragment"
+        android:name="org.apphatchery.gatbreferenceguide.ui.fragments.BodyFragment"
+        android:label="fragment_body"
+        tools:layout="@layout/fragment_body">
+        <argument
+            android:name="bodyUrl"
+            app:argType="org.apphatchery.gatbreferenceguide.db.entities.BodyUrl" />
+        <action
+            android:id="@+id/action_bodyFragment_self"
+            app:destination="@id/bodyFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="org.apphatchery.gatbreferenceguide.ui.fragments.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/action_splashFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@+id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+</navigation>
