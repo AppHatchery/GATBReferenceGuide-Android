@@ -17,7 +17,7 @@ fun <ResultType, RequestType> networkBoundResource(
             saveToDb(fetch())
             query().map { Resource.Success(it) }
         } else {
-            query().map { Resource.Success(it) }
+            query().map { Resource.Skipped(it) }
         }
     } catch (e: Exception) {
         query().map { Resource.Error(e, it) }

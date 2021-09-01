@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.apphatchery.gatbreferenceguide.databinding.FragmentChapterAndSubChapterItemBinding
+import org.apphatchery.gatbreferenceguide.databinding.FragmentWithRecyclerviewItemBinding
 import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 import org.apphatchery.gatbreferenceguide.utils.ALPHABET
 
@@ -28,18 +28,18 @@ class FASubChapterAdapter :
     var onItemClickListAdapter: ((SubChapterEntity) -> Unit)? = null
 
 
-    inner class ViewHolder(private val fragmentChapterAndSubChapterItemBinding: FragmentChapterAndSubChapterItemBinding) :
-        RecyclerView.ViewHolder(fragmentChapterAndSubChapterItemBinding.root) {
+    inner class ViewHolder(private val bind: FragmentWithRecyclerviewItemBinding) :
+        RecyclerView.ViewHolder(bind.root) {
 
         fun onBinding(chapterEntity: SubChapterEntity, index: Int) =
-            fragmentChapterAndSubChapterItemBinding.apply {
+            bind.apply {
                 (ALPHABET[index].uppercase() + ". " + chapterEntity.subChapterTitle).also {
                     textView.text = it
                 }
             }
 
         init {
-            fragmentChapterAndSubChapterItemBinding.root.setOnClickListener {
+            bind.root.setOnClickListener {
                 if (RecyclerView.NO_POSITION != adapterPosition) {
                     val currentList = currentList[adapterPosition]
                     onItemClickListAdapter?.let {
@@ -53,7 +53,7 @@ class FASubChapterAdapter :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        FragmentChapterAndSubChapterItemBinding.inflate(
+        FragmentWithRecyclerviewItemBinding.inflate(
             LayoutInflater.from(parent.context)
         )
     )

@@ -1,6 +1,12 @@
 package org.apphatchery.gatbreferenceguide.utils
 
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.paulrybitskyi.persistentsearchview.PersistentSearchView
@@ -43,4 +49,37 @@ abstract class OnTouchHelper(val onTouchHelperCallback: (Int) -> Int) :
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         onTouchHelperCallback(viewHolder.adapterPosition)
     }
+}
+
+fun EditText.setOnTextWatcher(
+    onTextChangedListener: (String) -> Unit,
+    afterTextChangedListener: () -> Unit
+) {
+    this.addTextChangedListener(object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+        override fun onTextChanged(
+            charSequence: CharSequence?,
+            start: Int,
+            before: Int,
+            count: Int
+        ) {
+            charSequence?.let {
+                if (it.isNotBlank()) onTextChangedListener(it.toString().lowercase().trim())
+            }
+
+        }
+
+        override fun afterTextChanged(s: Editable?) = afterTextChangedListener()
+    })
+}
+
+
+fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+    observe(lifecycleOwner, object : Observer<T> {
+        override fun onChanged(t: T?) {
+            observer.onChanged(t)
+            removeObserver(this)
+        }
+    })
 }

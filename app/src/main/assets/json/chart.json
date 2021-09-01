@@ -1,32 +1,97 @@
 [
   {
     "id": "table_1_interpretation_criteria_for_the_quantiferon_tb_gold_plus_test",
-    "subChapterId": 2,
-    "subChapterText": "Interpretation Criteria for the QuantiFERON-TB Gold Plus Test (QFT-Plus)"
+    "subChapterTitle": "Interferon-y Release Assays (IGRAs)",
+    "chartTitle": "Interpretation Criteria for the QuantiFERON-TB Gold Plus Test (QFT-Plus)"
   },
   {
     "id": "table_2_interpretation_criteria_for_the_t_spot_tb_test",
-    "subChapterId": 2,
-    "subChapterText": "Interpretation Criteria for the T-SPOT.TB Test (TSpot)"
+    "subChapterTitle": "Interferon-y Release Assays (IGRAs)",
+    "chartTitle": "Interpretation Criteria for the T-SPOT.TB Test (TSpot)"
   },
   {
     "id": "table_3_high_prevalence_and_high_risk_groups",
-    "subChapterId": 2,
-    "subChapterText": "High Prevalence and High-Risk Groups"
+    "subChapterTitle": "Targeted Testing and Diagnostic Tests for LTBI",
+    "chartTitle": "High Prevalence and High-Risk Groups"
   },
   {
     "id": "table_4_recommendations_for_regimens_to_treat_latent_tuberculosis_infection",
-    "subChapterId": 2,
-    "subChapterText": "Recommendations for regimens to treat latent tuberculosis infection"
+    "subChapterTitle": "Treatment Regimens",
+    "chartTitle": "Recommendations for regimens to treat latent tuberculosis infection"
   },
   {
     "id": "table_5_dosages_for_recommended_lbti_treatment_regimens",
-    "subChapterId": 2,
-    "subChapterText": "Dosages for recommended LBTI treatment regimens "
+    "subChapterTitle": "Treatment Regimens",
+    "chartTitle": "Dosages for recommended LBTI treatment regimens "
   },
   {
     "id": "table_6_ltbi_treatment_drug_adverse_reactions",
-    "subChapterId": 2,
-    "subChapterText": "LTBI Treatment Drug Adverse Reactions"
+    "subChapterTitle": "Treatment Regimens",
+    "chartTitle": "LTBI Treatment Drug Adverse Reactions"
+  },
+  {
+    "id": "5_treatment_of_current_(active)_disease_therapy__table7",
+    "subChapterTitle": "Treatment Regimens",
+    "chartTitle": "Recommended Regimens for Treatment of Adults and Children with Drug-Susceptible TB Pulmonary TB"
+  },
+  {
+    "id": "5_treatment_of_current_(active)_disease_therapy__table8",
+    "subChapterTitle": "Treatment Regimens",
+    "chartTitle": "First-Line TB Drugs: Dosing for Adults (ages 16 and over) Directly ObservedTherapy (DOT) is mandatory"
+  },
+  {
+    "id": "5_treatment_of_current_(active)_disease_therapy__table9",
+    "subChapterTitle": "Treatment Regimens",
+    "chartTitle": "Need clinical confirmation of table"
+  },
+  {
+    "id": "5_treatment_of_current_(active)_disease_therapy__table10",
+    "subChapterTitle": "Treatment Regimens",
+    "chartTitle": "Need clinical confirmation of table\nDose for either daily or twice weekly therapy"
+  },
+  {
+    "id": "5_treatment_of_current_(active)_disease_therapy__table11",
+    "subChapterTitle": "Treatment Regimens",
+    "chartTitle": "LTBI Treatment Drug Adverse Reactions"
+  },
+  {
+    "id": "5_treatment_of_current_(active)_disease_therapy__table12",
+    "subChapterTitle": "Treatment Regimens",
+    "chartTitle": "LTBI Treatment Drug Adverse Reactions"
+  },
+  {
+    "id": "5_treatment_of_current_(active)_disease_therapy__table13",
+    "subChapterTitle": "Treatment Regimens",
+    "chartTitle": "LTBI Treatment Drug Adverse Reactions"
+  },
+  {
+    "id": "5_treatment_of_current_(active)_disease_therapy__table14",
+    "subChapterTitle": "Treatment Regimens",
+    "chartTitle": "LTBI Treatment Drug Adverse Reactions"
+  },
+  {
+    "id": "5_treatment_of_current_(active)_disease_therapy__table15",
+    "subChapterTitle": "Treatment Regimens",
+    "chartTitle": "LTBI Treatment Drug Adverse Reactions"
+  },
+  {
+    "id": "5_treatment_of_current_(active)_disease_therapy__table16",
+    "subChapterTitle": "Treatment Regimens",
+    "chartTitle": "HHS Panel Recommendations on treatment of Tuberculosis Disease with HIV co-infection: Timing of Antiretroviral Therapy (ART) Initiation relative to TB treatment"
+  },
+  {
+    "id": "5_treatment_of_current_(active)_disease_therapy__table17",
+    "subChapterTitle": "Treatment Regimens",
+    "chartTitle": "LTBI Treatment Drug Adverse Reactions"
+  },
+  {
+    "id": "5_treatment_of_current_(active)_disease_therapy__table18",
+    "subChapterTitle": "Treatment Regimens",
+    "chartTitle": "LTBI Treatment Drug Adverse Reactions"
+  },
+  {
+    "id": "5_treatment_of_current_(active)_disease_therapy__table19",
+    "subChapterTitle": "Treatment Regimens",
+    "chartTitle": "LTBI Treatment Drug Adverse Reactions"
   }
 ]

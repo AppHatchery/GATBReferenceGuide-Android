@@ -25,8 +25,6 @@ class FASplashRepo @Inject constructor(
             db.withTransaction {
                 chapterDao.insert(it)
             }
-        }, shouldFetch = {
-            data.size != it.size
         }
     )
 
@@ -38,20 +36,16 @@ class FASplashRepo @Inject constructor(
             db.withTransaction {
                 subChapterDao.insert(it)
             }
-        }, shouldFetch = {
-            data.size != it.size
         }
     )
 
     fun dumpChartInfo(data: List<ChartEntity>) = networkBoundResource(
-        query = { chartDao.getChartEntityEntity() },
+        query = { chartDao.getChartAndSubChapter() },
         fetch = { data },
         saveToDb = {
             db.withTransaction {
                 chartDao.insert(it)
             }
-        }, shouldFetch = {
-            data.size != it.size
         }
     )
 

@@ -1,6 +1,7 @@
 package org.apphatchery.gatbreferenceguide.utils
 
 const val EXTENSION = ".html"
+const val HASH = "#"
 const val PAGES_DIR = "pages/"
 const val ASSETS_DIR = "assets/"
 const val JSON_DIR = "json/"

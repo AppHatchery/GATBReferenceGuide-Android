@@ -2,7 +2,6 @@ package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.webkit.*
 import android.widget.TextView
@@ -14,8 +13,10 @@ import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentBodyBinding
+import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
 import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
 import org.apphatchery.gatbreferenceguide.db.entities.BookmarkEntity
+import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
 import org.apphatchery.gatbreferenceguide.db.entities.NoteEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FABodyNoteAdapter
@@ -23,6 +24,7 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FABodyNoteColorAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.SwipeToDeleteCallback
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FABodyViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
+import java.util.*
 
 
 @AndroidEntryPoint
@@ -35,6 +37,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private var bookmarkEntity = BookmarkEntity()
     private lateinit var faBodyNoteColorAdapter: FABodyNoteColorAdapter
     private lateinit var faBodyNoteAdapter: FABodyNoteAdapter
+    private var chartAndSubChapter: ChartAndSubChapter? = null
 
 
     /*if isSubChapterNull is true, chapter has no subchapter, use chapterId */
@@ -48,7 +51,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             (if (isSubChapterNull()) bodyUrl.chapterEntity.chapterTitle else bodyUrl.subChapterEntity!!.subChapterTitle),
             (if (isSubChapterNull()) {
                 val text = bodyUrl.chapterEntity.chapterTitle
-                text.lowercase()
+                text.lowercase(Locale.ENGLISH)
                 text.replace(" ", "_")
                 bodyUrl.chapterEntity.chapterId.toString() + "_" + text
             } else bodyUrl.subChapterEntity!!.url),
@@ -76,9 +79,14 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         isBookmark(subChapter.subChapterId)
     }
 
+    private fun ifChartAndSubChapterIsNull() = chartAndSubChapter != null
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         fragmentBodyBinding = FragmentBodyBinding.bind(view)
         bodyUrl = bodyFragmentArgs.bodyUrl
+        chartAndSubChapter = bodyFragmentArgs.chartAndSubChapter
+
         faBodyNoteColorAdapter = FABodyNoteColorAdapter(requireContext()).also {
             it.submitList(NOTE_COLOR)
         }
@@ -118,9 +126,48 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         setupWebView()
         fragmentBodyBinding.apply {
-            toolbar.setupToolbar(requireActivity(), bodyUrl.chapterEntity.chapterTitle)
-            textviewSubChapter.text = getTitleOrUrl()[0]
-            bodyWebView.loadUrl(requireContext().cacheDir.toString() + '/' + PAGES_DIR + getTitleOrUrl()[1] + EXTENSION)
+
+            toolbarBackButton.setOnClickListener { requireActivity().onBackPressed() }
+
+            if (ifChartAndSubChapterIsNull()) {
+                viewModel.getChapterById(chartAndSubChapter!!.subChapterEntity.chapterId)
+                    .observeOnce(viewLifecycleOwner) { chapterEntity ->
+                        toolbarTitle.text = chapterEntity.chapterTitle
+
+
+                        tableViewLinearLayoutCompat.visibility = View.VISIBLE
+                        tableName.apply {
+                            text = chartAndSubChapter!!.chartEntity.chartTitle
+                            setOnClickListener {
+                                val directions =
+                                    BodyFragmentDirections.actionBodyFragmentSelf(
+                                        bodyUrl.copy(
+                                            chapterEntity = ChapterEntity(chapterTitle = chapterEntity.chapterTitle)
+                                        ), null
+                                    )
+                                findNavController().navigate(directions)
+                            }
+                        }
+                    }
+
+                textviewSubChapter.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                    R.drawable.ic_baseline_bar_chart,
+                    0,
+                    0,
+                    0
+                )
+
+
+                textviewSubChapter.text = chartAndSubChapter!!.chartEntity.chartTitle
+                bodyWebView.loadUrl(requireContext().cacheDir.toString() + '/' + PAGES_DIR + chartAndSubChapter!!.chartEntity.id + EXTENSION)
+
+            } else {
+
+                toolbarTitle.text = bodyUrl.chapterEntity.chapterTitle
+                textviewSubChapter.text = getTitleOrUrl()[0]
+                bodyWebView.loadUrl(requireContext().cacheDir.toString() + '/' + PAGES_DIR + getTitleOrUrl()[1] + EXTENSION)
+            }
+
             fragmentBodyBinding.bookmarkImageButton.setOnClickListener {
                 onBookmarkListener()
             }
@@ -241,54 +288,34 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 error: WebResourceError?
             ) {
 
-                fragmentBodyBinding.bodyWebView.visibility = View.GONE
-                fragmentBodyBinding.textviewSubChapter.visibility = View.GONE
-                fragmentBodyBinding.view.visibility = View.GONE
-                fragmentBodyBinding.linearLayoutCompat.visibility = View.GONE
-
-
-                fragmentBodyBinding.page404.visibility = View.VISIBLE
-                fragmentBodyBinding.backgroundImage.visibility = View.VISIBLE
-                fragmentBodyBinding.coverView.visibility = View.VISIBLE
-
-
+//                requireContext().toast(getTitleOrUrl()[0] + " file not found")
+//                requireActivity().onBackPressed()
                 super.onReceivedError(view, request, error)
-
             }
-
 
 
             override fun shouldOverrideUrlLoading(
                 view: WebView?,
                 request: WebResourceRequest?
             ): Boolean {
-                 val link = request?.url.toString()
-                Log.e(TAG, "shouldOverrideUrlLoading: "+ request!!.method )
-                if (link.contains("#")) gotoTableId(link) else {
-                    val stripLink = link.substring(link.lastIndexOf("/") + 1, link.length)
-                    stripLink.replace(EXTENSION, "")
-                    gotoNavController(stripLink.replace(EXTENSION, ""))
-                }
+                val link = request?.url.toString()
+                val stripLink = link.substring(link.lastIndexOf("/") + 1, link.length)
+                stripLink.replace(EXTENSION, "")
+                gotoNavController(stripLink.replace(EXTENSION, ""))
                 return super.shouldOverrideUrlLoading(view, request)
             }
         }
     }
 
 
-    private fun gotoTableId(url: String) {
-        Log.e(TAG, "gotoTableId: $url")
-    }
-
-
     private fun gotoNavController(url: String) {
-        Log.e(TAG, "gotoNavController: "+ url )
         if (url.isEmpty().not()) {
             viewModel.getSubChapter.observe(viewLifecycleOwner) { data ->
                 for (subChapter in data) {
                     if (subChapter.url == url) {
                         val subChapterFragmentDirections =
                             BodyFragmentDirections.actionBodyFragmentSelf(
-                                BodyUrl(bodyFragmentArgs.bodyUrl.chapterEntity, subChapter)
+                                BodyUrl(bodyFragmentArgs.bodyUrl.chapterEntity, subChapter), null
                             )
                         findNavController().navigate(subChapterFragmentDirections)
                     }

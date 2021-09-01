@@ -16,4 +16,7 @@ interface ChapterDao {
     @Query("SELECT  * FROM  ChapterEntity WHERE chapterTitle LIKE '%' || :keyword || '%'  ORDER BY chapterId")
     fun getChapterEntity(keyword: String = ""): Flow<List<ChapterEntity>>
 
+
+    @Query("SELECT  * FROM  ChapterEntity WHERE chapterId =:id")
+    fun getChapterById(id: Int): Flow<ChapterEntity>
 }

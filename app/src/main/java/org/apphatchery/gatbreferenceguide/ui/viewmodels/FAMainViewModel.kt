@@ -13,7 +13,7 @@ class FAMainViewModel @Inject constructor(
 ) : ViewModel() {
 
     val getChapter = db.chapterDao().getChapterEntity().asLiveData()
-    val getChart = db.chartDao().getChartEntityEntity().asLiveData()
+    val getChart = db.chartDao().getChartAndSubChapter().asLiveData()
 
     fun getCountByChapterId(chapterId: Int) = db.subChapterDao().getCountByChapterId(chapterId).asLiveData()
 }

@@ -2,30 +2,54 @@ package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentSplashBinding
 import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
 import org.apphatchery.gatbreferenceguide.db.entities.ChartEntity
+import org.apphatchery.gatbreferenceguide.db.entities.HtmlInfoEntity
 import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
+import org.apphatchery.gatbreferenceguide.prefs.UserPrefs
 import org.apphatchery.gatbreferenceguide.resource.Resource
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FASplashViewModel
-import org.apphatchery.gatbreferenceguide.utils.createHtmlAndAssetsDirectoryIfNotExists
-import org.apphatchery.gatbreferenceguide.utils.prepHtmlPlusAssets
-import org.apphatchery.gatbreferenceguide.utils.readJsonFromAssetToString
+import org.apphatchery.gatbreferenceguide.utils.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SplashFragment : BaseFragment(R.layout.fragment_splash) {
 
     private val viewModel: FASplashViewModel by viewModels()
     private lateinit var fragmentSplashBinding: FragmentSplashBinding
+    private val htmlInfoEntity = ArrayList<HtmlInfoEntity>()
+
+    @Inject
+    lateinit var userPrefs: UserPrefs
+
+
+    private fun Context.dumpHTMLInfo() = assets.apply {
+        list(PAGES_DIR)?.forEach {
+            val file = PAGES_DIR + it
+            var fileName = file.replace(EXTENSION, "")
+            fileName = fileName.replace(PAGES_DIR, "")
+            htmlInfoEntity.add(
+                HtmlInfoEntity(
+                    fileName,
+                    html2text(file).replace("GA TB Reference Guide", "")
+                )
+            )
+        }
+        viewModel.dumpHTMLInfo(htmlInfoEntity)
+    }
 
 
     private fun Context.dumpChartData() {
@@ -34,11 +58,17 @@ class SplashFragment : BaseFragment(R.layout.fragment_splash) {
             readJsonFromAssetToString("chart.json")!!,
             ofType
         ) as List<ChartEntity>).also {
+
             viewModel.dumpChartData(it)
                 .observe(viewLifecycleOwner) { resource ->
                     when (resource) {
                         is Resource.Success -> {
-                            dumpChapterInfo()
+
+                            if (viewModel.dumpChartDataObserve) {
+                                dumpChapterInfo()
+                                viewModel.dumpChartDataObserve = false
+                            }
+
                         }
                         else -> {
                         }
@@ -76,7 +106,13 @@ class SplashFragment : BaseFragment(R.layout.fragment_splash) {
                 .observe(viewLifecycleOwner) { resource ->
                     when (resource) {
                         is Resource.Success -> {
-                            findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
+
+
+                            if (viewModel.dumpSubChapterDataObserver) {
+                                dumpHTMLInfo()
+                                viewModel.dumpSubChapterDataObserver = false
+                            }
+
                         }
                         else -> {
                         }
@@ -85,7 +121,8 @@ class SplashFragment : BaseFragment(R.layout.fragment_splash) {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+    private fun firstLaunch(view: View) {
         fragmentSplashBinding = FragmentSplashBinding.bind(view)
 
         requireActivity().apply {
@@ -94,6 +131,30 @@ class SplashFragment : BaseFragment(R.layout.fragment_splash) {
             prepHtmlPlusAssets()
             dumpChartData()
         }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.taskFlowEvent.collect {
+
+                when (it) {
+                    FASplashViewModel.Callback.InsertHTMLInfoComplete -> {
+                        viewModel.bindHtmlWithChapter()
+                    }
+                    FASplashViewModel.Callback.InsertGlobalSearchInfoComplete -> {
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            userPrefs.setFirstLaunch(false)
+                        }
+                        findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        userPrefs.getFirstLaunch.asLiveData().observe(viewLifecycleOwner) {
+            if (it) firstLaunch(view) else
+                findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
+        }
+
 
     }
 

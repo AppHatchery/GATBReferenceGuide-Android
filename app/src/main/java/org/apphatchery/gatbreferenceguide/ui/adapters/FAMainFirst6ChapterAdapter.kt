@@ -1,6 +1,5 @@
 package org.apphatchery.gatbreferenceguide.ui.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -31,18 +30,21 @@ class FAMainFirst6ChapterAdapter :
     inner class ViewHolder(private val first6ChapterItemBinding: FragmentMainFirst6ChapterItemBinding) :
         RecyclerView.ViewHolder(first6ChapterItemBinding.root) {
 
-        fun onBinding(chapterEntity: ChapterEntity) = first6ChapterItemBinding.apply {
-            button.text = chapterEntity.chapterTitle
-        }
+        fun onBinding(chapterEntity: ChapterEntity) =
+            first6ChapterItemBinding.apply {
+                if (adapterPosition != 4)
+                    button.text = chapterEntity.chapterTitle
+            }
 
 
         init {
             first6ChapterItemBinding.button.setOnClickListener {
                 if (RecyclerView.NO_POSITION != adapterPosition) {
                     val currentList = currentList[adapterPosition]
-                    onItemClickListAdapter?.let {
-                         it(currentList)
-                    }
+                    if (adapterPosition != 4)
+                        onItemClickListAdapter?.let {
+                            it(currentList)
+                        }
                 }
             }
 

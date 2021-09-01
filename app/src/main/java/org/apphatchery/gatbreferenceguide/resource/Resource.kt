@@ -7,4 +7,6 @@ sealed class Resource<T>(
     class Error<T>(error: Exception, data: T? = null) : Resource<T>(data, error)
     class Success<T>(data: T) : Resource<T>(data)
     class Loading<T>(data: T? = null) : Resource<T>(data)
+
+    class Skipped<T>(data: T? = null) : Resource<T>(data)
 }

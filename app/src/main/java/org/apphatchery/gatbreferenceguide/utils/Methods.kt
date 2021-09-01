@@ -8,12 +8,12 @@ import android.graphics.drawable.ColorDrawable
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
-import android.widget.Toast.makeText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.reflect.TypeToken
 import org.apphatchery.gatbreferenceguide.R
+import org.jsoup.Jsoup
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -21,7 +21,7 @@ import java.util.*
 
 fun Toolbar.setupToolbar(
     context: Context,
-    titleText: String,
+    titleText: String? = null,
     subtitleText: String? = null,
     onBackPressed: Boolean = true
 ) =
@@ -45,6 +45,13 @@ fun Toolbar.setupToolbar(
             }
     }
 
+
+fun Toolbar.enableToolbar(context: Context) =
+    (context as AppCompatActivity).also {
+        it.setSupportActionBar(this@enableToolbar)
+    }.supportActionBar?.let {
+        it.title = null
+    }
 
 fun Dialog.dialog(): Dialog {
     this.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)).also { return this }
@@ -133,7 +140,7 @@ fun Context.prepHtmlPlusAssets(): AssetManager = assets.apply {
 
 }
 
-fun Int.searchNotFound(recyclerview: View, searchView: View) {
+fun Int.noItemFound(recyclerview: View, searchView: View) {
     if (this == 0) {
         searchView.visibility = View.VISIBLE
         recyclerview.visibility = View.GONE
@@ -141,4 +148,9 @@ fun Int.searchNotFound(recyclerview: View, searchView: View) {
         searchView.visibility = View.GONE
         recyclerview.visibility = View.VISIBLE
     }
+}
+
+
+fun Context.html2text(file: String): String {
+    return Jsoup.parse(assets.open(file), null, "").text()
 }

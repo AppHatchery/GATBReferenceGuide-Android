@@ -16,6 +16,8 @@ class FABodyViewModel @Inject constructor(
 ) : ViewModel() {
 
 
+    fun getChapterById(id: Int) = db.chapterDao().getChapterById(id).asLiveData()
+
     fun getBookmarkById(id: Int, fetchByChapter: Boolean = false) =
         db.bookmarkDao().getBookmarkById(id, fetchByChapter).asLiveData()
 

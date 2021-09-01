@@ -3,7 +3,9 @@ package org.apphatchery.gatbreferenceguide.db.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
+import org.apphatchery.gatbreferenceguide.db.data.ChapterAndSubChapter
 import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 
 @Dao
@@ -20,6 +22,17 @@ interface SubChapterDao {
 
     @Query("SELECT COUNT(*) FROM SubChapterEntity WHERE chapterId=:chapterId")
     fun getCountByChapterId(chapterId: Int): Flow<Int>
+
+    @Transaction
+     @Query("SELECT * FROM ChapterEntity")
+    fun getSubChapterBindChapter(): Flow<List<ChapterAndSubChapter>>
+
+
+    @Transaction
+     @Query("SELECT * FROM ChapterEntity  ORDER BY chapterId")
+    suspend fun getSubChapterBindChapterSuspended(): List<ChapterAndSubChapter>
+
+
 
     fun getSubChapterEntity(
         keyword: String = "",

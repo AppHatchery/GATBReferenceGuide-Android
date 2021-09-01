@@ -31,13 +31,20 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_chartFragment"
+            app:destination="@id/chartFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
         android:id="@+id/chapterFragment"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.ChapterFragment"
         android:label="ChapterFragment"
-        tools:layout="@layout/fragment_chapter_and_sub_chapter">
+        tools:layout="@layout/fragment_with_recyclerview">
         <action
             android:id="@+id/action_chapterFragment_to_subChapterFragment"
             app:destination="@id/subChapterFragment"
@@ -58,7 +65,7 @@
         android:id="@+id/subChapterFragment"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.SubChapterFragment"
         android:label="SubChapterFragment"
-        tools:layout="@layout/fragment_chapter_and_sub_chapter">
+        tools:layout="@layout/fragment_with_recyclerview">
         <argument
             android:name="chapterEntity"
             app:argType="org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity" />
@@ -86,6 +93,10 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <argument
+            android:name="chartAndSubChapter"
+            app:argType="org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
@@ -102,6 +113,39 @@
             app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@+id/nav_graph"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/globalSearchFragment"
+        android:name="org.apphatchery.gatbreferenceguide.ui.fragments.GlobalSearchFragment"
+        android:label="fragment_global_search"
+        tools:layout="@layout/fragment_global_search">
+        <action
+            android:id="@+id/action_globalSearchFragment_to_bodyFragment"
+            app:destination="@id/bodyFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_globalSearchFragment"
+        app:destination="@id/globalSearchFragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right" />
+    <fragment
+        android:id="@+id/chartFragment"
+        android:name="org.apphatchery.gatbreferenceguide.ui.fragments.ChartFragment"
+        android:label="ChartFragment"
+        tools:layout="@layout/fragment_with_recyclerview">
+        <action
+            android:id="@+id/action_chartFragment_to_bodyFragment"
+            app:destination="@id/bodyFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
 </navigation>

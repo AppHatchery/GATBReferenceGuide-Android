@@ -1,12 +1,9 @@
 package org.apphatchery.gatbreferenceguide.db.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
 import org.apphatchery.gatbreferenceguide.db.entities.ChartEntity
-import org.apphatchery.gatbreferenceguide.db.entities.NoteEntity
 
 @Dao
 interface ChartDao {
@@ -17,8 +14,13 @@ interface ChartDao {
     @Delete
     suspend fun delete(data: ChartEntity)
 
+    @Transaction
+    @Query("SELECT  * FROM  ChartEntity  JOIN SubChapterEntity USING(subChapterTitle)")
+    fun getChartAndSubChapter(): Flow<List<ChartAndSubChapter>>
 
-    @Query("SELECT  * FROM  ChartEntity")
-    fun getChartEntityEntity(): Flow<List<ChartEntity>>
+
+    @Transaction
+    @Query("SELECT  * FROM  ChartEntity JOIN SubChapterEntity USING(subChapterTitle)")
+    suspend fun getChartAndSubChapterSuspend(): List<ChartAndSubChapter>
 
 }
