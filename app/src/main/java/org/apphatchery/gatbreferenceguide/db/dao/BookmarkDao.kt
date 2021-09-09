@@ -23,10 +23,4 @@ interface BookmarkDao {
     @Query("SELECT  * FROM  BookmarkEntity WHERE subChapterId=:id")
     fun getBookmarkBySubChapterId(id: Int): Flow<BookmarkEntity>
 
-    @Query("SELECT  * FROM  BookmarkEntity WHERE chapterId=:id")
-    fun getBookmarkByChapterId(id: Int): Flow<BookmarkEntity>
-
-    fun getBookmarkById(id: Int, fetchByChapter: Boolean = false): Flow<BookmarkEntity> =
-        if (fetchByChapter) getBookmarkByChapterId(id) else getBookmarkBySubChapterId(id)
-
 }

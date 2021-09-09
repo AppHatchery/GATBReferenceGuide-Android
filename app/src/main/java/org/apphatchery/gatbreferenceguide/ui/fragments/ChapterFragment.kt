@@ -12,7 +12,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentWithRecyclerviewBinding
-import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAChapterViewModel
@@ -53,12 +52,8 @@ class ChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
             }
         }
         faChapterAdapter.itemClickCallback {
-            viewModel.getCountByChapterId(it.chapterId).observe(viewLifecycleOwner) { count ->
-                findNavController().navigate(
-                    if (count == 0) ChapterFragmentDirections.actionChapterFragmentToBodyFragment(
-                        BodyUrl(it), null
-                    ) else ChapterFragmentDirections.actionChapterFragmentToSubChapterFragment(it)
-                )
+            ChapterFragmentDirections.actionChapterFragmentToSubChapterFragment(it).apply {
+                findNavController().navigate(this)
             }
         }
     }

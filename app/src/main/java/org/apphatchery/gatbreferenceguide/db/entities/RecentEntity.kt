@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class RecentEntity(
     @PrimaryKey(autoGenerate = false)
-    val chapterId: Int,
-    val timeStamp: Long
+    val subChapterId: Int,
+    val subChapterTitle: String,
+    val timeStamp: Long = System.currentTimeMillis()
 )

@@ -14,6 +14,7 @@ class FAMainViewModel @Inject constructor(
 
     val getChapter = db.chapterDao().getChapterEntity().asLiveData()
     val getChart = db.chartDao().getChartAndSubChapter().asLiveData()
+    fun getChapterInfo(id: Int) = db.chapterDao().getChapterById(id).asLiveData()
 
     fun getCountByChapterId(chapterId: Int) = db.subChapterDao().getCountByChapterId(chapterId).asLiveData()
 }

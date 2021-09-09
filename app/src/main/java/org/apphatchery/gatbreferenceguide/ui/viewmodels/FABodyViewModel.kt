@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import org.apphatchery.gatbreferenceguide.db.Database
 import org.apphatchery.gatbreferenceguide.db.entities.BookmarkEntity
 import org.apphatchery.gatbreferenceguide.db.entities.NoteEntity
+import org.apphatchery.gatbreferenceguide.db.entities.RecentEntity
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,8 +19,8 @@ class FABodyViewModel @Inject constructor(
 
     fun getChapterById(id: Int) = db.chapterDao().getChapterById(id).asLiveData()
 
-    fun getBookmarkById(id: Int, fetchByChapter: Boolean = false) =
-        db.bookmarkDao().getBookmarkById(id, fetchByChapter).asLiveData()
+    fun getBookmarkById(subChapterId: Int) =
+        db.bookmarkDao().getBookmarkBySubChapterId(subChapterId).asLiveData()
 
     val getSubChapter = db.subChapterDao().getSubChapter().asLiveData()
 
@@ -31,8 +32,7 @@ class FABodyViewModel @Inject constructor(
         db.bookmarkDao().delete(data)
     }
 
-    fun getNote(isSubChapter: Boolean, subOrChapterId: Int) =
-        db.noteDao().getNoteEntity(isSubChapter, subOrChapterId).asLiveData()
+    fun getNote(subChapterId: Int) = db.noteDao().getNoteEntity(subChapterId).asLiveData()
 
     fun insertNote(noteEntity: NoteEntity) = viewModelScope.launch {
         db.noteDao().insert(noteEntity)
@@ -41,5 +41,10 @@ class FABodyViewModel @Inject constructor(
 
     fun deleteNote(note: NoteEntity) = viewModelScope.launch {
         db.noteDao().delete(note)
+    }
+
+    fun recentOpen(data: RecentEntity) = viewModelScope.launch {
+        db.recentDao().delete(data)
+        db.recentDao().insert(data)
     }
 }

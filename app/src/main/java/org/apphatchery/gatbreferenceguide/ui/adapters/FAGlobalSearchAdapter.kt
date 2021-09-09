@@ -48,6 +48,10 @@ class FAGlobalSearchAdapter @Inject constructor(
         fun onBinding(globalSearchEntity: GlobalSearchEntity, index: Int) =
             fragmentGlobalSearchItemBinding.apply {
 
+//                textInBody.text = globalSearchEntity.textInBody
+//                searchTitle.text = globalSearchEntity.searchTitle
+//                subChapter.text = globalSearchEntity.subChapter
+
                 setSpannableString(prepSearchQuery(globalSearchEntity.textInBody)) {
                     textInBody.text = this
                 }
@@ -86,14 +90,17 @@ class FAGlobalSearchAdapter @Inject constructor(
         spannableString: String,
         spannableTextCallback: SpannableString.() -> Unit
     ) = SpannableString(spannableString).apply {
-        setSpan(
-            if (spannableString.contains(searchQuery, true))
-                StyleSpan(Typeface.BOLD) else StyleSpan(Typeface.NORMAL),
-            0,
-            searchQuery.length,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        spannableTextCallback(this)
+        try {
+            setSpan(
+                if (spannableString.contains(searchQuery, true))
+                    StyleSpan(Typeface.BOLD) else StyleSpan(Typeface.NORMAL),
+                0,
+                searchQuery.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            spannableTextCallback(this)
+        } catch (e: Exception) {
+        }
     }
 
 

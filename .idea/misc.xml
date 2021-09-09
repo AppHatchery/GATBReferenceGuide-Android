@@ -8,18 +8,24 @@
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/drawable/ic__04.xml" value="0.225" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/drawable/ic_baseline_bar_chart.xml" value="0.19814814814814816" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/drawable/ic_baseline_delete_forever.xml" value="0.225" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/drawable/ic_baseline_edit.xml" value="0.3875" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/drawable/ic_baseline_keyboard_voice.xml" value="0.225" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/drawable/ic_baseline_star.xml" value="0.225" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/drawable/ic_baseline_star_20.xml" value="0.225" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/drawable/ic_baseline_star_outline.xml" value="0.225" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/drawable/ic_baseline_table_chart.xml" value="0.225" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/drawable/ic_baseline_text_fields.xml" value="0.225" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/drawable/ic_book.xml" value="0.225" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/drawable/ic_keyboard_arrow_right.xml" value="0.225" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/drawable/ic_upload.xml" value="0.3875" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/drawable/shape_circle_border.xml" value="0.225" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/drawable/shape_cirlce.xml" value="0.225" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/drawable/shape_gradient.xml" value="0.225" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/drawable/shape_gradient_rounded.xml" value="0.225" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/drawable/shape_round.xml" value="0.225" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/drawable/shape_round_saved_head.xml" value="0.225" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/activity_main.xml" value="0.18" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/activity_main2.xml" value="0.12222222222222222" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/dialog_bookmark.xml" value="0.20885416666666667" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/dialog_note.xml" value="0.25" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/dialog_note_color_item.xml" value="0.20885416666666667" />
@@ -29,16 +35,28 @@
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_chapter_item.xml" value="0.20885416666666667" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_global_search.xml" value="0.33" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_global_search_item.xml" value="0.3037249283667622" />
-        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_main.xml" value="0.20885416666666667" />
-        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_main_first_6_chapter_item.xml" value="0.12" />
-        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_main_first_6_chart_item.xml" value="0.33" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_main.xml" value="0.33" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_main2.xml" value="0.19427083333333334" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_main_first_6_chapter_item.xml" value="0.20885416666666667" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_main_first_6_chart_item.xml" value="0.5" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_note_item.xml" value="0.25" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_note_item_adc.xml" value="0.20885416666666667" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_recent.xml" value="0.20885416666666667" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_recent_item.xml" value="0.20885416666666667" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_saved.xml" value="0.25" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_saved_head_item.xml" value="0.20885416666666667" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_saved_item.xml" value="0.20885416666666667" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_saved_old.xml" value="0.20885416666666667" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_saved_view_pager_recycler_view.xml" value="0.20885416666666667" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_scrolling.xml" value="0.20885416666666667" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_splash.xml" value="0.1388888888888889" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_with_recyclerview.xml" value="0.20885416666666667" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/layout/fragment_with_recyclerview_item.xml" value="0.20885416666666667" />
+        <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/menu/activity_bottom_navigation_menu.xml" value="0.20885416666666667" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/menu/fragment_global_search_menu.xml" value="0.20885416666666667" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/menu/fragment_main_menu.xml" value="0.20885416666666667" />
         <entry key="..\:/Users/Ki4/AndroidStudioProjects/GATBReferenceGuide/app/src/main/res/menu/search_menu.xml" value="0.20885416666666667" />
+        <entry key="..\:/Users/Ki4/DevTools/platforms/android-30/data/res/layout/simple_list_item_1.xml" value="0.20885416666666667" />
       </map>
     </option>
   </component>

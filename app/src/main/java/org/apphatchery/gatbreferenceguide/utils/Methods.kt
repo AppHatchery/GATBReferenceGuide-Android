@@ -1,5 +1,6 @@
 package org.apphatchery.gatbreferenceguide.utils
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.res.AssetManager
@@ -121,19 +122,20 @@ fun Context.readJsonFromAssetToString(file: String): String? {
 
 fun <T> jsonOfType() = object : TypeToken<List<T>>() {}.type
 
+fun String.removeSlash() = replace("/", "")
 
 fun Context.prepHtmlPlusAssets(): AssetManager = assets.apply {
-    list(ASSETS_DIR)?.forEach {
+    list(ASSETS_DIR.removeSlash())?.forEach {
         val file = ASSETS_DIR + it
         toInternalStorage(open(file), file, false)
     }
 
-    list(PAGES_DIR)?.forEach {
+    list(PAGES_DIR.removeSlash())?.forEach {
         val file = PAGES_DIR + it
         toInternalStorage(open(file), file, false)
     }
 
-    list(IMAGE_DIR)?.forEach {
+    list(IMAGE_DIR.removeSlash())?.forEach {
         val file = IMAGE_DIR + it
         toInternalStorage(open(file), file, false)
     }
@@ -154,3 +156,11 @@ fun Int.noItemFound(recyclerview: View, searchView: View) {
 fun Context.html2text(file: String): String {
     return Jsoup.parse(assets.open(file), null, "").text()
 }
+
+
+fun View.toggleVisibility(boolean: Boolean) {
+    visibility = if (boolean) View.VISIBLE else View.GONE
+}
+
+
+fun Activity.getBottomNavigationView(): View = findViewById(R.id.bottomNavigationView)

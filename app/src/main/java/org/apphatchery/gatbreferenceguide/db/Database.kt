@@ -25,4 +25,5 @@ abstract class Database : RoomDatabase() {
     abstract fun chartDao(): ChartDao
     abstract fun htmlInfoDao(): HtmlInfoDao
     abstract fun globalSearchDao(): GlobalSearchDao
+    abstract fun recentDao(): RecentDao
 }

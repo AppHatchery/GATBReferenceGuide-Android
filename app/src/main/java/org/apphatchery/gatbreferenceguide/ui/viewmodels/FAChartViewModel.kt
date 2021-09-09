@@ -12,5 +12,6 @@ class FAChartViewModel @Inject constructor(
 ) : ViewModel() {
 
     val getChart = db.chartDao().getChartAndSubChapter().asLiveData()
+    fun getChapterInfo(id: Int) = db.chapterDao().getChapterById(id).asLiveData()
 
 }

@@ -1,17 +1,3 @@
 <resources>
     <string name="app_name">GATBReferenceGuide</string>
-    <string name="placeholder_short">State guidelines have changed for Two-Step testing, now it includes also individuals in prisons as well as academic institutions</string>
-    <string name="placeholder_long">
-        In  some  persons  (especially  individuals  >  50  years  of  age)  with  LTBI,  delayed-type
-        hypersensitivity  reactions  to  tuberculin  may  wane  over  time.  When  a  TST  is  performed
-        years  after  infection  has  occurred,  these  persons  may  have  an  initial  negative  tuber-culin
-        skin  test  result.  However,  this  initial  test  may  stimulate  (boost)  their  ability  to  react  to
-        subsequent  tuberculin  testing,  causing  a  positive  reaction  to  subsequent  tuberculin  skin  tests.
-        The  boosted  reaction  represents  a  true  positive  result  but  not  a  true conversion due to recent infection.
-        Two-step tuberculin skin testing  is  used  to  distinguish  between  boosted  reactions  and  reactions due to new infection.
-        Two-step  testing  (at  baseline)  is  recommended  for  employees  or  residents in institutional settings (such as health
-        care workers or correctional  facility  employees)  who  may  undergo  periodic  tu-berculin screening
-        (and have not had a TST in the past year), and for  whom  it  is  important  to  distinguish  between  new  infection  and a boosted reaction from past
-    </string>
-
 </resources>

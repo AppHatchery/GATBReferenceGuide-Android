@@ -2,8 +2,14 @@ package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.app.Dialog
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
-import android.webkit.*
+import android.webkit.WebResourceRequest
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -14,17 +20,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentBodyBinding
 import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
-import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
-import org.apphatchery.gatbreferenceguide.db.entities.BookmarkEntity
-import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
-import org.apphatchery.gatbreferenceguide.db.entities.NoteEntity
+import org.apphatchery.gatbreferenceguide.db.entities.*
+import org.apphatchery.gatbreferenceguide.enums.BookmarkType
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FABodyNoteAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FABodyNoteColorAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.SwipeToDeleteCallback
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FABodyViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
-import java.util.*
 
 
 @AndroidEntryPoint
@@ -38,28 +41,13 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private lateinit var faBodyNoteColorAdapter: FABodyNoteColorAdapter
     private lateinit var faBodyNoteAdapter: FABodyNoteAdapter
     private var chartAndSubChapter: ChartAndSubChapter? = null
+    private var bookmarkType: BookmarkType = BookmarkType.CHAPTER
+    private lateinit var subChapterEntity: SubChapterEntity
+    private lateinit var chapterEntity: ChapterEntity
 
 
-    /*if isSubChapterNull is true, chapter has no subchapter, use chapterId */
-    private fun isSubChapterNull() = bodyFragmentArgs.bodyUrl.subChapterEntity == null
-
-    private fun getBodyId() =
-        if (isSubChapterNull()) bodyUrl.chapterEntity.chapterId else bodyUrl.subChapterEntity!!.subChapterId
-
-    private fun getTitleOrUrl(): Array<String> {
-        return arrayOf(
-            (if (isSubChapterNull()) bodyUrl.chapterEntity.chapterTitle else bodyUrl.subChapterEntity!!.subChapterTitle),
-            (if (isSubChapterNull()) {
-                val text = bodyUrl.chapterEntity.chapterTitle
-                text.lowercase(Locale.ENGLISH)
-                text.replace(" ", "_")
-                bodyUrl.chapterEntity.chapterId.toString() + "_" + text
-            } else bodyUrl.subChapterEntity!!.url),
-        )
-    }
-
-    private fun isBookmark(id: Int, fetchByChapter: Boolean = false) {
-        viewModel.getBookmarkById(id, fetchByChapter).observe(viewLifecycleOwner) {
+    private fun isBookmark(subChapterId: Int) {
+        viewModel.getBookmarkById(subChapterId).observe(viewLifecycleOwner) {
             if (it != null) {
                 bookmarkEntity = it
                 fragmentBodyBinding.bookmarkImageButton.setImageResource(R.drawable.ic_baseline_star)
@@ -70,22 +58,25 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     }
 
 
-    private fun ifSubChapterIsNull(bodyUrl: BodyUrl) {
-        isBookmark(bodyUrl.chapterEntity.chapterId, true)
-    }
-
-    private fun ifSubChapterIsNotNull(bodyUrl: BodyUrl) {
-        val subChapter = bodyUrl.subChapterEntity!!
-        isBookmark(subChapter.subChapterId)
-    }
-
-    private fun ifChartAndSubChapterIsNull() = chartAndSubChapter != null
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         fragmentBodyBinding = FragmentBodyBinding.bind(view)
         bodyUrl = bodyFragmentArgs.bodyUrl
+        setHasOptionsMenu(true)
+
+
         chartAndSubChapter = bodyFragmentArgs.chartAndSubChapter
+        subChapterEntity = bodyUrl.subChapterEntity
+        chapterEntity = bodyUrl.chapterEntity
+
+
+        viewModel.recentOpen(
+            RecentEntity(
+                subChapterEntity.subChapterId,
+                subChapterEntity.subChapterTitle
+            )
+        )
+
+        isBookmark(subChapterEntity.subChapterId)
 
         faBodyNoteColorAdapter = FABodyNoteColorAdapter(requireContext()).also {
             it.submitList(NOTE_COLOR)
@@ -107,71 +98,31 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
 
 
-
         ItemTouchHelper(swipeHandler).also {
             it.attachToRecyclerView(fragmentBodyBinding.recyclerviewNote)
         }
 
 
         faBodyNoteAdapter = FABodyNoteAdapter().also {
-
-            viewModel.getNote(isSubChapterNull(), getBodyId()).observe(viewLifecycleOwner) { data ->
+            viewModel.getNote(subChapterEntity.subChapterId).observe(viewLifecycleOwner) { data ->
                 it.submitList(data)
             }
         }
 
-        if (isSubChapterNull()) ifSubChapterIsNull(bodyUrl) else {
-            ifSubChapterIsNotNull(bodyUrl)
-        }
 
         setupWebView()
         fragmentBodyBinding.apply {
 
+            toolbar.enableToolbar(requireActivity())
             toolbarBackButton.setOnClickListener { requireActivity().onBackPressed() }
+            bookmarkImageButton.setOnClickListener { onBookmarkListener() }
+//            addNote.setOnClickListener { onNoteListener() }
 
-            if (ifChartAndSubChapterIsNull()) {
-                viewModel.getChapterById(chartAndSubChapter!!.subChapterEntity.chapterId)
-                    .observeOnce(viewLifecycleOwner) { chapterEntity ->
-                        toolbarTitle.text = chapterEntity.chapterTitle
-
-
-                        tableViewLinearLayoutCompat.visibility = View.VISIBLE
-                        tableName.apply {
-                            text = chartAndSubChapter!!.chartEntity.chartTitle
-                            setOnClickListener {
-                                val directions =
-                                    BodyFragmentDirections.actionBodyFragmentSelf(
-                                        bodyUrl.copy(
-                                            chapterEntity = ChapterEntity(chapterTitle = chapterEntity.chapterTitle)
-                                        ), null
-                                    )
-                                findNavController().navigate(directions)
-                            }
-                        }
-                    }
-
-                textviewSubChapter.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                    R.drawable.ic_baseline_bar_chart,
-                    0,
-                    0,
-                    0
-                )
-
-
-                textviewSubChapter.text = chartAndSubChapter!!.chartEntity.chartTitle
-                bodyWebView.loadUrl(requireContext().cacheDir.toString() + '/' + PAGES_DIR + chartAndSubChapter!!.chartEntity.id + EXTENSION)
-
-            } else {
-
-                toolbarTitle.text = bodyUrl.chapterEntity.chapterTitle
-                textviewSubChapter.text = getTitleOrUrl()[0]
-                bodyWebView.loadUrl(requireContext().cacheDir.toString() + '/' + PAGES_DIR + getTitleOrUrl()[1] + EXTENSION)
+            if (chartAndSubChapter != null) isChartView() else {
+                toolbarTitle.text = chapterEntity.chapterTitle
+                textviewSubChapter.text = subChapterEntity.subChapterTitle
+                bodyWebView.loadUrl(requireContext().cacheDir.toString() + '/' + PAGES_DIR + subChapterEntity.url + EXTENSION)
             }
-
-            fragmentBodyBinding.bookmarkImageButton.setOnClickListener {
-                onBookmarkListener()
-            }
-
 
             recyclerviewNote.apply {
                 addItemDecoration(
@@ -183,15 +134,44 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 layoutManager = GridLayoutManager(requireContext(), 1)
                 adapter = faBodyNoteAdapter
             }
-
-
-            addNote.setOnClickListener { onNoteListener() }
-
         }
-
 
     }
 
+    private fun isChartView() = fragmentBodyBinding.apply {
+        viewModel.getChapterById(chartAndSubChapter!!.subChapterEntity.chapterId)
+            .observeOnce(viewLifecycleOwner) { chapterEntity ->
+                toolbarTitle.text = chapterEntity.chapterTitle
+
+
+                tableViewLinearLayoutCompat.visibility = View.VISIBLE
+                tableName.apply {
+                    text = chartAndSubChapter!!.chartEntity.chartTitle
+                    setOnClickListener {
+                        val directions =
+                            BodyFragmentDirections.actionBodyFragmentSelf(
+                                bodyUrl.copy(
+                                    chapterEntity = ChapterEntity(chapterTitle = chapterEntity.chapterTitle)
+                                ), null
+                            )
+                        findNavController().navigate(directions)
+                    }
+                }
+            }
+
+        textviewSubChapter.setCompoundDrawablesRelativeWithIntrinsicBounds(
+            R.drawable.ic_baseline_bar_chart,
+            0,
+            0,
+            0
+        )
+
+
+        bookmarkType = BookmarkType.CHART
+        textviewSubChapter.text = chartAndSubChapter!!.chartEntity.chartTitle
+        bodyWebView.loadUrl(requireContext().cacheDir.toString() + '/' + PAGES_DIR + chartAndSubChapter!!.chartEntity.id + EXTENSION)
+
+    }
 
     private fun onNoteListener() {
         Dialog(requireContext()).dialog().apply {
@@ -227,7 +207,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 val bookTitleTextInputEditText =
                     findViewById<TextInputEditText>(R.id.bookmarkTitleTextInputEditText)
                 bookTitleTextInputEditText.also {
-                    it.setText(getTitleOrUrl()[0])
+                    it.setText(subChapterEntity.subChapterTitle)
                     it.requestFocus()
                 }
 
@@ -239,30 +219,31 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 }
 
 
-                findViewById<TextView>(R.id.bookmarkTitle).text = getTitleOrUrl()[0]
+                findViewById<TextView>(R.id.bookmarkTitle).text = subChapterEntity.subChapterTitle
                 safeDialogShow()
             }
 
     }
 
     private fun onSaveBookmark(text: String) {
-        requireContext().toast("Bookmark saved")
+        if (bookmarkType != BookmarkType.CHART)
+            bookmarkType = BookmarkType.SUBCHAPTER
+
         viewModel.insertBookmark(
             BookmarkEntity(
-                bookmarkTitle = if (text.isEmpty()) getTitleOrUrl()[0] else text,
-                isSubChapter = isSubChapterNull(),
-                chapterId = bodyUrl.chapterEntity.chapterId,
-                subChapterId = if (isSubChapterNull()) 0 else bodyUrl.subChapterEntity!!.subChapterId
+                bookmarkTitle = if (text.isEmpty()) subChapterEntity.subChapterTitle else text,
+                bookmarkType = bookmarkType.toString(),
+                subChapterId = subChapterEntity.subChapterId
             )
         )
+        requireContext().toast("Bookmark saved")
     }
 
     private fun onSaveNote(noteBody: String) = fragmentBodyBinding.root.apply {
         if (noteBody.isBlank()) snackBar("Please enter notes to save.") else {
             viewModel.insertNote(
                 NoteEntity(
-                    subOrChapterId = getBodyId(),
-                    isSubChapter = isSubChapterNull(),
+                    subChapterId = subChapterEntity.subChapterId,
                     noteColor = faBodyNoteColorAdapter.selectedColor,
                     noteText = noteBody
                 )
@@ -276,24 +257,13 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             allowContentAccess = true
             allowFileAccess = true
             setSupportZoom(true)
+            builtInZoomControls = true
+            displayZoomControls = false
             cacheMode = WebSettings.LOAD_NO_CACHE
         }
 
 
         webViewClient = object : WebViewClient() {
-
-            override fun onReceivedError(
-                view: WebView?,
-                request: WebResourceRequest?,
-                error: WebResourceError?
-            ) {
-
-//                requireContext().toast(getTitleOrUrl()[0] + " file not found")
-//                requireActivity().onBackPressed()
-                super.onReceivedError(view, request, error)
-            }
-
-
             override fun shouldOverrideUrlLoading(
                 view: WebView?,
                 request: WebResourceRequest?
@@ -322,6 +292,22 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 }
             }
         }
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.search_menu, menu)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.searchView -> {
+                val directions = ChapterFragmentDirections.actionGlobalGlobalSearchFragment()
+                findNavController().navigate(directions)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 

@@ -16,7 +16,7 @@ class FAChapterViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    val searchQuery = MutableStateFlow("")
+    private val searchQuery = MutableStateFlow("")
 
     private val taskFlow = searchQuery.flatMapLatest {
         db.chapterDao().getChapterEntity(it)
@@ -26,5 +26,8 @@ class FAChapterViewModel @Inject constructor(
 
     fun getCountByChapterId(chapterId: Int) =
         db.subChapterDao().getCountByChapterId(chapterId).asLiveData()
+
+    fun getSubChapterById(id: Int) = db.subChapterDao().getSubChapterById(id).asLiveData()
+
 
 }

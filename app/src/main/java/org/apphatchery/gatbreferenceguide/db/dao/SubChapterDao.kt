@@ -24,14 +24,20 @@ interface SubChapterDao {
     fun getCountByChapterId(chapterId: Int): Flow<Int>
 
     @Transaction
-     @Query("SELECT * FROM ChapterEntity")
+    @Query("SELECT * FROM ChapterEntity")
     fun getSubChapterBindChapter(): Flow<List<ChapterAndSubChapter>>
 
 
     @Transaction
-     @Query("SELECT * FROM ChapterEntity  ORDER BY chapterId")
+    @Query("SELECT * FROM ChapterEntity WHERE chapterId=:id")
+    fun getSubChapterBindChapterByChapterId(id: Int): Flow<ChapterAndSubChapter>
+
+    @Transaction
+    @Query("SELECT * FROM ChapterEntity  ORDER BY chapterId")
     suspend fun getSubChapterBindChapterSuspended(): List<ChapterAndSubChapter>
 
+    @Query("SELECT  * FROM  SubChapterEntity WHERE subChapterId=:id")
+    fun getSubChapterById(id: Int): Flow<SubChapterEntity>
 
 
     fun getSubChapterEntity(

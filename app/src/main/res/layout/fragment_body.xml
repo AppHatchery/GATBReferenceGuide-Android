@@ -38,7 +38,8 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="@android:color/white"
-                android:textSize="16sp"
+                style="@style/TextAppearance.AppCompat.Medium"
+                 android:textStyle="bold"
                 tools:text="@string/appbar_scrolling_view_behavior" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -51,7 +52,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:drawableStart="@drawable/ic_title_icon"
         android:drawablePadding="10dp"
@@ -69,14 +70,14 @@
         android:id="@+id/linearLayoutCompat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:layout_marginEnd="16dp"
-        android:visibility="gone"
+        android:gravity="center"
+        android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview_sub_chapter">
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:layout_width="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:padding="16dp"
@@ -86,6 +87,7 @@
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/bookmarkImageButton"
             android:layout_width="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:padding="16dp"
@@ -94,10 +96,11 @@
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/add_note"
             android:layout_width="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:padding="16dp"
-            android:src="@drawable/ic_baseline_edit" />
+            android:src="@drawable/ic_edit" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -107,7 +110,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:background="#C6C6C8"
         app:layout_constraintEnd_toEndOf="parent"

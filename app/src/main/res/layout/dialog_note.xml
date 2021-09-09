@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/shape"
-                android:backgroundTint="@color/reddish"
+                android:backgroundTint="@android:color/darker_gray"
                 android:text="Cancel"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"

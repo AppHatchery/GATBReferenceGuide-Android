@@ -8,7 +8,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:775187534127:android:e95d786c9d1a8e6f3bd1da",
+        "mobilesdk_app_id": "1:775187534127:android:70bec2956a0523f03bd1da",
         "android_client_info": {
           "package_name": "org.apphatchery.gatbreferenceguide"
         }
@@ -30,35 +30,13 @@
             {
               "client_id": "775187534127-1jshdh3f4cn5gtrk1cs7ofj1gqjc5s80.apps.googleusercontent.com",
               "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:775187534127:android:44bf083b65f885d43bd1da",
-        "android_client_info": {
-          "package_name": "org.apphatchery.tBReferenceGuide"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "775187534127-1jshdh3f4cn5gtrk1cs7ofj1gqjc5s80.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCg6tBMjch1bzo-1hKFU2hzOQzznflyb9M"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
+            },
             {
-              "client_id": "775187534127-1jshdh3f4cn5gtrk1cs7ofj1gqjc5s80.apps.googleusercontent.com",
-              "client_type": 3
+              "client_id": "775187534127-hhg5u5s94c9g4e28gb1nom9jk2i4q6ts.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.apphatchery.GA-TB-Reference-Guide"
+              }
             }
           ]
         }

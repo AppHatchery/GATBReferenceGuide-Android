@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.fragment.app.FragmentContainerView
+    <fragment
         android:id="@+id/nav_host_fragment_container"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
@@ -19,6 +19,5 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:menu="@menu/activity_bottom_navigation_menu" />
+         app:menu="@menu/activity_bottom_navigation_menu" />
 </androidx.appcompat.widget.LinearLayoutCompat>

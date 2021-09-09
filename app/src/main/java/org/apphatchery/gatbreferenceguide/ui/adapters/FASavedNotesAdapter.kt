@@ -1,0 +1,3 @@
+package org.apphatchery.gatbreferenceguide.ui.adapters
+
+class FASavedNotesAdapter

@@ -1,8 +1,11 @@
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.core.content.FileProvider
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
@@ -23,6 +26,9 @@ import org.apphatchery.gatbreferenceguide.resource.Resource
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FASplashViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -37,7 +43,7 @@ class SplashFragment : BaseFragment(R.layout.fragment_splash) {
 
 
     private fun Context.dumpHTMLInfo() = assets.apply {
-        list(PAGES_DIR)?.forEach {
+        list(PAGES_DIR.removeSlash())?.forEach {
             val file = PAGES_DIR + it
             var fileName = file.replace(EXTENSION, "")
             fileName = fileName.replace(PAGES_DIR, "")
@@ -151,6 +157,7 @@ class SplashFragment : BaseFragment(R.layout.fragment_splash) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         userPrefs.getFirstLaunch.asLiveData().observe(viewLifecycleOwner) {
+            requireActivity().getBottomNavigationView().toggleVisibility(false)
             if (it) firstLaunch(view) else
                 findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
         }

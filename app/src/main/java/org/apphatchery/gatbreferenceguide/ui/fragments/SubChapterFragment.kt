@@ -14,6 +14,7 @@ import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentWithRecyclerviewBinding
 import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
 import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
+import org.apphatchery.gatbreferenceguide.db.entities.RecentEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FASubChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FASubChapterViewModel
@@ -39,7 +40,6 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
         faSubChapterAdapter = FASubChapterAdapter()
         viewModel.getSubChapterEntity.observe(viewLifecycleOwner) {
             bind.apply {
-//                it.size.searchNotFound(recyclerview, searchNotFound)
                 faSubChapterAdapter.submitList(it)
             }
         }

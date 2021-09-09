@@ -17,7 +17,7 @@ interface NoteDao {
     suspend fun delete(data: NoteEntity)
 
 
-    @Query("SELECT  * FROM  NoteEntity WHERE isSubChapter=:isSubChapter AND subOrChapterId=:subOrChapterId ORDER BY noteId DESC")
-    fun getNoteEntity(isSubChapter: Boolean = false, subOrChapterId: Int): Flow<List<NoteEntity>>
+    @Query("SELECT  * FROM  NoteEntity WHERE subChapterId=:subChapterId  ORDER BY noteId DESC")
+    fun getNoteEntity(subChapterId: Int): Flow<List<NoteEntity>>
 
 }

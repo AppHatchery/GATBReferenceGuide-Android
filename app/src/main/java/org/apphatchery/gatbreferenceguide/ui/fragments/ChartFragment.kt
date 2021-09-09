@@ -1,6 +1,7 @@
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -16,6 +17,7 @@ import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAChartAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAChartViewModel
+import org.apphatchery.gatbreferenceguide.utils.TAG
 import org.apphatchery.gatbreferenceguide.utils.enableToolbar
 
 @AndroidEntryPoint
@@ -35,11 +37,15 @@ class ChartFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
             }
 
             faChartAdapter.itemClickCallback {
-                val directions = ChartFragmentDirections.actionChartFragmentToBodyFragment(
-                    BodyUrl(ChapterEntity(it.subChapterEntity.chapterId, ""), it.subChapterEntity),
-                    it
-                )
-                findNavController().navigate(directions)
+                viewModel.getChapterInfo(it.subChapterEntity.chapterId).observe(viewLifecycleOwner){ chapterEntity->
+                    ChartFragmentDirections.actionChartFragmentToBodyFragment(
+                        BodyUrl(chapterEntity, it.subChapterEntity),
+                        it
+                    ).apply {
+                        findNavController().navigate(this)
+                    }
+                }
+
             }
         }
 
