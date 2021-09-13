@@ -12,8 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentMainBinding
+import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
 import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
 import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
+import org.apphatchery.gatbreferenceguide.db.entities.ChartEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChartAdapter
@@ -29,7 +31,8 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private lateinit var fragmentMainBinding: FragmentMainBinding
     private lateinit var first6ChapterAdapter: FAMainFirst6ChapterAdapter
     private lateinit var first6ChartAdapter: FAMainFirst6ChartAdapter
-    private lateinit var chapterList: ArrayList<ChapterEntity>
+    private lateinit var predefinedChapterList: ArrayList<ChapterEntity>
+    private lateinit var predefinedChartList: ArrayList<ChartAndSubChapter>
 
     private val viewModel: FAMainViewModel by viewModels()
 
@@ -37,13 +40,19 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         fragmentMainBinding = FragmentMainBinding.bind(view)
         requireActivity().getBottomNavigationView().toggleVisibility(true)
-
-        chapterList = ArrayList()
+        predefinedChapterList = ArrayList()
+        predefinedChartList = ArrayList()
 
         first6ChapterAdapter = FAMainFirst6ChapterAdapter().also { adapter ->
             viewModel.getChapter.observe(viewLifecycleOwner) {
-                adapter.submitList(it.subList(0, 5))
-                chapterList.addAll(it)
+                with(predefinedChapterList) {
+                    add(it[3].copy(chapterTitle = "Active TB Diagnosis"))
+                    add(it[4].copy(chapterTitle = "Active TB Treatment"))
+                    add(it[1].copy(chapterTitle = "LTBI Diagnosis"))
+                    add(it[2].copy(chapterTitle = "LTBI Treatment"))
+                    add(it[0])
+                    adapter.submitList(this)
+                }
             }
 
             adapter.itemClickCallback {
@@ -54,12 +63,17 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         }
 
 
-
-
-
         first6ChartAdapter = FAMainFirst6ChartAdapter().also { adapter ->
             viewModel.getChart.observe(viewLifecycleOwner) { data ->
-                adapter.submitList(data.subList(0, 6))
+                with(predefinedChartList) {
+                    add(data[7].copy(chartEntity = data[7].chartEntity.copy(chartTitle = "First line TB drugs for adults")))
+                    add(data[11])
+                    add(data[19])
+                    add(data[4].copy(chartEntity = data[4].chartEntity.copy(chartTitle = "Dosages for LTBI regimens")))
+                    add(data[5])
+                    add(data[14])
+                    adapter.submitList(this)
+                }
             }
 
             adapter.itemClickCallback {

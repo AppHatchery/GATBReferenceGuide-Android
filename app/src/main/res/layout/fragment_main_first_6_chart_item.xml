@@ -14,7 +14,7 @@
         android:ellipsize="end"
         style="@style/TextAppearance.AppCompat.Small.Inverse"
         android:gravity="center"
-        android:maxLines="3"
+        android:maxLines="2"
         android:paddingHorizontal="10dp"
          android:text="@string/app_name"
         android:textAllCaps="false"

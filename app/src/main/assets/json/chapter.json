@@ -1,59 +1,97 @@
 [
   {
-    "chapterTitle": "Epidemiology"
+    "chapterId": 1,
+    "chapterTitle": "Epidemiology",
+    "chapterHomePosition": 0
   },
   {
-    "chapterTitle": "Diagnostic Tests for Latent TB Infection (LTBI)"
+    "chapterId": 2,
+    "chapterTitle": "Diagnostic Tests for Latent TB Infection (LTBI)",
+    "chapterHomePosition": 0
   },
   {
-    "chapterTitle": "Treatment of Latent TB Infection (LTBI)"
+    "chapterId": 3,
+    "chapterTitle": "Treatment of Latent TB Infection (LTBI)",
+    "chapterHomePosition": 0
   },
   {
-    "chapterTitle": "Laboratory Diagnosis of Active Tuberculosis"
+    "chapterId": 4,
+    "chapterTitle": "Laboratory Diagnosis of Active Tuberculosis",
+    "chapterHomePosition": 0
   },
   {
-    "chapterTitle": "Treatment of Current (Active) Disease Therapy"
+    "chapterId": 5,
+    "chapterTitle": "Treatment of Current (Active) Disease Therapy",
+    "chapterHomePosition": 0
   },
   {
-    "chapterTitle": "Pregnancy and TB"
+    "chapterId": 6,
+    "chapterTitle": "Pregnancy and TB",
+    "chapterHomePosition": 0
   },
   {
-    "chapterTitle": "Childhood Tuberculosis"
+    "chapterId": 7,
+    "chapterTitle": "Childhood Tuberculosis",
+    "chapterHomePosition": 0
   },
   {
-    "chapterTitle": "Tuberculosis and Long-Term Care Facilities"
+    "chapterId": 8,
+    "chapterTitle": "Tuberculosis and Long-Term Care Facilities",
+    "chapterHomePosition": 0
   },
   {
-    "chapterTitle": "BCG Vaccination"
+    "chapterId": 9,
+    "chapterTitle": "BCG Vaccination",
+    "chapterHomePosition": 0
   },
   {
-    "chapterTitle": "TB Infection Control: Hospital Isolation Procedures"
+    "chapterId": 10,
+    "chapterTitle": "TB Infection Control: Hospital Isolation Procedures",
+    "chapterHomePosition": 0
   },
   {
-    "chapterTitle": "Community Tuberculosis Control"
+    "chapterId": 11,
+    "chapterTitle": "Community Tuberculosis Control",
+    "chapterHomePosition": 0
   },
   {
-    "chapterTitle": "Alternative Housing Program for Homeless TB Patients in Georgia"
+    "chapterId": 12,
+    "chapterTitle": "Alternative Housing Program for Homeless TB Patients in Georgia",
+    "chapterHomePosition": 0
   },
   {
-    "chapterTitle": "Georgia Department of Public Health (DPH)  Community Guidelines for Respiratory Isolation of  Patients with Active TB in the Community"
+    "chapterId": 13,
+    "chapterTitle": "Georgia Department of Public Health (DPH)  Community Guidelines for Respiratory Isolation of  Patients with Active TB in the Community",
+    "chapterHomePosition": 0
   },
   {
-    "chapterTitle": "References"
+    "chapterId": 14,
+    "chapterTitle": "References",
+    "chapterHomePosition": 0
   },
   {
-    "chapterTitle": "Appendix: District TB Coordinators (by District)"
+    "chapterId": 15,
+    "chapterTitle": "Appendix: District TB Coordinators (by District)",
+    "chapterHomePosition": 0
   },
   {
-    "chapterTitle": "Abbreviations"
+    "chapterId": 16,
+    "chapterTitle": "Abbreviations",
+    "chapterHomePosition": 0
   },
   {
-    "chapterTitle": "Acknowledgements"
+    "chapterId": 17,
+    "chapterTitle": "Acknowledgements",
+    "chapterHomePosition": 0
   },
   {
-    "chapterTitle": "Hello and welcome clinical statement"
+    "chapterId": 18,
+    "chapterTitle": "Hello and welcome clinical statement",
+    "chapterHomePosition": 0
   },
   {
-    "chapterTitle": "For more information"
+    "chapterId": 19,
+    "chapterTitle": "For more information",
+    "chapterHomePosition": 0
   }
 ]

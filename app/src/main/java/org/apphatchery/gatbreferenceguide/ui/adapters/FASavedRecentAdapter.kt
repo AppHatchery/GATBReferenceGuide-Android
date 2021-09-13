@@ -31,9 +31,7 @@ class FASavedRecentAdapter :
 
         fun onBinding(data: RecentEntity) =
             bind.apply {
-                ((adapterPosition + 1).toString() + ". " + data.subChapterTitle).also {
-                    textView.text = it
-                }
+                textView.text = data.subChapterTitle
             }
 
         init {

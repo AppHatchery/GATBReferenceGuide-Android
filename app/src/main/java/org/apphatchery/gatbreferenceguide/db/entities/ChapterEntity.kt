@@ -8,7 +8,8 @@ import kotlinx.parcelize.Parcelize
 @Entity
 @Parcelize
 data class ChapterEntity(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey(autoGenerate = false)
     val chapterId: Int = 0,
-    val chapterTitle: String
+    val chapterTitle: String,
+    val chapterHomePosition:Int = 0,
 ) : Parcelable

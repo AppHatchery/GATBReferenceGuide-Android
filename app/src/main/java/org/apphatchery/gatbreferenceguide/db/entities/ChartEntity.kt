@@ -11,5 +11,6 @@ data class ChartEntity(
     @PrimaryKey(autoGenerate = false)
     val id: String,
     val chartTitle: String,
-    val subChapterTitle: String
+    val subChapterTitle: String,
+    val chartHomePosition: Int
 ) : Parcelable
