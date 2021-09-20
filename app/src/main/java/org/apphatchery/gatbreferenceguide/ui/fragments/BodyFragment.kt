@@ -10,7 +10,10 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -41,13 +44,13 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private lateinit var faBodyNoteColorAdapter: FABodyNoteColorAdapter
     private lateinit var faBodyNoteAdapter: FABodyNoteAdapter
     private var chartAndSubChapter: ChartAndSubChapter? = null
-    private var bookmarkType: BookmarkType = BookmarkType.CHAPTER
+    private var bookmarkType: BookmarkType = BookmarkType.SUBCHAPTER
     private lateinit var subChapterEntity: SubChapterEntity
     private lateinit var chapterEntity: ChapterEntity
+    private var baseURL = ""
 
-
-    private fun isBookmark(subChapterId: Int) {
-        viewModel.getBookmarkById(subChapterId).observe(viewLifecycleOwner) {
+    private fun isBookmark(id: String, bookmarkType: BookmarkType) {
+        viewModel.getBookmarkById(id, bookmarkType).observe(viewLifecycleOwner) {
             if (it != null) {
                 bookmarkEntity = it
                 fragmentBodyBinding.bookmarkImageButton.setImageResource(R.drawable.ic_baseline_star)
@@ -63,6 +66,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         bodyUrl = bodyFragmentArgs.bodyUrl
         setHasOptionsMenu(true)
 
+        baseURL = "file://" + requireContext().cacheDir.toString() + "/"
 
         chartAndSubChapter = bodyFragmentArgs.chartAndSubChapter
         subChapterEntity = bodyUrl.subChapterEntity
@@ -76,7 +80,6 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             )
         )
 
-        isBookmark(subChapterEntity.subChapterId)
 
         faBodyNoteColorAdapter = FABodyNoteColorAdapter(requireContext()).also {
             it.submitList(NOTE_COLOR)
@@ -121,7 +124,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             if (chartAndSubChapter != null) isChartView() else {
                 toolbarTitle.text = chapterEntity.chapterTitle
                 textviewSubChapter.text = subChapterEntity.subChapterTitle
-                bodyWebView.loadUrl(requireContext().cacheDir.toString() + '/' + PAGES_DIR + subChapterEntity.url + EXTENSION)
+                bodyWebView.loadUrl(baseURL + PAGES_DIR + subChapterEntity.url + EXTENSION)
             }
 
             recyclerviewNote.apply {
@@ -136,6 +139,13 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             }
         }
 
+
+        isBookmark(
+            if (bookmarkType == BookmarkType.CHART)
+                chartAndSubChapter!!.chartEntity.id else
+                subChapterEntity.subChapterId.toString(),
+            bookmarkType
+        )
     }
 
     private fun isChartView() = fragmentBodyBinding.apply {
@@ -146,7 +156,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
                 tableViewLinearLayoutCompat.visibility = View.VISIBLE
                 tableName.apply {
-                    text = chartAndSubChapter!!.chartEntity.chartTitle
+                    text = chartAndSubChapter!!.subChapterEntity.subChapterTitle
                     setOnClickListener {
                         val directions =
                             BodyFragmentDirections.actionBodyFragmentSelf(
@@ -169,7 +179,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         bookmarkType = BookmarkType.CHART
         textviewSubChapter.text = chartAndSubChapter!!.chartEntity.chartTitle
-        bodyWebView.loadUrl(requireContext().cacheDir.toString() + '/' + PAGES_DIR + chartAndSubChapter!!.chartEntity.id + EXTENSION)
+
+        val loadUrl = baseURL + PAGES_DIR + chartAndSubChapter!!.chartEntity.id + EXTENSION
+        bodyWebView.loadUrl(loadUrl)
 
     }
 
@@ -195,44 +207,90 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     }
 
     private fun onBookmarkListener() {
-        if (bookmarkEntity.bookmarkId != 0) {
-            requireContext().toast(bookmarkEntity.bookmarkTitle + " has been removed from your bookmarks.")
-            viewModel.deleteBookmark(bookmarkEntity)
-            bookmarkEntity = BookmarkEntity()
-        } else
-            Dialog(requireContext()).dialog().apply {
-                setContentView(R.layout.dialog_bookmark)
-                val cancelButton = findViewById<View>(R.id.bookmarkCancelButton)
-                val saveButton = findViewById<View>(R.id.bookmarkSaveButton)
-                val bookTitleTextInputEditText =
-                    findViewById<TextInputEditText>(R.id.bookmarkTitleTextInputEditText)
+
+        Dialog(requireContext()).dialog().apply {
+            setContentView(R.layout.dialog_bookmark)
+            val cancelButton = findViewById<Button>(R.id.bookmarkCancelButton)
+            val saveButton = findViewById<Button>(R.id.bookmarkSaveButton)
+            val bookTitleTextInputEditText =
+                findViewById<TextInputEditText>(R.id.bookmarkTitleTextInputEditText)
+            bookTitleTextInputEditText.also {
+                it.setText(subChapterEntity.subChapterTitle)
+                it.requestFocus()
+            }
+
+            cancelButton.setOnClickListener { dismiss() }
+
+            saveButton.setOnClickListener {
+                onSaveBookmark(bookTitleTextInputEditText.text.toString().trim())
+                dismiss()
+            }
+
+
+            findViewById<View>(R.id.close_dialog).setOnClickListener { dismiss() }
+
+
+            if (bookmarkEntity.bookmarkId != 0) {
+
+                findViewById<TextView>(R.id.bookmarkTitle).text = bookmarkEntity.bookmarkTitle
                 bookTitleTextInputEditText.also {
-                    it.setText(subChapterEntity.subChapterTitle)
+                    it.setText(bookmarkEntity.bookmarkTitle)
+                    it.setSelection(bookmarkEntity.bookmarkTitle.length)
                     it.requestFocus()
                 }
 
-                cancelButton.setOnClickListener { dismiss() }
-
-                saveButton.setOnClickListener {
-                    onSaveBookmark(bookTitleTextInputEditText.text.toString().trim())
-                    dismiss()
+                "Delete".also {
+                    cancelButton.apply {
+                        text = it
+                        background.setTint(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.reddish
+                            )
+                        )
+                    }
                 }
 
-
-                findViewById<TextView>(R.id.bookmarkTitle).text = subChapterEntity.subChapterTitle
-                safeDialogShow()
+                "Update".also {
+                    saveButton.apply {
+                        text = it
+                        background.setTint(ContextCompat.getColor(requireContext(), R.color.green))
+                    }
+                }
+                cancelButton.setOnClickListener {
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("Attention")
+                        .setMessage("Are you sure you want to remove " + bookmarkEntity.bookmarkTitle + "  from you bookmarks ?")
+                        .setPositiveButton("yes") { _, _ ->
+                            dismiss()
+                            viewModel.deleteBookmark(bookmarkEntity)
+                            requireContext().toast(bookmarkEntity.bookmarkTitle + " has been removed from your bookmarks.")
+                            bookmarkEntity = BookmarkEntity()
+                        }
+                        .setNegativeButton("no", null)
+                        .show()
+                }
+                saveButton.setOnClickListener {
+                    bookmarkEntity.copy(
+                        bookmarkTitle = bookTitleTextInputEditText.text.toString().trim()
+                    ).also {
+                        dismiss()
+                        viewModel.updateBookmark(it)
+                        requireContext().toast("Bookmark has been updated.")
+                    }
+                }
             }
+
+            safeDialogShow()
+        }
 
     }
 
     private fun onSaveBookmark(text: String) {
-        if (bookmarkType != BookmarkType.CHART)
-            bookmarkType = BookmarkType.SUBCHAPTER
-
         viewModel.insertBookmark(
             BookmarkEntity(
                 bookmarkTitle = if (text.isEmpty()) subChapterEntity.subChapterTitle else text,
-                bookmarkType = bookmarkType.toString(),
+                chartId = if (bookmarkType == BookmarkType.CHART) chartAndSubChapter!!.chartEntity.id else "",
                 subChapterId = subChapterEntity.subChapterId
             )
         )
@@ -258,6 +316,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             allowFileAccess = true
             setSupportZoom(true)
             builtInZoomControls = true
+            javaScriptEnabled = true
             displayZoomControls = false
             cacheMode = WebSettings.LOAD_NO_CACHE
         }

@@ -33,8 +33,9 @@ class FASavedBookmarkAdapter :
         fun onBinding(data: BookmarkEntity, index: Int) =
             bind.apply {
                 textView.text = data.bookmarkTitle
+                textView.compoundDrawablePadding = 12
                 textView.setCompoundDrawablesWithIntrinsicBounds(
-                    0,
+                    if (data.chartId == "") R.drawable.ic_baseline_text_fields else R.drawable.ic_baseline_bar_chart,
                     0,
                     R.drawable.ic_baseline_star_20,
                     0

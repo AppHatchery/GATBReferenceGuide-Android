@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.*
 import org.apphatchery.gatbreferenceguide.databinding.FragmentSavedViewPagerRecyclerViewBinding
-import org.apphatchery.gatbreferenceguide.ui.fragments.ViewPagerData
+import org.apphatchery.gatbreferenceguide.db.data.ViewPagerData
 
 class FASavedViewPagerAdapter :
     ListAdapter<ViewPagerData, FASavedViewPagerAdapter.ViewHolder>(DiffUtilCallBack()) {
@@ -30,7 +30,7 @@ class FASavedViewPagerAdapter :
             layoutManager = LinearLayoutManager(context)
             adapter = viewPagerData.recyclerViewAdapter
             viewPagerData.swipeToDeleteCallback?.let {
-                ItemTouchHelper(viewPagerData.swipeToDeleteCallback)
+                ItemTouchHelper(viewPagerData.swipeToDeleteCallback as ItemTouchHelper.Callback)
                     .attachToRecyclerView(this)
             }
         }

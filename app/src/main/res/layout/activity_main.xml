@@ -17,7 +17,8 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
+        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
          app:menu="@menu/activity_bottom_navigation_menu" />
 </androidx.appcompat.widget.LinearLayoutCompat>

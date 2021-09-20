@@ -33,13 +33,13 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/toolbar_title"
+                style="@style/TextAppearance.AppCompat.Medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="@android:color/white"
-                style="@style/TextAppearance.AppCompat.Medium"
-                 android:textStyle="bold"
+                android:textStyle="bold"
                 tools:text="@string/appbar_scrolling_view_behavior" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -67,30 +67,34 @@
         tools:text="@string/app_name" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="0dp"
+        android:id="@+id/appCompatTextView"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
         android:text="Last updated 06/17/21"
         android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayoutCompat"
         app:layout_constraintEnd_toStartOf="@+id/linearLayoutCompat"
         app:layout_constraintStart_toStartOf="@+id/textview_sub_chapter"
+        app:layout_constraintTop_toBottomOf="@+id/textview_sub_chapter"
         tools:ignore="HardcodedText" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview_sub_chapter">
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:layout_width="wrap_content"
-            android:foreground="?attr/selectableItemBackground"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
+            android:foreground="?attr/selectableItemBackground"
             android:padding="16dp"
             android:src="@drawable/ic_upload" />
 
@@ -98,18 +102,18 @@
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/bookmarkImageButton"
             android:layout_width="wrap_content"
-            android:foreground="?attr/selectableItemBackground"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
+            android:foreground="?attr/selectableItemBackground"
             android:padding="16dp"
             android:src="@drawable/ic_baseline_star_outline" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/add_note"
             android:layout_width="wrap_content"
-            android:foreground="?attr/selectableItemBackground"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
+            android:foreground="?attr/selectableItemBackground"
             android:padding="16dp"
             android:src="@drawable/ic_edit" />
 
@@ -121,11 +125,12 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:background="#C6C6C8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat" />
+        app:layout_constraintTop_toBottomOf="@+id/appCompatTextView" />
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -148,7 +153,7 @@
         android:layout_marginEnd="8dp"
         android:gravity="center"
         android:visibility="gone"
-         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view">
 
@@ -163,7 +168,8 @@
             android:id="@+id/table_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:padding="8dp"
             android:textStyle="bold"
             tools:ignore="HardcodedText"
             tools:text="@string/appbar_scrolling_view_behavior" />

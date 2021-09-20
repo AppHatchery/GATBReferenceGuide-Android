@@ -9,21 +9,14 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentSavedBinding
+import org.apphatchery.gatbreferenceguide.db.data.ViewPagerData
 import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.*
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FASavedViewModel
 import org.apphatchery.gatbreferenceguide.utils.setupToolbar
 import org.apphatchery.gatbreferenceguide.utils.snackBar
-
-
-private val HEADING = arrayListOf("Recent", "Bookmarks")
-
-data class ViewPagerData(
-    val recyclerViewAdapter: RecyclerView.Adapter<*>,
-    val swipeToDeleteCallback: SwipeToDeleteCallback? = null
-)
-
+import java.util.*
 
 @AndroidEntryPoint
 class SavedFragment : BaseFragment(R.layout.fragment_saved) {
@@ -34,6 +27,7 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
     private lateinit var faSavedNoteAdapter: FABodyNoteAdapter
     private lateinit var faSavedRecentAdapter: FASavedRecentAdapter
 
+    private val viewPagerHeadingTitle = arrayListOf("Recent", "Bookmarks")
     private val viewModel: FASavedViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,7 +81,7 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
 
         }
 
-        val bookmarkSwipeHandler = object : SwipeToDeleteCallback(requireContext()) {
+        val bookmarkSwipeHandler = object : SwipeDecoratorCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 val bookmark = faSavedBookmarkAdapter.currentList[position]
@@ -97,6 +91,15 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
                         viewModel.insertBookmark(bookmark)
                     }
                 }
+            }
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+
+                 return false
             }
         }
 
@@ -112,7 +115,7 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
         }
 
         TabLayoutMediator(bind.tabLayout, bind.viewPager) { tab, position ->
-            tab.text = HEADING[position]
+            tab.text = viewPagerHeadingTitle[position]
         }.attach()
 
 

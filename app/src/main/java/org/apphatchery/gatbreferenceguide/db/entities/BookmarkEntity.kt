@@ -10,5 +10,5 @@ data class BookmarkEntity(
     val bookmarkId: Int = 0,
     val subChapterId: Int = 0,
      val bookmarkTitle: String = "",
-    val bookmarkType: String = BookmarkType.SUBCHAPTER.toString(),
+    val chartId: String = ""
 )

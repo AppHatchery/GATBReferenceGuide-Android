@@ -2,10 +2,8 @@ package org.apphatchery.gatbreferenceguide.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentWithRecyclerviewItemBinding
 import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
 import org.apphatchery.gatbreferenceguide.utils.ALPHABET
@@ -14,12 +12,9 @@ class FAChartAdapter :
     ListAdapter<ChartAndSubChapter, FAChartAdapter.ViewHolder>(DiffUtilCallBack()) {
 
 
-    class DiffUtilCallBack : DiffUtil.ItemCallback<ChartAndSubChapter>() {
+    class DiffUtilCallBack : BaseDiffUtilCallBack<ChartAndSubChapter>() {
         override fun areItemsTheSame(oldItem: ChartAndSubChapter, newItem: ChartAndSubChapter) =
             newItem.chartEntity.id == oldItem.chartEntity.id
-
-        override fun areContentsTheSame(oldItem: ChartAndSubChapter, newItem: ChartAndSubChapter) =
-            oldItem == newItem
     }
 
     fun itemClickCallback(listener: ((ChartAndSubChapter) -> Unit)) {

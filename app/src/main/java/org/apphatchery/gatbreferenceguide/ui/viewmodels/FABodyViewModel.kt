@@ -9,6 +9,7 @@ import org.apphatchery.gatbreferenceguide.db.Database
 import org.apphatchery.gatbreferenceguide.db.entities.BookmarkEntity
 import org.apphatchery.gatbreferenceguide.db.entities.NoteEntity
 import org.apphatchery.gatbreferenceguide.db.entities.RecentEntity
+import org.apphatchery.gatbreferenceguide.enums.BookmarkType
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,8 +20,8 @@ class FABodyViewModel @Inject constructor(
 
     fun getChapterById(id: Int) = db.chapterDao().getChapterById(id).asLiveData()
 
-    fun getBookmarkById(subChapterId: Int) =
-        db.bookmarkDao().getBookmarkBySubChapterId(subChapterId).asLiveData()
+    fun getBookmarkById(id: String, bookmarkType: BookmarkType) =
+        db.bookmarkDao().getBookmarkById(id, bookmarkType).asLiveData()
 
     val getSubChapter = db.subChapterDao().getSubChapter().asLiveData()
 
@@ -46,5 +47,9 @@ class FABodyViewModel @Inject constructor(
     fun recentOpen(data: RecentEntity) = viewModelScope.launch {
         db.recentDao().delete(data)
         db.recentDao().insert(data)
+    }
+
+    fun updateBookmark(data: BookmarkEntity) = viewModelScope.launch  {
+        db.bookmarkDao().update(data)
     }
 }

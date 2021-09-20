@@ -15,7 +15,6 @@ import org.apphatchery.gatbreferenceguide.databinding.FragmentMainBinding
 import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
 import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
 import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
-import org.apphatchery.gatbreferenceguide.db.entities.ChartEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChartAdapter
@@ -39,13 +38,14 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         fragmentMainBinding = FragmentMainBinding.bind(view)
-        requireActivity().getBottomNavigationView().toggleVisibility(true)
+//        requireActivity().getBottomNavigationView().toggleVisibility(true)
         predefinedChapterList = ArrayList()
         predefinedChartList = ArrayList()
 
         first6ChapterAdapter = FAMainFirst6ChapterAdapter().also { adapter ->
             viewModel.getChapter.observe(viewLifecycleOwner) {
                 with(predefinedChapterList) {
+                    clear()
                     add(it[3].copy(chapterTitle = "Active TB Diagnosis"))
                     add(it[4].copy(chapterTitle = "Active TB Treatment"))
                     add(it[1].copy(chapterTitle = "LTBI Diagnosis"))
@@ -66,12 +66,13 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         first6ChartAdapter = FAMainFirst6ChartAdapter().also { adapter ->
             viewModel.getChart.observe(viewLifecycleOwner) { data ->
                 with(predefinedChartList) {
+                    clear()
                     add(data[7].copy(chartEntity = data[7].chartEntity.copy(chartTitle = "First line TB drugs for adults")))
-                    add(data[11])
-                    add(data[19])
+                    add(data[13].copy(chartEntity = data[13].chartEntity.copy(chartTitle = "Second line drugs")))
+                    add(data[14].copy(chartEntity = data[14].chartEntity.copy(chartTitle = "Alternative regimens")))
                     add(data[4].copy(chartEntity = data[4].chartEntity.copy(chartTitle = "Dosages for LTBI regimens")))
-                    add(data[5])
-                    add(data[14])
+                    add(data[18].copy(chartEntity = data[18].chartEntity.copy(chartTitle = "Treatment of extrapulmonary TB")))
+                    add(data[6].copy(chartEntity = data[6].chartEntity.copy(chartTitle = "Regimens for drug-susceptible TB pulmonary TB")))
                     adapter.submitList(this)
                 }
             }

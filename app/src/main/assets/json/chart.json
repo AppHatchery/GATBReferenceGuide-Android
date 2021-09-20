@@ -62,31 +62,31 @@
   {
     "id": "table_11_pediatric_dosages_ethambutol_in_children_(birth_to_15_years)",
     "subChapterTitle": "Special Clinical Situations",
-    "chartTitle": "LTBI Treatment Drug Adverse Reactions",
+    "chartTitle": "Pediatric dosages - Ethambutol in children (birth to 15 years)\nEthambutol is available in 100mg and 400 mg tablets",
     "chartHomePosition": 0
   },
   {
     "id": "table_12_pediatric_dosages_pyrazinamide_in_children_(birth_to_15_years)",
     "subChapterTitle": "Treatment Regimens",
-    "chartTitle": "LTBI Treatment Drug Adverse Reactions",
+    "chartTitle": "Pediatric Dosages - Pyrazinamide in children (birth to 15 years)\nPyrazinamide is available in 500 mg tablets which are scored and can be cut in ½.",
     "chartHomePosition": 0
   },
   {
     "id": "table_13_antituberculosis_antibiotics_in_adult_patients_with_renal_impairment",
     "subChapterTitle": "Special Clinical Situations",
-    "chartTitle": "LTBI Treatment Drug Adverse Reactions",
+    "chartTitle": "Antituberculosis antibiotics in adult patients with renal impairment",
     "chartHomePosition": 0
   },
   {
     "id": "table_14_antituberculosis_medications_which_may_be_used_for_patients_who_have_contraindications_to_or_intolerance",
     "subChapterTitle": "Special Clinical Situations",
-    "chartTitle": "LTBI Treatment Drug Adverse Reactions",
+    "chartTitle": "Antituberculosis medications which may be used for patients who have contraindications to or intolerance of first line agents or who require IV therapy during acute or critical illness",
     "chartHomePosition": 0
   },
   {
     "id": "table_15_clinical_situations_for_which_standard_therapy_cannot_be_given_or_is_not_well_tolerated",
     "subChapterTitle": "Special Clinical Situations",
-    "chartTitle": "LTBI Treatment Drug Adverse Reactions",
+    "chartTitle": "Clinical Situations for which standard therapy cannot be given or is not well- tolerated or may not be effective: Potential Alternative Regimens (Dosing and/or Drugs)",
     "chartHomePosition": 0
   },
   {
@@ -98,31 +98,31 @@
   {
     "id": "table_17_what_to_start_choice_of_tb_therapy_and_antiretroviral_therapy_(art)_when)treating_co-infected_patients",
     "subChapterTitle": "Antiretroviral Therapy (ART) and Treatment of HIV Seropositive Patients with Active Tuberculosis Disease",
-    "chartTitle": "LTBI Treatment Drug Adverse Reactions",
+    "chartTitle": "What to start: Choice of TB therapy and Antiretroviral Therapy (ART) when treating co-infected patients",
     "chartHomePosition": 0
   },
   {
     "id": "table_18_dosage_adjustments_for_art_and_rifamycins_when_used_in_combination",
     "subChapterTitle": "Antiretroviral Therapy (ART) and Treatment of HIV Seropositive Patients with Active Tuberculosis Disease",
-    "chartTitle": "LTBI Treatment Drug Adverse Reactions",
+    "chartTitle": "Dosage Adjustments for ART and Rifamycins when used in Combination",
     "chartHomePosition": 0
   },
   {
     "id": "table_19_guidelines_for_treatment_of_extrapulmonary_tuberculosis",
     "subChapterTitle": "Adjunctive Use of Corticosteroid Therapy (Table 19)",
-    "chartTitle": "LTBI Treatment Drug Adverse Reactions",
+    "chartTitle": "Guidelines for Treatment of Extrapulmonary* Tuberculosis: Length of therapy and Adjunctive Use of Corticosteroids",
     "chartHomePosition": 0
   },
   {
     "id": "table_20_use_of_anti-tb_medications_in_specia_situations_pregnancy_tuberculosis_meningitis_and_renal_failure",
     "subChapterTitle": "Treatment of Active TB in Pregnancy",
-    "chartTitle": "LTBI Treatment Drug Adverse Reactions",
+    "chartTitle": "Use of Anti-TB Medications in Special Situations: Pregnancy, Tuberculous Meningitis and Renal Failure",
     "chartHomePosition": 0
   },
   {
     "id": "table_21_grady_hospital_tb_isolation_policy",
     "subChapterTitle": "Surveillance for Health Care Workers",
-    "chartTitle": "LTBI Treatment Drug Adverse Reactions",
+    "chartTitle": "Grady Hospital TB Isolation Policy",
     "chartHomePosition": 0
   }
 ]
