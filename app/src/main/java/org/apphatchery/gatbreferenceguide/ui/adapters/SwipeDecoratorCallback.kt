@@ -12,16 +12,14 @@ import org.apphatchery.gatbreferenceguide.R
 
 abstract class SwipeDecoratorCallback(private val context: Context) :
     ItemTouchHelper.SimpleCallback(
-        ItemTouchHelper.UP or ItemTouchHelper.DOWN
-                or ItemTouchHelper.START or ItemTouchHelper.END,
-        ItemTouchHelper.LEFT
+        0, ItemTouchHelper.LEFT
     ) {
 
     override fun onMove(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
         target: RecyclerView.ViewHolder
-    ) = true
+    ) = false
 
     override fun onChildDraw(
         c: Canvas,

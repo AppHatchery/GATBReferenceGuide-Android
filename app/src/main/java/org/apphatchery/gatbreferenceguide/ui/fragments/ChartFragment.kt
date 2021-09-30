@@ -73,13 +73,10 @@ class ChartFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.searchView -> {
-                val directions = SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
-                findNavController().navigate(directions)
-            }
-        }
+        if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
+            .also { findNavController().navigate(it) }
         return super.onOptionsItemSelected(item)
     }
+
 
 }

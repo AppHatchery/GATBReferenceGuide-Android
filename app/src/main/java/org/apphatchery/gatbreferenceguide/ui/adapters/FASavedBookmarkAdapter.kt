@@ -5,7 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentWithRecyclerviewItemBinding
 import org.apphatchery.gatbreferenceguide.db.entities.BookmarkEntity
 
@@ -33,13 +32,6 @@ class FASavedBookmarkAdapter :
         fun onBinding(data: BookmarkEntity, index: Int) =
             bind.apply {
                 textView.text = data.bookmarkTitle
-                textView.compoundDrawablePadding = 12
-                textView.setCompoundDrawablesWithIntrinsicBounds(
-                    if (data.chartId == "") R.drawable.ic_baseline_text_fields else R.drawable.ic_baseline_bar_chart,
-                    0,
-                    R.drawable.ic_baseline_star_20,
-                    0
-                )
             }
 
         init {

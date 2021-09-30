@@ -37,7 +37,7 @@ interface SubChapterDao {
     suspend fun getSubChapterBindChapterSuspended(): List<ChapterAndSubChapter>
 
     @Query("SELECT  * FROM  SubChapterEntity WHERE subChapterId=:id")
-    fun getSubChapterById(id: Int): Flow<SubChapterEntity>
+    fun getSubChapterById(id: String): Flow<SubChapterEntity>
 
 
     fun getSubChapterEntity(

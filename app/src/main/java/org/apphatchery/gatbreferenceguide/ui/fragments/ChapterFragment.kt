@@ -64,14 +64,12 @@ class ChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
     }
 
 
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.searchView -> {
-                val directions = ChapterFragmentDirections.actionGlobalGlobalSearchFragment()
-                findNavController().navigate(directions)
-            }
-        }
+        if (item.itemId == R.id.searchView) ChapterFragmentDirections.actionGlobalGlobalSearchFragment()
+            .also { findNavController().navigate(it) }
         return super.onOptionsItemSelected(item)
     }
+
 
 }

@@ -1,9 +1,6 @@
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -20,7 +17,6 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChartAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAMainViewModel
 import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
-import org.apphatchery.gatbreferenceguide.utils.setupToolbar
 import org.apphatchery.gatbreferenceguide.utils.toggleVisibility
 
 
@@ -38,7 +34,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         fragmentMainBinding = FragmentMainBinding.bind(view)
-//        requireActivity().getBottomNavigationView().toggleVisibility(true)
+        requireActivity().getBottomNavigationView().toggleVisibility(true)
         predefinedChapterList = ArrayList()
         predefinedChartList = ArrayList()
 
@@ -95,7 +91,12 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         fragmentMainBinding.apply {
             recyclerviewFirst6Chapters.setupAdapter(first6ChapterAdapter)
             recyclerviewFirst6Charts.setupAdapter(first6ChartAdapter, 3)
-            toolbar.setupToolbar(requireActivity(), "Guide", null, false)
+
+            searchView.setOnClickListener {
+                MainFragmentDirections.actionGlobalGlobalSearchFragment().also {
+                    findNavController().navigate(it)
+                }
+            }
 
             textviewAllChapters.setOnClickListener {
                 findNavController().navigate(R.id.action_mainFragment_to_chapterFragment)
@@ -106,8 +107,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             }
         }
 
-
-        setHasOptionsMenu(true)
     }
 
     private fun RecyclerView.setupAdapter(
@@ -116,21 +115,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     ) {
         layoutManager = GridLayoutManager(requireContext(), spanCount)
         adapter = listAdapter
-    }
-
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.searchView -> {
-                val directions = MainFragmentDirections.actionGlobalGlobalSearchFragment()
-                findNavController().navigate(directions)
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.fragment_main_menu, menu)
     }
 
 }

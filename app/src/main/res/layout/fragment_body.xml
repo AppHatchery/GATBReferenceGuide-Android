@@ -9,7 +9,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:background="@drawable/shape_gradient"
         android:theme="@style/Toolbar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,7 +47,6 @@
 
 
     <androidx.appcompat.widget.AppCompatTextView
-
         android:id="@+id/textview_sub_chapter"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -60,8 +59,7 @@
         android:textColor="@color/black"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:ignore="HardcodedText"
         tools:text="@string/app_name" />
@@ -71,13 +69,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:text="Last updated 06/17/21"
         android:textStyle="italic"
         app:layout_constraintEnd_toStartOf="@+id/linearLayoutCompat"
         app:layout_constraintStart_toStartOf="@+id/textview_sub_chapter"
-        app:layout_constraintTop_toBottomOf="@+id/textview_sub_chapter"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat"
         tools:ignore="HardcodedText" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -86,8 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:gravity="center"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview_sub_chapter">
 
         <androidx.appcompat.widget.AppCompatImageButton
@@ -135,13 +131,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerviewNote"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:padding="10dp"
-        android:visibility="gone"
-        tools:ignore="MissingConstraints"
-        tools:itemCount="2"
-        tools:listitem="@layout/fragment_note_item" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/table_viewLinearLayoutCompat" />
 
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -166,8 +162,9 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/table_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:foreground="?attr/selectableItemBackground"
             android:padding="8dp"
             android:textStyle="bold"
@@ -185,7 +182,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/table_viewLinearLayoutCompat" />
+        app:layout_constraintTop_toBottomOf="@+id/recyclerviewNote" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

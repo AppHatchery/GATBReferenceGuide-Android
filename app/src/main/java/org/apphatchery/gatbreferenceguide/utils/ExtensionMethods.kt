@@ -83,3 +83,9 @@ fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observ
         }
     })
 }
+
+fun  EditText.onSearchKeyword(searchText: String) = apply {
+    setText(searchText)
+    requestFocus()
+    setSelection(text.toString().length)
+}

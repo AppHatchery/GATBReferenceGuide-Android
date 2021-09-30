@@ -4,14 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.speech.RecognizerIntent
-import android.text.TextUtils
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
@@ -28,6 +23,7 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FAGlobalSearchAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
 import org.apphatchery.gatbreferenceguide.utils.enableToolbar
 import org.apphatchery.gatbreferenceguide.utils.noItemFound
+import org.apphatchery.gatbreferenceguide.utils.onSearchKeyword
 import org.apphatchery.gatbreferenceguide.utils.setOnTextWatcher
 import javax.inject.Inject
 
@@ -49,32 +45,32 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                voiceSearchForActivityResult(it)
+                voiceSearchForActivityResult(it) { searchText ->
+                    bind.searchKeyword.onSearchKeyword(searchText)
+                }
             }
 
         faGlobalSearchAdapter.also { faGlobalSearchAdapter ->
             viewModel.getGlobalSearchEntity.observe(viewLifecycleOwner) {
                 faGlobalSearchAdapter.submitList(it)
-                it.size.noItemFound(bind.recyclerview, bind.noItemFound)
+                it.size.noItemFound(bind.visibleViewGroup, bind.noItemFound)
+                "(${it.size}) result(s) found".also { bind.searchItemCount.text = it }
             }
 
 
             faGlobalSearchAdapter.itemClickCallback {
-                val directions =
-                    GlobalSearchFragmentDirections.actionGlobalSearchFragmentToBodyFragment(
-                        BodyUrl(
-                            ChapterEntity(it.chapterId, it.searchTitle),
-                            SubChapterEntity(
-                                it.subChapterId,
-                                it.chapterId,
-                                it.subChapter,
-                                it.fileName
-                            )
-                        ), null
-                    )
-
+                GlobalSearchFragmentDirections.actionGlobalSearchFragmentToBodyFragment(
+                    BodyUrl(
+                        ChapterEntity(it.chapterId, it.searchTitle),
+                        SubChapterEntity(
+                            it.subChapterId,
+                            it.chapterId,
+                            it.subChapter,
+                            it.fileName
+                        )
+                    ), null
+                ).also { findNavController().navigate(it) }
                 bind.searchKeyword.clearFocus()
-                findNavController().navigate(directions)
             }
         }
 
@@ -104,43 +100,11 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
     }
 
 
-    private fun voiceSearchListener() {
-        resultLauncher.launch(
-            Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).also {
-                it.putExtra(
-                    RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-                )
-            })
-    }
-
-
-    private fun voiceSearchForActivityResult(activityResult: ActivityResult) {
-        val matches = activityResult.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-        if (matches != null && matches.size > 0) {
-            val searchWrd = matches[0]
-            if (!TextUtils.isEmpty(searchWrd)) {
-                bind.searchKeyword.apply {
-                    setText(searchWrd)
-                    requestFocus()
-                    setSelection(text.toString().length)
-                }
-            }
-        }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        when (item.itemId) {
-            R.id.voiceSearch -> voiceSearchListener()
-        }
+        if (item.itemId == R.id.voiceSearch) voiceSearchListener(resultLauncher)
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.fragment_global_search_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
 
     override fun onDestroyView() {
         bind.searchKeyword.clearFocus()

@@ -2,6 +2,7 @@ package org.apphatchery.gatbreferenceguide.ui.adapters
 
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -9,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import org.apphatchery.gatbreferenceguide.databinding.FragmentNoteItemBinding
 import org.apphatchery.gatbreferenceguide.db.entities.NoteEntity
 
-class FABodyNoteAdapter :
-    ListAdapter<NoteEntity, FABodyNoteAdapter.ViewHolder>(DiffUtilCallBack()) {
+class FANoteAdapter(val viewInChapter: Int = View.GONE) :
+    ListAdapter<NoteEntity, FANoteAdapter.ViewHolder>(DiffUtilCallBack()) {
 
 
     class DiffUtilCallBack : DiffUtil.ItemCallback<NoteEntity>() {
@@ -35,15 +36,21 @@ class FABodyNoteAdapter :
             fragmentNoteItemBinding.apply {
                 view.setBackgroundColor(Color.parseColor(note.noteColor))
                 textviewNoteBody.text = note.noteText
-                ("Note - Last edited " + note.lastEditDateFormat).also { textviewNoteTitle.text = it }
+                ("Note - Last edited " + note.lastEditDateFormat).also {
+                    textviewNoteTitle.text =
+                        if (viewInChapter == View.VISIBLE) note.noteTitle else it
+                }
             }
 
         init {
-            fragmentNoteItemBinding.root.setOnClickListener {
-                if (RecyclerView.NO_POSITION != adapterPosition) {
-                    val currentClickedItem = currentList[adapterPosition]
-                    onItemClickListAdapter?.let {
-                        it(currentClickedItem)
+            fragmentNoteItemBinding.apply {
+                textviewShowChapter.visibility = viewInChapter
+                root.setOnClickListener {
+                    if (RecyclerView.NO_POSITION != adapterPosition) {
+                        val currentClickedItem = currentList[adapterPosition]
+                        onItemClickListAdapter?.let {
+                            it(currentClickedItem)
+                        }
                     }
                 }
             }

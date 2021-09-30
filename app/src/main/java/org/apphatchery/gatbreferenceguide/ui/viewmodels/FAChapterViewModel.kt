@@ -27,7 +27,7 @@ class FAChapterViewModel @Inject constructor(
     fun getCountByChapterId(chapterId: Int) =
         db.subChapterDao().getCountByChapterId(chapterId).asLiveData()
 
-    fun getSubChapterById(id: Int) = db.subChapterDao().getSubChapterById(id).asLiveData()
+//    fun getSubChapterById(id: Int) = db.subChapterDao().getSubChapterById(id).asLiveData()
 
 
 }

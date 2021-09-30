@@ -14,8 +14,8 @@ import org.apphatchery.gatbreferenceguide.databinding.DialogNoteColorItemBinding
 import org.apphatchery.gatbreferenceguide.db.data.NoteColor
 import org.apphatchery.gatbreferenceguide.utils.NOTE_COLOR
 
-class FABodyNoteColorAdapter(private val context: Context) :
-    ListAdapter<NoteColor, FABodyNoteColorAdapter.ViewHolder>(DiffUtilCallBack()) {
+class FANoteColorAdapter(private val context: Context) :
+    ListAdapter<NoteColor, FANoteColorAdapter.ViewHolder>(DiffUtilCallBack()) {
 
 
     var selectedColor: String = NOTE_COLOR[0].color

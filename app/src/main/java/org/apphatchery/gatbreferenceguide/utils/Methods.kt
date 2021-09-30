@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.snackbar.Snackbar
@@ -164,3 +165,16 @@ fun View.toggleVisibility(boolean: Boolean) {
 
 
 fun Activity.getBottomNavigationView(): View = findViewById(R.id.bottomNavigationView)
+
+
+fun Context.alertDialog(
+    title: String = "Attention",
+    message: String,
+    positiveButtonCallback: () -> Unit
+): AlertDialog = AlertDialog.Builder(this)
+    .setTitle(title)
+    .setMessage(message)
+    .setNegativeButton("no", null)
+    .setPositiveButton("yes") { _, _ ->
+        positiveButtonCallback()
+    }.show()

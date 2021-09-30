@@ -27,7 +27,7 @@ class FASavedViewPagerAdapter :
     inner class ViewHolder(private val bind: FragmentSavedViewPagerRecyclerViewBinding) :
         RecyclerView.ViewHolder(bind.root) {
         fun onBind(viewPagerData: ViewPagerData) = bind.recyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = GridLayoutManager(context, 1)
             adapter = viewPagerData.recyclerViewAdapter
             viewPagerData.swipeToDeleteCallback?.let {
                 ItemTouchHelper(viewPagerData.swipeToDeleteCallback as ItemTouchHelper.Callback)
