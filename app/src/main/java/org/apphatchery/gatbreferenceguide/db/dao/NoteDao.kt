@@ -14,11 +14,11 @@ interface NoteDao {
     suspend fun delete(data: NoteEntity)
 
 
-    @Query("SELECT  * FROM  NoteEntity WHERE noteId=:id  ORDER BY noteId DESC")
+    @Query("SELECT  * FROM  NoteEntity WHERE noteId=:id  ORDER BY lastEdit DESC")
     fun getNoteById(id: String): Flow<List<NoteEntity>>
 
 
-    @Query("SELECT  * FROM  NoteEntity  ORDER BY noteId DESC")
+    @Query("SELECT  * FROM  NoteEntity  ORDER BY lastEdit DESC")
     fun getNoteEntity(): Flow<List<NoteEntity>>
 
     @Update

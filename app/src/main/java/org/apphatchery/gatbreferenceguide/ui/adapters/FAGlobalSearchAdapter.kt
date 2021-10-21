@@ -9,31 +9,30 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.apphatchery.gatbreferenceguide.R
-import org.apphatchery.gatbreferenceguide.databinding.FragmentGlobalSearchItemBinding
-import org.apphatchery.gatbreferenceguide.db.entities.GlobalSearchEntity
-import javax.inject.Inject
+ import org.apphatchery.gatbreferenceguide.databinding.FragmentGlobalSearchItemBinding
+import org.apphatchery.gatbreferenceguide.db.data.GlobalSearchWithMatchInfo
+ import javax.inject.Inject
 
 class FAGlobalSearchAdapter @Inject constructor(
-) : ListAdapter<GlobalSearchEntity, FAGlobalSearchAdapter.ViewHolder>(DiffUtilCallBack()) {
+) : ListAdapter<GlobalSearchWithMatchInfo, FAGlobalSearchAdapter.ViewHolder>(DiffUtilCallBack()) {
 
     var searchQuery: String = ""
 
 
-    class DiffUtilCallBack : DiffUtil.ItemCallback<GlobalSearchEntity>() {
-        override fun areItemsTheSame(oldItem: GlobalSearchEntity, newItem: GlobalSearchEntity) =
-            newItem.fileName == oldItem.fileName
+    class DiffUtilCallBack : DiffUtil.ItemCallback<GlobalSearchWithMatchInfo>() {
+        override fun areItemsTheSame(oldItem: GlobalSearchWithMatchInfo, newItem: GlobalSearchWithMatchInfo) =
+            newItem.globalSearchEntity.fileName == oldItem.globalSearchEntity.fileName
 
-        override fun areContentsTheSame(oldItem: GlobalSearchEntity, newItem: GlobalSearchEntity) =
+        override fun areContentsTheSame(oldItem: GlobalSearchWithMatchInfo, newItem: GlobalSearchWithMatchInfo) =
             oldItem == newItem
     }
 
-    fun itemClickCallback(listener: ((GlobalSearchEntity) -> Unit)) {
+    fun itemClickCallback(listener: ((GlobalSearchWithMatchInfo) -> Unit)) {
         onItemClickListAdapter = listener
     }
 
 
-    private var onItemClickListAdapter: ((GlobalSearchEntity) -> Unit)? = null
+    private var onItemClickListAdapter: ((GlobalSearchWithMatchInfo) -> Unit)? = null
 
     private fun prepSearchQuery(textInBody: String) =
         textInBody.subSequence(getSearchStartPosition(textInBody), textInBody.length).toString()
@@ -45,30 +44,24 @@ class FAGlobalSearchAdapter @Inject constructor(
     inner class ViewHolder(private val fragmentGlobalSearchItemBinding: FragmentGlobalSearchItemBinding) :
         RecyclerView.ViewHolder(fragmentGlobalSearchItemBinding.root) {
 
-        fun onBinding(globalSearchEntity: GlobalSearchEntity, index: Int) =
+        fun onBinding(globalSearchEntity: GlobalSearchWithMatchInfo, index: Int) =
             fragmentGlobalSearchItemBinding.apply {
 
 //                textInBody.text = globalSearchEntity.textInBody
 //                searchTitle.text = globalSearchEntity.searchTitle
 //                subChapter.text = globalSearchEntity.subChapter
 
-                setSpannableString(prepSearchQuery(globalSearchEntity.textInBody)) {
+                setSpannableString(prepSearchQuery(globalSearchEntity.globalSearchEntity.textInBody)) {
                     textInBody.text = this
                 }
 
-                setSpannableString(globalSearchEntity.searchTitle) {
+                setSpannableString(globalSearchEntity.globalSearchEntity.searchTitle) {
                     searchTitle.text = this
                 }
 
-                setSpannableString(globalSearchEntity.subChapter) {
+                setSpannableString(globalSearchEntity.globalSearchEntity.subChapter) {
                     subChapter.text = this
                 }
-
-                textInBody.setCompoundDrawablesWithIntrinsicBounds(
-                    if (globalSearchEntity.isChart)
-                        R.drawable.ic_baseline_bar_chart else
-                        R.drawable.ic_baseline_text_fields, 0, 0, 0
-                )
 
             }
 
@@ -98,7 +91,7 @@ class FAGlobalSearchAdapter @Inject constructor(
                 searchQuery.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
-            spannableTextCallback(this)
+            spannableTextCallback(this.trim() as SpannableString)
         } catch (e: Exception) {
         }
     }

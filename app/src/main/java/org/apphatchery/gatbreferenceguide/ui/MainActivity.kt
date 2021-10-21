@@ -1,10 +1,12 @@
 package org.apphatchery.gatbreferenceguide.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import dagger.hilt.android.AndroidEntryPoint
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.ActivityMainBinding
@@ -29,5 +31,13 @@ class MainActivity : AppCompatActivity() {
                     findNavController(R.id.nav_host_fragment_container)
                 )
         }
+    }
+
+    private fun setupDynamicLink() {
+        FirebaseDynamicLinks.getInstance()
+            .getDynamicLink(intent)
+            .addOnSuccessListener {
+                Log.e("TAG", "setupDynamicLink: " + it.link)
+            }
     }
 }

@@ -8,7 +8,7 @@ import org.apphatchery.gatbreferenceguide.db.entities.ChartEntity
 @Dao
 interface ChartDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(data: List<ChartEntity>)
 
     @Delete

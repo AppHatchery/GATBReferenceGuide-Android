@@ -122,59 +122,65 @@
   {
     "subChapterId": 21,
     "chapterId": 5,
+    "subChapterTitle": "Introduction",
+    "url": "5_treatment_of_current_(active)_disease_therapy"
+  },
+  {
+    "subChapterId": 22,
+    "chapterId": 5,
     "subChapterTitle": "Considerations",
     "url": "5_treatment_of_current_(active)_disease_therapy__a__considerations"
   },
   {
-    "subChapterId": 22,
+    "subChapterId": 23,
     "chapterId": 5,
     "subChapterTitle": "Standard Therapy for Current (Active) Disease",
     "url": "5_treatment_of_current_(active)_disease_therapy__b__standard_therapy_for_current_(active)_disease"
   },
   {
-    "subChapterId": 23,
+    "subChapterId": 24,
     "chapterId": 5,
     "subChapterTitle": "Special Clinical Situations",
     "url": "5_treatment_of_current_(active)_disease_therapy__c__special_clinical_situations"
   },
   {
-    "subChapterId": 24,
+    "subChapterId": 25,
     "chapterId": 5,
     "subChapterTitle": "Drug Resistance",
     "url": "5_treatment_of_current_(active)_disease_therapy__d__drug_resistance"
   },
   {
-    "subChapterId": 25,
+    "subChapterId": 26,
     "chapterId": 5,
     "subChapterTitle": "Monitoring Patients on Therapy for Response and Adverse Events",
     "url": "5_treatment_of_current_(active)_disease_therapy__e__monitoring_patients_on_therapy_for_response_and_adverse_events"
   },
   {
-    "subChapterId": 26,
+    "subChapterId": 27,
     "chapterId": 5,
     "subChapterTitle": "TB and HIV",
     "url": "5_treatment_of_current_(active)_disease_therapy__f__tb_and_hiv"
   },
   {
-    "subChapterId": 27,
+    "subChapterId": 28,
     "chapterId": 5,
     "subChapterTitle": "Antiretroviral Therapy (ART) and Treatment of HIV Seropositive Patients with Active Tuberculosis Disease",
     "url": "5_treatment_of_current_(active)_disease_therapy__g__antiretroviral_therapy_(art)_and_treatment_of_persons"
   },
   {
-    "subChapterId": 28,
+    "subChapterId": 29,
     "chapterId": 5,
     "subChapterTitle": "Immune Reconstitution Inflammatory Syndrome (IRIS) Associated with Initiation of Antiretroviral Therapy During the Course of TB Therapy",
     "url": "5_treatment_of_current_(active)_disease_therapy__h__immune_reconstitution_inflammatory_syndrome"
   },
   {
-    "subChapterId": 29,
+    "subChapterId": 30,
     "chapterId": 5,
     "subChapterTitle": "Treatment of Extrapulmonary TB (Table 19)",
     "url": "5_treatment_of_current_(active)_disease_therapy__i__treatment_of_extrapulmonary_tb"
   },
   {
-    "subChapterId": 30,
+    "subChapterId": 31,
     "chapterId": 5,
     "subChapterTitle": "Adjunctive Use of Corticosteroid Therapy (Table 19)",
     "url": "5_treatment_of_current_(active)_disease_therapy__j__adjunctive_use_of_corticosteroid_therapy"
@@ -182,143 +188,155 @@
   {
     "subChapterId": 31,
     "chapterId": 6,
-    "subChapterTitle": "Treatment for LTBI and Risk Factors",
+    "subChapterTitle": "Introduction",
     "url": "6_pregnancy_and_tb__a__treatment_for_ltbi_and_risk_factors"
   },
   {
     "subChapterId": 32,
     "chapterId": 6,
+    "subChapterTitle": "Treatment for LTBI and Risk Factors",
+    "url": "6_pregnancy_and_tb"
+  },
+  {
+    "subChapterId": 33,
+    "chapterId": 6,
     "subChapterTitle": "Treatment of Active TB in Pregnancy",
     "url": "6_pregnancy_and_tb__b__treatment_of_active_tb_in_pregnancy"
   },
   {
-    "subChapterId": 33,
+    "subChapterId": 34,
     "chapterId": 7,
     "subChapterTitle": "Children Tuberculosis",
     "url": "7_childhood_tuberculosis"
   },
   {
-    "subChapterId": 34,
+    "subChapterId": 35,
     "chapterId": 7,
     "subChapterTitle": "Management Considerations",
     "url": "7_childhood_tuberculosis__a__management_considerations"
   },
   {
-    "subChapterId": 35,
+    "subChapterId": 36,
     "chapterId": 8,
     "subChapterTitle": "Tuberculosis and Long-Term Care Facilities",
     "url": "8_tuberculosis_and_long_term_care_facilities"
   },
   {
-    "subChapterId": 36,
+    "subChapterId": 37,
     "chapterId": 9,
     "subChapterTitle": "BCG Vaccination",
     "url": "9_bcg_vaccination"
   },
   {
-    "subChapterId": 37,
+    "subChapterId": 38,
     "chapterId": 10,
     "subChapterTitle": "Introduction",
     "url": "10_tb_infection_control_hospital_isolation_procedures"
   },
   {
-    "subChapterId": 38,
+    "subChapterId": 39,
     "chapterId": 10,
     "subChapterTitle": "Administrative Controls",
     "url": "10_tb_infection_control_hospital_isolation_procedures__a__administrative_controls"
   },
   {
-    "subChapterId": 39,
+    "subChapterId": 40,
     "chapterId": 10,
     "subChapterTitle": "Surveillance for Health Care Workers",
     "url": "10_tb_infection_control_hospital_isolation_procedures__b__surveillance_for_health_care_workers"
   },
   {
-    "subChapterId": 40,
+    "subChapterId": 41,
     "chapterId": 10,
     "subChapterTitle": "Environmental Controls",
     "url": "10_tb_infection_control_hospital_isolation_procedures__c__environmental_controls"
   },
   {
-    "subChapterId": 41,
+    "subChapterId": 42,
     "chapterId": 10,
     "subChapterTitle": "Personal Respiratory Protection",
     "url": "10_tb_infection_control_hospital_isolation_procedures__d__personal_respiratory_protection"
   },
   {
-    "subChapterId": 42,
+    "subChapterId": 43,
+    "chapterId": 11,
+    "subChapterTitle": "Introduction",
+    "url": "11_community_tuberculosis_control"
+  },
+  {
+    "subChapterId": 44,
     "chapterId": 11,
     "subChapterTitle": "TB Surveillance in Georgia",
     "url": "11_community_tuberculosis_control__a__tb_surveillance_in_georgia"
   },
   {
-    "subChapterId": 43,
+    "subChapterId": 45,
     "chapterId": 11,
     "subChapterTitle": "TB Case Definitions for Public Health Surveillance",
     "url": "11_community_tuberculosis_control__b__tb_case_definitions_for_public_health_surveillance"
   },
   {
-    "subChapterId": 44,
+    "subChapterId": 46,
     "chapterId": 11,
     "subChapterTitle": "Role of the Health Department",
     "url": "11_community_tuberculosis_control__c__role_of_the_health_department"
   },
   {
-    "subChapterId": 45,
+    "subChapterId": 47,
     "chapterId": 11,
     "subChapterTitle": "Hospital Discharge Planning for Patients with Suspected or Proven TB",
     "url": "11_community_tuberculosis_control__d__hospital_discharge_planning_for_patients_with_suspected_or_proven_tb"
   },
   {
-    "subChapterId": 46,
+    "subChapterId": 48,
     "chapterId": 11,
     "subChapterTitle": "The U.S.-Mexico Binational Tuberculosis Referral Program (CureTB)",
     "url": "11_community_tuberculosis_control__e__the_us_mexico_binational_tuberculosis_referral_program_(curetb)"
   },
   {
-    "subChapterId": 47,
+    "subChapterId": 48,
     "chapterId": 12,
     "subChapterTitle": "Alternative Housing Program for Homeless TB Patients in Georgia",
     "url": "12_alternative_housing_program_for_homeless_tb_patients_in_georgia"
   },
   {
-    "subChapterId": 48,
+    "subChapterId": 50,
     "chapterId": 13,
     "subChapterTitle": "Georgia Department of Public Health (DPH) Community Guidelines for Respiratory Isolation of Patients With Active TB in the Community",
     "url": "13_georgia_department_of_public_health_(dph)_community_guidelines_for_respiratory"
   },
   {
-    "subChapterId": 49,
+    "subChapterId": 51,
     "chapterId": 14,
     "subChapterTitle": "References",
     "url": "14_references"
   },
   {
-    "subChapterId": 50,
+    "subChapterId": 52,
     "chapterId": 15,
     "subChapterTitle": "Appendix: District TB Coordinators (by district)",
     "url": "15_appendix_district_tb_coordinators_(by_district)"
   },
   {
-    "subChapterId": 51,
+    "subChapterId": 53,
     "chapterId": 16,
     "subChapterTitle": "Abbreviations",
     "url": "16_abbreviations"
   },
   {
-    "subChapterId": 52,
+    "subChapterId": 54,
     "chapterId": 17,
     "subChapterTitle": "Acknowledgements",
     "url": "17_acknowledgements"
   },
   {
-    "subChapterId": 53,
+    "subChapterId": 55,
     "chapterId": 18,
     "subChapterTitle": "Hello and welcome clinical statement",
     "url": "18_hello_and_welcome_clinical_statement"
   },
   {
-    "subChapterId": 54,
+    "subChapterId": 56,
     "chapterId": 19,
     "subChapterTitle": "For more information",
     "url": "19_for_more_information"

@@ -21,10 +21,10 @@ import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAGlobalSearchAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
-import org.apphatchery.gatbreferenceguide.utils.enableToolbar
 import org.apphatchery.gatbreferenceguide.utils.noItemFound
 import org.apphatchery.gatbreferenceguide.utils.onSearchKeyword
 import org.apphatchery.gatbreferenceguide.utils.setOnTextWatcher
+import org.apphatchery.gatbreferenceguide.utils.toggleSoftKeyboard
 import javax.inject.Inject
 
 
@@ -54,19 +54,21 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             viewModel.getGlobalSearchEntity.observe(viewLifecycleOwner) {
                 faGlobalSearchAdapter.submitList(it)
                 it.size.noItemFound(bind.visibleViewGroup, bind.noItemFound)
-                "(${it.size}) result(s) found".also { bind.searchItemCount.text = it }
+                "${it.size} result${if (it.size == 1) "" else "s"}".also {
+                    bind.searchItemCount.text = it
+                }
             }
 
 
             faGlobalSearchAdapter.itemClickCallback {
                 GlobalSearchFragmentDirections.actionGlobalSearchFragmentToBodyFragment(
                     BodyUrl(
-                        ChapterEntity(it.chapterId, it.searchTitle),
+                        ChapterEntity(it.globalSearchEntity.chapterId, it.globalSearchEntity.searchTitle),
                         SubChapterEntity(
-                            it.subChapterId,
-                            it.chapterId,
-                            it.subChapter,
-                            it.fileName
+                            it.globalSearchEntity.subChapterId,
+                            it.globalSearchEntity.chapterId,
+                            it.globalSearchEntity.subChapter,
+                            it.globalSearchEntity.fileName
                         )
                     ), null
                 ).also { findNavController().navigate(it) }
@@ -75,35 +77,43 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         }
 
         bind.apply {
-            toolbarBackButton.setOnClickListener { requireActivity().onBackPressed() }
-            "Search Everywhere".also { toolbarTitle.text = it }
-            toolbar.enableToolbar(requireActivity())
-            recyclerview.apply {
+             recyclerview.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = faGlobalSearchAdapter
+            }
+
+            voiceSearch.setOnClickListener {
+                voiceSearchListener(resultLauncher)
             }
 
             searchKeyword.setOnTextWatcher(
                 onTextChangedListener = {
                     viewModel.searchQuery.value = it
+
+                    with(bind.searchItemCount) {
+                        visibility = if (searchKeyword.text.toString().trim()
+                                .isBlank()
+                        ) View.GONE else View.VISIBLE
+                    }
+
                 },
                 afterTextChangedListener = {
-                    faGlobalSearchAdapter.searchQuery = searchKeyword.text.toString().lowercase()
+                    faGlobalSearchAdapter.searchQuery =
+                        searchKeyword.text.toString().trim().lowercase()
                     faGlobalSearchAdapter.notifyDataSetChanged()
                 }
             )
 
         }
 
-        setHasOptionsMenu(true)
+        bind.searchKeyword.apply {
+            requestFocus()
+            toggleSoftKeyboard(requireContext())
+
+        }
 
     }
 
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.voiceSearch) voiceSearchListener(resultLauncher)
-        return super.onOptionsItemSelected(item)
-    }
 
 
     override fun onDestroyView() {

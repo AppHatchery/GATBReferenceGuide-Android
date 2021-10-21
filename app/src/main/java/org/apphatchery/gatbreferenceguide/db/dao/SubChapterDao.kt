@@ -1,9 +1,6 @@
 package org.apphatchery.gatbreferenceguide.db.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 import org.apphatchery.gatbreferenceguide.db.data.ChapterAndSubChapter
 import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
@@ -11,7 +8,7 @@ import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 @Dao
 interface SubChapterDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(data: List<SubChapterEntity>)
 
     @Query("SELECT  * FROM  SubChapterEntity WHERE subChapterTitle LIKE '%' || :keyword || '%'  ORDER BY subChapterId")

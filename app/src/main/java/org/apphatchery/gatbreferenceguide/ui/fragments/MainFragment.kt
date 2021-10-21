@@ -42,10 +42,10 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             viewModel.getChapter.observe(viewLifecycleOwner) {
                 with(predefinedChapterList) {
                     clear()
-                    add(it[3].copy(chapterTitle = "Active TB Diagnosis"))
-                    add(it[4].copy(chapterTitle = "Active TB Treatment"))
-                    add(it[1].copy(chapterTitle = "LTBI Diagnosis"))
-                    add(it[2].copy(chapterTitle = "LTBI Treatment"))
+                    add(it[3].copy(chapterTitle = "Diagnosis for Active TB"))
+                    add(it[4].copy(chapterTitle = "Treatment for Active TB"))
+                    add(it[1].copy(chapterTitle = "Diagnosis for LTBI"))
+                    add(it[2].copy(chapterTitle = "Treatment for LTBI"))
                     add(it[0])
                     adapter.submitList(this)
                 }
@@ -63,8 +63,8 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             viewModel.getChart.observe(viewLifecycleOwner) { data ->
                 with(predefinedChartList) {
                     clear()
-                    add(data[7].copy(chartEntity = data[7].chartEntity.copy(chartTitle = "First line TB drugs for adults")))
-                    add(data[13].copy(chartEntity = data[13].chartEntity.copy(chartTitle = "Second line drugs")))
+                    add(data[19].copy(chartEntity = data[19].chartEntity.copy(chartTitle = "Use of TB drugs in Special Situations")))
+                    add(data[13].copy(chartEntity = data[13].chartEntity.copy(chartTitle = "IV Therapy Drugs")))
                     add(data[14].copy(chartEntity = data[14].chartEntity.copy(chartTitle = "Alternative regimens")))
                     add(data[4].copy(chartEntity = data[4].chartEntity.copy(chartTitle = "Dosages for LTBI regimens")))
                     add(data[18].copy(chartEntity = data[18].chartEntity.copy(chartTitle = "Treatment of extrapulmonary TB")))

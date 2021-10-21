@@ -60,7 +60,7 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="8dp"
                 android:drawableEnd="@drawable/ic_keyboard_arrow_right"
-                android:text="Show in subchapter"
+                android:text="Show in chapter"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textview_note_body"

@@ -5,6 +5,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
+import org.apphatchery.gatbreferenceguide.db.data.GlobalSearchWithMatchInfo
+import org.apphatchery.gatbreferenceguide.db.entities.FullTextSearchGlobalSearchEntity
 import org.apphatchery.gatbreferenceguide.db.entities.GlobalSearchEntity
 
 @Dao
@@ -14,7 +16,11 @@ interface GlobalSearchDao {
     suspend fun insert(data: List<GlobalSearchEntity>)
 
 
-    @Query("SELECT  * FROM  GlobalSearchEntity  WHERE  subChapter LIKE '%' || :keyword || '%'  OR subChapter LIKE '%' || :keyword || '%' OR searchTitle LIKE '%' || :keyword || '%'  OR textInBody LIKE '%' || :keyword || '%' ORDER BY chapterId")
-    fun getGlobalSearchEntity(keyword: String = ""): Flow<List<GlobalSearchEntity>>
+    @Query(
+        """SELECT  * , matchinfo(FullTextSearchGlobalSearchEntity) as matchInfo FROM 
+        GlobalSearchEntity JOIN FullTextSearchGlobalSearchEntity USING(fileName) 
+        WHERE FullTextSearchGlobalSearchEntity MATCH :keyword ORDER BY GlobalSearchEntity.chapterId ASC, GlobalSearchEntity.subChapterId ASC"""
+    )
+    fun getGlobalSearchEntity(keyword: String): Flow<List<GlobalSearchWithMatchInfo>>
 
 }

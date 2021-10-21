@@ -1,7 +1,9 @@
 package org.apphatchery.gatbreferenceguide.utils
 
+import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
@@ -84,8 +86,18 @@ fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observ
     })
 }
 
-fun  EditText.onSearchKeyword(searchText: String) = apply {
+fun EditText.onSearchKeyword(searchText: String) = apply {
     setText(searchText)
     requestFocus()
     setSelection(text.toString().length)
+}
+
+fun EditText.toggleSoftKeyboard(context: Context, showSoftKeyboard: Boolean = true) = context.apply {
+    val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    if (showSoftKeyboard) inputManager.showSoftInput(
+        this@toggleSoftKeyboard,
+        InputMethodManager.SHOW_IMPLICIT
+    ) else {
+        inputManager.hideSoftInputFromWindow(this@toggleSoftKeyboard.windowToken, 0)
+    }
 }

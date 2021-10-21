@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/voiceSearch"
-        android:icon="@drawable/ic_baseline_keyboard_voice"
+        android:icon="@drawable/ic_baseline_voice_white"
         android:title="Voice Search"
         app:showAsAction="always" />
 

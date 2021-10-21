@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -154,6 +155,13 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 layoutManager = GridLayoutManager(requireContext(), 1)
                 adapter = faNoteAdapter
             }
+
+            shareButton.setOnClickListener {
+                Intent(Intent.ACTION_SEND)
+                    .putExtra(Intent.EXTRA_TEXT, subChapterEntity.subChapterTitle)
+                    .setType("text/plain")
+                    .also { requireActivity().startActivity(Intent.createChooser(it, "Share")) }
+            }
         }
 
 
@@ -170,7 +178,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 toolbarTitle.text = chapterEntity.chapterTitle
 
 
-                tableViewLinearLayoutCompat.visibility = View.VISIBLE
+//                tableViewLinearLayoutCompat.visibility = View.VISIBLE
                 tableName.apply {
                     text = chartAndSubChapter!!.subChapterEntity.subChapterTitle
                     setOnClickListener {
@@ -394,22 +402,34 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 request: WebResourceRequest?
             ): Boolean {
                 val link = request?.url.toString()
-                return if (link.subSequence(0, 4).toString().lowercase() == "http".lowercase()) {
+                return when {
+                    link.subSequence(0, 4).toString().lowercase() == "http".lowercase() -> {
 
-                    requireActivity().apply {
-                        alertDialog(message = "Open link in browser ?") {
-                            startActivity(
-                                Intent(Intent.ACTION_VIEW)
-                                    .setData(Uri.parse(link))
-                            )
+                        requireActivity().apply {
+                            alertDialog("", message = "Open link in browser ?") {
+                                startActivity(
+                                    Intent(Intent.ACTION_VIEW)
+                                        .setData(Uri.parse(link))
+                                )
+                            }
                         }
+                        true
                     }
-                    true
-                } else {
-                    val stripLink = link.substring(link.lastIndexOf("/") + 1, link.length)
-                    stripLink.replace(EXTENSION, "")
-                    gotoNavController(stripLink.replace(EXTENSION, ""))
-                    super.shouldOverrideUrlLoading(view, request)
+                    link.contains("#") -> {
+                        bookmarkType = BookmarkType.SUBCHAPTER
+                        BodyFragmentDirections.actionBodyFragmentSelf(
+                            bodyUrl.copy(
+                                chapterEntity = ChapterEntity(chapterTitle = chapterEntity.chapterTitle)
+                            ), null
+                        ).also { findNavController().navigate(it) }
+                        true
+                    }
+                    else -> {
+                        val stripLink = link.substring(link.lastIndexOf("/") + 1, link.length)
+                        stripLink.replace(EXTENSION, "")
+                        gotoNavController(stripLink.replace(EXTENSION, ""))
+                        super.shouldOverrideUrlLoading(view, request)
+                    }
                 }
 
             }

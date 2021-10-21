@@ -16,7 +16,9 @@ class FAGlobalSearchViewModel @Inject constructor(
     val searchQuery = MutableStateFlow("")
 
     private val taskFlow = searchQuery.flatMapLatest {
-        db.globalSearchDao().getGlobalSearchEntity(it)
+        val searchQuery =
+            if (it.isEmpty()) " " else it.replace(Regex.fromLiteral("\""), "\"\"").trim()
+        db.globalSearchDao().getGlobalSearchEntity("*\"$searchQuery\"*")
     }
 
     val getGlobalSearchEntity = taskFlow.asLiveData()

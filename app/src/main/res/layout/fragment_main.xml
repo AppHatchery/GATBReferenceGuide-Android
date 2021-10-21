@@ -38,20 +38,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_round"
-            android:backgroundTint="#83C1BFBF"
-            android:foreground="?attr/selectableItemBackground"
-            app:cardCornerRadius="20dp">
+             android:foreground="?attr/selectableItemBackground"
+            app:cardCornerRadius="10dp">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:drawableStart="@drawable/ic_baseline_search"
-                android:drawableEnd="@drawable/ic_baseline_keyboard_voice"
+                android:drawableStart="@drawable/ic_baseline_search_gray"
+                android:drawableEnd="@drawable/ic_baseline_voice_gray"
                 android:drawablePadding="8dp"
                 android:padding="8dp"
-                android:textColor="@color/white"
-                android:text="Search"
+                android:textSize="17sp"
+                 android:textColor="@color/dark_gray"
+                android:text="Search Guide"
+                 android:gravity="center_vertical"
                 tools:ignore="HardcodedText" />
 
         </androidx.cardview.widget.CardView>
@@ -73,6 +73,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textview_chapter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Chapters"
+                android:textColor="@color/black"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/textview_all_chapters"
+                app:layout_constraintEnd_toStartOf="@+id/textview_all_chapters"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
+
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textview_all_chapters"
                 android:layout_width="wrap_content"
@@ -82,7 +98,8 @@
                 android:foreground="?attr/selectableItemBackgroundBorderless"
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="16dp"
-                android:text="All Chapters"
+                android:text="See All Chapters"
+                android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="HardcodedText" />
@@ -108,6 +125,7 @@
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="16dp"
                 android:text="See All Charts"
+                android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recyclerview_first_6_chapters"
                 tools:ignore="HardcodedText" />
