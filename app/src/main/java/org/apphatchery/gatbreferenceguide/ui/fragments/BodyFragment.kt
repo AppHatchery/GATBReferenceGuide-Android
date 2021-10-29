@@ -274,7 +274,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         deleteButton.apply {
             text = "Delete"
-            setTextColor(Color.WHITE)
+
              setOnClickListener {
                 requireContext().alertDialog(
                     message = "Are you sure you want to delete this note ?"
@@ -289,7 +289,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         updateButton.apply {
             text = "Update"
-            setTextColor(Color.WHITE)
+
              setOnClickListener {
                 if (noteBody.text.toString().trim()
                         .isEmpty()
