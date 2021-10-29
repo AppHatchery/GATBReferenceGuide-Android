@@ -15,7 +15,6 @@ import org.apphatchery.gatbreferenceguide.db.entities.*
         BookmarkEntity::class,
         GlobalSearchEntity::class,
         HtmlInfoEntity::class,
-        FullTextSearchGlobalSearchEntity::class,
     ], version = 1, exportSchema = false
 )
 abstract class Database : RoomDatabase() {

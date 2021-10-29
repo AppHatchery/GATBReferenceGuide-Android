@@ -63,12 +63,12 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             viewModel.getChart.observe(viewLifecycleOwner) { data ->
                 with(predefinedChartList) {
                     clear()
-                    add(data[19].copy(chartEntity = data[19].chartEntity.copy(chartTitle = "Use of TB drugs in Special Situations")))
+                    add(data[7].copy(chartEntity = data[7].chartEntity.copy(chartTitle = "First Line TB Drugs for Adults")))
                     add(data[13].copy(chartEntity = data[13].chartEntity.copy(chartTitle = "IV Therapy Drugs")))
-                    add(data[14].copy(chartEntity = data[14].chartEntity.copy(chartTitle = "Alternative regimens")))
-                    add(data[4].copy(chartEntity = data[4].chartEntity.copy(chartTitle = "Dosages for LTBI regimens")))
-                    add(data[18].copy(chartEntity = data[18].chartEntity.copy(chartTitle = "Treatment of extrapulmonary TB")))
-                    add(data[6].copy(chartEntity = data[6].chartEntity.copy(chartTitle = "Regimens for drug-susceptible TB pulmonary TB")))
+                    add(data[14].copy(chartEntity = data[14].chartEntity.copy(chartTitle = "Alternative Regimens")))
+                    add(data[4].copy(chartEntity = data[4].chartEntity.copy(chartTitle = "Dosages for LTBI Regimens")))
+                    add(data[18].copy(chartEntity = data[18].chartEntity.copy(chartTitle = "Treatment of Extrapulmonary TB")))
+                    add(data[19].copy(chartEntity = data[19].chartEntity.copy(chartTitle = "Use of TB drugs in Special Situations")))
                     adapter.submitList(this)
                 }
             }

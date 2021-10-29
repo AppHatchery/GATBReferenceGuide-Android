@@ -16,10 +16,8 @@ import org.apphatchery.gatbreferenceguide.db.entities.ChartEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.*
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FASavedViewModel
-import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
 import org.apphatchery.gatbreferenceguide.utils.setupToolbar
 import org.apphatchery.gatbreferenceguide.utils.snackBar
-import org.apphatchery.gatbreferenceguide.utils.toggleVisibility
 
 @AndroidEntryPoint
 class SavedFragment : BaseFragment(R.layout.fragment_saved) {
@@ -40,7 +38,7 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
 
         faSavedRecentAdapter = FASavedRecentAdapter().apply {
             viewModel.getRecentEntity.observe(viewLifecycleOwner) {
-                submitList(it)
+                submitList(if (it.size > 7) it.subList(0, 7) else it)
             }
             itemClickCallback {
                 viewModel.getSubChapterInfo(it.subChapterId.toString())

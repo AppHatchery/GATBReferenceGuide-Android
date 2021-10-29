@@ -13,4 +13,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <include
+        android:id="@+id/include_fragment_no_bookmark"
+        layout="@layout/include_fragment_no_bookmark"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/include_fragment_no_recent"
+        layout="@layout/include_fragment_no_recent"
+        android:visibility="gone" />
+
+    <include
+        android:id="@+id/include_fragment_no_note"
+        layout="@layout/include_fragment_no_note"
+        android:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

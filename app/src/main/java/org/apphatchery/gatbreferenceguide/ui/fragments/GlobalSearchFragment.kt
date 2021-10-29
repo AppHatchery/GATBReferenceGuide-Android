@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.ActivityResultLauncher
@@ -13,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentGlobalSearchBinding
 import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
@@ -27,7 +27,7 @@ import org.apphatchery.gatbreferenceguide.utils.setOnTextWatcher
 import org.apphatchery.gatbreferenceguide.utils.toggleSoftKeyboard
 import javax.inject.Inject
 
-
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
@@ -63,12 +63,12 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             faGlobalSearchAdapter.itemClickCallback {
                 GlobalSearchFragmentDirections.actionGlobalSearchFragmentToBodyFragment(
                     BodyUrl(
-                        ChapterEntity(it.globalSearchEntity.chapterId, it.globalSearchEntity.searchTitle),
+                        ChapterEntity(it.chapterId, it.searchTitle),
                         SubChapterEntity(
-                            it.globalSearchEntity.subChapterId,
-                            it.globalSearchEntity.chapterId,
-                            it.globalSearchEntity.subChapter,
-                            it.globalSearchEntity.fileName
+                            it.subChapterId,
+                            it.chapterId,
+                            it.subChapter,
+                            it.fileName
                         )
                     ), null
                 ).also { findNavController().navigate(it) }
@@ -77,7 +77,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         }
 
         bind.apply {
-             recyclerview.apply {
+            recyclerview.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = faGlobalSearchAdapter
             }
@@ -95,14 +95,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                                 .isBlank()
                         ) View.GONE else View.VISIBLE
                     }
-
-                },
-                afterTextChangedListener = {
-                    faGlobalSearchAdapter.searchQuery =
-                        searchKeyword.text.toString().trim().lowercase()
-                    faGlobalSearchAdapter.notifyDataSetChanged()
-                }
-            )
+                })
 
         }
 
@@ -113,7 +106,6 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         }
 
     }
-
 
 
     override fun onDestroyView() {

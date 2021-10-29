@@ -1,11 +1,12 @@
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
+import android.animation.Animator
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -15,8 +16,11 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorRes
+import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -40,7 +44,7 @@ import org.apphatchery.gatbreferenceguide.utils.*
 @AndroidEntryPoint
 class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
-    private lateinit var fragmentBodyBinding: FragmentBodyBinding
+    private lateinit var bind: FragmentBodyBinding
     private val bodyFragmentArgs: BodyFragmentArgs by navArgs()
     private lateinit var bodyUrl: BodyUrl
     private val viewModel: FABodyViewModel by viewModels()
@@ -52,21 +56,22 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private lateinit var subChapterEntity: SubChapterEntity
     private lateinit var chapterEntity: ChapterEntity
     private var baseURL = ""
+    private var isCollapsed = false
 
     private fun setupBookmark(id: String) {
         viewModel.getBookmarkById(id).observe(viewLifecycleOwner) {
             if (it != null) {
                 bookmarkEntity = it
-                fragmentBodyBinding.bookmarkImageButton.setImageResource(R.drawable.ic_baseline_star)
+                bind.bookmarkImageButton.setImageResource(R.drawable.ic_baseline_star)
             } else {
-                fragmentBodyBinding.bookmarkImageButton.setImageResource(R.drawable.ic_baseline_star_outline)
+                bind.bookmarkImageButton.setImageResource(R.drawable.ic_baseline_star_outline)
             }
         }
     }
 
 
     private fun onDeleteNoteSnackbar(note: NoteEntity) =
-        fragmentBodyBinding.root.snackBar(" Note deleted.").also {
+        bind.root.snackBar(" Note deleted.").also {
             it.setAction("undo") {
                 viewModel.insertNote(note)
             }
@@ -78,7 +83,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        fragmentBodyBinding = FragmentBodyBinding.bind(view)
+        bind = FragmentBodyBinding.bind(view)
         bodyUrl = bodyFragmentArgs.bodyUrl
         setHasOptionsMenu(true)
 
@@ -114,13 +119,13 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
 
         ItemTouchHelper(swipeHandler).also {
-            it.attachToRecyclerView(fragmentBodyBinding.recyclerviewNote)
+            it.attachToRecyclerView(bind.recyclerviewNote)
         }
 
 
 
         setupWebView()
-        fragmentBodyBinding.apply {
+        bind.apply {
 
             toolbar.enableToolbar(requireActivity())
             toolbarBackButton.setOnClickListener { requireActivity().onBackPressed() }
@@ -139,6 +144,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     if (bookmarkType == BookmarkType.CHART) chartAndSubChapter!!.chartEntity.id else subChapterEntity.subChapterId.toString()
                 ).observe(viewLifecycleOwner) { data ->
                     it.submitList(data)
+                    showNoteCollapseControl(data.isEmpty())
+                    bind.noteCountTextView.text = getString(R.string.notes_count, data.size)
                 }
 
                 it.itemClickCallback { onNoteListenerEdit(it) }
@@ -162,6 +169,23 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     .setType("text/plain")
                     .also { requireActivity().startActivity(Intent.createChooser(it, "Share")) }
             }
+
+            collapseActionButton.setOnClickListener {
+                bind.recyclerviewNote.apply {
+                    if (isCollapsed.not()) {
+                        scaleAnimate(this, 0f) {
+                            (it as ImageView).setImageResource(R.drawable.ic_baseline_arrow_down)
+                            visibility = View.GONE
+                        }
+                    } else {
+                        visibility = View.VISIBLE
+                        scaleAnimate(this, 1f) {
+                            (it as ImageView).setImageResource(R.drawable.ic_baseline_arrow_up)
+                        }
+                    }
+                    isCollapsed = !isCollapsed
+                }
+            }
         }
 
 
@@ -172,7 +196,24 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         )
     }
 
-    private fun isChartView() = fragmentBodyBinding.apply {
+    private fun scaleAnimate(view: View, scaleFactor: Float, onAnimationCompleted: () -> Unit) =
+        view.animate().apply {
+            scaleX(scaleFactor).scaleY(scaleFactor)
+            duration = 200
+            setListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator?) = Unit
+                override fun onAnimationEnd(animation: Animator?) = onAnimationCompleted()
+                override fun onAnimationCancel(animation: Animator?) = Unit
+                override fun onAnimationRepeat(animation: Animator?) = Unit
+            })
+        }
+
+    private fun showNoteCollapseControl(isEmpty: Boolean) {
+        bind.collapsableNoteRoot.visibility =
+            if (isEmpty) View.GONE else View.VISIBLE
+    }
+
+    private fun isChartView() = bind.apply {
         viewModel.getChapterById(chartAndSubChapter!!.subChapterEntity.chapterId)
             .observeOnce(viewLifecycleOwner) { chapterEntity ->
                 toolbarTitle.text = chapterEntity.chapterTitle
@@ -213,7 +254,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         setContentView(R.layout.dialog_note)
         val deleteButton = findViewById<Button>(R.id.noteCancelButton)
         val updateButton = findViewById<Button>(R.id.noteSaveButton)
-        val noteBody = findViewById<TextInputEditText>(R.id.noteBody)
+        val noteBody = findViewById<AppCompatEditText>(R.id.noteBody)
         val noteTitle = findViewById<TextView>(R.id.noteTitle)
         val noteColorRecyclerView = findViewById<RecyclerView>(R.id.noteRecyclerViewColor)
         noteColorRecyclerView.apply {
@@ -233,8 +274,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         deleteButton.apply {
             text = "Delete"
-            changeBackgroundColor(R.color.reddish)
-            setOnClickListener {
+            setTextColor(Color.WHITE)
+             setOnClickListener {
                 requireContext().alertDialog(
                     message = "Are you sure you want to delete this note ?"
                 ) {
@@ -248,11 +289,11 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         updateButton.apply {
             text = "Update"
-            changeBackgroundColor(R.color.green)
-            setOnClickListener {
+            setTextColor(Color.WHITE)
+             setOnClickListener {
                 if (noteBody.text.toString().trim()
                         .isEmpty()
-                ) fragmentBodyBinding.root.snackBar("Please enter notes to update.") else {
+                ) bind.root.snackBar("Please enter notes to update.") else {
                     viewModel.updateNote(
                         note.copy(
                             noteText = noteBody.text.toString().trim(),
@@ -273,7 +314,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         setContentView(R.layout.dialog_note)
         val cancelButton = findViewById<View>(R.id.noteCancelButton)
         val saveButton = findViewById<View>(R.id.noteSaveButton)
-        val noteBody = findViewById<TextInputEditText>(R.id.noteBody)
+        val noteBody = findViewById<AppCompatEditText>(R.id.noteBody)
         val noteColorRecyclerView = findViewById<RecyclerView>(R.id.noteRecyclerViewColor)
         findViewById<View>(R.id.closeDialog).setOnClickListener { dismiss() }
         noteColorRecyclerView.apply {
@@ -296,7 +337,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             val cancelButton = findViewById<Button>(R.id.bookmarkCancelButton)
             val saveButton = findViewById<Button>(R.id.bookmarkSaveButton)
             val bookTitleTextInputEditText =
-                findViewById<TextInputEditText>(R.id.bookmarkTitleTextInputEditText)
+                findViewById<AppCompatEditText>(R.id.bookmarkTitleTextInputEditText)
             bookTitleTextInputEditText.also {
                 it.setText(subChapterEntity.subChapterTitle)
                 it.requestFocus()
@@ -311,12 +352,11 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
 
             findViewById<View>(R.id.close_dialog).setOnClickListener { dismiss() }
-            findViewById<TextView>(R.id.bookmarkTitle).text = subChapterEntity.subChapterTitle
 
 
             if (bookmarkEntity.bookmarkId != "0") {
 
-                findViewById<TextView>(R.id.bookmarkTitle).text = bookmarkEntity.bookmarkTitle
+                findViewById<TextView>(R.id.bookmarkTitle).text ="Edit bookmark"
                 bookTitleTextInputEditText.also {
                     it.setText(bookmarkEntity.bookmarkTitle)
                     it.setSelection(bookmarkEntity.bookmarkTitle.length)
@@ -325,14 +365,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
                 cancelButton.apply {
                     text = "Delete"
-                    changeBackgroundColor(R.color.reddish)
-                }
+                 }
 
 
                 saveButton.apply {
                     text = "Update"
-                    changeBackgroundColor(R.color.green)
-                }
+                 }
 
                 cancelButton.setOnClickListener {
                     requireContext().alertDialog(
@@ -370,7 +408,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         requireContext().toast("Bookmark saved")
     }
 
-    private fun onSaveNote(noteBody: String) = fragmentBodyBinding.root.apply {
+    private fun onSaveNote(noteBody: String) = bind.root.apply {
         if (noteBody.isBlank()) snackBar("Please enter notes to save.") else {
             viewModel.insertNote(
                 NoteEntity(
@@ -385,7 +423,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         }
     }
 
-    private fun setupWebView() = fragmentBodyBinding.bodyWebView.apply {
+    private fun setupWebView() = bind.bodyWebView.apply {
         with(settings) {
             allowContentAccess = true
             allowFileAccess = true

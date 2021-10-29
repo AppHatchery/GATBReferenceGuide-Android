@@ -9,30 +9,30 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
- import org.apphatchery.gatbreferenceguide.databinding.FragmentGlobalSearchItemBinding
-import org.apphatchery.gatbreferenceguide.db.data.GlobalSearchWithMatchInfo
- import javax.inject.Inject
+import org.apphatchery.gatbreferenceguide.databinding.FragmentGlobalSearchItemBinding
+import org.apphatchery.gatbreferenceguide.db.entities.GlobalSearchEntity
+import javax.inject.Inject
 
 class FAGlobalSearchAdapter @Inject constructor(
-) : ListAdapter<GlobalSearchWithMatchInfo, FAGlobalSearchAdapter.ViewHolder>(DiffUtilCallBack()) {
+) : ListAdapter<GlobalSearchEntity, FAGlobalSearchAdapter.ViewHolder>(DiffUtilCallBack()) {
 
     var searchQuery: String = ""
 
 
-    class DiffUtilCallBack : DiffUtil.ItemCallback<GlobalSearchWithMatchInfo>() {
-        override fun areItemsTheSame(oldItem: GlobalSearchWithMatchInfo, newItem: GlobalSearchWithMatchInfo) =
-            newItem.globalSearchEntity.fileName == oldItem.globalSearchEntity.fileName
+    class DiffUtilCallBack : DiffUtil.ItemCallback<GlobalSearchEntity>() {
+        override fun areItemsTheSame(oldItem: GlobalSearchEntity, newItem: GlobalSearchEntity) =
+            newItem.fileName == oldItem.fileName
 
-        override fun areContentsTheSame(oldItem: GlobalSearchWithMatchInfo, newItem: GlobalSearchWithMatchInfo) =
+        override fun areContentsTheSame(oldItem: GlobalSearchEntity, newItem: GlobalSearchEntity) =
             oldItem == newItem
     }
 
-    fun itemClickCallback(listener: ((GlobalSearchWithMatchInfo) -> Unit)) {
+    fun itemClickCallback(listener: ((GlobalSearchEntity) -> Unit)) {
         onItemClickListAdapter = listener
     }
 
 
-    private var onItemClickListAdapter: ((GlobalSearchWithMatchInfo) -> Unit)? = null
+    private var onItemClickListAdapter: ((GlobalSearchEntity) -> Unit)? = null
 
     private fun prepSearchQuery(textInBody: String) =
         textInBody.subSequence(getSearchStartPosition(textInBody), textInBody.length).toString()
@@ -44,25 +44,15 @@ class FAGlobalSearchAdapter @Inject constructor(
     inner class ViewHolder(private val fragmentGlobalSearchItemBinding: FragmentGlobalSearchItemBinding) :
         RecyclerView.ViewHolder(fragmentGlobalSearchItemBinding.root) {
 
-        fun onBinding(globalSearchEntity: GlobalSearchWithMatchInfo, index: Int) =
+        fun onBinding(globalSearchEntity: GlobalSearchEntity, index: Int) =
             fragmentGlobalSearchItemBinding.apply {
 
-//                textInBody.text = globalSearchEntity.textInBody
-//                searchTitle.text = globalSearchEntity.searchTitle
-//                subChapter.text = globalSearchEntity.subChapter
+                searchTitle.text = globalSearchEntity.searchTitle
+                subChapter.text = globalSearchEntity.subChapter
 
-                setSpannableString(prepSearchQuery(globalSearchEntity.globalSearchEntity.textInBody)) {
+                setSpannableString(prepSearchQuery(globalSearchEntity.textInBody)) {
                     textInBody.text = this
                 }
-
-                setSpannableString(globalSearchEntity.globalSearchEntity.searchTitle) {
-                    searchTitle.text = this
-                }
-
-                setSpannableString(globalSearchEntity.globalSearchEntity.subChapter) {
-                    subChapter.text = this
-                }
-
             }
 
         init {

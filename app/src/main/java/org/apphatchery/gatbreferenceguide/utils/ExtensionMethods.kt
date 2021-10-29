@@ -54,9 +54,7 @@ abstract class OnTouchHelper(val onTouchHelperCallback: (Int) -> Int) :
 }
 
 fun EditText.setOnTextWatcher(
-    onTextChangedListener: (String) -> Unit,
-    afterTextChangedListener: () -> Unit
-) {
+    onTextChangedListener: (String) -> Unit) {
     this.addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
 
@@ -72,7 +70,7 @@ fun EditText.setOnTextWatcher(
 
         }
 
-        override fun afterTextChanged(s: Editable?) = afterTextChangedListener()
+        override fun afterTextChanged(s: Editable?) = Unit
     })
 }
 
