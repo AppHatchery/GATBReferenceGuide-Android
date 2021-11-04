@@ -13,6 +13,7 @@ import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
 import org.apphatchery.gatbreferenceguide.db.data.ViewPagerData
 import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
 import org.apphatchery.gatbreferenceguide.db.entities.ChartEntity
+import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.*
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FASavedViewModel
@@ -92,17 +93,12 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
             itemClickCallback {
                 viewModel.getSubChapterInfo(it.bookmarkId)
                     .observe(viewLifecycleOwner) { subChapterEntity ->
-                        viewModel.getChapterInfo(subChapterEntity.chapterId)
-                            .observe(viewLifecycleOwner) { chapterEntity ->
-                                SavedFragmentDirections.actionSavedFragmentToBodyFragment(
-                                    BodyUrl(
-                                        chapterEntity,
-                                        subChapterEntity
-                                    ), null
-                                ).apply {
-                                    findNavController().navigate(this)
-                                }
+                        if (subChapterEntity == null) {
+                            viewModel.getSubChapterInfo(it.subChapter).observe(viewLifecycleOwner) {
+                                actionSavedFragmentToBodyFragment(it)
                             }
+                        } else
+                            actionSavedFragmentToBodyFragment(subChapterEntity)
                     }
             }
 
@@ -152,5 +148,19 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
         }.attach()
 
 
+    }
+
+    private fun actionSavedFragmentToBodyFragment(subChapterEntity: SubChapterEntity) {
+        viewModel.getChapterInfo(subChapterEntity.chapterId)
+            .observe(viewLifecycleOwner) { chapterEntity ->
+                SavedFragmentDirections.actionSavedFragmentToBodyFragment(
+                    BodyUrl(
+                        chapterEntity,
+                        subChapterEntity
+                    ), null
+                ).apply {
+                    findNavController().navigate(this)
+                }
+            }
     }
 }

@@ -8,4 +8,5 @@ data class BookmarkEntity(
     @PrimaryKey(autoGenerate = false)
     val bookmarkId: String = 0.toString(),
     val bookmarkTitle: String = "",
+    val subChapter: String = ""
 )
