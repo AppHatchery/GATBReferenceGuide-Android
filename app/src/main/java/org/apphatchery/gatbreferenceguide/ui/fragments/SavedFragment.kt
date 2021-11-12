@@ -69,7 +69,7 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
                             .observe(viewLifecycleOwner) { chapter ->
 
                                 val chartEntity = ChartEntity(
-                                    it.noteId, it.noteTitle, subChapter.subChapterTitle, 0
+                                    it.noteId, it.noteTitle, subChapter.subChapterTitle, subChapter.subChapterId, 0
                                 )
 
                                 val chartAndSubChapter = ChartAndSubChapter(chartEntity, subChapter)

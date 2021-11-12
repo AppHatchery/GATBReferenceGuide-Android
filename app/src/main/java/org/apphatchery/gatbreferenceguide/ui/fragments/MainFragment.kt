@@ -6,6 +6,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentMainBinding
@@ -17,6 +19,7 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChartAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAMainViewModel
 import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
+import org.apphatchery.gatbreferenceguide.utils.toast
 import org.apphatchery.gatbreferenceguide.utils.toggleVisibility
 
 
@@ -107,6 +110,8 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             }
         }
 
+        setupDynamicLink()
+
     }
 
     private fun RecyclerView.setupAdapter(
@@ -117,4 +122,52 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         adapter = listAdapter
     }
 
+    private fun setupDynamicLink() {
+        Firebase.dynamicLinks
+            .getDynamicLink(requireActivity().intent)
+            .addOnSuccessListener(requireActivity()) { pendingDynamicLink ->
+                if (pendingDynamicLink != null)
+                    pendingDynamicLink.link?.let {
+                        val id = it.getQueryParameter("query")
+                        val isPage = it.getQueryParameter("isPage")
+                        if (isPage != null && id != null) {
+                            requireActivity().intent.data = null
+                            requireActivity().intent.replaceExtras(Bundle())
+                            handleDynamicLink(isPage.toInt(), id)
+                        }
+                    }
+            }
+    }
+
+    private fun handleDynamicLink(isPage: Int, id: String) {
+        if (isPage == 0) {
+            viewModel.getChartAndSubChapterById(id)
+                .observe(viewLifecycleOwner) { chartAndSubchapter ->
+                    viewModel.getSubChapterInfo(chartAndSubchapter.chartEntity.id)
+                        .observe(viewLifecycleOwner) { subChapterEntity ->
+                            viewModel.getChapterInfo(subChapterEntity.chapterId)
+                                .observe(viewLifecycleOwner) { chapterEntity ->
+                                    MainFragmentDirections.actionMainFragmentToBodyFragmentDirect(
+                                        BodyUrl(chapterEntity, subChapterEntity), chartAndSubchapter
+                                    ).apply {
+                                        findNavController().navigate(this)
+                                    }
+                                }
+                        }
+                }
+        } else {
+            viewModel.getSubChapterInfo(id)
+                .observe(viewLifecycleOwner) { subChapterEntity ->
+                    viewModel.getChapterInfo(subChapterEntity.chapterId)
+                        .observe(viewLifecycleOwner) { chapterEntity ->
+                            MainFragmentDirections.actionMainFragmentToBodyFragmentDirect(
+                                BodyUrl(chapterEntity, subChapterEntity), null
+                            ).apply {
+                                findNavController().navigate(this)
+                            }
+                        }
+                }
+
+        }
+    }
 }

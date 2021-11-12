@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
@@ -16,7 +15,6 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorRes
@@ -26,7 +24,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.*
-import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.dynamiclinks.DynamicLink
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import dagger.hilt.android.AndroidEntryPoint
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentBodyBinding
@@ -43,6 +42,13 @@ import org.apphatchery.gatbreferenceguide.utils.*
 @SuppressLint("SetTextI18n")
 @AndroidEntryPoint
 class BodyFragment : BaseFragment(R.layout.fragment_body) {
+
+
+    companion object {
+        const val DOMAIN_URI_PREFIX = "https://gatbreferenceguide.page.link"
+        const val DEEP_LINK = "https://www.example.com"
+        const val LOGO_URL ="https://raw.githubusercontent.com/AppHatchery/GA-TB-Reference-Guide-Web/main/assets/logo.jpg"
+    }
 
     private lateinit var bind: FragmentBodyBinding
     private val bodyFragmentArgs: BodyFragmentArgs by navArgs()
@@ -164,10 +170,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             }
 
             shareButton.setOnClickListener {
-                Intent(Intent.ACTION_SEND)
-                    .putExtra(Intent.EXTRA_TEXT, subChapterEntity.subChapterTitle)
-                    .setType("text/plain")
-                    .also { requireActivity().startActivity(Intent.createChooser(it, "Share")) }
+                createDynamicLink()
+
+
             }
 
             collapseActionButton.setOnClickListener {
@@ -274,7 +279,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         deleteButton.apply {
             text = "Delete"
-             setOnClickListener {
+            setOnClickListener {
                 requireContext().alertDialog(
                     message = "Are you sure you want to delete this note ?"
                 ) {
@@ -288,7 +293,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         updateButton.apply {
             text = "Update"
-             setOnClickListener {
+            setOnClickListener {
                 if (noteBody.text.toString().trim()
                         .isEmpty()
                 ) bind.root.snackBar("Please enter notes to update.") else {
@@ -354,7 +359,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
             if (bookmarkEntity.bookmarkId != "0") {
 
-                findViewById<TextView>(R.id.bookmarkTitle).text ="Edit bookmark"
+                findViewById<TextView>(R.id.bookmarkTitle).text = "Edit bookmark"
                 bookTitleTextInputEditText.also {
                     it.setText(bookmarkEntity.bookmarkTitle)
                     it.setSelection(bookmarkEntity.bookmarkTitle.length)
@@ -363,12 +368,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
                 cancelButton.apply {
                     text = "Delete"
-                 }
+                }
 
 
                 saveButton.apply {
                     text = "Update"
-                 }
+                }
 
                 cancelButton.setOnClickListener {
                     requireContext().alertDialog(
@@ -502,5 +507,33 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         return super.onOptionsItemSelected(item)
     }
 
+
+    private fun createDynamicLink() {
+        requireView().snackBar("Generating link, please wait ...")
+        val query =
+            if (bookmarkType == BookmarkType.CHART) chartAndSubChapter!!.chartEntity.id else subChapterEntity.subChapterId.toString()
+        val isPage = if (bookmarkType == BookmarkType.CHART) 0 else 1
+
+        FirebaseDynamicLinks.getInstance().createDynamicLink()
+            .setLink(Uri.parse("$DEEP_LINK?query=$query&isPage=$isPage"))
+            .setDomainUriPrefix(DOMAIN_URI_PREFIX)
+            .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
+            .setSocialMetaTagParameters(
+                DynamicLink.SocialMetaTagParameters.Builder()
+                    .setTitle(chapterEntity.chapterTitle)
+                    .setDescription(subChapterEntity.subChapterTitle)
+                    .setImageUrl(Uri.parse(LOGO_URL))
+                    .build())
+            .buildShortDynamicLink()
+            .addOnSuccessListener { result ->
+                Intent(Intent.ACTION_SEND)
+                    .putExtra(Intent.EXTRA_TEXT, result.shortLink.toString())
+                    .setType("text/plain")
+                    .also { requireActivity().startActivity(Intent.createChooser(it, "Share")) }
+            }
+            .addOnFailureListener {
+                requireView().snackBar("Failed to create link, please try again")
+            }
+    }
 
 }

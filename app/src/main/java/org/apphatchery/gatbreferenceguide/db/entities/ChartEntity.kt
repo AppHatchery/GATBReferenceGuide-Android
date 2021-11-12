@@ -12,5 +12,6 @@ data class ChartEntity(
     val id: String,
     val chartTitle: String,
     val subChapterTitle: String,
+    val subChapterId: Int,
     val chartHomePosition: Int
 ) : Parcelable
