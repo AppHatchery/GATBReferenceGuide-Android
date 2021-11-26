@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import org.apphatchery.gatbreferenceguide.R
@@ -17,8 +18,7 @@ import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.*
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FASavedViewModel
-import org.apphatchery.gatbreferenceguide.utils.setupToolbar
-import org.apphatchery.gatbreferenceguide.utils.snackBar
+ import org.apphatchery.gatbreferenceguide.utils.snackBar
 
 @AndroidEntryPoint
 class SavedFragment : BaseFragment(R.layout.fragment_saved) {
@@ -31,15 +31,28 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
 
     private val viewPagerHeadingTitle = arrayListOf("Recent", "Bookmarks", "Notes")
     private val viewModel: FASavedViewModel by viewModels()
+    private var onViewCreated = true
+
+
+    enum class SavedType {
+        RECENT, BOOKMARK, NOTES
+    }
+
+
+    data class SavedTypeData(
+        val savedType: SavedType = SavedType.RECENT,
+        val itemCount: Int = -1,
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         bind = FragmentSavedBinding.bind(view)
-        bind.toolbar.setupToolbar(requireActivity(), "Saved", null, false)
 
         faSavedRecentAdapter = FASavedRecentAdapter().apply {
             viewModel.getRecentEntity.observe(viewLifecycleOwner) {
                 submitList(if (it.size > 7) it.subList(0, 7) else it)
+                if (onViewCreated) viewModel.setSavedItemCount(SavedTypeData(itemCount = it.size))
+                onViewCreated = false
             }
             itemClickCallback {
                 viewModel.getSubChapterInfo(it.subChapterId.toString())
@@ -56,6 +69,27 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
             }
         }
 
+        bind.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+
+                when (position) {
+                    0 -> setSavedData(
+                        SavedType.RECENT, faSavedRecentAdapter.currentList.size
+                    )
+
+                    1 -> setSavedData(
+                        SavedType.BOOKMARK, faSavedBookmarkAdapter.currentList.size
+                    )
+
+                    2 -> setSavedData(
+                        SavedType.NOTES,
+                        faSavedNoteAdapter.currentList.size
+                    )
+                }
+            }
+        })
+
+
 
         faSavedNoteAdapter = FANoteAdapter(View.VISIBLE).apply {
             viewModel.getNoteEntity.observe(viewLifecycleOwner) {
@@ -69,7 +103,11 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
                             .observe(viewLifecycleOwner) { chapter ->
 
                                 val chartEntity = ChartEntity(
-                                    it.noteId, it.noteTitle, subChapter.subChapterTitle, subChapter.subChapterId, 0
+                                    it.noteId,
+                                    it.noteTitle,
+                                    subChapter.subChapterTitle,
+                                    subChapter.subChapterId,
+                                    0
                                 )
 
                                 val chartAndSubChapter = ChartAndSubChapter(chartEntity, subChapter)
@@ -81,6 +119,7 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
                                 }
                             }
                     }
+                setSavedData(SavedType.NOTES, currentList.size)
             }
         }
 
@@ -108,10 +147,13 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 val bookmark = faSavedBookmarkAdapter.currentList[position]
+                val currentListSize = faSavedBookmarkAdapter.currentList.size
                 viewModel.deleteBookmark(bookmark)
-                bind.root.snackBar(" Bookmark deleted.").also {
-                    it.setAction("undo") {
+                setSavedData(SavedType.BOOKMARK, currentListSize.minus(1))
+                bind.root.snackBar(getString(R.string.bookmark_deleted)).also {
+                    it.setAction(getString(R.string.undo)) {
                         viewModel.insertBookmark(bookmark)
+                        setSavedData(SavedType.BOOKMARK, currentListSize)
                     }
                 }
             }
@@ -123,9 +165,12 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
                 val position = viewHolder.adapterPosition
                 val note = faSavedNoteAdapter.currentList[position]
                 viewModel.deleteNote(note)
-                bind.root.snackBar(" Note deleted.").also {
-                    it.setAction("undo") {
+                val currentListSize = faSavedNoteAdapter.currentList.size
+                setSavedData(SavedType.NOTES, currentListSize.minus(1))
+                bind.root.snackBar(getString(R.string.note_deleted)).also {
+                    it.setAction(getString(R.string.undo)) {
                         viewModel.insertNote(note)
+                        setSavedData(SavedType.NOTES, currentListSize)
                     }
                 }
             }
@@ -138,7 +183,7 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
         )
 
 
-        faSavedViewPagerAdapter = FASavedViewPagerAdapter().apply {
+        faSavedViewPagerAdapter = FASavedViewPagerAdapter(viewModel, viewLifecycleOwner).apply {
             submitList(viewPagerAdapter)
             bind.viewPager.adapter = this
         }
@@ -163,4 +208,7 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
                 }
             }
     }
+
+    private fun setSavedData(savedType: SavedType, itemCount: Int) =
+        viewModel.setSavedItemCount(SavedTypeData(savedType, itemCount))
 }

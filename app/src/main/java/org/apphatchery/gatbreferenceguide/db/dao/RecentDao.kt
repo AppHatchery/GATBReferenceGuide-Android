@@ -1,10 +1,11 @@
 package org.apphatchery.gatbreferenceguide.db.dao
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
-import org.apphatchery.gatbreferenceguide.db.data.ChapterAndSubChapter
 import org.apphatchery.gatbreferenceguide.db.entities.RecentEntity
-import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 
 @Dao
 interface RecentDao {
@@ -17,5 +18,8 @@ interface RecentDao {
 
     @Query("SELECT * FROM RecentEntity ORDER BY timeStamp DESC")
     fun getRecentEntity(): Flow<List<RecentEntity>>
+
+    @Query("DELETE FROM RecentEntity")
+    suspend fun clearRecent()
 
 }

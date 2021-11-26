@@ -112,13 +112,10 @@ class SplashFragment : BaseFragment(R.layout.fragment_splash) {
                 .observe(viewLifecycleOwner) { resource ->
                     when (resource) {
                         is Resource.Success -> {
-
-
                             if (viewModel.dumpSubChapterDataObserver) {
                                 dumpHTMLInfo()
                                 viewModel.dumpSubChapterDataObserver = false
                             }
-
                         }
                         else -> {
                         }
@@ -148,7 +145,7 @@ class SplashFragment : BaseFragment(R.layout.fragment_splash) {
                         viewLifecycleOwner.lifecycleScope.launch {
                             userPrefs.setFirstLaunch(false)
                         }
-                        findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
+                        findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToMainFragment())
                     }
                 }
             }
@@ -157,9 +154,9 @@ class SplashFragment : BaseFragment(R.layout.fragment_splash) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         userPrefs.getFirstLaunch.asLiveData().observe(viewLifecycleOwner) {
-            requireActivity().getBottomNavigationView().toggleVisibility(false)
-            if (it) firstLaunch(view) else
-                findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
+             if (it) firstLaunch(view) else{
+                findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToMainFragment())
+            }
         }
 
 

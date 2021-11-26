@@ -1,7 +1,6 @@
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -13,12 +12,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentWithRecyclerviewBinding
 import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
-import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAChartAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAChartViewModel
-import org.apphatchery.gatbreferenceguide.utils.TAG
-import org.apphatchery.gatbreferenceguide.utils.enableToolbar
 
 @AndroidEntryPoint
 class ChartFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
@@ -37,24 +33,20 @@ class ChartFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
             }
 
             faChartAdapter.itemClickCallback {
-                viewModel.getChapterInfo(it.subChapterEntity.chapterId).observe(viewLifecycleOwner){ chapterEntity->
-                    ChartFragmentDirections.actionChartFragmentToBodyFragment(
-                        BodyUrl(chapterEntity, it.subChapterEntity),
-                        it
-                    ).apply {
-                        findNavController().navigate(this)
+                viewModel.getChapterInfo(it.subChapterEntity.chapterId)
+                    .observe(viewLifecycleOwner) { chapterEntity ->
+                        ChartFragmentDirections.actionChartFragmentToBodyFragment(
+                            BodyUrl(chapterEntity, it.subChapterEntity),
+                            it
+                        ).apply {
+                            findNavController().navigate(this)
+                        }
                     }
-                }
 
             }
         }
 
         bind.apply {
-
-            toolbarBackButton.setOnClickListener { requireActivity().onBackPressed() }
-            "All Charts".also { toolbarTitle.text = it }
-            toolbar.enableToolbar(requireActivity())
-
 
             recyclerview.apply {
                 layoutManager = LinearLayoutManager(requireContext())

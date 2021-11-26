@@ -6,13 +6,10 @@ import android.content.Context
 import android.content.res.AssetManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.reflect.TypeToken
 import org.apphatchery.gatbreferenceguide.R
@@ -21,40 +18,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.util.*
-
-fun Toolbar.setupToolbar(
-    context: Context,
-    titleText: String? = null,
-    subtitleText: String? = null,
-    onBackPressed: Boolean = true
-) =
-    (context as AppCompatActivity).run {
-        setSupportActionBar(this@setupToolbar)
-        supportActionBar?.let {
-            with(it) {
-                if (onBackPressed) {
-                    setDisplayHomeAsUpEnabled(true)
-                    setDisplayShowHomeEnabled(true)
-                    setHomeAsUpIndicator(R.drawable.ic_arrow_back)
-                }
-
-                title = titleText
-                subtitle = subtitleText
-            }
-        }
-        if (onBackPressed)
-            this@setupToolbar.setNavigationOnClickListener {
-                onBackPressed()
-            }
-    }
-
-
-fun Toolbar.enableToolbar(context: Context) =
-    (context as AppCompatActivity).also {
-        it.setSupportActionBar(this@enableToolbar)
-    }.supportActionBar?.let {
-        it.title = null
-    }
 
 fun Dialog.dialog(): Dialog {
     this.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT)).also { return this }
@@ -95,7 +58,7 @@ private fun InputStream.writeToDisk(file: File) {
 fun Context.toInternalStorage(
     inputStream: InputStream,
     filename: String,
-    override: Boolean = true
+    override: Boolean = true,
 ) {
     File(cacheDir, filename).also { file ->
         if (override) inputStream.writeToDisk(file) else if (file.exists()
@@ -171,7 +134,7 @@ fun Activity.getBottomNavigationView(): View = findViewById(R.id.bottomNavigatio
 fun Context.alertDialog(
     title: String = "Attention",
     message: String,
-    positiveButtonCallback: () -> Unit
+    positiveButtonCallback: () -> Unit,
 ): AlertDialog = AlertDialog.Builder(this)
     .setTitle(title)
     .setMessage(message)

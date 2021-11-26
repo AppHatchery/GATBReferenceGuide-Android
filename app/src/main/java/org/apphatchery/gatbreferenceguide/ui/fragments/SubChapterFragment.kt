@@ -6,6 +6,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,11 +15,10 @@ import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentWithRecyclerviewBinding
 import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
 import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
-import org.apphatchery.gatbreferenceguide.db.entities.RecentEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FASubChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FASubChapterViewModel
-import org.apphatchery.gatbreferenceguide.utils.enableToolbar
+import org.apphatchery.gatbreferenceguide.utils.getActionBar
 
 @AndroidEntryPoint
 class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
@@ -57,9 +57,7 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
 
         bind.apply {
 
-            toolbarBackButton.setOnClickListener { requireActivity().onBackPressed() }
-            chapterEntity.chapterTitle.also { toolbarTitle.text = it }
-            toolbar.enableToolbar(requireActivity())
+            getActionBar(requireActivity())?.title = chapterEntity.chapterTitle
 
             recyclerview.apply {
                 layoutManager = LinearLayoutManager(requireContext())

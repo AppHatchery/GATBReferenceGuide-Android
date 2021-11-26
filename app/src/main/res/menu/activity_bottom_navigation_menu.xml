@@ -11,18 +11,13 @@
         android:icon="@drawable/ic_baseline_bookmark"
         android:title="Saved" />
 
-    <item
-        android:id="@+id/privacyPolicy"
-        android:icon="@drawable/ic_privacy"
-        android:title="Privacy Policy" />
-
     <!--    <item-->
 <!--        android:id="@+id/phoneBook"-->
 <!--        android:icon="@drawable/ic_phone_book"-->
 <!--        android:title="Phone Book" />-->
 
-<!--    <item-->
-<!--        android:id="@+id/settings"-->
-<!--        android:icon="@drawable/ic_baseline_settings"-->
-<!--        android:title="Settings" />-->
+    <item
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/ic_baseline_settings"
+        android:title="Settings" />
 </menu>

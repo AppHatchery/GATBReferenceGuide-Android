@@ -1,4 +1,49 @@
 <resources>
     <string name="app_name">GATBReferenceGuide</string>
+    <string name="bookmark_confirm_deletion">Are you sure you want to remove %s from you bookmarks ?</string>
+    <string name="bookmark_deleted">%s has been removed from your bookmarks.</string>
+    <string name="bookmark_updated">Bookmark has been updated.</string>
+    <string name="bookmark_saved">Bookmark saved</string>
+    <string name="bookmark_add">Add Bookmark</string>
+
     <string name="notes_count">My Notes (%d)</string>
+    <string name="note_saved">Note saved.</string>
+    <string name="note_deleted">Note deleted.</string>
+    <string name="note_updated">Note has been updated.</string>
+    <string name="note_enter_to_save_prompt">Please enter notes to save.</string>
+    <string name="note_confirm_deletion">Are you sure you want to delete this note ?</string>
+    <string name="note_enter_to_update_prompt">Please enter notes to update.</string>
+
+    <string name="dynamic_link_generation">Generating link, please wait …</string>
+    <string name="dynamic_link_failed_to_generate">Failed to create link, please try again.</string>
+    <string name="view_in_chapter">View in chapter</string>
+
+    <string name="delete">Delete</string>
+    <string name="update">Update</string>
+    <string name="edit">Edit</string>
+    <string name="share">Share</string>
+    <string name="undo">Undo</string>
+    <string name="bookmark">Bookmark</string>
+    <string name="note">Note</string>
+    <string name="edit_concat">Edit %s</string>
+
+    <string name="open_link_in_browser">Open link in browser ?</string>
+    <string name="last_updated">Last updates %s</string>
+
+
+    <!-- Privacy Policy Preferences -->
+    <string name="privacy_policy_key">privacy_policy_key</string>
+    <string name="privacy_policy">Privacy Policy</string>
+
+
+    <!-- Reset Preferences -->
+    <string name="reset_key">reset_key</string>
+    <string name="reset_title">Cleat App Content</string>
+    <string name="reset_summary">Reset all app data and start all over again</string>
+
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download content if available </string>
+    <string name="attachment_summary_off">Only download content when manually requested</string>
+
+
 </resources>

@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.MainFragment"
-        android:label="fragment_main"
+        android:label="Guide"
         tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_chapterFragment"
@@ -38,12 +38,18 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_privacyPolicy"
+            app:destination="@id/privacyPolicy" />
     </fragment>
 
     <fragment
         android:id="@+id/chapterFragment"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.ChapterFragment"
-        android:label="ChapterFragment"
+        android:label="All Chapters"
         tools:layout="@layout/fragment_with_recyclerview">
         <action
             android:id="@+id/action_chapterFragment_to_subChapterFragment"
@@ -64,8 +70,7 @@
     <fragment
         android:id="@+id/subChapterFragment"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.SubChapterFragment"
-        android:label="SubChapterFragment"
-        tools:layout="@layout/fragment_with_recyclerview">
+         tools:layout="@layout/fragment_with_recyclerview">
         <argument
             android:name="chapterEntity"
             app:argType="org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity" />
@@ -81,8 +86,7 @@
     <fragment
         android:id="@+id/bodyFragment"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.BodyFragment"
-        android:label="fragment_body"
-        tools:layout="@layout/fragment_body">
+         tools:layout="@layout/fragment_body">
         <argument
             android:name="bodyUrl"
             app:argType="org.apphatchery.gatbreferenceguide.db.entities.BodyUrl" />
@@ -117,7 +121,7 @@
     <fragment
         android:id="@+id/globalSearchFragment"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.GlobalSearchFragment"
-        android:label="fragment_global_search"
+        android:label="Search"
         tools:layout="@layout/fragment_global_search">
         <action
             android:id="@+id/action_globalSearchFragment_to_bodyFragment"
@@ -137,7 +141,7 @@
     <fragment
         android:id="@+id/chartFragment"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.ChartFragment"
-        android:label="ChartFragment"
+        android:label="All Charts"
         tools:layout="@layout/fragment_with_recyclerview">
         <action
             android:id="@+id/action_chartFragment_to_bodyFragment"
@@ -150,7 +154,7 @@
     <fragment
         android:id="@+id/savedFragment"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.SavedFragment"
-        android:label="fragment_recent"
+        android:label="Saved"
         tools:layout="@layout/fragment_saved">
         <action
             android:id="@+id/action_savedFragment_to_bodyFragment"
@@ -163,7 +167,18 @@
     <fragment
         android:id="@+id/privacyPolicy"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.PrivacyPolicy"
-        android:label="fragment_privacy_policy"
+        android:label="Privacy Policy"
         tools:layout="@layout/fragment_privacy_policy" />
-
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="org.apphatchery.gatbreferenceguide.ui.fragments.SettingsFragment"
+        android:label="Settings" >
+        <action
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            android:id="@+id/action_settingsFragment_to_privacyPolicy"
+            app:destination="@id/privacyPolicy" />
+    </fragment>
 </navigation>

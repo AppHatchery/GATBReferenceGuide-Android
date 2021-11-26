@@ -44,6 +44,8 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/shape_gradient_rounded_with_stroke"
         android:gravity="start"
+        android:textColorHint="@color/dark_gray"
+        android:textColor="@color/black"
         android:hint="Enter notes ..."
         android:inputType="textMultiLine|textAutoComplete|textAutoCorrect|textCapSentences"
         android:maxHeight="150dp"

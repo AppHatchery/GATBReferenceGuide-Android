@@ -22,4 +22,7 @@ interface BookmarkDao {
     @Query("SELECT  * FROM  BookmarkEntity WHERE bookmarkId=:id")
     fun getBookmarkById(id: String): Flow<BookmarkEntity>
 
+    @Query("DELETE FROM BookmarkEntity")
+    suspend fun clearBookmarks()
+
 }

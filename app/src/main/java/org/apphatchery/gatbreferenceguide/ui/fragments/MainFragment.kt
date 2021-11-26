@@ -18,8 +18,8 @@ import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChartAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAMainViewModel
+import org.apphatchery.gatbreferenceguide.utils.getActionBar
 import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
-import org.apphatchery.gatbreferenceguide.utils.toast
 import org.apphatchery.gatbreferenceguide.utils.toggleVisibility
 
 
@@ -37,6 +37,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         fragmentMainBinding = FragmentMainBinding.bind(view)
+        getActionBar(requireActivity())?.setDisplayHomeAsUpEnabled(false)
         requireActivity().getBottomNavigationView().toggleVisibility(true)
         predefinedChapterList = ArrayList()
         predefinedChartList = ArrayList()
@@ -116,7 +117,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
     private fun RecyclerView.setupAdapter(
         listAdapter: RecyclerView.Adapter<*>,
-        spanCount: Int = 2
+        spanCount: Int = 2,
     ) {
         layoutManager = GridLayoutManager(requireContext(), spanCount)
         adapter = listAdapter
@@ -128,12 +129,12 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             .addOnSuccessListener(requireActivity()) { pendingDynamicLink ->
                 if (pendingDynamicLink != null)
                     pendingDynamicLink.link?.let {
-                        val id = it.getQueryParameter("query")
-                        val isPage = it.getQueryParameter("isPage")
-                        if (isPage != null && id != null) {
+                        val androidQueryId = it.getQueryParameter("androidQueryId")
+                        val androidIsPage = it.getQueryParameter("androidIsPage")
+                        if (androidIsPage != null && androidQueryId != null) {
                             requireActivity().intent.data = null
                             requireActivity().intent.replaceExtras(Bundle())
-                            handleDynamicLink(isPage.toInt(), id)
+                            handleDynamicLink(androidIsPage.toInt(), androidQueryId)
                         }
                     }
             }
@@ -143,7 +144,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         if (isPage == 0) {
             viewModel.getChartAndSubChapterById(id)
                 .observe(viewLifecycleOwner) { chartAndSubchapter ->
-                    viewModel.getSubChapterInfo(chartAndSubchapter.chartEntity.id)
+                    viewModel.getSubChapterInfo(chartAndSubchapter.subChapterEntity.subChapterId.toString())
                         .observe(viewLifecycleOwner) { subChapterEntity ->
                             viewModel.getChapterInfo(subChapterEntity.chapterId)
                                 .observe(viewLifecycleOwner) { chapterEntity ->

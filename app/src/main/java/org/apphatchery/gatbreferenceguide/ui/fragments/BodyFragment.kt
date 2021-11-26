@@ -1,7 +1,6 @@
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.animation.Animator
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
@@ -17,9 +16,7 @@ import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.ColorRes
 import androidx.appcompat.widget.AppCompatEditText
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -39,7 +36,6 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.SwipeDecoratorCallback
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FABodyViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
 
-@SuppressLint("SetTextI18n")
 @AndroidEntryPoint
 class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
@@ -47,7 +43,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     companion object {
         const val DOMAIN_URI_PREFIX = "https://gatbreferenceguide.page.link"
         const val DEEP_LINK = "https://www.example.com"
-        const val LOGO_URL ="https://raw.githubusercontent.com/AppHatchery/GA-TB-Reference-Guide-Web/main/assets/logo.jpg"
+        const val LOGO_URL =
+            "https://raw.githubusercontent.com/AppHatchery/GA-TB-Reference-Guide-Web/main/assets/logo.jpg"
     }
 
     private lateinit var bind: FragmentBodyBinding
@@ -77,15 +74,11 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
 
     private fun onDeleteNoteSnackbar(note: NoteEntity) =
-        bind.root.snackBar(" Note deleted.").also {
-            it.setAction("undo") {
+        bind.root.snackBar(getString(R.string.note_deleted)).also {
+            it.setAction(getString(R.string.undo)) {
                 viewModel.insertNote(note)
             }
         }
-
-    private fun View.changeBackgroundColor(
-        @ColorRes color: Int
-    ) = background.setTint(ContextCompat.getColor(context, color))
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -99,6 +92,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         subChapterEntity = bodyUrl.subChapterEntity
         chapterEntity = bodyUrl.chapterEntity
 
+        getActionBar(requireActivity())?.title = chapterEntity.chapterTitle
 
         viewModel.recentOpen(
             RecentEntity(
@@ -133,12 +127,11 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         setupWebView()
         bind.apply {
 
-            toolbar.enableToolbar(requireActivity())
-            toolbarBackButton.setOnClickListener { requireActivity().onBackPressed() }
+            bind.lastUpdateTextView.text = getString(R.string.last_updated, subChapterEntity.lastUpdated)
             bookmarkImageButton.setOnClickListener { onBookmarkListener() }
 
+
             if (chartAndSubChapter != null) isChartView() else {
-                toolbarTitle.text = chapterEntity.chapterTitle
                 textviewSubChapter.text = subChapterEntity.subChapterTitle
                 bodyWebView.loadUrl(baseURL + PAGES_DIR + subChapterEntity.url + EXTENSION)
             }
@@ -221,10 +214,6 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private fun isChartView() = bind.apply {
         viewModel.getChapterById(chartAndSubChapter!!.subChapterEntity.chapterId)
             .observeOnce(viewLifecycleOwner) { chapterEntity ->
-                toolbarTitle.text = chapterEntity.chapterTitle
-
-
-//                tableViewLinearLayoutCompat.visibility = View.VISIBLE
                 tableName.apply {
                     text = chartAndSubChapter!!.subChapterEntity.subChapterTitle
                     setOnClickListener {
@@ -250,6 +239,15 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         bookmarkType = BookmarkType.CHART
         textviewSubChapter.text = chartAndSubChapter!!.chartEntity.chartTitle
 
+        bodyWebView.apply {
+            setInitialScale(1)
+            with(settings) {
+                loadWithOverviewMode = true
+                useWideViewPort = true
+                javaScriptEnabled = true
+            }
+        }
+
         val loadUrl = baseURL + PAGES_DIR + chartAndSubChapter!!.chartEntity.id + EXTENSION
         bodyWebView.loadUrl(loadUrl)
 
@@ -270,7 +268,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         }
 
         findViewById<View>(R.id.closeDialog).setOnClickListener { dismiss() }
-        noteTitle.text = "Edit Note"
+        noteTitle.text = getString(R.string.edit_concat, getString(R.string.note))
         noteBody.apply {
             setText(note.noteText)
             setSelection(note.noteText.length)
@@ -278,10 +276,10 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         }
 
         deleteButton.apply {
-            text = "Delete"
+            text = getString(R.string.delete)
             setOnClickListener {
                 requireContext().alertDialog(
-                    message = "Are you sure you want to delete this note ?"
+                    message = getString(R.string.note_confirm_deletion)
                 ) {
                     dismiss()
                     viewModel.deleteNote(note)
@@ -292,11 +290,11 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
 
         updateButton.apply {
-            text = "Update"
+            text = getString(R.string.update)
             setOnClickListener {
                 if (noteBody.text.toString().trim()
                         .isEmpty()
-                ) bind.root.snackBar("Please enter notes to update.") else {
+                ) bind.root.snackBar(getString(R.string.note_enter_to_update_prompt)) else {
                     viewModel.updateNote(
                         note.copy(
                             noteText = noteBody.text.toString().trim(),
@@ -305,7 +303,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                         )
                     )
                     dismiss()
-                    requireContext().toast("Note has been updated.")
+                    requireContext().toast(getString(R.string.note_updated))
                 }
             }
         }
@@ -325,6 +323,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
+        noteBody.requestFocus()
         cancelButton.setOnClickListener { dismiss() }
         saveButton.setOnClickListener {
             onSaveNote(noteBody.text.toString().trim())
@@ -359,7 +358,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
             if (bookmarkEntity.bookmarkId != "0") {
 
-                findViewById<TextView>(R.id.bookmarkTitle).text = "Edit bookmark"
+                findViewById<TextView>(R.id.bookmarkTitle).text =
+                    getString(R.string.edit_concat, getString(R.string.bookmark))
                 bookTitleTextInputEditText.also {
                     it.setText(bookmarkEntity.bookmarkTitle)
                     it.setSelection(bookmarkEntity.bookmarkTitle.length)
@@ -367,21 +367,23 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 }
 
                 cancelButton.apply {
-                    text = "Delete"
+                    text = getString(R.string.delete)
                 }
 
 
                 saveButton.apply {
-                    text = "Update"
+                    text = getString(R.string.update)
                 }
 
                 cancelButton.setOnClickListener {
                     requireContext().alertDialog(
-                        message = "Are you sure you want to remove " + bookmarkEntity.bookmarkTitle + "  from you bookmarks ?"
+                        message = getString(R.string.bookmark_confirm_deletion,
+                            bookmarkEntity.bookmarkTitle)
                     ) {
                         dismiss()
                         viewModel.deleteBookmark(bookmarkEntity)
-                        requireContext().toast(bookmarkEntity.bookmarkTitle + " has been removed from your bookmarks.")
+                        requireContext().toast(getString(R.string.bookmark_deleted,
+                            bookmarkEntity.bookmarkTitle))
                         bookmarkEntity = BookmarkEntity()
                     }
                 }
@@ -391,7 +393,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     ).also {
                         dismiss()
                         viewModel.updateBookmark(it)
-                        requireContext().toast("Bookmark has been updated.")
+                        requireContext().toast(getString(R.string.bookmark_updated))
                     }
                 }
             }
@@ -409,11 +411,11 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 subChapter = subChapterEntity.subChapterTitle
             )
         )
-        requireContext().toast("Bookmark saved")
+        requireContext().toast(getString(R.string.bookmark_saved))
     }
 
     private fun onSaveNote(noteBody: String) = bind.root.apply {
-        if (noteBody.isBlank()) snackBar("Please enter notes to save.") else {
+        if (noteBody.isBlank()) snackBar(getString(R.string.note_enter_to_save_prompt)) else {
             viewModel.insertNote(
                 NoteEntity(
                     noteId = if (bookmarkType == BookmarkType.CHART) chartAndSubChapter!!.chartEntity.id else subChapterEntity.subChapterId.toString(),
@@ -423,7 +425,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     noteText = noteBody
                 )
             )
-            snackBar("Note saved")
+            snackBar(getString(R.string.note_saved))
         }
     }
 
@@ -441,14 +443,13 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(
                 view: WebView?,
-                request: WebResourceRequest?
+                request: WebResourceRequest?,
             ): Boolean {
                 val link = request?.url.toString()
                 return when {
                     link.subSequence(0, 4).toString().lowercase() == "http".lowercase() -> {
-
                         requireActivity().apply {
-                            alertDialog("", message = "Open link in browser ?") {
+                            alertDialog("", message = getString(R.string.open_link_in_browser)) {
                                 startActivity(
                                     Intent(Intent.ACTION_VIEW)
                                         .setData(Uri.parse(link))
@@ -507,17 +508,21 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun isBookmarkCheck() = bookmarkType == BookmarkType.CHART
 
     private fun createDynamicLink() {
-        requireView().snackBar("Generating link, please wait ...")
-        val query =
-            if (bookmarkType == BookmarkType.CHART) chartAndSubChapter!!.chartEntity.id else subChapterEntity.subChapterId.toString()
-        val isPage = if (bookmarkType == BookmarkType.CHART) 0 else 1
+        requireView().snackBar(getString(R.string.dynamic_link_generation))
+        val androidQueryId = if (isBookmarkCheck()) chartAndSubChapter!!.chartEntity.id else
+            subChapterEntity.subChapterId.toString()
+        val androidIsPage = if (isBookmarkCheck()) 0 else 1
+        val iosHtmlFile = if (isBookmarkCheck()) chartAndSubChapter!!.chartEntity.id else
+            subChapterEntity.url
 
         FirebaseDynamicLinks.getInstance().createDynamicLink()
-            .setLink(Uri.parse("$DEEP_LINK?query=$query&isPage=$isPage"))
+            .setLink(Uri.parse("$DEEP_LINK?androidQueryId=$androidQueryId&androidIsPage=$androidIsPage&iosHtmlFile=$iosHtmlFile"))
             .setDomainUriPrefix(DOMAIN_URI_PREFIX)
             .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
+            .setIosParameters(DynamicLink.IosParameters.Builder("").build())
             .setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder()
                     .setTitle(chapterEntity.chapterTitle)
@@ -529,10 +534,13 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 Intent(Intent.ACTION_SEND)
                     .putExtra(Intent.EXTRA_TEXT, result.shortLink.toString())
                     .setType("text/plain")
-                    .also { requireActivity().startActivity(Intent.createChooser(it, "Share")) }
+                    .also {
+                        requireActivity().startActivity(Intent.createChooser(it,
+                            getString(R.string.share)))
+                    }
             }
             .addOnFailureListener {
-                requireView().snackBar("Failed to create link, please try again")
+                requireView().snackBar(getString(R.string.dynamic_link_failed_to_generate))
             }
     }
 

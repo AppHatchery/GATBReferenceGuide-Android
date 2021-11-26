@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Add Bookmark Title"
+            android:text="@string/bookmark_add"
             android:textColor="@color/white"
             android:textStyle="bold" />
 
@@ -43,6 +43,8 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/shape_gradient_rounded_with_stroke"
         android:gravity="start"
+        android:textColorHint="@color/dark_gray"
+        android:textColor="@color/black"
         android:hint="Enter bookmark title ..."
         android:inputType="textMultiLine|textAutoComplete|textAutoCorrect|textCapSentences"
         android:maxHeight="150dp"
@@ -61,6 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="@color/black"
             android:background="@drawable/shape_gradient_rounded_with_stroke"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:text="Cancel"
@@ -80,6 +83,7 @@
             android:background="@drawable/shape_gradient_rounded_with_stroke"
             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:text="Save"
+            android:textColor="@color/black"
             android:textAllCaps="false"
             tools:ignore="HardcodedText" />
     </androidx.appcompat.widget.LinearLayoutCompat>

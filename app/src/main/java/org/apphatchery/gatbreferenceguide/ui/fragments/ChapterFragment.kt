@@ -1,6 +1,7 @@
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -15,7 +16,7 @@ import org.apphatchery.gatbreferenceguide.databinding.FragmentWithRecyclerviewBi
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAChapterViewModel
-import org.apphatchery.gatbreferenceguide.utils.enableToolbar
+
 
 
 @AndroidEntryPoint
@@ -42,11 +43,7 @@ class ChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
 
 
         bind.apply {
-
-            toolbarBackButton.setOnClickListener { requireActivity().onBackPressed() }
-            "All Chapters".also { toolbarTitle.text = it }
-            toolbar.enableToolbar(requireActivity())
-            recyclerview.apply {
+             recyclerview.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = faChapterAdapter
             }
@@ -62,7 +59,6 @@ class ChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.search_menu, menu)
     }
-
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -1,0 +1,64 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <PreferenceCategory app:title="Updates">
+
+        <SwitchPreferenceCompat
+            app:key="attachment"
+            app:summaryOff="@string/attachment_summary_off"
+            app:summaryOn="@string/attachment_summary_on"
+            app:title="Content Update" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Notifications">
+
+        <SwitchPreferenceCompat
+            app:key="push_notifications"
+            app:summaryOff="Do not send any push notifications"
+            app:summaryOn="Send me push notifications"
+            app:title="Push Notifications" />
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Appearance">
+
+        <SeekBarPreference
+            android:max="6"
+            app:adjustable="true"
+            app:defaultValue="2"
+            app:title="Font Size" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="More">
+
+        <Preference
+            app:key="contact"
+            app:title="Contact Us" />
+
+
+        <PreferenceScreen
+            app:key="@string/privacy_policy_key"
+            app:title="@string/privacy_policy" />
+
+
+        <Preference
+            app:key="about"
+            app:title="About" />
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory app:title="Reset">
+
+        <Preference
+            app:key="@string/reset_key"
+            app:summary="@string/reset_summary"
+            app:title="@string/reset_title" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

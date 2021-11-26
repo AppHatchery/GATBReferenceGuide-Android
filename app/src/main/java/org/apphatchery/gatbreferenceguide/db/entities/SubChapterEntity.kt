@@ -12,5 +12,6 @@ data class SubChapterEntity(
     val subChapterId: Int = 0,
     val chapterId: Int,
     val subChapterTitle: String,
-    val url: String =""
+    val url: String ="",
+    val lastUpdated: String =""
 ) : Parcelable
