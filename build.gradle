@@ -3,7 +3,13 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
+       // maven { url 'https://jitpack.io' }
+        maven {
+            url "https://software.mobile.pendo.io/artifactory/androidx-release"
+            // <For Android Support (not AndroidX) use the below instead of the above>
+            // url "https://software.mobile.pendo.io/artifactory/android-release"
+        }
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.2'

@@ -21,7 +21,7 @@ import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAMainViewModel
 import org.apphatchery.gatbreferenceguide.utils.getActionBar
 import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
 import org.apphatchery.gatbreferenceguide.utils.toggleVisibility
-
+import sdk.pendo.io.Pendo
 
 @AndroidEntryPoint
 class MainFragment : BaseFragment(R.layout.fragment_main) {
@@ -36,6 +36,18 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        //pendo setup
+        var visitorId: String? = "visitor123"
+        var accountId = "account123"
+
+        Pendo.startSession(
+            visitorId,
+            accountId,
+            null,
+            null
+        )
+
         fragmentMainBinding = FragmentMainBinding.bind(view)
         getActionBar(requireActivity())?.setDisplayHomeAsUpEnabled(false)
         requireActivity().getBottomNavigationView().toggleVisibility(true)
