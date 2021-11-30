@@ -37,6 +37,16 @@
             </intent-filter>
 
         </activity>
+
+        // pendo setup
+        <activity android:name="sdk.pendo.io.activities.PendoGateActivity" android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="pendo-4c681747"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
