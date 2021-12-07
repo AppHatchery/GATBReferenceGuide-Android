@@ -40,10 +40,21 @@
             app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_mainFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_mainFragment_to_privacyPolicy"
-            app:destination="@id/privacyPolicy" />
+            app:destination="@id/privacyPolicy"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_contactFragment"
+            app:destination="@id/contactFragment" />
     </fragment>
 
     <fragment
@@ -70,7 +81,7 @@
     <fragment
         android:id="@+id/subChapterFragment"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.SubChapterFragment"
-         tools:layout="@layout/fragment_with_recyclerview">
+        tools:layout="@layout/fragment_with_recyclerview">
         <argument
             android:name="chapterEntity"
             app:argType="org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity" />
@@ -86,7 +97,7 @@
     <fragment
         android:id="@+id/bodyFragment"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.BodyFragment"
-         tools:layout="@layout/fragment_body">
+        tools:layout="@layout/fragment_body">
         <argument
             android:name="bodyUrl"
             app:argType="org.apphatchery.gatbreferenceguide.db.entities.BodyUrl" />
@@ -105,7 +116,7 @@
     <fragment
         android:id="@+id/splashFragment"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.SplashFragment"
-        android:label="fragment_splash"
+        android:label="Guide"
         tools:layout="@layout/fragment_splash">
         <action
             android:id="@+id/action_splashFragment_to_mainFragment"
@@ -168,17 +179,46 @@
         android:id="@+id/privacyPolicy"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.PrivacyPolicy"
         android:label="Privacy Policy"
-        tools:layout="@layout/fragment_privacy_policy" />
+        tools:layout="@layout/fragment_web_view" />
     <fragment
         android:id="@+id/settingsFragment"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.SettingsFragment"
-        android:label="Settings" >
+        android:label="Settings">
         <action
+            android:id="@+id/action_settingsFragment_to_privacyPolicy"
+            app:destination="@id/privacyPolicy"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            android:id="@+id/action_settingsFragment_to_privacyPolicy"
-            app:destination="@id/privacyPolicy" />
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_settingsFragment_to_about"
+            app:destination="@id/about"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+    <fragment
+        android:id="@+id/contactFragment"
+        android:name="org.apphatchery.gatbreferenceguide.ui.fragments.ContactFragment"
+        android:label="Contacts"
+        tools:layout="@layout/fragment_contact">
+        <action
+            android:id="@+id/action_contactFragment_to_contactAddFragment"
+            app:destination="@id/contactAddFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/contactAddFragment"
+        android:name="org.apphatchery.gatbreferenceguide.ui.fragments.ContactAddFragment"
+        android:label="New Contact"
+        tools:layout="@layout/fragment_contact_add" />
+    <fragment
+        android:id="@+id/about"
+        android:name="org.apphatchery.gatbreferenceguide.ui.fragments.About"
+        android:label="About Us" />
 </navigation>

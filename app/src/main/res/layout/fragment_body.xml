@@ -45,6 +45,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textview_sub_chapter">
 
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/share_feedback_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:foreground="?attr/actionBarItemBackground"
+            android:padding="16dp"
+            android:src="@drawable/ic_baseline_help_outline" />
+
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/share_button"
             android:layout_width="wrap_content"
@@ -141,7 +151,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/notes_count"
-                android:textSize="17sp"
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatImageView

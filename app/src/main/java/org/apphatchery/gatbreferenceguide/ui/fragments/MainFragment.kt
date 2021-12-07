@@ -1,6 +1,7 @@
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -35,15 +36,18 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private val viewModel: FAMainViewModel by viewModels()
 
 
+    companion object{
+        //pendo setup
+        const val VISITOR_ID = "visitor123"
+        const val ACCOUNT_ID = "account123"
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        //pendo setup
-        var visitorId: String? = "visitor123"
-        var accountId = "account123"
-
         Pendo.startSession(
-            visitorId,
-            accountId,
+            VISITOR_ID,
+            ACCOUNT_ID,
             null,
             null
         )

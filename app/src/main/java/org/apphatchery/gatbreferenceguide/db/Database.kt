@@ -15,6 +15,7 @@ import org.apphatchery.gatbreferenceguide.db.entities.*
         BookmarkEntity::class,
         GlobalSearchEntity::class,
         HtmlInfoEntity::class,
+        Contact::class,
     ], version = 1, exportSchema = false
 )
 abstract class Database : RoomDatabase() {
@@ -26,4 +27,5 @@ abstract class Database : RoomDatabase() {
     abstract fun htmlInfoDao(): HtmlInfoDao
     abstract fun globalSearchDao(): GlobalSearchDao
     abstract fun recentDao(): RecentDao
+    abstract fun contactDao(): ContactDao
 }

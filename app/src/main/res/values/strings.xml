@@ -28,17 +28,33 @@
     <string name="edit_concat">Edit %s</string>
 
     <string name="open_link_in_browser">Open link in browser ?</string>
-    <string name="last_updated">Last updates %s</string>
+    <string name="last_updated">Last updated %s</string>
 
 
     <!-- Privacy Policy Preferences -->
     <string name="privacy_policy_key">privacy_policy_key</string>
-    <string name="privacy_policy">Privacy Policy</string>
+    <string name="privacy_policy">Legal</string>
 
+
+    <!-- About Us Preferences -->
+    <string name="about_us_key">about_us_key</string>
+    <string name="about_us">About Us</string>
+
+    <!-- About Us Preferences -->
+    <string name="contact_us_key">contact_us_key</string>
+    <string name="contact_us">Contact Us</string>
+
+    <!-- Theme Preferences -->
+    <string name="theme_key">theme_key</string>
+    <string name="theme">Theme</string>
+
+    <!-- Font Preferences -->
+    <string name="font_key">font_key</string>
+    <string name="font">Font</string>
 
     <!-- Reset Preferences -->
     <string name="reset_key">reset_key</string>
-    <string name="reset_title">Cleat App Content</string>
+    <string name="reset_title">Clear App Content</string>
     <string name="reset_summary">Reset all app data and start all over again</string>
 
     <string name="attachment_title">Download incoming attachments</string>

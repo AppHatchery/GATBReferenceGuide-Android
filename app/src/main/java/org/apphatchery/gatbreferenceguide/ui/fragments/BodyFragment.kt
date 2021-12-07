@@ -1,6 +1,7 @@
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.animation.Animator
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
@@ -9,10 +10,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.webkit.WebResourceRequest
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.webkit.*
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -20,6 +18,7 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.*
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
@@ -29,12 +28,14 @@ import org.apphatchery.gatbreferenceguide.databinding.FragmentBodyBinding
 import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
 import org.apphatchery.gatbreferenceguide.db.entities.*
 import org.apphatchery.gatbreferenceguide.enums.BookmarkType
+import org.apphatchery.gatbreferenceguide.prefs.UserPrefs
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteColorAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.SwipeDecoratorCallback
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FABodyViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class BodyFragment : BaseFragment(R.layout.fragment_body) {
@@ -60,6 +61,10 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private lateinit var chapterEntity: ChapterEntity
     private var baseURL = ""
     private var isCollapsed = false
+
+    @Inject
+    lateinit var userPrefs: UserPrefs
+    private var fontSize = "1"
 
     private fun setupBookmark(id: String) {
         viewModel.getBookmarkById(id).observe(viewLifecycleOwner) {
@@ -93,6 +98,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         chapterEntity = bodyUrl.chapterEntity
 
         getActionBar(requireActivity())?.title = chapterEntity.chapterTitle
+        dialog = Dialog(requireContext()).dialog()
 
         viewModel.recentOpen(
             RecentEntity(
@@ -104,6 +110,18 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         faNoteColorAdapter = FANoteColorAdapter(requireContext()).also {
             it.submitList(NOTE_COLOR)
+        }
+
+
+        fontSize = PreferenceManager.getDefaultSharedPreferences(requireContext())
+            .getString(getString(R.string.font_key), "1").toString()
+
+
+        bind.bodyWebView.settings.textSize = when (fontSize.toInt()) {
+            0 -> WebSettings.TextSize.SMALLER
+            2 -> WebSettings.TextSize.LARGER
+            3 -> WebSettings.TextSize.LARGEST
+            else -> WebSettings.TextSize.NORMAL
         }
 
 
@@ -127,7 +145,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         setupWebView()
         bind.apply {
 
-            bind.lastUpdateTextView.text = getString(R.string.last_updated, subChapterEntity.lastUpdated)
+            bind.lastUpdateTextView.text =
+                getString(R.string.last_updated, subChapterEntity.lastUpdated)
             bookmarkImageButton.setOnClickListener { onBookmarkListener() }
 
 
@@ -168,6 +187,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
             }
 
+            shareFeedbackButton.setOnClickListener { onShareFeedbackListener() }
             collapseActionButton.setOnClickListener {
                 bind.recyclerviewNote.apply {
                     if (isCollapsed.not()) {
@@ -192,6 +212,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 chartAndSubChapter!!.chartEntity.id else
                 subChapterEntity.subChapterId.toString()
         )
+        requireActivity().getBottomNavigationView().isChecked(R.id.mainFragment)
     }
 
     private fun scaleAnimate(view: View, scaleFactor: Float, onAnimationCompleted: () -> Unit) =
@@ -332,6 +353,42 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         safeDialogShow()
     }
 
+    private lateinit var dialog: Dialog
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private fun onShareFeedbackListener() {
+        requireView().snackBar("Working in it, just a moment please ...")
+        dialog.apply {
+            setContentView(R.layout.dialog_feedback)
+            val page =
+                if (bookmarkType == BookmarkType.CHART) chartAndSubChapter!!.chartEntity.id else subChapterEntity.url
+            val url =
+                "https://emorymedicine.sjc1.qualtrics.com/jfe/form/SV_4NEG4bjuyBGono9?page=$page"
+            findViewById<WebView>(R.id.body_web_view).apply {
+                settings.javaScriptEnabled = true
+                loadUrl(url)
+                webViewClient = object : WebViewClient() {
+
+                    override fun onPageFinished(view: WebView?, url: String?) {
+                        view?.let { if (it.progress == 100) safeDialogShow() }
+                    }
+
+                    override fun onReceivedError(
+                        view: WebView?,
+                        request: WebResourceRequest?,
+                        error: WebResourceError?
+                    ) {
+                        requireView().snackBar("Failed to process your request, please try again.")
+                    }
+                }
+            }
+
+            findViewById<View>(R.id.close_dialog).setOnClickListener { dismiss() }
+
+        }
+
+    }
+
     private fun onBookmarkListener() {
 
         Dialog(requireContext()).dialog().apply {
@@ -377,13 +434,19 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
                 cancelButton.setOnClickListener {
                     requireContext().alertDialog(
-                        message = getString(R.string.bookmark_confirm_deletion,
-                            bookmarkEntity.bookmarkTitle)
+                        message = getString(
+                            R.string.bookmark_confirm_deletion,
+                            bookmarkEntity.bookmarkTitle
+                        )
                     ) {
                         dismiss()
                         viewModel.deleteBookmark(bookmarkEntity)
-                        requireContext().toast(getString(R.string.bookmark_deleted,
-                            bookmarkEntity.bookmarkTitle))
+                        requireContext().toast(
+                            getString(
+                                R.string.bookmark_deleted,
+                                bookmarkEntity.bookmarkTitle
+                            )
+                        )
                         bookmarkEntity = BookmarkEntity()
                     }
                 }
@@ -528,15 +591,20 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     .setTitle(chapterEntity.chapterTitle)
                     .setDescription(subChapterEntity.subChapterTitle)
                     .setImageUrl(Uri.parse(LOGO_URL))
-                    .build())
+                    .build()
+            )
             .buildShortDynamicLink()
             .addOnSuccessListener { result ->
                 Intent(Intent.ACTION_SEND)
                     .putExtra(Intent.EXTRA_TEXT, result.shortLink.toString())
                     .setType("text/plain")
                     .also {
-                        requireActivity().startActivity(Intent.createChooser(it,
-                            getString(R.string.share)))
+                        requireActivity().startActivity(
+                            Intent.createChooser(
+                                it,
+                                getString(R.string.share)
+                            )
+                        )
                     }
             }
             .addOnFailureListener {

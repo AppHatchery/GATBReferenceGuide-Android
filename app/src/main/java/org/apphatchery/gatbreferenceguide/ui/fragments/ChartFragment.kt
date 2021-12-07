@@ -15,6 +15,8 @@ import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAChartAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAChartViewModel
+import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
+import org.apphatchery.gatbreferenceguide.utils.isChecked
 
 @AndroidEntryPoint
 class ChartFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
@@ -56,6 +58,7 @@ class ChartFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
 
 
         setHasOptionsMenu(true)
+        requireActivity().getBottomNavigationView().isChecked(R.id.mainFragment)
     }
 
 

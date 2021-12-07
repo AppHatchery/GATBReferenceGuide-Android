@@ -9,7 +9,9 @@ import android.graphics.drawable.ColorDrawable
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.annotation.IdRes
 import androidx.appcompat.app.AlertDialog
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.reflect.TypeToken
 import org.apphatchery.gatbreferenceguide.R
@@ -128,7 +130,12 @@ fun View.toggleVisibility(boolean: Boolean) {
 }
 
 
-fun Activity.getBottomNavigationView(): View = findViewById(R.id.bottomNavigationView)
+fun Activity.getBottomNavigationView(): BottomNavigationView =
+    findViewById(R.id.bottomNavigationView)
+
+fun BottomNavigationView.isChecked(@IdRes id: Int) {
+    menu.findItem(id).isChecked = true
+}
 
 
 fun Context.alertDialog(

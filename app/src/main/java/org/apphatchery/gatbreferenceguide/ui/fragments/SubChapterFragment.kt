@@ -19,6 +19,8 @@ import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FASubChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FASubChapterViewModel
 import org.apphatchery.gatbreferenceguide.utils.getActionBar
+import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
+import org.apphatchery.gatbreferenceguide.utils.isChecked
 
 @AndroidEntryPoint
 class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
@@ -66,7 +68,7 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
         }
 
         setHasOptionsMenu(true)
-
+        requireActivity().getBottomNavigationView().isChecked(R.id.mainFragment)
     }
 
 

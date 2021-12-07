@@ -16,7 +16,8 @@ import org.apphatchery.gatbreferenceguide.databinding.FragmentWithRecyclerviewBi
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAChapterViewModel
-
+import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
+import org.apphatchery.gatbreferenceguide.utils.isChecked
 
 
 @AndroidEntryPoint
@@ -53,6 +54,7 @@ class ChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
                 findNavController().navigate(this)
             }
         }
+        requireActivity().getBottomNavigationView().isChecked(R.id.mainFragment)
     }
 
 

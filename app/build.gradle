@@ -55,7 +55,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics:18.2.1'
     implementation 'com.google.firebase:firebase-analytics:19.0.1'
     implementation 'com.google.firebase:firebase-dynamic-links-ktx:20.1.1'
-    implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.preference:preference-ktx:1.1.1'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -140,5 +140,4 @@ dependencies {
     //RecyclerViewSwipeDecorator
     /*A simple utility class to add a background, an icon and a label to a RecyclerView item while swiping it left or right.*/
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
-
 }
