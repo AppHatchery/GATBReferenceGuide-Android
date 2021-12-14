@@ -35,6 +35,13 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
 
+    private fun setFontSummaryText(id: Int) = when (id) {
+        0 -> "Small"
+        2 -> "Large"
+        3 -> "Larger"
+        else -> "Normal"
+    }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
@@ -61,12 +68,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
 
         findPreference<ListPreference>(getString(R.string.font_key))?.let {
-            it.summary = when (it.value.toString().toInt()) {
-                0 -> "Small"
-                2 -> "Large"
-                3 -> "Larger"
-                else -> "Normal"
+            it.summary = setFontSummaryText(it.value.toString().toInt())
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                it.summary = setFontSummaryText(newValue.toString().toInt())
+                true
             }
+
         }
 
 
