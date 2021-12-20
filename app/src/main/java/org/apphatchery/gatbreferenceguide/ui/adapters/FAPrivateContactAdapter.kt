@@ -9,38 +9,37 @@ import androidx.recyclerview.widget.RecyclerView
 import org.apphatchery.gatbreferenceguide.databinding.FragmentContactItemBinding
 import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
 import org.apphatchery.gatbreferenceguide.db.entities.Contact
+import org.apphatchery.gatbreferenceguide.db.entities.PrivateContact
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAContactAdapter.FAContactViewHolder
 
-class FAContactAdapter : ListAdapter<Contact, FAContactViewHolder>(DiffUtilCallBack()) {
+class FAPrivateContactAdapter : ListAdapter<PrivateContact, FAPrivateContactAdapter.FAPrivateContactViewHolder>(DiffUtilCallBack()) {
 
-
-
-    class DiffUtilCallBack : DiffUtil.ItemCallback<Contact>() {
-        override fun areContentsTheSame(oldItem: Contact, newItem: Contact): Boolean {
+    class DiffUtilCallBack : DiffUtil.ItemCallback<PrivateContact>() {
+        override fun areContentsTheSame(oldItem: PrivateContact, newItem: PrivateContact): Boolean {
             return oldItem == newItem
         }
 
-        override fun areItemsTheSame(oldItem: Contact, newItem: Contact): Boolean {
+        override fun areItemsTheSame(oldItem: PrivateContact, newItem: PrivateContact): Boolean {
             return oldItem.id == newItem.id
         }
     }
 
-    fun itemClickCallback(listener: ((Contact) -> Unit)) {
+    fun itemClickCallback(listener: ((PrivateContact) -> Unit)) {
         onItemClickListAdapter = listener
     }
 
-    private var onItemClickListAdapter: ((Contact) -> Unit)? = null
+    private var onItemClickListAdapter: ((PrivateContact) -> Unit)? = null
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FAContactViewHolder {
-        return FAContactViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FAPrivateContactViewHolder {
+        return FAPrivateContactViewHolder(
             FragmentContactItemBinding.inflate(
                 LayoutInflater.from(parent.context)
             )
         )
     }
 
-    override fun onBindViewHolder(holder: FAContactViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: FAPrivateContactViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(it) }
     }
 
@@ -48,10 +47,10 @@ class FAContactAdapter : ListAdapter<Contact, FAContactViewHolder>(DiffUtilCallB
     private var labelFlag = true
     private var firstLetter = ""
 
-    inner class FAContactViewHolder(
+    inner class FAPrivateContactViewHolder(
         private val binding: FragmentContactItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(contact: Contact) = binding.apply {
+        fun bind(contact: PrivateContact) = binding.apply {
             fullNameTextView.text = contact.fullName
             firstLetter = contact.fullName.substring(0, 1).uppercase()
 

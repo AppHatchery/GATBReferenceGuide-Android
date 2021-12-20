@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 
 @Entity
 @Parcelize
-data class Contact(
+data class PrivateContact(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val fullName: String,

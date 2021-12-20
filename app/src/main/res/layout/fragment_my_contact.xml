@@ -214,14 +214,24 @@
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/update_button"
             style="@style/TextAppearance.MaterialComponents.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:backgroundTint="#878787"
-            android:background="@drawable/shape_gradient_rounded"
             android:paddingHorizontal="20dp"
             android:text="Save contact"
+            android:textColor="@color/white" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/delete_button"
+            style="@style/TextAppearance.MaterialComponents.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#878787"
+            android:paddingHorizontal="20dp"
+            android:text="delete contact"
             android:textColor="@color/white" />
 
 

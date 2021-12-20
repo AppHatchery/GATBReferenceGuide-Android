@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
@@ -102,3 +103,5 @@ fun EditText.toggleSoftKeyboard(context: Context, showSoftKeyboard: Boolean = tr
 }
 
 fun getActionBar(context: Context) = (context as AppCompatActivity).supportActionBar
+
+
