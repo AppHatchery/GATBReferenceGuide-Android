@@ -1,28 +1,35 @@
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentMainBinding
 import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
-import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
-import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
+import org.apphatchery.gatbreferenceguide.db.entities.*
+import org.apphatchery.gatbreferenceguide.prefs.UserPrefs
+import org.apphatchery.gatbreferenceguide.resource.Resource
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChartAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAMainViewModel
-import org.apphatchery.gatbreferenceguide.utils.getActionBar
-import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
-import org.apphatchery.gatbreferenceguide.utils.toggleVisibility
+import org.apphatchery.gatbreferenceguide.utils.*
 import sdk.pendo.io.Pendo
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainFragment : BaseFragment(R.layout.fragment_main) {
@@ -32,31 +39,36 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private lateinit var first6ChartAdapter: FAMainFirst6ChartAdapter
     private lateinit var predefinedChapterList: ArrayList<ChapterEntity>
     private lateinit var predefinedChartList: ArrayList<ChartAndSubChapter>
-
+    private val htmlInfoEntity = ArrayList<HtmlInfoEntity>()
     private val viewModel: FAMainViewModel by viewModels()
 
+    @Inject
+    lateinit var userPrefs: UserPrefs
 
-    companion object{
-        //pendo setup
+    companion object {
         const val VISITOR_ID = "visitor123"
         const val ACCOUNT_ID = "account123"
     }
 
+    private fun setupPendo() = Pendo.startSession(
+        VISITOR_ID,
+        ACCOUNT_ID,
+        null,
+        null
+    )
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    private fun init() {
 
-        Pendo.startSession(
-            VISITOR_ID,
-            ACCOUNT_ID,
-            null,
-            null
-        )
+        with(fragmentMainBinding) {
+            progressBar.isVisible = false
+            group.isVisible = true
+        }
 
-        fragmentMainBinding = FragmentMainBinding.bind(view)
-        getActionBar(requireActivity())?.setDisplayHomeAsUpEnabled(false)
         requireActivity().getBottomNavigationView().toggleVisibility(true)
+
         predefinedChapterList = ArrayList()
         predefinedChartList = ArrayList()
+        setupPendo()
 
         first6ChapterAdapter = FAMainFirst6ChapterAdapter().also { adapter ->
             viewModel.getChapter.observe(viewLifecycleOwner) {
@@ -66,8 +78,8 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                     add(it[4].copy(chapterTitle = "Treatment for Active TB"))
                     add(it[1].copy(chapterTitle = "Diagnosis for LTBI"))
                     add(it[2].copy(chapterTitle = "Treatment for LTBI"))
-                    add(it[0])
-                    adapter.submitList(this)
+                    add(it[14].copy(chapterTitle = "Appendix"))
+                     adapter.submitList(this)
                 }
             }
 
@@ -131,6 +143,17 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        fragmentMainBinding = FragmentMainBinding.bind(view)
+        userPrefs.getFirstLaunch.asLiveData().observe(viewLifecycleOwner) {
+            if (it) firstLaunch() else {
+                init()
+            }
+        }
+
+
+    }
+
     private fun RecyclerView.setupAdapter(
         listAdapter: RecyclerView.Adapter<*>,
         spanCount: Int = 2,
@@ -187,4 +210,114 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
         }
     }
+
+
+    private fun Context.dumpHTMLInfo() = assets.apply {
+        list(PAGES_DIR.removeSlash())?.forEach {
+            val file = PAGES_DIR + it
+            var fileName = file.replace(EXTENSION, "")
+            fileName = fileName.replace(PAGES_DIR, "")
+            htmlInfoEntity.add(
+                HtmlInfoEntity(
+                    fileName,
+                    html2text(file).replace("GA TB Reference Guide", "")
+                )
+            )
+        }
+        viewModel.dumpHTMLInfo(htmlInfoEntity)
+    }
+
+
+    private fun Context.dumpChartData() {
+        val ofType = object : TypeToken<List<ChartEntity>>() {}.type
+        (Gson().fromJson(
+            readJsonFromAssetToString("chart.json")!!,
+            ofType
+        ) as List<ChartEntity>).also {
+
+            viewModel.dumpChartData(it)
+                .observe(viewLifecycleOwner) { resource ->
+                    when (resource) {
+                        is Resource.Success -> {
+
+                            if (viewModel.dumpChartDataObserve) {
+                                dumpChapterInfo()
+                                viewModel.dumpChartDataObserve = false
+                            }
+
+                        }
+                        else -> {
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun Context.dumpChapterInfo() {
+        val ofType = object : TypeToken<List<ChapterEntity>>() {}.type
+        (Gson().fromJson(
+            readJsonFromAssetToString("chapter.json")!!,
+            ofType
+        ) as List<ChapterEntity>).also {
+            viewModel.dumpChapterData(it)
+                .observe(viewLifecycleOwner) { resource ->
+                    when (resource) {
+                        is Resource.Success -> {
+                            dumpSubChapterInfo()
+                        }
+                        else -> {
+                        }
+                    }
+                }
+        }
+    }
+
+    private fun Context.dumpSubChapterInfo() {
+        val ofType = object : TypeToken<List<SubChapterEntity>>() {}.type
+        (Gson().fromJson(
+            readJsonFromAssetToString("subchapter.json")!!,
+            ofType
+        ) as List<SubChapterEntity>).also {
+            viewModel.dumpSubChapterData(it)
+                .observe(viewLifecycleOwner) { resource ->
+                    when (resource) {
+                        is Resource.Success -> {
+                            if (viewModel.dumpSubChapterDataObserver) {
+                                dumpHTMLInfo()
+                                viewModel.dumpSubChapterDataObserver = false
+                            }
+                        }
+                        else -> {
+                        }
+                    }
+                }
+        }
+    }
+
+
+    private fun firstLaunch() {
+        requireActivity().apply {
+            getBottomNavigationView().toggleVisibility(false)
+            createHtmlAndAssetsDirectoryIfNotExists()
+            prepHtmlPlusAssets()
+            dumpChartData()
+        }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.taskFlowEvent.collect {
+
+                when (it) {
+                    FAMainViewModel.Callback.InsertHTMLInfoComplete -> {
+                        viewModel.bindHtmlWithChapter()
+                    }
+                    FAMainViewModel.Callback.InsertGlobalSearchInfoComplete -> {
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            userPrefs.setFirstLaunch(false)
+                        }
+                        init()
+                    }
+                }
+            }
+        }
+    }
+
 }

@@ -14,3 +14,7 @@ val NOTE_COLOR = arrayListOf(
     NoteColor("#007AFF"),
     NoteColor("#5856D6"),
 )
+
+const val ANALYTICS_PAGE_EVENT = "page"
+const val ANALYTICS_SEARCH_EVENT = "search"
+const val ANALYTICS_BOOKMARK_EVENT = "bookmark"

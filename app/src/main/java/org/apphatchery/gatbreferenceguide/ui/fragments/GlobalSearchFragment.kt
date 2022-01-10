@@ -8,23 +8,21 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentGlobalSearchBinding
 import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
 import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
-import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAGlobalSearchAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
-import org.apphatchery.gatbreferenceguide.utils.noItemFound
-import org.apphatchery.gatbreferenceguide.utils.onSearchKeyword
-import org.apphatchery.gatbreferenceguide.utils.setOnTextWatcher
-import org.apphatchery.gatbreferenceguide.utils.toggleSoftKeyboard
+import org.apphatchery.gatbreferenceguide.utils.*
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -38,6 +36,8 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
     @Inject
     lateinit var faGlobalSearchAdapter: FAGlobalSearchAdapter
 
+    @Inject
+    lateinit var firebaseAnalytics: FirebaseAnalytics
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,19 +61,24 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
 
             faGlobalSearchAdapter.itemClickCallback {
-                GlobalSearchFragmentDirections.actionGlobalSearchFragmentToBodyFragment(
-                    BodyUrl(
-                        ChapterEntity(it.chapterId, it.searchTitle),
-                        SubChapterEntity(
-                            it.subChapterId,
-                            it.chapterId,
-                            it.subChapter,
-                            it.fileName
-                        )
-                    ), null
-                ).also { findNavController().navigate(it) }
-                bind.searchKeyword.clearFocus()
+
+                /*Log search keyword name*/
+                firebaseAnalytics.logEvent(
+                    ANALYTICS_SEARCH_EVENT,
+                    bundleOf(Pair(ANALYTICS_SEARCH_EVENT, bind.searchKeyword.text.toString()))
+                )
+
+                viewModel.getSubChapterById(it.subChapterId.toString())
+                    .observe(viewLifecycleOwner) { subChapter ->
+                        GlobalSearchFragmentDirections.actionGlobalSearchFragmentToBodyFragment(
+                            BodyUrl(
+                                ChapterEntity(it.chapterId, it.searchTitle), subChapter
+                            ), null
+                        ).also { findNavController().navigate(it) }
+                        bind.searchKeyword.clearFocus()
+                    }
             }
+
         }
 
         bind.apply {

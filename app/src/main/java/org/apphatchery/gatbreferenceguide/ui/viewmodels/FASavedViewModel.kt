@@ -31,6 +31,7 @@ class FASavedViewModel @Inject constructor(
     }
 
     fun getChapterInfo(id: Int) = db.chapterDao().getChapterById(id).asLiveData()
+    fun getChartAndSubChapterById(id: String) = db.chartDao().getChartAndSubChapterById(id).asLiveData()
     fun getSubChapterInfo(id: String) = db.subChapterDao().getSubChapterById(id).asLiveData()
 
     fun deleteBookmark(data: BookmarkEntity) = viewModelScope.launch {

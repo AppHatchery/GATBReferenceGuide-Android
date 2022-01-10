@@ -18,7 +18,7 @@ import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.*
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FASavedViewModel
- import org.apphatchery.gatbreferenceguide.utils.snackBar
+import org.apphatchery.gatbreferenceguide.utils.snackBar
 
 @AndroidEntryPoint
 class SavedFragment : BaseFragment(R.layout.fragment_saved) {
@@ -29,18 +29,18 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
     private lateinit var faSavedNoteAdapter: FANoteAdapter
     private lateinit var faSavedRecentAdapter: FASavedRecentAdapter
 
-    private val viewPagerHeadingTitle = arrayListOf("Recent", "Bookmarks", "Notes")
+    private val viewPagerHeadingTitle = arrayListOf("Bookmarks", "Notes", "Recent")
     private val viewModel: FASavedViewModel by viewModels()
     private var onViewCreated = true
 
 
     enum class SavedType {
-        RECENT, BOOKMARK, NOTES
+        BOOKMARK, NOTES, RECENT
     }
 
 
     data class SavedTypeData(
-        val savedType: SavedType = SavedType.RECENT,
+        val savedType: SavedType = SavedType.BOOKMARK,
         val itemCount: Int = -1,
     )
 
@@ -73,15 +73,15 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
             override fun onPageSelected(position: Int) {
 
                 when (position) {
-                    0 -> setSavedData(
+                    2 -> setSavedData(
                         SavedType.RECENT, faSavedRecentAdapter.currentList.size
                     )
 
-                    1 -> setSavedData(
+                    0 -> setSavedData(
                         SavedType.BOOKMARK, faSavedBookmarkAdapter.currentList.size
                     )
 
-                    2 -> setSavedData(
+                    1 -> setSavedData(
                         SavedType.NOTES,
                         faSavedNoteAdapter.currentList.size
                     )
@@ -130,39 +130,56 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
             }
 
             itemClickCallback {
-                viewModel.getSubChapterInfo(it.bookmarkId)
-                    .observe(viewLifecycleOwner) { subChapterEntity ->
-                        if (subChapterEntity == null) {
-                            viewModel.getSubChapterInfo(it.subChapter).observe(viewLifecycleOwner) {
-                                actionSavedFragmentToBodyFragment(it)
+                if (it.bookmarkId.contains("table_")) {
+                    viewModel.getChartAndSubChapterById(it.bookmarkId).observe(viewLifecycleOwner) {
+                        viewModel.getChapterInfo(it.subChapterEntity.chapterId)
+                            .observe(viewLifecycleOwner) { chapterEntity ->
+                                SavedFragmentDirections.actionSavedFragmentToBodyFragment(
+                                    BodyUrl(chapterEntity, it.subChapterEntity),
+                                    it
+                                ).apply {
+                                    findNavController().navigate(this)
+                                }
                             }
-                        } else
-                            actionSavedFragmentToBodyFragment(subChapterEntity)
                     }
+
+                } else {
+                    viewModel.getSubChapterInfo(it.bookmarkId)
+                        .observe(viewLifecycleOwner) { subChapterEntity ->
+                            if (subChapterEntity == null) {
+                                viewModel.getSubChapterInfo(it.subChapter)
+                                    .observe(viewLifecycleOwner) {
+                                        actionSavedFragmentToBodyFragment(it)
+                                    }
+                            } else
+                                actionSavedFragmentToBodyFragment(subChapterEntity)
+                        }
+                }
             }
 
         }
 
         val bookmarkSwipeHandler = object : SwipeDecoratorCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
+                val position = viewHolder.absoluteAdapterPosition
                 val bookmark = faSavedBookmarkAdapter.currentList[position]
                 val currentListSize = faSavedBookmarkAdapter.currentList.size
                 viewModel.deleteBookmark(bookmark)
                 setSavedData(SavedType.BOOKMARK, currentListSize.minus(1))
-                bind.root.snackBar(getString(R.string.bookmark_deleted)).also {
-                    it.setAction(getString(R.string.undo)) {
-                        viewModel.insertBookmark(bookmark)
-                        setSavedData(SavedType.BOOKMARK, currentListSize)
+                bind.root.snackBar(getString(R.string.bookmark_deleted, bookmark.bookmarkTitle))
+                    .also {
+                        it.setAction(getString(R.string.undo)) {
+                            viewModel.insertBookmark(bookmark)
+                            setSavedData(SavedType.BOOKMARK, currentListSize)
+                        }
                     }
-                }
             }
         }
 
 
         val noteSwipeHandler = object : SwipeDecoratorCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
+                val position = viewHolder.absoluteAdapterPosition
                 val note = faSavedNoteAdapter.currentList[position]
                 viewModel.deleteNote(note)
                 val currentListSize = faSavedNoteAdapter.currentList.size
@@ -177,9 +194,9 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
         }
 
         val viewPagerAdapter = arrayListOf(
-            ViewPagerData(faSavedRecentAdapter),
             ViewPagerData(faSavedBookmarkAdapter, bookmarkSwipeHandler),
             ViewPagerData(faSavedNoteAdapter, noteSwipeHandler),
+            ViewPagerData(faSavedRecentAdapter),
         )
 
 

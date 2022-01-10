@@ -9,12 +9,12 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.apphatchery.gatbreferenceguide.db.entities.*
-import org.apphatchery.gatbreferenceguide.db.repositories.FASplashRepo
+import org.apphatchery.gatbreferenceguide.db.repositories.Repository
 import javax.inject.Inject
 
 @HiltViewModel
 class FASplashViewModel @Inject constructor(
-    private val repo: FASplashRepo
+    private val repo: Repository
 ) : ViewModel() {
 
     var dumpChartDataObserve = true

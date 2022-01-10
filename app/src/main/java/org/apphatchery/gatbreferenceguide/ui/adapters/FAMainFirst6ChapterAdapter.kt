@@ -32,19 +32,17 @@ class FAMainFirst6ChapterAdapter :
 
         fun onBinding(chapterEntity: ChapterEntity) =
             first6ChapterItemBinding.apply {
-                if (adapterPosition != 4)
-                    button.text = chapterEntity.chapterTitle
+                button.text = chapterEntity.chapterTitle
             }
 
 
         init {
             first6ChapterItemBinding.button.setOnClickListener {
-                if (RecyclerView.NO_POSITION != adapterPosition) {
-                    val currentList = currentList[adapterPosition]
-                    if (adapterPosition != 4)
-                        onItemClickListAdapter?.let {
-                            it(currentList)
-                        }
+                if (RecyclerView.NO_POSITION != absoluteAdapterPosition) {
+                    val currentList = currentList[absoluteAdapterPosition]
+                    onItemClickListAdapter?.let {
+                        it(currentList)
+                    }
                 }
             }
 

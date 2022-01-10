@@ -16,7 +16,7 @@ import org.apphatchery.gatbreferenceguide.db.entities.*
         GlobalSearchEntity::class,
         HtmlInfoEntity::class,
         Contact::class,
-    ], version = 1, exportSchema = false
+    ], version = 1
 )
 abstract class Database : RoomDatabase() {
     abstract fun chapterDao(): ChapterDao

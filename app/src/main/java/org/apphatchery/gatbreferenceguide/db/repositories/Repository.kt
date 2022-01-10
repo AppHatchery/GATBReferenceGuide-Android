@@ -9,7 +9,7 @@ import org.apphatchery.gatbreferenceguide.utils.networkBoundResource
 import javax.inject.Inject
 
 
-class FASplashRepo @Inject constructor(
+class Repository @Inject constructor(
     val db: Database
 ) {
 

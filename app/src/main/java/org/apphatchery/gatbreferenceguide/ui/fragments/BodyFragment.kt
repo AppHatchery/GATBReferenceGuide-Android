@@ -10,16 +10,21 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.webkit.*
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.*
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,7 +69,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
     @Inject
     lateinit var userPrefs: UserPrefs
-    private var fontSize = "1"
+
+    @Inject
+    lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private fun setupBookmark(id: String) {
         viewModel.getBookmarkById(id).observe(viewLifecycleOwner) {
@@ -97,6 +104,11 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         subChapterEntity = bodyUrl.subChapterEntity
         chapterEntity = bodyUrl.chapterEntity
 
+
+        bind.lastUpdateTextView.text =
+            getString(R.string.last_updated, subChapterEntity.lastUpdated)
+
+
         getActionBar(requireActivity())?.title = chapterEntity.chapterTitle
         dialog = Dialog(requireContext()).dialog()
 
@@ -111,19 +123,6 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         faNoteColorAdapter = FANoteColorAdapter(requireContext()).also {
             it.submitList(NOTE_COLOR)
         }
-
-
-        fontSize = PreferenceManager.getDefaultSharedPreferences(requireContext())
-            .getString(getString(R.string.font_key), "1").toString()
-
-
-        bind.bodyWebView.settings.textSize = when (fontSize.toInt()) {
-            0 -> WebSettings.TextSize.SMALLER
-            2 -> WebSettings.TextSize.LARGER
-            3 -> WebSettings.TextSize.LARGEST
-            else -> WebSettings.TextSize.NORMAL
-        }
-
 
         val swipeHandler = object : SwipeDecoratorCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -145,8 +144,6 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         setupWebView()
         bind.apply {
 
-            bind.lastUpdateTextView.text =
-                getString(R.string.last_updated, subChapterEntity.lastUpdated)
             bookmarkImageButton.setOnClickListener { onBookmarkListener() }
 
 
@@ -204,6 +201,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     isCollapsed = !isCollapsed
                 }
             }
+
+
+            if (chapterEntity.chapterId == 15) {
+                bodyWebView.onZoomOut()
+            }
+
         }
 
 
@@ -213,6 +216,14 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 subChapterEntity.subChapterId.toString()
         )
         requireActivity().getBottomNavigationView().isChecked(R.id.mainFragment)
+
+        /*Log screen name*/
+        firebaseAnalytics.logEvent(
+            ANALYTICS_PAGE_EVENT,
+            bundleOf(Pair(ANALYTICS_PAGE_EVENT, subChapterEntity.url))
+        )
+
+
     }
 
     private fun scaleAnimate(view: View, scaleFactor: Float, onAnimationCompleted: () -> Unit) =
@@ -260,14 +271,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         bookmarkType = BookmarkType.CHART
         textviewSubChapter.text = chartAndSubChapter!!.chartEntity.chartTitle
 
-        bodyWebView.apply {
-            setInitialScale(1)
-            with(settings) {
-                loadWithOverviewMode = true
-                useWideViewPort = true
-                javaScriptEnabled = true
-            }
-        }
+        bodyWebView.onZoomOut()
 
         val loadUrl = baseURL + PAGES_DIR + chartAndSubChapter!!.chartEntity.id + EXTENSION
         bodyWebView.loadUrl(loadUrl)
@@ -334,8 +338,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
     private fun onNoteListener() = Dialog(requireContext()).dialog().apply {
         setContentView(R.layout.dialog_note)
-        val cancelButton = findViewById<View>(R.id.noteCancelButton)
-        val saveButton = findViewById<View>(R.id.noteSaveButton)
+        val cancelButton = findViewById<AppCompatButton>(R.id.noteCancelButton)
+        val saveButton = findViewById<AppCompatButton>(R.id.noteSaveButton)
         val noteBody = findViewById<AppCompatEditText>(R.id.noteBody)
         val noteColorRecyclerView = findViewById<RecyclerView>(R.id.noteRecyclerViewColor)
         findViewById<View>(R.id.closeDialog).setOnClickListener { dismiss() }
@@ -345,10 +349,17 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         }
         noteBody.requestFocus()
-        cancelButton.setOnClickListener { dismiss() }
-        saveButton.setOnClickListener {
-            onSaveNote(noteBody.text.toString().trim())
-            dismiss()
+        cancelButton.apply {
+            setCompoundDrawables(null, null, null, null)
+            setOnClickListener { dismiss() }
+        }
+
+        saveButton.apply {
+            setCompoundDrawables(null, null, null, null)
+            setOnClickListener {
+                onSaveNote(noteBody.text.toString().trim())
+                dismiss()
+            }
         }
         safeDialogShow()
     }
@@ -398,7 +409,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             val bookTitleTextInputEditText =
                 findViewById<AppCompatEditText>(R.id.bookmarkTitleTextInputEditText)
             bookTitleTextInputEditText.also {
-                it.setText(subChapterEntity.subChapterTitle)
+                it.setText(
+                    if (bookmarkType == BookmarkType.CHART) chartAndSubChapter!!.chartEntity.chartTitle else subChapterEntity.subChapterTitle,
+                )
                 it.requestFocus()
             }
 
@@ -459,6 +472,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                         requireContext().toast(getString(R.string.bookmark_updated))
                     }
                 }
+            } else {
+                cancelButton.setCompoundDrawables(null, null, null, null)
+                saveButton.setCompoundDrawables(null, null, null, null)
             }
 
             safeDialogShow()
@@ -467,13 +483,27 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     }
 
     private fun onSaveBookmark(text: String) {
+        val bookmarkTitle = if (text.isEmpty()) subChapterEntity.subChapterTitle else text
+        val bookmarkUrl =
+            if (bookmarkType == BookmarkType.CHART) chartAndSubChapter!!.chartEntity.id else subChapterEntity.url
+
         viewModel.insertBookmark(
             BookmarkEntity(
-                bookmarkTitle = if (text.isEmpty()) subChapterEntity.subChapterTitle else text,
+                bookmarkTitle = bookmarkTitle,
                 bookmarkId = if (bookmarkType == BookmarkType.CHART) chartAndSubChapter!!.chartEntity.id else subChapterEntity.subChapterId.toString(),
                 subChapter = subChapterEntity.subChapterTitle
             )
         )
+
+
+        /*Log bookmark name*/
+        firebaseAnalytics.logEvent(
+            ANALYTICS_BOOKMARK_EVENT,
+            bundleOf(Pair(ANALYTICS_BOOKMARK_EVENT, bookmarkUrl))
+        )
+
+        firebaseAnalytics.logEvent(bookmarkUrl, null)
+
         requireContext().toast(getString(R.string.bookmark_saved))
     }
 
@@ -493,16 +523,6 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     }
 
     private fun setupWebView() = bind.bodyWebView.apply {
-        with(settings) {
-            allowContentAccess = true
-            allowFileAccess = true
-            setSupportZoom(true)
-            builtInZoomControls = true
-            displayZoomControls = false
-            cacheMode = WebSettings.LOAD_NO_CACHE
-        }
-
-
         webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(
                 view: WebView?,

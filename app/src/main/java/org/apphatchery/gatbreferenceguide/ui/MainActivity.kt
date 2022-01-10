@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var preferenceManager: SharedPreferences
-    private var themeState = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +28,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         preferenceManager = PreferenceManager.getDefaultSharedPreferences(this)
         navController = findNavController(R.id.nav_host_fragment_container)
-        themeState = preferenceManager.getString(getString(R.string.theme_key), "system").toString()
         binding.bottomNavigationView.setupWithNavController(navController)
         setupActionBarWithNavController(navController, AppBarConfiguration(navController.graph))
     }
@@ -39,11 +37,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        when (themeState) {
-            "system" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-            "light" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            "dark" -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        }
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        supportActionBar?.elevation = 0f
+
+//
+//        val themeValue: Array<String> = resources.getStringArray(R.array.theme_values)
+//        when (preferenceManager.getString(getString(R.string.theme_key), themeValue[0])
+//            .toString()) {
+//            themeValue[0] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+//            themeValue[1] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+//            themeValue[2] -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+//        }
         super.onResume()
     }
 }
