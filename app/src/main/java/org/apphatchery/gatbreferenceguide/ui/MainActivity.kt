@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         supportActionBar?.elevation = 0f
 
 //

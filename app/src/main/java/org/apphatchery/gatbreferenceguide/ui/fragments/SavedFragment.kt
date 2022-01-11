@@ -1,6 +1,7 @@
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -50,28 +51,29 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
 
         faSavedRecentAdapter = FASavedRecentAdapter().apply {
             viewModel.getRecentEntity.observe(viewLifecycleOwner) {
-                submitList(if (it.size > 7) it.subList(0, 7) else it)
-                if (onViewCreated) viewModel.setSavedItemCount(SavedTypeData(itemCount = it.size))
-                onViewCreated = false
+                submitList(if (it.size > 10) it.subList(0, 10) else it)
             }
             itemClickCallback {
-                viewModel.getSubChapterInfo(it.subChapterId.toString())
-                    .observe(viewLifecycleOwner) { subChapterEntity ->
-                        viewModel.getChapterInfo(subChapterEntity.chapterId)
-                            .observe(viewLifecycleOwner) { chapterEntity ->
-                                SavedFragmentDirections.actionSavedFragmentToBodyFragment(
-                                    BodyUrl(chapterEntity, subChapterEntity), null
-                                ).apply {
-                                    findNavController().navigate(this)
+                if (it.id.contains("table_")) it.id.navigateToChart() else {
+                    viewModel.getSubChapterInfo(it.id)
+                        .observe(viewLifecycleOwner) { subChapterEntity ->
+                            viewModel.getChapterInfo(subChapterEntity.chapterId)
+                                .observe(viewLifecycleOwner) { chapterEntity ->
+                                    SavedFragmentDirections.actionSavedFragmentToBodyFragment(
+                                        BodyUrl(chapterEntity, subChapterEntity), null
+                                    ).apply {
+                                        findNavController().navigate(this)
+                                    }
                                 }
-                            }
-                    }
+                        }
+                }
             }
         }
 
         bind.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
 
+                Log.e("TAG", "onPageSelected: "+ position )
                 when (position) {
                     2 -> setSavedData(
                         SavedType.RECENT, faSavedRecentAdapter.currentList.size
@@ -127,23 +129,13 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
         faSavedBookmarkAdapter = FASavedBookmarkAdapter().apply {
             viewModel.getBookmarkEntity.observe(viewLifecycleOwner) {
                 submitList(it)
+                if (onViewCreated) viewModel.setSavedItemCount(SavedTypeData(itemCount = it.size))
+                onViewCreated = false
             }
 
             itemClickCallback {
-                if (it.bookmarkId.contains("table_")) {
-                    viewModel.getChartAndSubChapterById(it.bookmarkId).observe(viewLifecycleOwner) {
-                        viewModel.getChapterInfo(it.subChapterEntity.chapterId)
-                            .observe(viewLifecycleOwner) { chapterEntity ->
-                                SavedFragmentDirections.actionSavedFragmentToBodyFragment(
-                                    BodyUrl(chapterEntity, it.subChapterEntity),
-                                    it
-                                ).apply {
-                                    findNavController().navigate(this)
-                                }
-                            }
-                    }
-
-                } else {
+                if (it.bookmarkId.contains("table_")) it.bookmarkId.navigateToChart()
+                else {
                     viewModel.getSubChapterInfo(it.bookmarkId)
                         .observe(viewLifecycleOwner) { subChapterEntity ->
                             if (subChapterEntity == null) {
@@ -228,4 +220,19 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
 
     private fun setSavedData(savedType: SavedType, itemCount: Int) =
         viewModel.setSavedItemCount(SavedTypeData(savedType, itemCount))
+
+
+    private fun String.navigateToChart() = viewModel.getChartAndSubChapterById(this)
+        .observe(viewLifecycleOwner) {
+            viewModel.getChapterInfo(it.subChapterEntity.chapterId)
+                .observe(viewLifecycleOwner) { chapterEntity ->
+                    SavedFragmentDirections.actionSavedFragmentToBodyFragment(
+                        BodyUrl(chapterEntity, it.subChapterEntity),
+                        it
+                    ).apply {
+                        findNavController().navigate(this)
+                    }
+                }
+        }
+
 }

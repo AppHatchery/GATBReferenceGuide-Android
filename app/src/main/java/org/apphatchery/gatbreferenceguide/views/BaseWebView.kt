@@ -4,9 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
+import android.util.Log
 import android.webkit.WebSettings
 import android.webkit.WebView
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
+import androidx.webkit.WebSettingsCompat
+import androidx.webkit.WebViewFeature
 import org.apphatchery.gatbreferenceguide.R
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -25,6 +29,15 @@ class BaseWebView(context: Context, attributeSet: AttributeSet?) : WebView(conte
             displayZoomControls = false
             cacheMode = WebSettings.LOAD_NO_CACHE
             javaScriptEnabled = true
+
+            if (WebViewFeature
+                    .isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+                WebSettingsCompat.setForceDark(
+                    this,
+                    WebSettingsCompat.FORCE_DARK_ON
+                )
+            }
+
         }
         applyFontSize()
     }

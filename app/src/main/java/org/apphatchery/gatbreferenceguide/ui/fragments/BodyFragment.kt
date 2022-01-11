@@ -66,6 +66,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private lateinit var chapterEntity: ChapterEntity
     private var baseURL = ""
     private var isCollapsed = false
+    private lateinit var id: String
+    private lateinit var title: String
 
     @Inject
     lateinit var userPrefs: UserPrefs
@@ -112,12 +114,6 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         getActionBar(requireActivity())?.title = chapterEntity.chapterTitle
         dialog = Dialog(requireContext()).dialog()
 
-        viewModel.recentOpen(
-            RecentEntity(
-                subChapterEntity.subChapterId,
-                subChapterEntity.subChapterTitle
-            )
-        )
 
 
         faNoteColorAdapter = FANoteColorAdapter(requireContext()).also {
@@ -142,6 +138,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
 
         setupWebView()
+
+
+
         bind.apply {
 
             bookmarkImageButton.setOnClickListener { onBookmarkListener() }
@@ -152,12 +151,20 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 bodyWebView.loadUrl(baseURL + PAGES_DIR + subChapterEntity.url + EXTENSION)
             }
 
+
+            id = if (bookmarkType == BookmarkType.CHART)
+                chartAndSubChapter!!.chartEntity.id else
+                subChapterEntity.subChapterId.toString()
+
+            title = if (bookmarkType == BookmarkType.CHART)
+                chartAndSubChapter!!.chartEntity.chartTitle else
+                subChapterEntity.subChapterTitle
+
+
             addNote.setOnClickListener { onNoteListener() }
 
             faNoteAdapter = FANoteAdapter().also {
-                viewModel.getNote(
-                    if (bookmarkType == BookmarkType.CHART) chartAndSubChapter!!.chartEntity.id else subChapterEntity.subChapterId.toString()
-                ).observe(viewLifecycleOwner) { data ->
+                viewModel.getNote(id).observe(viewLifecycleOwner) { data ->
                     it.submitList(data)
                     showNoteCollapseControl(data.isEmpty())
                     bind.noteCountTextView.text = getString(R.string.notes_count, data.size)
@@ -210,11 +217,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         }
 
 
-        setupBookmark(
-            if (bookmarkType == BookmarkType.CHART)
-                chartAndSubChapter!!.chartEntity.id else
-                subChapterEntity.subChapterId.toString()
-        )
+
+        setupBookmark(id)
+
         requireActivity().getBottomNavigationView().isChecked(R.id.mainFragment)
 
         /*Log screen name*/
@@ -223,6 +228,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             bundleOf(Pair(ANALYTICS_PAGE_EVENT, subChapterEntity.url))
         )
 
+
+        viewModel.recentOpen(RecentEntity(id, title))
 
     }
 
@@ -409,9 +416,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             val bookTitleTextInputEditText =
                 findViewById<AppCompatEditText>(R.id.bookmarkTitleTextInputEditText)
             bookTitleTextInputEditText.also {
-                it.setText(
-                    if (bookmarkType == BookmarkType.CHART) chartAndSubChapter!!.chartEntity.chartTitle else subChapterEntity.subChapterTitle,
-                )
+                it.setText(title)
                 it.requestFocus()
             }
 
@@ -490,7 +495,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         viewModel.insertBookmark(
             BookmarkEntity(
                 bookmarkTitle = bookmarkTitle,
-                bookmarkId = if (bookmarkType == BookmarkType.CHART) chartAndSubChapter!!.chartEntity.id else subChapterEntity.subChapterId.toString(),
+                bookmarkId = id,
                 subChapter = subChapterEntity.subChapterTitle
             )
         )
@@ -511,8 +516,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         if (noteBody.isBlank()) snackBar(getString(R.string.note_enter_to_save_prompt)) else {
             viewModel.insertNote(
                 NoteEntity(
-                    noteId = if (bookmarkType == BookmarkType.CHART) chartAndSubChapter!!.chartEntity.id else subChapterEntity.subChapterId.toString(),
-                    noteTitle = if (bookmarkType == BookmarkType.CHART) chartAndSubChapter!!.chartEntity.chartTitle else subChapterEntity.subChapterTitle,
+                    noteId = this@BodyFragment.id,
+                    noteTitle = this@BodyFragment.title,
                     subChapterId = subChapterEntity.subChapterId,
                     noteColor = faNoteColorAdapter.selectedColor,
                     noteText = noteBody
@@ -594,9 +599,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private fun isBookmarkCheck() = bookmarkType == BookmarkType.CHART
 
     private fun createDynamicLink() {
-        requireView().snackBar(getString(R.string.dynamic_link_generation))
-        val androidQueryId = if (isBookmarkCheck()) chartAndSubChapter!!.chartEntity.id else
-            subChapterEntity.subChapterId.toString()
+        requireContext().toast(getString(R.string.dynamic_link_generation))
+         val androidQueryId = id
         val androidIsPage = if (isBookmarkCheck()) 0 else 1
         val iosHtmlFile = if (isBookmarkCheck()) chartAndSubChapter!!.chartEntity.id else
             subChapterEntity.url
@@ -628,7 +632,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     }
             }
             .addOnFailureListener {
-                requireView().snackBar(getString(R.string.dynamic_link_failed_to_generate))
+                requireContext().toast(getString(R.string.dynamic_link_failed_to_generate))
             }
     }
 
