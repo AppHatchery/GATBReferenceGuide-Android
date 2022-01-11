@@ -11,10 +11,10 @@
         android:icon="@drawable/ic_baseline_bookmark"
         android:title="Saved" />
 
-<!--        <item-->
-<!--        android:id="@+id/contactFragment"-->
-<!--        android:icon="@drawable/ic_phone_book"-->
-<!--        android:title="Phone Book" />-->
+        <item
+        android:id="@+id/contactFragment"
+        android:icon="@drawable/ic_phone_book"
+        android:title="Phone Book" />
 
     <item
         android:id="@+id/settingsFragment"

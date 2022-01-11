@@ -5,19 +5,23 @@ import kotlinx.coroutines.flow.Flow
 import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
 import org.apphatchery.gatbreferenceguide.db.entities.ChartEntity
 import org.apphatchery.gatbreferenceguide.db.entities.Contact
+import org.apphatchery.gatbreferenceguide.db.entities.PrivateContact
 
 @Dao
-interface ContactDao {
+interface PrivateContactDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(data: List<Contact>)
+    suspend fun insert(data: PrivateContact)
 
-    @Query("SELECT  * FROM  Contact ORDER BY fullName ASC")
-    fun getContacts(): Flow<List<Contact>>
+    @Query("SELECT  * FROM  PrivateContact ORDER BY fullName ASC")
+    fun getContacts(): Flow<List<PrivateContact>>
+
+    @Update
+    suspend fun update(data:PrivateContact)
 
     @Delete
-    suspend fun delete(data: Contact)
+    suspend fun delete(data: PrivateContact)
 
-    @Query("DELETE FROM Contact")
+    @Query("DELETE FROM PrivateContact")
     suspend fun clearContact()
 }
