@@ -42,18 +42,18 @@ class FAContactViewModel @Inject constructor(
     }
 
     fun deleteContact(data:PrivateContact) = viewModelScope.launch{
-        db.privateContactDao().delete(data)
+//        db.privateContactDao().delete(data)
     }
 
     fun update(data:PrivateContact) = viewModelScope.launch{
-        db.privateContactDao().update(data)
+//        db.privateContactDao().update(data)
     }
 
     fun copyPublicToPrivateContact(data:PrivateContact) = viewModelScope.launch{
-        db.privateContactDao().insert(data)
+//        db.privateContactDao().insert(data)
     }
 
-    val getPrivateContact = db.privateContactDao().getContacts().asLiveData()
+//    val getPrivateContact = db.privateContactDao().getContacts().asLiveData()
 
     val getContacts = db.contactDao().getContacts().asLiveData()
 }

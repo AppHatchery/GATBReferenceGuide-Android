@@ -2,12 +2,12 @@ package org.apphatchery.gatbreferenceguide.views
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.graphics.Canvas
 import android.util.AttributeSet
-import android.util.Log
 import android.webkit.WebSettings
 import android.webkit.WebView
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
@@ -15,6 +15,9 @@ import org.apphatchery.gatbreferenceguide.R
 
 @SuppressLint("SetJavaScriptEnabled")
 class BaseWebView(context: Context, attributeSet: AttributeSet?) : WebView(context, attributeSet) {
+
+    private lateinit var preferenceManager: SharedPreferences
+
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
@@ -30,12 +33,33 @@ class BaseWebView(context: Context, attributeSet: AttributeSet?) : WebView(conte
             cacheMode = WebSettings.LOAD_NO_CACHE
             javaScriptEnabled = true
 
+            preferenceManager = PreferenceManager.getDefaultSharedPreferences(context)
+
             if (WebViewFeature
-                    .isFeatureSupported(WebViewFeature.FORCE_DARK)) {
-                WebSettingsCompat.setForceDark(
-                    this,
-                    WebSettingsCompat.FORCE_DARK_ON
-                )
+                    .isFeatureSupported(WebViewFeature.FORCE_DARK)
+            ) {
+
+                when (context.resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        WebSettingsCompat.setForceDark(
+                            this,
+                            WebSettingsCompat.FORCE_DARK_ON
+                        )
+                    }
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        WebSettingsCompat.setForceDark(
+                            this,
+                            WebSettingsCompat.FORCE_DARK_OFF
+                        )
+                    }
+                    Configuration.UI_MODE_NIGHT_UNDEFINED -> {
+                        WebSettingsCompat.setForceDark(
+                            this,
+                            WebSettingsCompat.FORCE_DARK_OFF
+                        )
+                    }
+                }
+
             }
 
         }

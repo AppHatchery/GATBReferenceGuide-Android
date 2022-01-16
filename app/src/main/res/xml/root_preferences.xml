@@ -4,13 +4,13 @@
 
     <PreferenceCategory app:title="Appearance">
 
-<!--        <ListPreference-->
-<!--            android:dialogTitle="Choose theme"-->
-<!--            android:defaultValue="system"-->
-<!--            android:entries="@array/theme_entries"-->
-<!--            android:entryValues="@array/theme_values"-->
-<!--            android:key="@string/theme_key"-->
-<!--            android:title="@string/theme" />-->
+        <ListPreference
+            android:dialogTitle="Choose theme"
+            android:defaultValue="system"
+            android:entries="@array/theme_entries"
+            android:entryValues="@array/theme_values"
+            android:key="@string/theme_key"
+            android:title="@string/theme" />
 
 
         <ListPreference

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="chapterBackgroundColor" format="reference|color" />
+    <attr name="chapterBackgroundColorTop" format="reference|color" />
+
+    <attr name="chartBackgroundColor" format="reference|color" />
+    <attr name="chartBackgroundColorTop" format="reference|color" />
+    <attr name="searchBackgroundColor" format="reference|color" />
+</resources>

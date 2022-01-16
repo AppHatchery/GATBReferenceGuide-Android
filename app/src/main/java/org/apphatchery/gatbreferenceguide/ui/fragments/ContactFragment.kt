@@ -48,9 +48,9 @@ class ContactFragment : BaseFragment(R.layout.fragment_contact) {
 
 
         faPrivateContactAdapter = FAPrivateContactAdapter().apply {
-            viewModel.getPrivateContact.observe(viewLifecycleOwner){
-                faPrivateContactAdapter.submitList(it)
-            }
+//            viewModel.getPrivateContact.observe(viewLifecycleOwner){
+//                faPrivateContactAdapter.submitList(it)
+//            }
             itemClickCallback {
                 val bundle = Bundle().apply {
                     putParcelable("contact", it)
@@ -65,9 +65,9 @@ class ContactFragment : BaseFragment(R.layout.fragment_contact) {
 
 
         faContactAdapter = FAContactAdapter().apply {
-            viewModel.getContacts.observe(viewLifecycleOwner){
-                faContactAdapter.submitList(it)
-            }
+//            viewModel.getContacts.observe(viewLifecycleOwner){
+//                faContactAdapter.submitList(it)
+//            }
             itemClickCallback {
                 val bundle = Bundle().apply {
                     putParcelable("contact", it)
