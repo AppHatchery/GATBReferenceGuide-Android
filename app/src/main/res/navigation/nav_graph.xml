@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/mainFragment">
 
     <fragment
         android:id="@+id/mainFragment"
@@ -114,22 +114,6 @@
             app:nullable="true" />
     </fragment>
     <fragment
-        android:id="@+id/splashFragment"
-        android:name="org.apphatchery.gatbreferenceguide.ui.fragments.SplashFragment"
-        android:label="Guide"
-        tools:layout="@layout/fragment_splash">
-        <action
-            android:id="@+id/action_splashFragment_to_mainFragment"
-            app:destination="@id/mainFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:launchSingleTop="true"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:popUpTo="@+id/nav_graph"
-            app:popUpToInclusive="true" />
-    </fragment>
-    <fragment
         android:id="@+id/globalSearchFragment"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.GlobalSearchFragment"
         android:label="Search"
@@ -211,6 +195,16 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_contactFragment_to_contactDetailsFragment"
+            app:destination="@id/contactDetailsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+        <action
+            android:id="@+id/action_contactFragment_to_myContactDetailsFragment"
+            app:destination="@id/myContactDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/contactAddFragment"
@@ -221,4 +215,27 @@
         android:id="@+id/about"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.About"
         android:label="About Us" />
+    <fragment
+        android:id="@+id/contactDetailsFragment"
+        android:name="org.apphatchery.gatbreferenceguide.ui.fragments.ContactDetailsFragment"
+        android:label="Public Contact"
+        tools:layout="@layout/fragment_contact_details" >
+        <argument
+            android:name="contact"
+            app:argType="org.apphatchery.gatbreferenceguide.db.entities.Contact" />
+        <action
+            android:id="@+id/action_contactDetailsFragment_to_contactFragment"
+            app:destination="@id/contactFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myContactDetailsFragment"
+        android:name="org.apphatchery.gatbreferenceguide.ui.fragments.MyContactDetailsFragment"
+        android:label="Private Contact" >
+        <action
+            android:id="@+id/action_myContactDetailsFragment_to_contactFragment"
+            app:destination="@id/contactFragment" />
+        <argument
+            android:name="contact"
+            app:argType="org.apphatchery.gatbreferenceguide.db.entities.PrivateContact" />
+    </fragment>
 </navigation>

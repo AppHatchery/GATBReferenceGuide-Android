@@ -52,6 +52,7 @@ class FASavedViewPagerAdapter(
 
                 with(bind) {
 
+                    Log.e("TAG", ""+it )
                     recyclerView.isVisible = it.itemCount == -1 || it.itemCount > 0
 
                     includeFragmentNoRecent.root.visibility = View.GONE

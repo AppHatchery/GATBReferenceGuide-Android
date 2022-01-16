@@ -10,9 +10,8 @@ import kotlinx.parcelize.Parcelize
 data class Contact(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val firstName: String,
-    val lastName: String = "",
-    val additionInfo: String = "",
+    val fullName: String,
+    val additionalInfo: String = "",
     val contactCell: String = "",
     val contactEmail: String = "",
     val contactAddress: String = "",

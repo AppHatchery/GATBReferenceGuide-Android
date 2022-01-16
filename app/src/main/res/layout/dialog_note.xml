@@ -44,12 +44,12 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/shape_gradient_rounded_with_stroke"
         android:gravity="start"
-        android:textColorHint="@color/dark_gray"
-        android:textColor="@color/black"
         android:hint="Enter notes ..."
         android:inputType="textMultiLine|textAutoComplete|textAutoCorrect|textCapSentences"
         android:maxHeight="150dp"
         android:padding="16dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/dark_gray"
         tools:ignore="HardcodedText" />
 
 
@@ -64,12 +64,12 @@
         tools:ignore="HardcodedText" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:background="@color/white"
-        android:padding="8dp"
         android:id="@+id/noteRecyclerViewColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:background="@color/white"
+        android:padding="8dp"
         android:paddingVertical="5dp"
         tools:itemCount="1"
         tools:listitem="@layout/dialog_note_color_item" />
@@ -78,15 +78,19 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="8dp"
+        android:gravity="center">
 
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/noteCancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="@drawable/shape_gradient_rounded_with_stroke"
+            android:drawableStart="@drawable/ic_trash"
+            android:drawablePadding="10dp"
+            android:paddingHorizontal="20dp"
+            android:layout_weight="1"
             android:text="Cancel"
             android:textAllCaps="false"
             android:textColor="@android:color/black"
@@ -102,6 +106,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/shape_gradient_rounded_with_stroke"
+            android:drawableStart="@drawable/ic_check"
+            android:drawablePadding="10dp"
+            android:paddingHorizontal="20dp"
             android:text="Save"
             android:textAllCaps="false"
             android:textColor="@android:color/black"

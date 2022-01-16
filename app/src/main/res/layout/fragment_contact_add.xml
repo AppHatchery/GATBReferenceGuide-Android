@@ -33,7 +33,7 @@
                 android:layout_marginTop="8dp"
                 android:background="@drawable/shape_round"
                 android:gravity="start"
-                android:hint="Name"
+                android:hint="full Name"
                 android:inputType="text|textAutoComplete|textCapSentences|textAutoCorrect"
                 android:maxLines="1"
                 android:padding="8dp"
@@ -46,7 +46,7 @@
                 android:background="#4DC6C6C8" />
 
             <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/first_name_textView"
+                android:id="@+id/additional_info_textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"

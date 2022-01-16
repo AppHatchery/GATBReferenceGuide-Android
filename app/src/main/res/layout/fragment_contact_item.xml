@@ -5,20 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
     <androidx.appcompat.widget.AppCompatTextView
-        android:visibility="gone"
-        tools:visibility="visible"
         android:id="@+id/textView_label"
         style="@style/TextAppearance.MaterialComponents.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="#878787"
         android:paddingHorizontal="24dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="A" />
+        tools:text="A"
+        tools:visibility="visible" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/fullName_textView"

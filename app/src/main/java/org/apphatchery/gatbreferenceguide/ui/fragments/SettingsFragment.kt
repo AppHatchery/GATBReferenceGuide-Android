@@ -34,21 +34,24 @@ class SettingsFragment : PreferenceFragmentCompat() {
         startActivity(this)
     }
 
-
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
+        val themeValue: Array<String> =
+            requireActivity().resources.getStringArray(R.array.theme_values)
+        val fontValue: Array<String> =
+            requireActivity().resources.getStringArray(R.array.font_entries)
 
         findPreference<ListPreference>(getString(R.string.theme_key))?.let {
             it.summary =
-                if (it.value.toString() == "system") "System default" else it.value.toString()
+                if (it.value.toString() == themeValue[0]) "System default" else it.value.toString()
                     .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 when {
-                    newValue.toString() == "light" -> {
+                    newValue.toString() == themeValue[1] -> {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                     }
-                    newValue.toString() == "dark" -> {
+                    newValue.toString() == themeValue[2] -> {
                         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                     }
                     else -> {
@@ -61,11 +64,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
 
         findPreference<ListPreference>(getString(R.string.font_key))?.let {
-            it.summary = when (it.value.toString().toInt()) {
-                0 -> "Small"
-                2 -> "Large"
-                3 -> "Larger"
-                else -> "Normal"
+            it.summary = fontValue[it.value.toString().toInt()]
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                it.summary = fontValue[newValue.toString().toInt()]
+                true
             }
         }
 

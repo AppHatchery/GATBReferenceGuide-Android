@@ -15,5 +15,14 @@
         <!-- Customize your theme here. -->
 
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+
+        <item name="chapterBackgroundColor">#BEB0AC</item>
+        <item name="chapterBackgroundColorTop">#A55C3C</item>
+
+
+        <item name="chartBackgroundColor">#823410</item>
+        <item name="chartBackgroundColorTop">#BD998A</item>
+        <item name="searchBackgroundColor">#121212</item>
+
     </style>
 </resources>

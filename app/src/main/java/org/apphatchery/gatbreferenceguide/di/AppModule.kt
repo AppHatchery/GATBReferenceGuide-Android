@@ -5,6 +5,8 @@ import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -68,6 +70,12 @@ object AppModule {
     ) = Room.databaseBuilder(context, Database::class.java, "ga_tb_reference_guide.db")
         .fallbackToDestructiveMigration()
         .build()
+
+    @Singleton
+    @Provides
+    fun providesFirebaseAnalytics(
+        @ApplicationContext context: Context
+    ): FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
 }
 
 @Retention(AnnotationRetention.RUNTIME)

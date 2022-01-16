@@ -13,7 +13,7 @@ class FASavedRecentAdapter :
 
     class DiffUtilCallBack : DiffUtil.ItemCallback<RecentEntity>() {
         override fun areItemsTheSame(oldItem: RecentEntity, newItem: RecentEntity) =
-            newItem.subChapterId == oldItem.subChapterId
+            newItem.id == oldItem.id
 
         override fun areContentsTheSame(oldItem: RecentEntity, newItem: RecentEntity) =
             oldItem == newItem
@@ -31,7 +31,7 @@ class FASavedRecentAdapter :
 
         fun onBinding(data: RecentEntity) =
             bind.apply {
-                textView.text = data.subChapterTitle
+                textView.text = data.title
             }
 
         init {

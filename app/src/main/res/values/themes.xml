@@ -16,12 +16,17 @@
 
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
 
+        <item name="chapterBackgroundColor">#e1c2b3</item>
+        <item name="chapterBackgroundColorTop">#c98463</item>
+
+        <item name="chartBackgroundColor">#c98463</item>
+        <item name="chartBackgroundColorTop">#9c3300</item>
+        <item name="searchBackgroundColor">@color/reddish</item>
     </style>
 
     <style name="Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
-        <!--        <item name="android:fontFamily">@font/gotham_rounded_book</item>-->
     </style>
 
 
