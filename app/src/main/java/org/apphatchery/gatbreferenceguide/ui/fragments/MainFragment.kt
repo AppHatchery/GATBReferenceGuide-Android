@@ -46,8 +46,8 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     lateinit var userPrefs: UserPrefs
 
     companion object {
-        const val VISITOR_ID = "visitor123"
-        const val ACCOUNT_ID = "account123"
+        const val VISITOR_ID = ""
+        const val ACCOUNT_ID = "GTRG"
     }
 
     private fun setupPendo() = Pendo.startSession(
@@ -78,7 +78,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                     add(it[4].copy(chapterTitle = "Treatment for Active TB"))
                     add(it[1].copy(chapterTitle = "Diagnosis for LTBI"))
                     add(it[2].copy(chapterTitle = "Treatment for LTBI"))
-                    add(it[14].copy(chapterTitle = "Appendix"))
+                    add(it[14].copy(chapterTitle = "District TB Coordinators"))
                      adapter.submitList(this)
                 }
             }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GATBReferenceGuide</string>
+    <string name="app_name">TB Guide</string>
     <string name="bookmark_confirm_deletion">Are you sure you want to remove %s from you bookmarks ?</string>
     <string name="bookmark_deleted">%s has been removed from your bookmarks.</string>
     <string name="bookmark_updated">Bookmark has been updated.</string>
