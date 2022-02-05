@@ -17,6 +17,9 @@
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
 
         <item name="chapterBackgroundColor">#e1c2b3</item>
+        <item name="colorBlackWhite">@android:color/white</item>
+        <item name="colorWhiteBlack">@color/dark_black</item>
+
         <item name="chapterBackgroundColorTop">#c98463</item>
 
         <item name="chartBackgroundColor">#c98463</item>
@@ -34,55 +37,5 @@
         <item name="colorAccent">@color/reddish</item>
     </style>
 
-
-    <!--    Font sizes settings    -->
-    <style name="FontSize_12">
-        <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="FontSize_14">
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="FontSize_16">
-        <item name="android:textSize">16sp</item>
-    </style>
-
-    <style name="FontSize_18">
-        <item name="android:textSize">18sp</item>
-    </style>
-
-    <style name="FontSize_20">
-        <item name="android:textSize">20sp</item>
-    </style>
-
-    <style name="FontSize_22">
-        <item name="android:textSize">22sp</item>
-    </style>
-
-    <style name="FontSize_24">
-        <item name="android:textSize">24sp</item>
-    </style>
-
-    <style name="FontSize_26">
-        <item name="android:textSize">26sp</item>
-    </style>
-
-    <style name="FontSize_28">
-        <item name="android:textSize">28sp</item>
-    </style>
-
-    <style name="FontSize_30">
-        <item name="android:textSize">30sp</item>
-    </style>
-
-
-    <style name="YourTheme" parent="Theme.AppCompat">
-        <item name="preferenceTheme">@style/PreferenceTheme</item>
-    </style>
-
-    <style name="PreferenceTheme" parent="@style/PreferenceThemeOverlay">
-        <item name="android:layout">@layout/fragment_settings</item>
-    </style>
 
 </resources>

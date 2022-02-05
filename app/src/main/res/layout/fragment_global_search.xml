@@ -18,15 +18,11 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/searchView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_round"
-            android:foreground="?attr/selectableItemBackground"
-            app:cardCornerRadius="10dp">
 
             <androidx.appcompat.widget.LinearLayoutCompat
+                android:backgroundTint="#85D1D1D1"
+                android:background="@drawable/shape_circle"
+                android:drawableStart="@drawable/ic_baseline_search_gray"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center">
@@ -44,7 +40,6 @@
                     android:inputType="text|textCapSentences|textAutoCorrect|textAutoComplete"
                     android:maxLines="1"
                     android:padding="8dp"
-                    android:textColor="@color/dark_gray"
                     android:textSize="17sp"
                     tools:ignore="HardcodedText" />
 
@@ -61,7 +56,6 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
 
 
-        </androidx.cardview.widget.CardView>
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>

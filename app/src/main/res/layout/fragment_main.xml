@@ -28,28 +28,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.cardview.widget.CardView
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/shape_round"
-            android:foreground="?attr/selectableItemBackground"
-            app:cardCornerRadius="10dp">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/ic_baseline_search_gray"
-                android:drawableEnd="@drawable/ic_baseline_voice_gray"
-                android:drawablePadding="8dp"
-                android:gravity="center_vertical"
-                android:padding="8dp"
-                android:text="Search Guide"
-                android:textColor="@color/dark_gray"
-                android:textSize="17sp"
-                tools:ignore="HardcodedText" />
-
-        </androidx.cardview.widget.CardView>
+            android:background="@drawable/shape_circle"
+            android:backgroundTint="#85D1D1D1"
+            android:drawableStart="@drawable/ic_baseline_search_gray"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:padding="8dp"
+            android:text="Search Guide"
+            android:textSize="17sp"
+            tools:ignore="HardcodedText" />
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -74,8 +66,8 @@
                 android:id="@+id/textview_chapter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Chapters"
                 android:layout_marginStart="4dp"
+                android:text="Chapters"
                 android:textSize="17sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/textview_all_chapters"
@@ -159,11 +151,11 @@
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group"
-        android:visibility="gone"
-        tools:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-         app:constraint_referenced_ids="scrollView2,linearLayoutCompat3" />
+        android:visibility="gone"
+        app:constraint_referenced_ids="scrollView2,linearLayoutCompat3"
+        tools:visibility="visible" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

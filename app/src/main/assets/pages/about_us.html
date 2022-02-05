@@ -11,30 +11,69 @@
     <link href="../assets/uikit.css" rel="stylesheet">
     <link href="../assets/style.css" rel="stylesheet">
 </head>
+<style>
+    :root {
+      color-scheme: light dark;
+      --background-color: #fff;
+      --body-color: #666;
+      --link-color: #ba6233;
+      --table-title-color: #8c352d;
+    }
+
+    @media screen and (prefers-color-scheme: dark) {
+      :root {
+        --background-color: #202025;
+        --body-color: #fff;
+        --link-color: #f3a479;
+        --table-title-color: #d7958f;
+        /* --title-color: #ff8080;
+        --subhead-color: #80ff80;
+        --link-color: #93d5ff; */
+      }
+    }
+
+    html {
+      /* 1 */
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      font-size: 16px;
+      font-weight: normal;
+      line-height: 1.5;
+      /* 2 */
+      -webkit-text-size-adjust: 100%;
+      /* 3 */
+      background: var(--background-color);
+      color: var(--body-color);
+    }
+</style>
 <body>
 
 <br>
 <div class="uk-container">
-    <h3 class="reddish">About the Developer</h3>
-    <p>The AppHatchery is a collaboration between Emory University and Georgia Tech as part
-        of the Georgia Clinical and Traslational Science Alliance (Georgia CTSA)</p>
-
+    <div uk-grid>
+<!--        <div class="uk-width-1-5">-->
+<!--            <img alt="author" src="face.svg" style="width: 250px"/>-->
+<!--        </div>-->
+        <div class="uk-width-expand">
+            <h3 class="uk-text-uppercase">About the Developer</h3>
+            <p>The AppHatchery is a collaboration between Emory University and Georgia Tech as part of the Georgia Clinical and Traslational Science Alliance (Georgia CTSA)</p>
+        </div>
+    </div>
 </div>
 
 <br>
 <br>
 
 <div class="uk-container">
-    <h3 class="reddish">About the App</h3>
-    <p>This app is a digital translation of the Georgia TB Reference guide, a booklet that
-        responds to clinicians’ questions about tuberculosis infection, disease, and
-        control. The standards and guidelines are based on the work and experience of the
-        American Thoracic
-        Society (ATS), the Centers for Disease Control and Prevention
-        (CDC), the Infectious Disease Society of America (IDSA), Emory
-        University, the World Health Organization (WHO), and the Atlanta
-        TB Prevention Coalition.</p>
+    <div uk-grid>
+<!--        <div class="uk-width-1-5">-->
+<!--            <img alt="author" src="logo.jpg" style="width: 250px"/>-->
+<!--        </div>-->
+        <div class="uk-width-expand">
+            <h3 class="uk-text-uppercase">About the App</h3>
+            <p>This app is a digital translation of the Georgia TB Reference guide, a booklet that responds to clinicians’ questions about tuberculosis infection, disease, and control. The standards and guidelines are based on the work and experience of the American Thoracic Society (ATS), the Centers for Disease Control and Prevention (CDC), the Infectious Disease Society of America (IDSA), Emory University, the World Health Organization (WHO), and the Atlanta TB Prevention Coalition.</p>
 
+        </div>
+    </div>
 </div>
 
 
@@ -43,40 +82,47 @@
 
 
 <div class="uk-container">
-    <h3 class="reddish">Acknowledgements</h3>
-    <ol class="uk-list uk-list-divider">
-        <li>Sonja Tate</li>
-        <li>Melinda Dolphin</li>
-        <li>Melody Wegienka</li>
-        <li>April Garcia</li>
-        <li>Hoa Le</li>
-        <li>Kim Warren</li>
-        <li>Lola Rush</li>
-        <li>Daniel Graciaa</li>
-        <li>Jane Yoon</li>
-        <li>Alison Smith</li>
-        <li>Jeff Collins</li>
-        <li>David Brower</li>
-        <li>Max Adelman</li>
-        <li>Gregory Damhorst</li>
-        <li>Phylistine Gardner</li>
-    </ol>
+    <div uk-grid>
+<!--        <div class="uk-width-1-5">-->
+<!--            <img alt="author" src="acknowledge.svg" style="width: 250px"/>-->
+<!--        </div>-->
+        <div class="uk-width-expand">
+            <h3 class="uk-text-uppercase">Acknowledgements</h3>
+            <p>We'd like to give a special mention to the following individuals for contributing their time and expertise in the creation of this app.</p>
+                 <ol class="uk-list uk-list-divider">
+                    <li>Jane Yoon</li>
+                    <li>Daniel Graciaa</li>
+                    <li>Kim Warren</li>
+                    <li>Lola Rush</li>
+                    <li>April Garcia</li>
+                    <li>Hoa Le</li>
+                    <li>Sonja Tate</li>
+                    <li>Melinda Dolphin</li>
+                    <li>Melody Wegienka</li>
+                    <li>Gregory Damhorst</li>
+                    <li>Max Adelman</li>
+                    <li>David Brower</li>
+                    <li>Jeff Collins</li>
+                    <li>Alison Smith</li>
+                    <li>Marjorie McDermott</li>
+                    <li>Phylistine Gardner</li>
+                </ol>
+        </div>
+    </div>
 </div>
 
 
 <br>
 <div class="uk-container-expand uk-padding" style="background: #f2f2f0">
-    <div class="uk-child-width-3-1 uk-text-center" uk-grid>
+    <div class="uk-child-width-3-1 uk-text-center" style="text-align: center" uk-grid>
         <div>
-            <img alt="Emory University" class="" src="../assets/EU_noShield_hz_280.png"
-                 style="width: 250px"/>
+            <img alt="Emory University" class="" src="EU_noShield_hz_280.png" style="width: 250px"/>
         </div>
         <div>
-            <img alt="Emory Healthcare" class="" src="../assets/Emory_healthcare.png?v=1"
-                 style="width: 250px"/>
+            <img alt="Emory Healthcare" class="" src="Emory_healthcare.png" style="width: 250px"/>
         </div>
         <div>
-            <img alt="DPH" class="" src="../assets/DPH.png" style="width: 250px"/>
+            <img alt="DPH" class="" src="DPH.png" style="width: 250px"/>
         </div>
     </div>
 </div>

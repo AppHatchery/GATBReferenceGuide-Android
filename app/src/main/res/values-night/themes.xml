@@ -18,11 +18,20 @@
 
         <item name="chapterBackgroundColor">#BEB0AC</item>
         <item name="chapterBackgroundColorTop">#A55C3C</item>
-
+        <item name="colorBlackWhite">@color/dark_black</item>
+        <item name="colorWhiteBlack">@android:color/white</item>
 
         <item name="chartBackgroundColor">#823410</item>
         <item name="chartBackgroundColorTop">#BD998A</item>
-        <item name="searchBackgroundColor">#121212</item>
+        <item name="searchBackgroundColor">#823410</item>
+        <item name="android:textColor">@color/white</item>
 
+        <item name="actionBarStyle">@style/darkActionbar</item>
+
+    </style>
+
+
+    <style name="darkActionbar" parent="Widget.AppCompat.ActionBar">
+        <item name="background">?chartBackgroundColor</item>
     </style>
 </resources>

@@ -6,4 +6,7 @@
     <attr name="chartBackgroundColor" format="reference|color" />
     <attr name="chartBackgroundColorTop" format="reference|color" />
     <attr name="searchBackgroundColor" format="reference|color" />
+    <attr name="colorBlackWhite" format="color" />
+    <attr name="colorWhiteBlack" format="color" />
+
 </resources>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
-    android:background="#C98463"
+    android:background="?chartBackgroundColor"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -31,7 +31,7 @@
             android:layout_height="45dp"
             android:foreground="?attr/selectableItemBackground"
             android:padding="10dp"
-            android:src="@drawable/ic_close_black_48dp" />
+            android:src="@drawable/ic_close" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -43,8 +43,6 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/shape_gradient_rounded_with_stroke"
         android:gravity="start"
-        android:textColorHint="@color/dark_gray"
-        android:textColor="@color/black"
         android:hint="Enter bookmark title ..."
         android:inputType="textMultiLine|textAutoComplete|textAutoCorrect|textCapSentences"
         android:maxHeight="150dp"
@@ -62,13 +60,12 @@
             android:id="@+id/bookmarkCancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-             android:background="@drawable/shape_gradient_rounded_with_stroke"
+            android:layout_weight="1"
+            android:background="@drawable/shape_gradient_rounded_with_stroke"
             android:drawableStart="@drawable/ic_trash"
             android:drawablePadding="10dp"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:paddingHorizontal="35dp"
-            android:textColor="@color/black"
-            android:layout_weight="1"
-             android:foreground="?attr/selectableItemBackgroundBorderless"
             android:text="Cancel"
             android:textAllCaps="false"
             tools:ignore="HardcodedText" />
@@ -84,12 +81,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/shape_gradient_rounded_with_stroke"
-            android:foreground="?attr/selectableItemBackgroundBorderless"
-            android:text="Save"
             android:drawableStart="@drawable/ic_check"
             android:drawablePadding="10dp"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
             android:paddingHorizontal="35dp"
-            android:textColor="@color/black"
+            android:text="Save"
             android:textAllCaps="false"
             tools:ignore="HardcodedText" />
     </androidx.appcompat.widget.LinearLayoutCompat>
