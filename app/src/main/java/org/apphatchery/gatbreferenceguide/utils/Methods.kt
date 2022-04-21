@@ -26,15 +26,11 @@ fun Dialog.dialog(): Dialog {
 }
 
 fun Dialog.safeDialogShow() {
-    try {
-        Objects.requireNonNull(window!!).setLayout(
-            WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.WRAP_CONTENT
-        )
-        show()
-    } catch (e: Exception) {
-//            context.toast("Oops! Something went wrong please try again, please try again.")
-    }
+    Objects.requireNonNull(window!!).setLayout(
+        WindowManager.LayoutParams.MATCH_PARENT,
+        WindowManager.LayoutParams.WRAP_CONTENT
+    )
+    show()
 }
 
 fun Context.toast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
@@ -86,8 +82,6 @@ fun Context.readJsonFromAssetToString(file: String): String? {
         null
     }
 }
-
-fun <T> jsonOfType() = object : TypeToken<List<T>>() {}.type
 
 fun String.removeSlash() = replace("/", "")
 

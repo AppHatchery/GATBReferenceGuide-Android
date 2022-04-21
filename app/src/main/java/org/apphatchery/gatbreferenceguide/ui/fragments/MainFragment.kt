@@ -31,6 +31,9 @@ import org.apphatchery.gatbreferenceguide.utils.*
 import sdk.pendo.io.Pendo
 import javax.inject.Inject
 
+
+private const val BUILD_VERSION = 1
+
 @AndroidEntryPoint
 class MainFragment : BaseFragment(R.layout.fragment_main) {
 
@@ -79,7 +82,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                     add(it[1].copy(chapterTitle = "Diagnosis for LTBI"))
                     add(it[2].copy(chapterTitle = "Treatment for LTBI"))
                     add(it[14].copy(chapterTitle = "District TB Coordinators"))
-                     adapter.submitList(this)
+                    adapter.submitList(this)
                 }
             }
 
@@ -99,7 +102,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                     add(data[13].copy(chartEntity = data[13].chartEntity.copy(chartTitle = "IV Therapy Drugs")))
                     add(data[14].copy(chartEntity = data[14].chartEntity.copy(chartTitle = "Alternative Regimens")))
                     add(data[4].copy(chartEntity = data[4].chartEntity.copy(chartTitle = "Dosages for LTBI Regimens")))
-                    add(data[18].copy(chartEntity = data[18].chartEntity.copy(chartTitle = "Treatment of Extrapulmonary TB")))
+                    add(data[18].copy(chartEntity = data[18].chartEntity.copy(chartTitle = "Treatment of Extra- pulmonary TB")))
                     add(data[19].copy(chartEntity = data[19].chartEntity.copy(chartTitle = "Use of TB drugs in Special Situations")))
                     adapter.submitList(this)
                 }
@@ -145,8 +148,8 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         fragmentMainBinding = FragmentMainBinding.bind(view)
-        userPrefs.getFirstLaunch.asLiveData().observe(viewLifecycleOwner) {
-            if (it) firstLaunch() else {
+        userPrefs.getBuildVersion.asLiveData().observe(viewLifecycleOwner) {
+            if (it != BUILD_VERSION) firstLaunch() else {
                 init()
             }
         }
@@ -311,7 +314,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                     }
                     FAMainViewModel.Callback.InsertGlobalSearchInfoComplete -> {
                         viewLifecycleOwner.lifecycleScope.launch {
-                            userPrefs.setFirstLaunch(false)
+                            userPrefs.setBuildVersion(BUILD_VERSION)
                         }
                         init()
                     }

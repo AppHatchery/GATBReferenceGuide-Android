@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -47,8 +48,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
 
     companion object {
-        const val DOMAIN_URI_PREFIX = "https://apphatcherygatbreferenceguide.page.link"
-        const val DEEP_LINK = "https://georgiactsa.org/research/commercialization"
+        const val DOMAIN_LINK = "https://apphatcherygatbreferenceguide.page.link"
         const val LOGO_URL =
             "https://raw.githubusercontent.com/AppHatchery/GA-TB-Reference-Guide-Web/main/assets/logo.jpg"
     }
@@ -606,10 +606,13 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             subChapterEntity.url
 
         FirebaseDynamicLinks.getInstance().createDynamicLink()
-            .setLink(Uri.parse("$DEEP_LINK?androidQueryId=$androidQueryId&androidIsPage=$androidIsPage&iosHtmlFile=$iosHtmlFile"))
-            .setDomainUriPrefix(DOMAIN_URI_PREFIX)
+            .setLink(Uri.parse("$DOMAIN_LINK?androidQueryId=$androidQueryId&androidIsPage=$androidIsPage&chapterID=$iosHtmlFile"))
+            .setDomainUriPrefix(DOMAIN_LINK)
             .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
-            .setIosParameters(DynamicLink.IosParameters.Builder("").build())
+            .setIosParameters(DynamicLink.IosParameters
+                .Builder("edu.emory.tb.guide")
+                .setAppStoreId("1583294462")
+                .build())
             .setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder()
                     .setTitle(chapterEntity.chapterTitle)
@@ -632,6 +635,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     }
             }
             .addOnFailureListener {
+                Log.e(TAG, "createDynamicLink: ", it)
                 requireContext().toast(getString(R.string.dynamic_link_failed_to_generate))
             }
     }
