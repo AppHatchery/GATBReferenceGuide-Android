@@ -4,7 +4,7 @@
     "chapterId": 1,
     "subChapterTitle": "Epidemiology",
     "url": "1_epidemiology",
-    "lastUpdated": "November 2021"
+    "lastUpdated": "June 2022"
   },
   {
     "subChapterId": 2,
@@ -18,7 +18,7 @@
     "chapterId": 2,
     "subChapterTitle": "Tuberculin Skin Test (TST)",
     "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)__a__tuberculin_skin_test",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2022"
   },
   {
     "subChapterId": 4,
@@ -53,7 +53,7 @@
     "chapterId": 2,
     "subChapterTitle": "Targeted Testing and Diagnostic Tests for LTBI",
     "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)__f__targeted_testing_and_diagnostic_tests_for_ltbi",
-    "lastUpdated": "November 2021"
+    "lastUpdated": "June 2022"
   },
   {
     "subChapterId": 9,
@@ -81,7 +81,7 @@
     "chapterId": 3,
     "subChapterTitle": "Treatment Regimens",
     "url": "3_treatment_of_latent_tb_infection_(ltbi)__a__treatment_regimens",
-    "lastUpdated": "November 2021"
+    "lastUpdated": "June 2022"
   },
   {
     "subChapterId": 13,
@@ -95,7 +95,7 @@
     "chapterId": 3,
     "subChapterTitle": "Contacts of MDR-TB Cases",
     "url": "3_treatment_of_latent_tb_infection_(ltbi)__c__contacts_of_mdr_tb_cases",
-    "lastUpdated": "November 2021"
+    "lastUpdated": "June 2022"
   },
   {
     "subChapterId": 15,
@@ -158,21 +158,21 @@
     "chapterId": 5,
     "subChapterTitle": "Standard Therapy for Current (Active) Disease",
     "url": "5_treatment_of_current_(active)_disease_therapy__b__standard_therapy_for_current_(active)_disease",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2022"
   },
   {
     "subChapterId": 24,
     "chapterId": 5,
     "subChapterTitle": "Special Clinical Situations",
     "url": "5_treatment_of_current_(active)_disease_therapy__c__special_clinical_situations",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2022"
   },
   {
     "subChapterId": 25,
     "chapterId": 5,
     "subChapterTitle": "Drug Resistance",
     "url": "5_treatment_of_current_(active)_disease_therapy__d__drug_resistance",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2022"
   },
   {
     "subChapterId": 26,
@@ -220,15 +220,15 @@
     "subChapterId": 31,
     "chapterId": 6,
     "subChapterTitle": "Introduction",
-    "url": "6_pregnancy_and_tb__a__treatment_for_ltbi_and_risk_factors",
+    "url": "6_pregnancy_and_tb",
     "lastUpdated": "April 2020"
   },
   {
     "subChapterId": 32,
     "chapterId": 6,
     "subChapterTitle": "Treatment for LTBI and Risk Factors",
-    "url": "6_pregnancy_and_tb",
-    "lastUpdated": "April 2020"
+    "url": "6_pregnancy_and_tb__a__treatment_for_ltbi_and_risk_factors",
+    "lastUpdated": "June 2022"
   },
   {
     "subChapterId": 33,
@@ -361,7 +361,7 @@
     "chapterId": 14,
     "subChapterTitle": "References",
     "url": "14_references",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2022"
   },
   {
     "subChapterId": 52,
@@ -382,7 +382,7 @@
     "chapterId": 17,
     "subChapterTitle": "Acknowledgements",
     "url": "17_acknowledgements",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2022"
   },
   {
     "subChapterId": 55,
