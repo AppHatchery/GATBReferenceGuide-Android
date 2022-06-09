@@ -1,183 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragments.BodyFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textview_sub_chapter"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:drawableStart="@drawable/ic_title_icon"
-        android:drawablePadding="10dp"
-        android:gravity="center_vertical"
-        android:textSize="17sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText"
-        tools:text="@string/app_name" />
+    <data>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/last_update_textView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayoutCompat"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayoutCompat"
-        app:layout_constraintStart_toStartOf="@+id/textview_sub_chapter"
-        app:layout_constraintTop_toTopOf="@+id/linearLayoutCompat"
-        app:layout_constraintVertical_bias="0.64"
-        tools:ignore="HardcodedText"
-        tools:text="Last updated 06/17/21" />
+    </data>
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/linearLayoutCompat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textview_sub_chapter">
-
-
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/share_feedback_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:foreground="?attr/actionBarItemBackground"
-            android:padding="16dp"
-            android:src="@drawable/ic_baseline_help_outline" />
-
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/share_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:foreground="?attr/actionBarItemBackground"
-            android:padding="16dp"
-            android:src="@drawable/ic_upload" />
-
-
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/bookmarkImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:foreground="?attr/actionBarItemBackground"
-            android:padding="16dp"
-            android:src="@drawable/ic_baseline_star_outline" />
-
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/add_note"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:foreground="?attr/actionBarItemBackground"
-            android:padding="16dp"
-            android:src="@drawable/ic_edit" />
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-    <View
-        android:id="@+id/view"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:background="#C6C6C8"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/last_update_textView" />
-
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/table_viewLinearLayoutCompat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:gravity="center"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view">
+        android:layout_height="match_parent"
+        tools:context=".ui.fragments.BodyFragment">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
+            android:id="@+id/textview_sub_chapter"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/ic_keyboard_arrow_right"
-            android:text="@string/view_in_chapter" />
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:drawableStart="@drawable/ic_title_icon"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:textSize="17sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="HardcodedText"
+            tools:text="@string/app_name" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/table_name"
-            android:layout_width="match_parent"
+            android:id="@+id/last_update_textView"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:foreground="?attr/selectableItemBackground"
-            android:padding="8dp"
-            android:textStyle="bold"
-            tools:text="@string/appbar_scrolling_view_behavior" />
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:paddingHorizontal="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/table_viewLinearLayoutCompat">
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayoutCompat"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayoutCompat"
+            app:layout_constraintStart_toStartOf="@+id/textview_sub_chapter"
+            app:layout_constraintTop_toTopOf="@+id/linearLayoutCompat"
+            app:layout_constraintVertical_bias="0.64"
+            tools:ignore="HardcodedText"
+            tools:text="Last updated 06/17/21" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/collapsable_note_root"
-            android:layout_width="match_parent"
+            android:id="@+id/linearLayoutCompat"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical">
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textview_sub_chapter">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/note_count_textView"
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/share_feedback_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/notes_count"
-                android:textStyle="bold" />
+                android:background="@android:color/transparent"
+                android:foreground="?attr/actionBarItemBackground"
+                android:padding="16dp"
+                android:src="@drawable/ic_baseline_help_outline" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/collapse_action_button"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/shape_circle"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:padding="8dp"
-                android:src="@drawable/ic_baseline_arrow_up" />
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/share_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:foreground="?attr/actionBarItemBackground"
+                android:padding="16dp"
+                android:src="@drawable/ic_upload" />
 
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/bookmarkImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:foreground="?attr/actionBarItemBackground"
+                android:padding="16dp"
+                android:src="@drawable/ic_baseline_star_outline" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/add_note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:foreground="?attr/actionBarItemBackground"
+                android:padding="16dp"
+                android:src="@drawable/ic_edit" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerviewNote"
+
+        <View
+            android:id="@+id/view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="1dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:background="#C6C6C8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/last_update_textView" />
 
-        <org.apphatchery.gatbreferenceguide.views.BaseWebView
-            android:id="@+id/body_web_view"
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/table_viewLinearLayoutCompat"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical" />
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view">
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/ic_keyboard_arrow_right"
+                android:text="@string/view_in_chapter" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/table_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:foreground="?attr/selectableItemBackground"
+                android:padding="8dp"
+                android:textStyle="bold"
+                tools:text="@string/appbar_scrolling_view_behavior" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:paddingHorizontal="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/table_viewLinearLayoutCompat">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/collapsable_note_root"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/note_count_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/notes_count"
+                    android:textStyle="bold" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/collapse_action_button"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/shape_circle"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_baseline_arrow_up" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerviewNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <org.apphatchery.gatbreferenceguide.views.BaseWebView
+                android:id="@+id/body_web_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

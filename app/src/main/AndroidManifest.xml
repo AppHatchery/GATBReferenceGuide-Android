@@ -20,7 +20,7 @@
         android:theme="@style/Theme.GATBReferenceGuide"
         android:usesCleartextTraffic="true">
 
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.MainActivity" android:exported="true">
             <intent-filter>
 
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +38,7 @@
 
         </activity>
 
-        <activity android:name="sdk.pendo.io.activities.PendoGateActivity" android:launchMode="singleInstance">
+        <activity android:name="sdk.pendo.io.activities.PendoGateActivity" android:launchMode="singleInstance" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>

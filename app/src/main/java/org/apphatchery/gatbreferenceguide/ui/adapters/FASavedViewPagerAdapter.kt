@@ -1,6 +1,5 @@
 package org.apphatchery.gatbreferenceguide.ui.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,22 +50,20 @@ class FASavedViewPagerAdapter(
             viewModel.savedItemCount.asLiveData().observe(viewLifecycleOwner) {
 
                 with(bind) {
-
-                    Log.e("TAG", ""+it )
                     recyclerView.isVisible = it.itemCount == -1 || it.itemCount > 0
 
-                    includeFragmentNoRecent.root.visibility = View.GONE
-                    includeFragmentNoBookmark.root.visibility = View.GONE
-                    includeFragmentNoNote.root.visibility = View.GONE
+                    includeFragmentNoRecent.visibility = View.GONE
+                    includeFragmentNoBookmark.visibility = View.GONE
+                    includeFragmentNoNote.visibility = View.GONE
 
                     when (it.savedType) {
                         SavedFragment.SavedType.RECENT -> {
-                            includeFragmentNoRecent.root.isVisible =
+                            includeFragmentNoRecent.isVisible =
                                 it.itemCount < 1
                         }
-                        SavedFragment.SavedType.BOOKMARK -> includeFragmentNoBookmark.root.isVisible =
+                        SavedFragment.SavedType.BOOKMARK -> includeFragmentNoBookmark.isVisible =
                             it.itemCount < 1
-                        SavedFragment.SavedType.NOTES -> includeFragmentNoNote.root.isVisible =
+                        SavedFragment.SavedType.NOTES -> includeFragmentNoNote.isVisible =
                             it.itemCount < 1
                     }
                 }

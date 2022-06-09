@@ -10,12 +10,17 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.apphatchery.gatbreferenceguide.db.entities.*
 import org.apphatchery.gatbreferenceguide.db.repositories.Repository
+import org.apphatchery.gatbreferenceguide.prefs.UserPrefs
 import javax.inject.Inject
 
 @HiltViewModel
 class FAMainViewModel @Inject constructor(
     private val repo: Repository
 ) : ViewModel() {
+
+
+    @Inject
+    lateinit var userPrefs: UserPrefs
 
     val getChapter = repo.db.chapterDao().getChapterEntity().asLiveData()
     val getChart = repo.db.chartDao().getChartAndSubChapter().asLiveData()

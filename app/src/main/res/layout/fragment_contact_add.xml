@@ -1,229 +1,236 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <data>
+
+    </data>
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
+        android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <androidx.appcompat.widget.AppCompatTextView
+
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#878787"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="8dp"
-                android:text="Name of contact" />
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#878787"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="8dp"
+                    android:text="Name of contact" />
 
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/fullName_textView"
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/fullName_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/shape_round"
+                    android:gravity="start"
+                    android:hint="full Name"
+                    android:inputType="text|textAutoComplete|textCapSentences|textAutoCorrect"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:paddingHorizontal="5dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:background="#4DC6C6C8" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/additional_info_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:background="@drawable/shape_round"
+                    android:gravity="start"
+                    android:hint="Additional Info"
+                    android:inputType="text|textAutoComplete|textCapSentences|textAutoCorrect"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:paddingHorizontal="5dp" />
+
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/shape_round"
-                android:gravity="start"
-                android:hint="full Name"
-                android:inputType="text|textAutoComplete|textCapSentences|textAutoCorrect"
-                android:maxLines="1"
-                android:padding="8dp"
-                android:paddingHorizontal="5dp" />
+                android:layout_marginVertical="16dp"
+                android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="16dp"
-                android:background="#4DC6C6C8" />
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#878787"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="8dp"
+                    android:text="Contact Info" />
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/additional_info_textView"
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/cell_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/shape_round"
+                    android:gravity="start"
+                    android:hint="Cell"
+                    android:inputType="phone"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:paddingHorizontal="5dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:background="#4DC6C6C8" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/email_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:background="@drawable/shape_round"
+                    android:gravity="start"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:paddingHorizontal="5dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:background="#4DC6C6C8" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/address_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:background="@drawable/shape_round"
+                    android:gravity="start"
+                    android:hint="Address"
+                    android:inputType="text|textAutoCorrect|textCapSentences"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:paddingHorizontal="5dp" />
+
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:background="@drawable/shape_round"
-                android:gravity="start"
-                android:hint="Additional Info"
-                android:inputType="text|textAutoComplete|textCapSentences|textAutoCorrect"
-                android:maxLines="1"
-                android:padding="8dp"
-                android:paddingHorizontal="5dp" />
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#878787"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="8dp"
+                    android:text="Office" />
+
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/office_phone_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/shape_round"
+                    android:gravity="start"
+                    android:hint="Phone"
+                    android:inputType="phone"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:paddingHorizontal="5dp" />
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:background="#4DC6C6C8" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/office_fax_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:background="@drawable/shape_round"
+                    android:gravity="start"
+                    android:hint="Fax"
+                    android:inputType="phone"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:paddingHorizontal="5dp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#878787"
+                    android:paddingHorizontal="24dp"
+                    android:paddingVertical="8dp"
+                    android:text="Notes" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/notes_textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/shape_round"
+                    android:gravity="start"
+                    android:inputType="text|textAutoComplete|textCapSentences|textAutoCorrect"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:paddingHorizontal="5dp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.appcompat.widget.AppCompatButton
+                style="@style/TextAppearance.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:backgroundTint="#878787"
+                android:background="@drawable/shape_gradient_rounded"
+                android:paddingHorizontal="20dp"
+                android:text="Save contact"
+                android:textColor="@color/white" />
 
 
         </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="16dp"
-            android:orientation="vertical">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#878787"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="8dp"
-                android:text="Contact Info" />
-
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/cell_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/shape_round"
-                android:gravity="start"
-                android:hint="Cell"
-                android:inputType="phone"
-                android:maxLines="1"
-                android:padding="8dp"
-                android:paddingHorizontal="5dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="16dp"
-                android:background="#4DC6C6C8" />
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/email_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:background="@drawable/shape_round"
-                android:gravity="start"
-                android:hint="Email"
-                android:inputType="textEmailAddress"
-                android:maxLines="1"
-                android:padding="8dp"
-                android:paddingHorizontal="5dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="16dp"
-                android:background="#4DC6C6C8" />
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/address_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:background="@drawable/shape_round"
-                android:gravity="start"
-                android:hint="Address"
-                android:inputType="text|textAutoCorrect|textCapSentences"
-                android:maxLines="1"
-                android:padding="8dp"
-                android:paddingHorizontal="5dp" />
-
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#878787"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="8dp"
-                android:text="Office" />
-
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/office_phone_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/shape_round"
-                android:gravity="start"
-                android:hint="Phone"
-                android:inputType="phone"
-                android:maxLines="1"
-                android:padding="8dp"
-                android:paddingHorizontal="5dp" />
-
-            <View
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginHorizontal="16dp"
-                android:background="#4DC6C6C8" />
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/office_fax_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:background="@drawable/shape_round"
-                android:gravity="start"
-                android:hint="Fax"
-                android:inputType="phone"
-                android:maxLines="1"
-                android:padding="8dp"
-                android:paddingHorizontal="5dp" />
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="vertical">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#878787"
-                android:paddingHorizontal="24dp"
-                android:paddingVertical="8dp"
-                android:text="Notes" />
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/notes_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/shape_round"
-                android:gravity="start"
-                android:inputType="text|textAutoComplete|textCapSentences|textAutoCorrect"
-                android:maxLines="1"
-                android:padding="8dp"
-                android:paddingHorizontal="5dp" />
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-        <androidx.appcompat.widget.AppCompatButton
-            style="@style/TextAppearance.MaterialComponents.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:backgroundTint="#878787"
-            android:background="@drawable/shape_gradient_rounded"
-            android:paddingHorizontal="20dp"
-            android:text="Save contact"
-            android:textColor="@color/white" />
-
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
-</ScrollView>
+    </ScrollView>
+</layout>

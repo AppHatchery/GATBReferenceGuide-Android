@@ -133,17 +133,32 @@
         <entry key="app/src/main/res/drawable/ic_shape_bg_chart.xml" value="0.2625" />
         <entry key="app/src/main/res/drawable/ic_trash.xml" value="0.2625" />
         <entry key="app/src/main/res/drawable/shape_gradient_rounded_with_stroke.xml" value="0.2625" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.3104166666666667" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.20363636363636364" />
         <entry key="app/src/main/res/layout/dialog_bookmark.xml" value="0.24635416666666668" />
         <entry key="app/src/main/res/layout/dialog_feedback.xml" value="0.24635416666666668" />
         <entry key="app/src/main/res/layout/dialog_note.xml" value="0.24635416666666668" />
+        <entry key="app/src/main/res/layout/dialog_note_color_item.xml" value="0.2421875" />
+        <entry key="app/src/main/res/layout/dialog_zoom_in_out.xml" value="0.2421875" />
         <entry key="app/src/main/res/layout/fragment_body.xml" value="0.24635416666666668" />
         <entry key="app/src/main/res/layout/fragment_contact.xml" value="0.24635416666666668" />
+        <entry key="app/src/main/res/layout/fragment_contact_add.xml" value="0.2421875" />
+        <entry key="app/src/main/res/layout/fragment_contact_details.xml" value="0.2421875" />
+        <entry key="app/src/main/res/layout/fragment_contact_item.xml" value="0.2421875" />
+        <entry key="app/src/main/res/layout/fragment_contact_view_pager_recycler_view.xml" value="0.2421875" />
         <entry key="app/src/main/res/layout/fragment_global_search.xml" value="0.24635416666666668" />
         <entry key="app/src/main/res/layout/fragment_global_search_item.xml" value="0.24635416666666668" />
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.28854166666666664" />
         <entry key="app/src/main/res/layout/fragment_main_first_6_chapter_item.xml" value="0.2477355072463768" />
         <entry key="app/src/main/res/layout/fragment_main_first_6_chart_item.xml" value="0.24635416666666668" />
+        <entry key="app/src/main/res/layout/fragment_my_contact.xml" value="0.2421875" />
+        <entry key="app/src/main/res/layout/fragment_my_contact_details.xml" value="0.2421875" />
+        <entry key="app/src/main/res/layout/fragment_note_item.xml" value="0.2421875" />
+        <entry key="app/src/main/res/layout/fragment_saved.xml" value="0.2421875" />
+        <entry key="app/src/main/res/layout/fragment_saved_view_pager_recycler_view.xml" value="0.2421875" />
+        <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.2421875" />
+        <entry key="app/src/main/res/layout/fragment_splash.xml" value="0.2421875" />
+        <entry key="app/src/main/res/layout/fragment_web_view.xml" value="0.2421875" />
+        <entry key="app/src/main/res/layout/fragment_with_recyclerview.xml" value="0.2421875" />
         <entry key="app/src/main/res/layout/fragment_with_recyclerview_item.xml" value="0.24479166666666666" />
         <entry key="app/src/main/res/menu/activity_bottom_navigation_menu.xml" value="0.24583333333333332" />
         <entry key="app/src/main/res/xml/root_preferences.xml" value="0.18568840579710144" />

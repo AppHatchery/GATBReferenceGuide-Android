@@ -16,15 +16,6 @@ import org.apphatchery.gatbreferenceguide.R
 abstract class BaseFragment(@LayoutRes layoutRes: Int) : Fragment(layoutRes) {
     abstract override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 
-//    override fun onAttach(context: Context) {
-//        try {
-//            requireActivity().getBottomNavigationView().toggleVisibility(false)
-//        } catch (e: Exception) {
-//        }
-//        super.onAttach(context)
-//    }
-
-
     fun voiceSearchListener(resultLauncher: ActivityResultLauncher<Intent>) =
         resultLauncher.launch(
             Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).also {

@@ -38,14 +38,14 @@ class ContactDetailsFragment : Fragment(R.layout.fragment_contact_details){
         val contact = args.contact!!
 
         binding.apply {
-            fullNameTextView.setText(contact.fullName)
-            additionalInfoTextView.setText(contact.additionalInfo)
-            cellTextView.setText(contact.contactCell)
-            emailTextView.setText(contact.contactEmail)
-            additionalInfoTextView.setText(contact.contactAddress)
-            officePhoneTextView.setText(contact.officePhone)
-            officeFaxTextView.setText(contact.officeFax)
-            notesTextView.setText(contact.personalNote)
+            fullNameTextView.text = contact.fullName
+            additionalInfoTextView.text = contact.additionalInfo
+            cellTextView.text = contact.contactCell
+            emailTextView.text = contact.contactEmail
+            additionalInfoTextView.text = contact.contactAddress
+            officePhoneTextView.text = contact.officePhone
+            officeFaxTextView.text = contact.officeFax
+            notesTextView.text = contact.personalNote
         }
 
 

@@ -13,6 +13,7 @@ import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import org.apphatchery.gatbreferenceguide.R
 
+@Suppress("DEPRECATION")
 @SuppressLint("SetJavaScriptEnabled")
 class BaseWebView(context: Context, attributeSet: AttributeSet?) : WebView(context, attributeSet) {
 

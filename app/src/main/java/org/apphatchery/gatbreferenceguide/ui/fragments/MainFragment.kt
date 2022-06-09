@@ -15,13 +15,11 @@ import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentMainBinding
 import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
 import org.apphatchery.gatbreferenceguide.db.entities.*
-import org.apphatchery.gatbreferenceguide.prefs.UserPrefs
 import org.apphatchery.gatbreferenceguide.resource.Resource
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChapterAdapter
@@ -29,7 +27,6 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChartAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAMainViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
 import sdk.pendo.io.Pendo
-import javax.inject.Inject
 
 
 private const val BUILD_VERSION = 2
@@ -44,9 +41,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private lateinit var predefinedChartList: ArrayList<ChartAndSubChapter>
     private val htmlInfoEntity = ArrayList<HtmlInfoEntity>()
     private val viewModel: FAMainViewModel by viewModels()
-
-    @Inject
-    lateinit var userPrefs: UserPrefs
 
     companion object {
         const val VISITOR_ID = ""
@@ -148,7 +142,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         fragmentMainBinding = FragmentMainBinding.bind(view)
-        userPrefs.getBuildVersion.asLiveData().observe(viewLifecycleOwner) {
+        viewModel.userPrefs.getBuildVersion.asLiveData().observe(viewLifecycleOwner) {
             if (it != BUILD_VERSION) firstLaunch() else {
                 init()
             }
@@ -314,7 +308,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                     }
                     FAMainViewModel.Callback.InsertGlobalSearchInfoComplete -> {
                         viewLifecycleOwner.lifecycleScope.launch {
-                            userPrefs.setBuildVersion(BUILD_VERSION)
+                            viewModel.userPrefs.setBuildVersion(BUILD_VERSION)
                         }
                         init()
                     }
