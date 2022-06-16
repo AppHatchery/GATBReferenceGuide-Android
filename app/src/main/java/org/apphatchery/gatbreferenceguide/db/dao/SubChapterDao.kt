@@ -8,7 +8,7 @@ import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 @Dao
 interface SubChapterDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(data: List<SubChapterEntity>)
 
     @Query("SELECT  * FROM  SubChapterEntity WHERE subChapterTitle LIKE '%' || :keyword || '%'  ORDER BY subChapterId")

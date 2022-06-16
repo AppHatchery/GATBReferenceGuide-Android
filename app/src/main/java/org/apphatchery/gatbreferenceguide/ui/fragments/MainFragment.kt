@@ -2,6 +2,7 @@ package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -32,7 +33,7 @@ import sdk.pendo.io.Pendo
 import javax.inject.Inject
 
 
-private const val BUILD_VERSION = 2
+private const val BUILD_VERSION = 3
 
 @AndroidEntryPoint
 class MainFragment : BaseFragment(R.layout.fragment_main) {
