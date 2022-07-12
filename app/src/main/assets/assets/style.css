@@ -1,69 +1,86 @@
 /* Import from the UIkit.css file */
 :root {
-  color-scheme: light dark;
-  --background-color: #fff;
-  --body-color: #666;
-  --link-color: #ba6233;
-  --table-title-color: #8c352d;
-  --titles-color: #333;
+    color-scheme: light dark;
+    --background-color: #fff;
+    --body-color: #666;
+    --link-color: #ba6233;
+    --table-title-color: #8c352d;
+    --titles-color: #333;
 }
 
 @media screen and (prefers-color-scheme: dark) {
-  :root {
-    --background-color: #202025;
-    --body-color: #fff;
-    --link-color: #f3a479;
-    --table-title-color: #d7958f;
-    --titles-color: #fff;
-    /* --title-color: #ff8080;
-    --subhead-color: #80ff80;
-    --link-color: #93d5ff; */
-  }
+    :root {
+        --background-color: #202025;
+        --body-color: #fff;
+        --link-color: #f3a479;
+        --table-title-color: #d7958f;
+        --titles-color: #fff;
+        /* --title-color: #ff8080;
+        --subhead-color: #80ff80;
+        --link-color: #93d5ff; */
+    }
 }
 
 html {
-  /* 1 */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-size: 16px;
-  font-weight: normal;
-  line-height: 1.5;
-  /* 2 */
-  -webkit-text-size-adjust: 100%;
-  /* 3 */
-  background: var(--background-color);
-  color: var(--body-color);
+    /* 1 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 1.5;
+    /* 2 */
+    -webkit-text-size-adjust: 100%;
+    /* 3 */
+    background: var(--background-color);
+    color: var(--body-color);
 }
 
 body {
-  margin: 0;
+    margin: 0;
 }
 
 a:active,
 a:hover {
-  outline: none;
+    outline: none;
 }
 
 a,
 .uk-link {
-  color: #1e87f0;
-  text-decoration: none;
-  cursor: pointer;
+    color: #1e87f0;
+    text-decoration: none;
+    cursor: pointer;
 }
+
 a:hover,
 .uk-link:hover,
 .uk-link-toggle:hover .uk-link,
 .uk-link-toggle:focus .uk-link {
-  color: #0f6ecd;
-  text-decoration: underline;
+    color: #0f6ecd;
+    text-decoration: underline;
 }
 
 .uk-text-bold {
-  color: var(--titles-color);
+    color: var(--titles-color);
+}
+
+
+h1,
+.uk-h1,
+h2,
+.uk-h2,
+h3,
+.uk-h3,
+h4,
+.uk-h4,
+h5,
+.uk-h5,
+h6,
+.uk-h6 {
+    color: var(--titles-color) !important;
 }
 
 b,
 strong {
-  font-weight: bolder;
+    font-weight: bolder;
 }
 
 /* ========================================================================
@@ -75,66 +92,75 @@ strong {
  * 3. Style
  */
 .uk-table {
-  /* 1 */
-  border-collapse: collapse;
-  border-spacing: 0;
-  /* 2 */
-  width: 100%;
-  /* 3 */
-  margin-bottom: 20px;
+    /* 1 */
+    border-collapse: collapse;
+    border-spacing: 0;
+    /* 2 */
+    width: 100%;
+    /* 3 */
+    margin-bottom: 20px;
 }
+
 /* Add margin if adjacent element */
 * + .uk-table {
-  margin-top: 20px;
+    margin-top: 20px;
 }
+
 /* Header cell
  ========================================================================== */
 /*
  * 1. Style
  */
 .uk-table th {
-  padding: 16px 12px;
-  text-align: left;
-  vertical-align: bottom;
-  /* 1 */
-  font-size: 0.875rem;
-  font-weight: normal;
-  color: #999;
-  text-transform: uppercase;
+    padding: 16px 12px;
+    text-align: left;
+    vertical-align: bottom;
+    /* 1 */
+    font-size: 0.875rem;
+    font-weight: normal;
+    color: #999;
+    text-transform: uppercase;
 }
+
 /* Cell
  ========================================================================== */
 .uk-table td {
-  padding: 16px 12px;
-  vertical-align: top;
+    padding: 16px 12px;
+    vertical-align: top;
 }
+
 /*
  * Remove margin from the last-child
  */
 .uk-table td > :last-child {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
+
 /* Footer
  ========================================================================== */
 .uk-table tfoot {
-  font-size: 0.875rem;
+    font-size: 0.875rem;
 }
+
 /* Caption
  ========================================================================== */
 .uk-table caption {
-  font-size: 0.875rem;
-  text-align: left;
-  color: #999;
+    font-size: 0.875rem;
+    text-align: left;
+    color: #999;
 }
+
 /* Alignment modifier
  ========================================================================== */
 .uk-table-middle,
 .uk-table-middle td {
-  vertical-align: middle !important;
+    vertical-align: middle !important;
 }
+
 .uk-table-middle th {
-  vertical-align: middle !important;
+    vertical-align: middle !important;
 }
+
 /* Style modifiers
  ========================================================================== */
 /*
@@ -143,113 +169,132 @@ strong {
 .uk-table-divider > tr:not(:first-child),
 .uk-table-divider > :not(:first-child) > tr,
 .uk-table-divider > :first-child > tr:not(:first-child) {
-  border-top: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
 }
+
 /*
  * Striped
  */
 .uk-table-striped > tr:nth-of-type(odd),
 .uk-table-striped tbody tr:nth-of-type(odd) {
-  background: #f8f8f8;
-  border-top: 1px solid #e5e5e5;
-  border-bottom: 1px solid #e5e5e5;
+    background: #f8f8f8;
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
 }
+
 /*
  * Hover
  */
 .uk-table-hover > tr:hover,
 .uk-table-hover tbody tr:hover {
-  background: #ffd;
+    background: #ffd;
 }
+
 /* Active state
  ========================================================================== */
 .uk-table > tr.uk-active,
 .uk-table tbody tr.uk-active {
-  background: #ffd;
+    background: #ffd;
 }
+
 /* Size modifier
  ========================================================================== */
 .uk-table-small th,
 .uk-table-small td {
-  padding: 10px 12px;
+    padding: 10px 12px;
 }
+
 .uk-table-large th,
 .uk-table-large td {
-  padding: 22px 12px;
+    padding: 22px 12px;
 }
+
 /* Justify modifier
  ========================================================================== */
 .uk-table-justify th:first-child,
 .uk-table-justify td:first-child {
-  padding-left: 0;
+    padding-left: 0;
 }
+
 .uk-table-justify th:last-child,
 .uk-table-justify td:last-child {
-  padding-right: 0;
+    padding-right: 0;
 }
+
 /* Cell size modifier
  ========================================================================== */
 .uk-table-shrink {
-  width: 1px;
+    width: 1px;
 }
+
 .uk-table-expand {
-  min-width: 150px;
+    min-width: 150px;
 }
+
 /* Cell link modifier
  ========================================================================== */
 /*
  * Does not work with `uk-table-justify` at the moment
  */
 .uk-table-link {
-  padding: 0 !important;
+    padding: 0 !important;
 }
+
 .uk-table-link > a {
-  display: block;
-  padding: 16px 12px;
+    display: block;
+    padding: 16px 12px;
 }
+
 .uk-table-small .uk-table-link > a {
-  padding: 10px 12px;
+    padding: 10px 12px;
 }
+
 /* Responsive table
  ========================================================================== */
 /* Phone landscape and smaller */
 @media (max-width: 959px) {
-  .uk-table-responsive,
-  .uk-table-responsive tbody,
-  .uk-table-responsive th,
-  .uk-table-responsive td,
-  .uk-table-responsive tr {
-    display: block;
-  }
-  .uk-table-responsive thead {
-    display: none;
-  }
-  .uk-table-responsive th,
-  .uk-table-responsive td {
-    width: auto !important;
-    max-width: none !important;
-    min-width: 0 !important;
-    overflow: visible !important;
-    white-space: normal !important;
-  }
-  .uk-table-responsive th:not(:first-child):not(.uk-table-link),
-  .uk-table-responsive td:not(:first-child):not(.uk-table-link),
-  .uk-table-responsive .uk-table-link:not(:first-child) > a {
-    padding-top: 5px !important;
-  }
-  .uk-table-responsive th:not(:last-child):not(.uk-table-link),
-  .uk-table-responsive td:not(:last-child):not(.uk-table-link),
-  .uk-table-responsive .uk-table-link:not(:last-child) > a {
-    padding-bottom: 5px !important;
-  }
-  .uk-table-justify.uk-table-responsive th,
-  .uk-table-justify.uk-table-responsive td {
-    padding-left: 0;
-    padding-right: 0;
-  }
+    .uk-table-responsive,
+    .uk-table-responsive tbody,
+    .uk-table-responsive th,
+    .uk-table-responsive td,
+    .uk-table-responsive tr {
+        display: block;
+    }
+
+    .uk-table-responsive thead {
+        display: none;
+    }
+
+    .uk-table-responsive th,
+    .uk-table-responsive td {
+        width: auto !important;
+        max-width: none !important;
+        min-width: 0 !important;
+        overflow: visible !important;
+        white-space: normal !important;
+    }
+
+    .uk-table-responsive th:not(:first-child):not(.uk-table-link),
+    .uk-table-responsive td:not(:first-child):not(.uk-table-link),
+    .uk-table-responsive .uk-table-link:not(:first-child) > a {
+        padding-top: 5px !important;
+    }
+
+    .uk-table-responsive th:not(:last-child):not(.uk-table-link),
+    .uk-table-responsive td:not(:last-child):not(.uk-table-link),
+    .uk-table-responsive .uk-table-link:not(:last-child) > a {
+        padding-bottom: 5px !important;
+    }
+
+    .uk-table-justify.uk-table-responsive th,
+    .uk-table-justify.uk-table-responsive td {
+        padding-left: 0;
+        padding-right: 0;
+    }
 }
+
 .uk-table tbody tr {
-  transition: background-color 0.1s linear;
+    transition: background-color 0.1s linear;
 }
 
 /* Wrap modifiers
@@ -258,25 +303,27 @@ strong {
  * Prevent text from wrapping onto multiple lines
  */
 .uk-text-nowrap {
-  white-space: nowrap;
+    white-space: nowrap;
 }
+
 /*
  * 1. Make sure a max-width is set after which truncation can occur
  * 2. Prevent text from wrapping onto multiple lines, and truncate with an ellipsis
  * 3. Fix for table cells
  */
 .uk-text-truncate {
-  /* 1 */
-  max-width: 100%;
-  /* 2 */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    /* 1 */
+    max-width: 100%;
+    /* 2 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
+
 /* 2 */
 th.uk-text-truncate,
 td.uk-text-truncate {
-  max-width: 0;
+    max-width: 0;
 }
 
 /* End of import from UIkit.css file */

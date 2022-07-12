@@ -6,18 +6,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.apphatchery.gatbreferenceguide.R
-import org.apphatchery.gatbreferenceguide.api.API
 import org.apphatchery.gatbreferenceguide.db.Database
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -33,38 +28,6 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun providesRetrofit(): Retrofit =
-        Retrofit.Builder()
-            .baseUrl("BASE_URL")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-
-    @RetrofitDownloadClient
-    @Singleton
-    @Provides
-    fun providesRetrofitDownloadClient(): Retrofit =
-        Retrofit.Builder()
-            .baseUrl("")
-            .build()
-
-    @Singleton
-    @Provides
-    fun providesAPI(retrofit: Retrofit): API = retrofit.create(API::class.java)
-
-
-    @RetrofitDownloadClientAPI
-    @Singleton
-    @Provides
-    fun providesRetrofitDownloadClientAPI(
-        @RetrofitDownloadClient
-        retrofit: Retrofit
-    ): API = retrofit.create(
-        API::class.java
-    )
-
-    @Singleton
-    @Provides
     fun providesRoomDB(
         @ApplicationContext context: Context
     ) = Room.databaseBuilder(context, Database::class.java, "ga_tb_reference_guide.db")
@@ -77,12 +40,3 @@ object AppModule {
         @ApplicationContext context: Context
     ): FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
 }
-
-@Retention(AnnotationRetention.RUNTIME)
-@Qualifier
-annotation class RetrofitDownloadClientAPI
-
-
-@Retention(AnnotationRetention.RUNTIME)
-@Qualifier
-annotation class RetrofitDownloadClient

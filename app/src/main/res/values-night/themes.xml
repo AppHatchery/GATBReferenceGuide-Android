@@ -27,6 +27,7 @@
         <item name="android:textColor">@color/white</item>
 
         <item name="actionBarStyle">@style/darkActionbar</item>
+        <item name="android:windowBackground">@color/dark_black</item>
 
     </style>
 
