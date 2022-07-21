@@ -1,6 +1,7 @@
 package org.apphatchery.gatbreferenceguide.ui
 
 import android.content.SharedPreferences
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         navController = findNavController(R.id.nav_host_fragment_container)
         binding.bottomNavigationView.setupWithNavController(navController)
         setupActionBarWithNavController(navController, AppBarConfiguration(navController.graph))
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
     }
 
     override fun onSupportNavigateUp(): Boolean {

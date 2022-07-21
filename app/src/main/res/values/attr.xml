@@ -8,5 +8,6 @@
     <attr name="searchBackgroundColor" format="reference|color" />
     <attr name="colorBlackWhite" format="color" />
     <attr name="colorWhiteBlack" format="color" />
+    <attr name="savedTopBar" format="color"/>
 
 </resources>

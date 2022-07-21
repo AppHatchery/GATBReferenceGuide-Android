@@ -37,6 +37,7 @@
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
                     android:hint="Enter keyword"
+                    android:textColorHint="@color/light_gray"
                     android:inputType="text|textCapSentences|textAutoCorrect|textAutoComplete"
                     android:maxLines="1"
                     android:padding="8dp"

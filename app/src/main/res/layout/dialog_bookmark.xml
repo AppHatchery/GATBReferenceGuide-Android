@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
-    android:background="?chartBackgroundColor"
+    android:background="@drawable/shape_dialog_rounded"
     android:orientation="vertical"
     android:padding="16dp">
 

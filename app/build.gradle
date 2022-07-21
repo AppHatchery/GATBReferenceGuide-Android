@@ -17,7 +17,7 @@ android {
         applicationId "org.apphatchery.gatbreferenceguide"
         minSdk 24
         targetSdk 30
-        versionCode 20
+        versionCode 21
 //        versionName "Development"
         versionName "1.6"
 

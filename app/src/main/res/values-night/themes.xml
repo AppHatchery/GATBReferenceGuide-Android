@@ -21,6 +21,7 @@
         <item name="colorBlackWhite">@color/dark_black</item>
         <item name="colorWhiteBlack">@android:color/white</item>
 
+        <item name="savedTopBar">@color/dark_black</item>
         <item name="chartBackgroundColor">#823410</item>
         <item name="chartBackgroundColorTop">#BD998A</item>
         <item name="searchBackgroundColor">#823410</item>

@@ -21,9 +21,12 @@
         <item name="colorWhiteBlack">@color/dark_black</item>
 
         <item name="chapterBackgroundColorTop">#c98463</item>
+        <item name="savedTopBar">#FFFFFF</item>
+
+        <item name="android:textViewStyle">@style/TextViewStyle</item>
 
         <item name="chartBackgroundColor">#c98463</item>
-        <item name="chartBackgroundColorTop">#9c3300</item>
+        <item name="chartBackgroundColorTop">#823410</item>
         <item name="searchBackgroundColor">@color/reddish</item>
     </style>
 
@@ -35,6 +38,10 @@
 
     <style name="Progress" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorAccent">@color/reddish</item>
+    </style>
+
+    <style name="TextViewStyle" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/black</item>
     </style>
 
 
