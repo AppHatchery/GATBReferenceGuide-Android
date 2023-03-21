@@ -375,7 +375,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun onShareFeedbackListener() {
-        requireView().snackBar("Working in it, just a moment please ...")
+        requireView().snackBar("Working on it, just a moment please ...")
         dialog.apply {
             setContentView(R.layout.dialog_feedback)
             val page =
