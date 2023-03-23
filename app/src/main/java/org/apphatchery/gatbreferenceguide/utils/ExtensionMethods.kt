@@ -1,12 +1,10 @@
 package org.apphatchery.gatbreferenceguide.utils
 
 import android.content.Context
-import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
@@ -14,7 +12,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.paulrybitskyi.persistentsearchview.PersistentSearchView
 import com.paulrybitskyi.persistentsearchview.adapters.model.SuggestionItem
 import com.paulrybitskyi.persistentsearchview.listeners.OnSuggestionChangeListener
@@ -58,7 +55,8 @@ abstract class OnTouchHelper(val onTouchHelperCallback: (Int) -> Int) :
 }
 
 fun EditText.setOnTextWatcher(
-    onTextChangedListener: (String) -> Unit) {
+    onTextChangedListener: (String) -> Unit
+) {
     this.addTextChangedListener(object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
 
@@ -81,8 +79,8 @@ fun EditText.setOnTextWatcher(
 
 fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
     observe(lifecycleOwner, object : Observer<T> {
-        override fun onChanged(t: T?) {
-            observer.onChanged(t)
+        override fun onChanged(value: T) {
+            observer.onChanged(value)
             removeObserver(this)
         }
     })
@@ -94,15 +92,16 @@ fun EditText.onSearchKeyword(searchText: String) = apply {
     setSelection(text.toString().length)
 }
 
-fun EditText.toggleSoftKeyboard(context: Context, showSoftKeyboard: Boolean = true) = context.apply {
-    val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-    if (showSoftKeyboard) inputManager.showSoftInput(
-        this@toggleSoftKeyboard,
-        InputMethodManager.SHOW_IMPLICIT
-    ) else {
-        inputManager.hideSoftInputFromWindow(this@toggleSoftKeyboard.windowToken, 0)
+fun EditText.toggleSoftKeyboard(context: Context, showSoftKeyboard: Boolean = true) =
+    context.apply {
+        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        if (showSoftKeyboard) inputManager.showSoftInput(
+            this@toggleSoftKeyboard,
+            InputMethodManager.SHOW_IMPLICIT
+        ) else {
+            inputManager.hideSoftInputFromWindow(this@toggleSoftKeyboard.windowToken, 0)
+        }
     }
-}
 
 fun getActionBar(context: Context) = (context as AppCompatActivity).supportActionBar
 

@@ -153,7 +153,7 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
 
         val bookmarkSwipeHandler = object : SwipeDecoratorCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.absoluteAdapterPosition
+                val position = viewHolder.adapterPosition
                 val bookmark = faSavedBookmarkAdapter.currentList[position]
                 val currentListSize = faSavedBookmarkAdapter.currentList.size
                 viewModel.deleteBookmark(bookmark)
@@ -171,7 +171,7 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
 
         val noteSwipeHandler = object : SwipeDecoratorCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.absoluteAdapterPosition
+                val position = viewHolder.adapterPosition
                 val note = faSavedNoteAdapter.currentList[position]
                 viewModel.deleteNote(note)
                 val currentListSize = faSavedNoteAdapter.currentList.size

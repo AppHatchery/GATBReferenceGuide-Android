@@ -38,8 +38,8 @@ class FAMainFirst6ChapterAdapter :
 
         init {
             first6ChapterItemBinding.button.setOnClickListener {
-                if (RecyclerView.NO_POSITION != absoluteAdapterPosition) {
-                    val currentList = currentList[absoluteAdapterPosition]
+                if (RecyclerView.NO_POSITION != adapterPosition) {
+                    val currentList = currentList[adapterPosition]
                     onItemClickListAdapter?.let {
                         it(currentList)
                     }
