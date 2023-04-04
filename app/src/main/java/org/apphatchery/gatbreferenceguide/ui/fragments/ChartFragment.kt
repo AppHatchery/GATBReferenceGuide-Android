@@ -38,7 +38,7 @@ class ChartFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
                 viewModel.getChapterInfo(it.subChapterEntity.chapterId)
                     .observe(viewLifecycleOwner) { chapterEntity ->
                         ChartFragmentDirections.actionChartFragmentToBodyFragment(
-                            BodyUrl(chapterEntity, it.subChapterEntity),
+                            BodyUrl(chapterEntity, it.subChapterEntity, ""),
                             it
                         ).apply {
                             findNavController().navigate(this)

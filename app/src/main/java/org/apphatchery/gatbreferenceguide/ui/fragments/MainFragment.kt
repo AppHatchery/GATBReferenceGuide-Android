@@ -113,7 +113,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                 viewModel.getChapterInfo(it.subChapterEntity.chapterId)
                     .observe(viewLifecycleOwner) { chapterEntity ->
                         MainFragmentDirections.actionMainFragmentToBodyFragmentDirect(
-                            BodyUrl(chapterEntity, it.subChapterEntity),
+                            BodyUrl(chapterEntity, it.subChapterEntity, ""),
                             it
                         ).apply {
                             findNavController().navigate(this)
@@ -192,7 +192,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                             viewModel.getChapterInfo(subChapterEntity.chapterId)
                                 .observe(viewLifecycleOwner) { chapterEntity ->
                                     MainFragmentDirections.actionMainFragmentToBodyFragmentDirect(
-                                        BodyUrl(chapterEntity, subChapterEntity), chartAndSubchapter
+                                        BodyUrl(chapterEntity, subChapterEntity, ""), chartAndSubchapter
                                     ).apply {
                                         findNavController().navigate(this)
                                     }
@@ -205,7 +205,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                     viewModel.getChapterInfo(subChapterEntity.chapterId)
                         .observe(viewLifecycleOwner) { chapterEntity ->
                             MainFragmentDirections.actionMainFragmentToBodyFragmentDirect(
-                                BodyUrl(chapterEntity, subChapterEntity), null
+                                BodyUrl(chapterEntity, subChapterEntity,""), null
                             ).apply {
                                 findNavController().navigate(this)
                             }

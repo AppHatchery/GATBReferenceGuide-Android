@@ -50,7 +50,7 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
         faSubChapterAdapter.itemClickCallback {
             val subChapterFragmentDirections =
                 SubChapterFragmentDirections.actionSubChapterFragmentToBodyFragment(
-                    BodyUrl(chapterEntity, it), null
+                    BodyUrl(chapterEntity, it, ""), null
                 )
 
             findNavController().navigate(subChapterFragmentDirections)
