@@ -8,5 +8,6 @@ import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 @Parcelize
 data class BodyUrl(
     val chapterEntity: ChapterEntity,
-    val subChapterEntity: SubChapterEntity
+    val subChapterEntity: SubChapterEntity,
+    val searchQuery: String
 ) : Parcelable

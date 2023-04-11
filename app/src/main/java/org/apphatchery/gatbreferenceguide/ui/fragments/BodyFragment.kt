@@ -529,6 +529,13 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
     private fun setupWebView() = bind.bodyWebView.apply {
         webViewClient = object : WebViewClient() {
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+
+                if(bodyUrl.searchQuery.isNotEmpty()) view?.findAllAsync(bodyUrl.searchQuery)
+            }
+
             override fun shouldOverrideUrlLoading(
                 view: WebView?,
                 request: WebResourceRequest?,
@@ -575,7 +582,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     if (subChapter.url == url) {
                         val subChapterFragmentDirections =
                             BodyFragmentDirections.actionBodyFragmentSelf(
-                                BodyUrl(bodyFragmentArgs.bodyUrl.chapterEntity, subChapter), null
+                                BodyUrl(bodyFragmentArgs.bodyUrl.chapterEntity, subChapter, ""), null
                             )
                         findNavController().navigate(subChapterFragmentDirections)
                     }

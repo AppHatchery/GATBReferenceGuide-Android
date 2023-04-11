@@ -60,7 +60,7 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
                             viewModel.getChapterInfo(subChapterEntity.chapterId)
                                 .observe(viewLifecycleOwner) { chapterEntity ->
                                     SavedFragmentDirections.actionSavedFragmentToBodyFragment(
-                                        BodyUrl(chapterEntity, subChapterEntity), null
+                                        BodyUrl(chapterEntity, subChapterEntity, ""), null
                                     ).apply {
                                         findNavController().navigate(this)
                                     }
@@ -114,7 +114,7 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
 
                                 val chartAndSubChapter = ChartAndSubChapter(chartEntity, subChapter)
                                 SavedFragmentDirections.actionSavedFragmentToBodyFragment(
-                                    BodyUrl(chapter, subChapter),
+                                    BodyUrl(chapter, subChapter, ""),
                                     if (it.noteId.contains("table_")) chartAndSubChapter else null
                                 ).apply {
                                     findNavController().navigate(this)
@@ -210,7 +210,8 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
                 SavedFragmentDirections.actionSavedFragmentToBodyFragment(
                     BodyUrl(
                         chapterEntity,
-                        subChapterEntity
+                        subChapterEntity,
+                        ""
                     ), null
                 ).apply {
                     findNavController().navigate(this)
@@ -227,7 +228,7 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
             viewModel.getChapterInfo(it.subChapterEntity.chapterId)
                 .observe(viewLifecycleOwner) { chapterEntity ->
                     SavedFragmentDirections.actionSavedFragmentToBodyFragment(
-                        BodyUrl(chapterEntity, it.subChapterEntity),
+                        BodyUrl(chapterEntity, it.subChapterEntity, ""),
                         it
                     ).apply {
                         findNavController().navigate(this)
