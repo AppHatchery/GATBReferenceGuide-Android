@@ -6,6 +6,8 @@ import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
@@ -533,7 +535,11 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
 
-                if(bodyUrl.searchQuery.isNotEmpty()) view?.findAllAsync(bodyUrl.searchQuery)
+                if(bodyUrl.searchQuery.isNotEmpty()){
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        view?.findAllAsync(bodyUrl.searchQuery)
+                    }, 300)
+                }
             }
 
             override fun shouldOverrideUrlLoading(
