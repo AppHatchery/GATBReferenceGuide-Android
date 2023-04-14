@@ -11,6 +11,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -139,7 +140,27 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         setupWebView()
 
+        if(bodyUrl.searchQuery.isNotEmpty()){
+            bind.searchClearText.text = bodyUrl.searchQuery
+            bind.searchClearContainer.visibility = View.VISIBLE
+            bind.searchClearButton.setOnClickListener {
 
+                bind.searchClearContainer.visibility = View.GONE
+                bind.bodyWebView.apply {
+                    clearMatches()
+                    val lp = layoutParams as ViewGroup.MarginLayoutParams
+                    lp.bottomMargin = 0
+                    layoutParams = lp
+                }
+            }
+
+            // add bottom margin
+            bind.bodyWebView.apply {
+                val lp = layoutParams as ViewGroup.MarginLayoutParams
+                lp.bottomMargin = 20 + bind.searchClearContainer.height
+                layoutParams = lp
+            }
+        }
 
         bind.apply {
 
