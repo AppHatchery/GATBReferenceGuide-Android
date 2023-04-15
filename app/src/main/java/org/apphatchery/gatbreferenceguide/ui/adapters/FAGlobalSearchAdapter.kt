@@ -3,9 +3,12 @@ package org.apphatchery.gatbreferenceguide.ui.adapters
 import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
+import android.text.TextUtils
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.text.HtmlCompat
+import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -47,12 +50,28 @@ class FAGlobalSearchAdapter @Inject constructor(
         fun onBinding(globalSearchEntity: GlobalSearchEntity, index: Int) =
             fragmentGlobalSearchItemBinding.apply {
 
-                searchTitle.text = globalSearchEntity.searchTitle
-                subChapter.text = globalSearchEntity.subChapter
+                searchTitle.text = HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)
+                subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
+                textInBody.text = HtmlCompat.fromHtml(globalSearchEntity.textInBody, FROM_HTML_MODE_LEGACY)
+               val bodyWithTags = globalSearchEntity.textInBody
 
-                setSpannableString(prepSearchQuery(globalSearchEntity.textInBody)) {
-                    textInBody.text = this
+                val pattern = ".*<font color='Red'>(.*?)</font>.*".toRegex()
+                val matchResult = pattern.find(bodyWithTags)
+                val extractedSearchValue = matchResult?.groupValues?.get(1) ?: ""
+
+                val locationOfTarget =  textInBody.text.indexOf(extractedSearchValue)
+                if (locationOfTarget != -1) {
+                    textInBody.maxLines = 2
+                    textInBody.ellipsize = TextUtils.TruncateAt.MARQUEE
+                    textInBody.post {
+                        val line = textInBody.layout.getLineForOffset(locationOfTarget)
+                        val y = textInBody.layout.getLineTop(line)
+                        textInBody.scrollTo(0, y)
+                    }
                 }
+
+
+
             }
 
         init {
