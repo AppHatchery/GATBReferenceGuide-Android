@@ -4,11 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,10 +53,22 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             }
 
         faGlobalSearchAdapter.also { faGlobalSearchAdapter ->
-            viewModel.getGlobalSearchEntity.observe(viewLifecycleOwner) {
-                faGlobalSearchAdapter.submitList(it)
-                it.size.noItemFound(bind.visibleViewGroup, bind.noItemFound)
-                "${it.size} result${if (it.size == 1) "" else "s"}".also {
+            viewModel.getGlobalSearchEntity.observe(viewLifecycleOwner) {word->
+
+                val search = viewModel.searchQuery
+                val highlightedWord = word.map { item ->
+                    val highlightSearchTerm = "<font color='Red'>${search.value}</font>"
+                    val highlightedSearchChapter = item.subChapter.replace(search.value, highlightSearchTerm, ignoreCase = true)
+                    val highlightedSearchTitle = item.searchTitle.replace(search.value, highlightSearchTerm, ignoreCase = true)
+                    val highlightedTextInBody = item.textInBody.replace(search.value, highlightSearchTerm, ignoreCase = true)
+                    item.copy(searchTitle = highlightedSearchTitle, textInBody = highlightedTextInBody, subChapter = highlightedSearchChapter)
+                }
+
+                //faGlobalSearchAdapter.submitList(highlightedWord)
+
+                faGlobalSearchAdapter.submitList(highlightedWord)
+                highlightedWord.size.noItemFound(bind.visibleViewGroup, bind.noItemFound)
+                "${highlightedWord.size} result${if (highlightedWord.size == 1) "" else "s"}".also {
                     bind.searchItemCount.text = it
                 }
             }
@@ -101,6 +115,13 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                         ) View.GONE else View.VISIBLE
                     }
                 })
+            searchKeyword.doAfterTextChanged { editable ->
+                if (editable != null) {
+                    if (editable.isBlank()) {
+                      viewModel.searchQuery.value = ""
+                    }
+                }
+            }
 
         }
 
