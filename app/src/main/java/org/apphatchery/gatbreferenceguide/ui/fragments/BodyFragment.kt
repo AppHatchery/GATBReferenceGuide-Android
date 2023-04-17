@@ -11,6 +11,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewStructure.HtmlInfo
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -21,6 +22,8 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.os.bundleOf
+import androidx.core.text.HtmlCompat
+import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -111,7 +114,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             getString(R.string.last_updated, subChapterEntity.lastUpdated)
 
 
-        getActionBar(requireActivity())?.title = chapterEntity.chapterTitle
+        getActionBar(requireActivity())?.title = HtmlCompat.fromHtml(chapterEntity.chapterTitle,FROM_HTML_MODE_LEGACY).toString()
         dialog = Dialog(requireContext()).dialog()
 
 

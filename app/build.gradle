@@ -11,12 +11,12 @@ plugins {
 }
 
 android {
-    compileSdk 30
+    compileSdk 31
 
     defaultConfig {
         applicationId "org.apphatchery.gatbreferenceguide"
         minSdk 24
-        targetSdk 30
+        targetSdk 31
         versionCode 21
 //        versionName "Development"
         versionName "1.6"
