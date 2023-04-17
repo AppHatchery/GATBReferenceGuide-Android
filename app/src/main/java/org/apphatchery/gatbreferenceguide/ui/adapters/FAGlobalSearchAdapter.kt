@@ -53,7 +53,7 @@ class FAGlobalSearchAdapter @Inject constructor(
                 searchTitle.text = HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)
                 subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
                 textInBody.text = HtmlCompat.fromHtml(globalSearchEntity.textInBody, FROM_HTML_MODE_LEGACY)
-               val bodyWithTags = globalSearchEntity.textInBody
+                val bodyWithTags = globalSearchEntity.textInBody
 
                 val pattern = ".*<font color='Red'>(.*?)</font>.*".toRegex()
                 val matchResult = pattern.find(bodyWithTags)
@@ -69,9 +69,6 @@ class FAGlobalSearchAdapter @Inject constructor(
                         textInBody.scrollTo(0, y)
                     }
                 }
-
-
-
             }
 
         init {
