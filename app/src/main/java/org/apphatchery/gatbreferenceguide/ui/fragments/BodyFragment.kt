@@ -7,6 +7,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.BackgroundColorSpan
@@ -575,7 +577,11 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
 
-                if(bodyUrl.searchQuery.isNotEmpty()) view?.findAllAsync(bodyUrl.searchQuery)
+                if(bodyUrl.searchQuery.isNotEmpty()){
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        view?.findAllAsync(bodyUrl.searchQuery)
+                    }, 300)
+                }
             }
 
             override fun shouldOverrideUrlLoading(
