@@ -56,7 +56,6 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             viewModel.getGlobalSearchEntity.observe(viewLifecycleOwner) {word->
 
                 val search = viewModel.searchQuery
-                Log.d("mooo",search.value)
                 val highlightedWord = word.map { item ->
                     val highlightSearchTerm = "<font color='Red'>${search.value}</font>"
                     val highlightedSearchChapter = item.subChapter.replace(search.value, highlightSearchTerm, ignoreCase = true)
