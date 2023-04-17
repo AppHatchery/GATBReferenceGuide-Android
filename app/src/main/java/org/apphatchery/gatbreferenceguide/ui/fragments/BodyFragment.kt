@@ -4,14 +4,20 @@ import android.animation.Animator
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.BackgroundColorSpan
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewStructure.HtmlInfo
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -22,6 +28,8 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.os.bundleOf
+import androidx.core.text.HtmlCompat
+import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -41,6 +49,7 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteColorAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.SwipeDecoratorCallback
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FABodyViewModel
+import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
 import javax.inject.Inject
 
@@ -58,6 +67,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private val bodyFragmentArgs: BodyFragmentArgs by navArgs()
     private lateinit var bodyUrl: BodyUrl
     private val viewModel: FABodyViewModel by viewModels()
+
     private var bookmarkEntity = BookmarkEntity()
     private lateinit var faNoteColorAdapter: FANoteColorAdapter
     private lateinit var faNoteAdapter: FANoteAdapter
@@ -112,7 +122,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             getString(R.string.last_updated, subChapterEntity.lastUpdated)
 
 
-        getActionBar(requireActivity())?.title = chapterEntity.chapterTitle
+        getActionBar(requireActivity())?.title = HtmlCompat.fromHtml(chapterEntity.chapterTitle,FROM_HTML_MODE_LEGACY).toString()
         dialog = Dialog(requireContext()).dialog()
 
 
@@ -166,9 +176,20 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
             bookmarkImageButton.setOnClickListener { onBookmarkListener() }
 
-
             if (chartAndSubChapter != null) isChartView() else {
-                textviewSubChapter.text = subChapterEntity.subChapterTitle
+
+                val originalTitle = subChapterEntity.subChapterTitle
+                val searchedWordToColor = bodyUrl.searchQuery
+                val spannableString = SpannableString(originalTitle)
+                val startIndex = originalTitle.indexOf(searchedWordToColor)
+                if (startIndex != -1) {
+                    val endIndex = startIndex + searchedWordToColor.length
+                    val backgroundColorSpan = BackgroundColorSpan(Color.YELLOW)
+                    spannableString.setSpan(backgroundColorSpan, startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    val foregroundColorSpan = ForegroundColorSpan(Color.BLACK)
+                    spannableString.setSpan(foregroundColorSpan, startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+                textviewSubChapter.text = spannableString
                 bodyWebView.loadUrl(baseURL + PAGES_DIR + subChapterEntity.url + EXTENSION)
             }
 
