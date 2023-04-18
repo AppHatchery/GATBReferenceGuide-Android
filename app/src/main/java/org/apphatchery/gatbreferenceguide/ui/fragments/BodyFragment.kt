@@ -16,7 +16,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewStructure.HtmlInfo
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -48,7 +47,6 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteColorAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.SwipeDecoratorCallback
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FABodyViewModel
-import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
 import javax.inject.Inject
 
@@ -553,8 +551,36 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
+                //view?.loadUrl("javascript:window.find('tb')")
+               // view?.loadUrl("javascript:window.find('tb');")
 
-                if(bodyUrl.searchQuery.isNotEmpty()) view?.findAllAsync(bodyUrl.searchQuery)
+                val searchBody = bodyUrl.searchQuery.split(" ")
+
+                for (eachWord in searchBody) {
+                    val jsCode = "javascript:(function() { " +
+                            "var count = 0;" +
+                            "function highlightAllOccurencesOfString(str) {" +
+                            "  var obj = window.document.getElementsByTagName('body')[0];" +
+                            "  var allOccurrences = obj.innerHTML.match(new RegExp(str, 'gi'));" +
+                            "  count = allOccurrences.length;" +
+                            "  for (var i = 0; i < count; i++) {" +
+                            "    var occurence = allOccurrences[i];" +
+                            "    var span = document.createElement('span');" +
+                            "    span.style.backgroundColor = 'yellow';" +
+                            "    span.style.color = 'black';" +
+                            "    span.style.fontWeight = 'normal';" +
+                            "    span.innerHTML = occurence;" +
+                            "    allOccurrences[i] = obj.innerHTML.replace(new RegExp(occurence, 'gi'), span.outerHTML);" +
+                            "    obj.innerHTML = allOccurrences[i];" +
+                            "  }" +
+                            "}" +
+                            "highlightAllOccurencesOfString('$eachWord');" +
+                            "})()"
+                    view?.loadUrl(jsCode)
+                }
+
+
+                // if(bodyUrl.searchQuery.isNotEmpty()) view?.findAllAsync(bodyUrl.searchQuery)
             }
 
             override fun shouldOverrideUrlLoading(
