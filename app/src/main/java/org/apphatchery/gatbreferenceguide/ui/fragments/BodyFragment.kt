@@ -551,34 +551,35 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                //view?.loadUrl("javascript:window.find('tb')")
-               // view?.loadUrl("javascript:window.find('tb');")
 
-                val searchBody = bodyUrl.searchQuery.split(" ")
+
+                val allowedString = normalizeString(bodyUrl.searchQuery)
+                val searchBody = allowedString.split(" ")
 
                 for (eachWord in searchBody) {
                     val jsCode = "javascript:(function() { " +
                             "var count = 0;" +
                             "function highlightAllOccurencesOfString(str) {" +
                             "  var obj = window.document.getElementsByTagName('body')[0];" +
-                            "  var allOccurrences = obj.innerHTML.match(new RegExp(str, 'gi'));" +
+                            "  var html = obj.innerHTML;" +
+                            "  var regex = new RegExp('(?<!<[^>]*>)' + str + '(?![^<]*?>)', 'gi');" +
+                            "  var allOccurrences = html.match(regex);" +
                             "  count = allOccurrences.length;" +
                             "  for (var i = 0; i < count; i++) {" +
-                            "    var occurence = allOccurrences[i];" +
+                            "    var occurrence = allOccurrences[i];" +
                             "    var span = document.createElement('span');" +
                             "    span.style.backgroundColor = 'yellow';" +
                             "    span.style.color = 'black';" +
                             "    span.style.fontWeight = 'normal';" +
-                            "    span.innerHTML = occurence;" +
-                            "    allOccurrences[i] = obj.innerHTML.replace(new RegExp(occurence, 'gi'), span.outerHTML);" +
-                            "    obj.innerHTML = allOccurrences[i];" +
+                            "    span.innerHTML = occurrence;" +
+                            "    html = html.replace(new RegExp('(?<!<[^>]*>)' + occurrence + '(?![^<]*?>)', 'gi'), span.outerHTML);" +
                             "  }" +
+                            "  obj.innerHTML = html;" +
                             "}" +
                             "highlightAllOccurencesOfString('$eachWord');" +
                             "})()"
                     view?.loadUrl(jsCode)
                 }
-
 
                 // if(bodyUrl.searchQuery.isNotEmpty()) view?.findAllAsync(bodyUrl.searchQuery)
             }
@@ -620,7 +621,18 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             }
         }
     }
+    fun normalizeString(str: String): String {
+        // Remove any leading or trailing spaces
+        var normalizedStr = str.trim()
 
+        // Replace multiple spaces with a single space
+        normalizedStr = normalizedStr.replace("\\s+".toRegex(), " ")
+
+        // Remove any spaces that are not in between two words
+        normalizedStr = normalizedStr.replace("\\s([\\W\\s]*)\\s".toRegex(), "$1")
+
+        return normalizedStr
+    }
 
     private fun gotoNavController(url: String) {
         if (url.isEmpty().not()) {
