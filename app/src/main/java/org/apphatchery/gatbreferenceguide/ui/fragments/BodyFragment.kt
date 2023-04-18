@@ -7,6 +7,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.BackgroundColorSpan
@@ -16,6 +18,8 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import android.view.ViewStructure.HtmlInfo
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -47,6 +51,7 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteColorAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.SwipeDecoratorCallback
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FABodyViewModel
+import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
 import javax.inject.Inject
 
@@ -147,7 +152,27 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         setupWebView()
 
+        if(bodyUrl.searchQuery.isNotEmpty()){
+            bind.searchClearText.text = bodyUrl.searchQuery
+            bind.searchClearContainer.visibility = View.VISIBLE
+            bind.searchClearButton.setOnClickListener {
 
+                bind.searchClearContainer.visibility = View.GONE
+                bind.bodyWebView.apply {
+                    clearMatches()
+                    val lp = layoutParams as ViewGroup.MarginLayoutParams
+                    lp.bottomMargin = 0
+                    layoutParams = lp
+                }
+            }
+
+            // add bottom margin
+            bind.bodyWebView.apply {
+                val lp = layoutParams as ViewGroup.MarginLayoutParams
+                lp.bottomMargin = 20 + bind.searchClearContainer.height
+                layoutParams = lp
+            }
+        }
 
         bind.apply {
 
@@ -552,36 +577,11 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
 
-
-                val allowedString = normalizeString(bodyUrl.searchQuery)
-                val searchBody = allowedString.split(" ")
-
-                for (eachWord in searchBody) {
-                    val jsCode = "javascript:(function() { " +
-                            "var count = 0;" +
-                            "function highlightAllOccurencesOfString(str) {" +
-                            "  var obj = window.document.getElementsByTagName('body')[0];" +
-                            "  var html = obj.innerHTML;" +
-                            "  var regex = new RegExp('(?<!<[^>]*>)' + str + '(?![^<]*?>)', 'gi');" +
-                            "  var allOccurrences = html.match(regex);" +
-                            "  count = allOccurrences.length;" +
-                            "  for (var i = 0; i < count; i++) {" +
-                            "    var occurrence = allOccurrences[i];" +
-                            "    var span = document.createElement('span');" +
-                            "    span.style.backgroundColor = 'yellow';" +
-                            "    span.style.color = 'black';" +
-                            "    span.style.fontWeight = 'normal';" +
-                            "    span.innerHTML = occurrence;" +
-                            "    html = html.replace(new RegExp('(?<!<[^>]*>)' + occurrence + '(?![^<]*?>)', 'gi'), span.outerHTML);" +
-                            "  }" +
-                            "  obj.innerHTML = html;" +
-                            "}" +
-                            "highlightAllOccurencesOfString('$eachWord');" +
-                            "})()"
-                    view?.loadUrl(jsCode)
+                if(bodyUrl.searchQuery.isNotEmpty()){
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        view?.findAllAsync(bodyUrl.searchQuery)
+                    }, 300)
                 }
-
-                // if(bodyUrl.searchQuery.isNotEmpty()) view?.findAllAsync(bodyUrl.searchQuery)
             }
 
             override fun shouldOverrideUrlLoading(
@@ -621,18 +621,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             }
         }
     }
-    fun normalizeString(str: String): String {
-        // Remove any leading or trailing spaces
-        var normalizedStr = str.trim()
 
-        // Replace multiple spaces with a single space
-        normalizedStr = normalizedStr.replace("\\s+".toRegex(), " ")
-
-        // Remove any spaces that are not in between two words
-        normalizedStr = normalizedStr.replace("\\s([\\W\\s]*)\\s".toRegex(), "$1")
-
-        return normalizedStr
-    }
 
     private fun gotoNavController(url: String) {
         if (url.isEmpty().not()) {
