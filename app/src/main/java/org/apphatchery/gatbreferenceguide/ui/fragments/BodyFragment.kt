@@ -159,10 +159,28 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
                 bind.searchClearContainer.visibility = View.GONE
                 bind.bodyWebView.apply {
-                    clearMatches()
+                    clearMatches()//clears the search without multiple parameters
                     val lp = layoutParams as ViewGroup.MarginLayoutParams
                     lp.bottomMargin = 0
                     layoutParams = lp
+                    //clears the search with multiple parameters
+                    webViewClient = object : WebViewClient() {
+                        override fun onPageFinished(view: WebView?, url: String?) {
+                            super.onPageFinished(view, url)
+                            val jsCode = """
+                                    javascript:(function() { 
+                                        var highlighted = document.querySelectorAll('[style="background-color: yellow;"]');
+                                        for (var i = 0; i < highlighted.length; i++) {
+                                            highlighted[i].style.backgroundColor = null;
+                                        }
+                                    })();
+                                """
+                            view?.loadUrl(jsCode)
+                        }
+                    }
+
+                    loadUrl("about:blank") // Load a blank page to ensure onPageFinished() gets called
+                    loadUrl(url_global.toString())
                 }
             }
 
@@ -570,13 +588,14 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             snackBar(getString(R.string.note_saved))
         }
     }
+    var url_global : String? = null
 
     private fun setupWebView() = bind.bodyWebView.apply {
         webViewClient = object : WebViewClient() {
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-
+                 url_global = url
                 if(bodyUrl.searchQuery.isNotEmpty()){
                     Handler(Looper.getMainLooper()).postDelayed({
                         view?.findAllAsync(bodyUrl.searchQuery)
