@@ -68,7 +68,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             group.isVisible = true
         }
 
-        requireActivity().getBottomNavigationView().toggleVisibility(true)
+        requireActivity().getBottomNavigationView()?.toggleVisibility(true)
 
         predefinedChapterList = ArrayList()
         predefinedChartList = ArrayList()
@@ -301,7 +301,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
     private fun firstLaunch() {
         requireActivity().apply {
-            getBottomNavigationView().toggleVisibility(false)
+            getBottomNavigationView()?.toggleVisibility(false)
             createHtmlAndAssetsDirectoryIfNotExists()
             prepHtmlPlusAssets()
             dumpChartData()

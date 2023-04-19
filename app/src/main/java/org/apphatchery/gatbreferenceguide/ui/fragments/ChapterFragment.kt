@@ -54,7 +54,7 @@ class ChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
                 findNavController().navigate(this)
             }
         }
-        requireActivity().getBottomNavigationView().isChecked(R.id.mainFragment)
+        requireActivity().getBottomNavigationView()?.isChecked(R.id.mainFragment)
     }
 
 

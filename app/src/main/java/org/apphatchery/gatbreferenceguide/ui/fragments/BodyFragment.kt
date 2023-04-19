@@ -264,7 +264,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         setupBookmark(id)
 
-        requireActivity().getBottomNavigationView().isChecked(R.id.mainFragment)
+        requireActivity().getBottomNavigationView()?.isChecked(R.id.mainFragment)
 
         /*Log screen name*/
         firebaseAnalytics.logEvent(
