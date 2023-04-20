@@ -165,21 +165,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     layoutParams = lp
                     //clears the search with multiple parameters
                     webViewClient = object : WebViewClient() {
-                        override fun onPageFinished(view: WebView?, url: String?) {
-                            super.onPageFinished(view, url)
-                            val jsCode = """
-                                    javascript:(function() { 
-                                        var highlighted = document.querySelectorAll('[style="background-color: yellow;"]');
-                                        for (var i = 0; i < highlighted.length; i++) {
-                                            highlighted[i].style.backgroundColor = null;
-                                        }
-                                    })();
-                                """
-                            view?.loadUrl(jsCode)
-                        }
-                    }
 
-                    loadUrl("about:blank") // Load a blank page to ensure onPageFinished() gets called
+                    }
                     loadUrl(url_global.toString())
                 }
             }
