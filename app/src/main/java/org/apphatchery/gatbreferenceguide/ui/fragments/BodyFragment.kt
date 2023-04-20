@@ -164,9 +164,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     lp.bottomMargin = 0
                     layoutParams = lp
                     //clears the search with multiple parameters
-                    webViewClient = object : WebViewClient() {
-
-                    }
+                    webViewClient = object : WebViewClient() {}
                     loadUrl(url_global.toString())
                 }
             }
