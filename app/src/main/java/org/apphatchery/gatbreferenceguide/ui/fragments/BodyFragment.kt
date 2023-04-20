@@ -19,7 +19,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewStructure.HtmlInfo
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -51,7 +50,6 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteColorAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.SwipeDecoratorCallback
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FABodyViewModel
-import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
 import javax.inject.Inject
 
@@ -581,12 +579,14 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                  url_global = url
-                if(bodyUrl.searchQuery.isNotEmpty()){
+
+
+                val searchInput = bodyUrl.searchQuery
+                if(searchInput.isNotEmpty() && !isOnlyWhitespace(searchInput)){
                     Handler(Looper.getMainLooper()).postDelayed({
-                        view?.findAllAsync(bodyUrl.searchQuery)
-                    }, 300)
-                }
-                val allowedString = normalizeString(bodyUrl.searchQuery)
+                        view?.findAllAsync(searchInput) }, 300) }else{ return }
+
+                val allowedString = normalizeString(searchInput)
                 val searchBody = allowedString.split(" ")
 
                 for (eachWord in searchBody) {
@@ -652,7 +652,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             }
         }
     }
+    fun isOnlyWhitespace(str: String): Boolean {
+        val trimmedStr = str.trim()
+        return trimmedStr.isEmpty()
+    }
     fun normalizeString(str: String): String {
+
         // Remove any leading or trailing spaces
         var normalizedStr = str.trim()
 
