@@ -19,7 +19,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewStructure.HtmlInfo
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -51,7 +50,6 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteColorAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.SwipeDecoratorCallback
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FABodyViewModel
-import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
 import javax.inject.Inject
 
@@ -159,10 +157,13 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
                 bind.searchClearContainer.visibility = View.GONE
                 bind.bodyWebView.apply {
-                    clearMatches()
+                    clearMatches()//clears the search without multiple parameters
                     val lp = layoutParams as ViewGroup.MarginLayoutParams
                     lp.bottomMargin = 0
                     layoutParams = lp
+                    //clears the search with multiple parameters
+                    webViewClient = object : WebViewClient() {}
+                    loadUrl(url_global.toString())
                 }
             }
 
@@ -570,17 +571,47 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             snackBar(getString(R.string.note_saved))
         }
     }
+    var url_global : String? = null
 
     private fun setupWebView() = bind.bodyWebView.apply {
         webViewClient = object : WebViewClient() {
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
+                 url_global = url
 
-                if(bodyUrl.searchQuery.isNotEmpty()){
+
+                val searchInput = bodyUrl.searchQuery
+                if(searchInput.isNotEmpty() && !isOnlyWhitespace(searchInput)){
                     Handler(Looper.getMainLooper()).postDelayed({
-                        view?.findAllAsync(bodyUrl.searchQuery)
-                    }, 300)
+                        view?.findAllAsync(searchInput) }, 300) }else{ return }
+
+                val allowedString = normalizeString(searchInput)
+                val searchBody = allowedString.split(" ")
+
+                for (eachWord in searchBody) {
+                    val jsCode = "javascript:(function() { " +
+                            "var count = 0;" +
+                            "function highlightAllOccurencesOfString(str) {" +
+                            "  var obj = window.document.getElementsByTagName('body')[0];" +
+                            "  var html = obj.innerHTML;" +
+                            "  var regex = new RegExp('(?<!<[^>]*>)' + str + '(?![^<]*?>)', 'gi');" +
+                            "  var allOccurrences = html.match(regex);" +
+                            "  count = allOccurrences.length;" +
+                            "  for (var i = 0; i < count; i++) {" +
+                            "    var occurrence = allOccurrences[i];" +
+                            "    var span = document.createElement('span');" +
+                            "    span.style.backgroundColor = 'yellow';" +
+                            "    span.style.color = 'black';" +
+                            "    span.style.fontWeight = 'normal';" +
+                            "    span.innerHTML = occurrence;" +
+                            "    html = html.replace(new RegExp('(?<!<[^>]*>)' + occurrence + '(?![^<]*?>)', 'gi'), span.outerHTML);" +
+                            "  }" +
+                            "  obj.innerHTML = html;" +
+                            "}" +
+                            "highlightAllOccurencesOfString('$eachWord');" +
+                            "})()"
+                    view?.loadUrl(jsCode)
                 }
             }
 
@@ -620,6 +651,23 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
             }
         }
+    }
+    fun isOnlyWhitespace(str: String): Boolean {
+        val trimmedStr = str.trim()
+        return trimmedStr.isEmpty()
+    }
+    fun normalizeString(str: String): String {
+
+        // Remove any leading or trailing spaces
+        var normalizedStr = str.trim()
+
+        // Replace multiple spaces with a single space
+        normalizedStr = normalizedStr.replace("\\s+".toRegex(), " ")
+
+        // Remove any spaces that are not in between two words
+        normalizedStr = normalizedStr.replace("\\s([\\W\\s]*)\\s".toRegex(), "$1")
+
+        return normalizedStr
     }
 
 
