@@ -4,14 +4,21 @@ import android.animation.Animator
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.BackgroundColorSpan
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewStructure.HtmlInfo
+import android.view.ViewGroup
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -60,6 +67,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private val bodyFragmentArgs: BodyFragmentArgs by navArgs()
     private lateinit var bodyUrl: BodyUrl
     private val viewModel: FABodyViewModel by viewModels()
+
     private var bookmarkEntity = BookmarkEntity()
     private lateinit var faNoteColorAdapter: FANoteColorAdapter
     private lateinit var faNoteAdapter: FANoteAdapter
@@ -142,15 +150,49 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         setupWebView()
 
+        if(bodyUrl.searchQuery.isNotEmpty()){
+            bind.searchClearText.text = bodyUrl.searchQuery
+            bind.searchClearContainer.visibility = View.VISIBLE
+            bind.searchClearButton.setOnClickListener {
 
+                bind.searchClearContainer.visibility = View.GONE
+                bind.bodyWebView.apply {
+                    clearMatches()//clears the search without multiple parameters
+                    val lp = layoutParams as ViewGroup.MarginLayoutParams
+                    lp.bottomMargin = 0
+                    layoutParams = lp
+                    //clears the search with multiple parameters
+                    webViewClient = object : WebViewClient() {}
+                    loadUrl(url_global.toString())
+                }
+            }
+
+            // add bottom margin
+            bind.bodyWebView.apply {
+                val lp = layoutParams as ViewGroup.MarginLayoutParams
+                lp.bottomMargin = 20 + bind.searchClearContainer.height
+                layoutParams = lp
+            }
+        }
 
         bind.apply {
 
             bookmarkImageButton.setOnClickListener { onBookmarkListener() }
 
-
             if (chartAndSubChapter != null) isChartView() else {
-                textviewSubChapter.text = subChapterEntity.subChapterTitle
+
+                val originalTitle = subChapterEntity.subChapterTitle
+                val searchedWordToColor = bodyUrl.searchQuery
+                val spannableString = SpannableString(originalTitle)
+                val startIndex = originalTitle.indexOf(searchedWordToColor)
+                if (startIndex != -1) {
+                    val endIndex = startIndex + searchedWordToColor.length
+                    val backgroundColorSpan = BackgroundColorSpan(Color.YELLOW)
+                    spannableString.setSpan(backgroundColorSpan, startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    val foregroundColorSpan = ForegroundColorSpan(Color.BLACK)
+                    spannableString.setSpan(foregroundColorSpan, startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+                textviewSubChapter.text = spannableString
                 bodyWebView.loadUrl(baseURL + PAGES_DIR + subChapterEntity.url + EXTENSION)
             }
 
@@ -223,7 +265,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         setupBookmark(id)
 
-        requireActivity().getBottomNavigationView().isChecked(R.id.mainFragment)
+        requireActivity().getBottomNavigationView()?.isChecked(R.id.mainFragment)
 
         /*Log screen name*/
         firebaseAnalytics.logEvent(
@@ -529,14 +571,48 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             snackBar(getString(R.string.note_saved))
         }
     }
+    var url_global : String? = null
 
     private fun setupWebView() = bind.bodyWebView.apply {
         webViewClient = object : WebViewClient() {
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
+                 url_global = url
 
-                if(bodyUrl.searchQuery.isNotEmpty()) view?.findAllAsync(bodyUrl.searchQuery)
+
+                val searchInput = bodyUrl.searchQuery
+                if(searchInput.isNotEmpty() && !isOnlyWhitespace(searchInput)){
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        view?.findAllAsync(searchInput) }, 300) }else{ return }
+
+                val allowedString = normalizeString(searchInput)
+                val searchBody = allowedString.split(" ")
+
+                for (eachWord in searchBody) {
+                    val jsCode = "javascript:(function() { " +
+                            "var count = 0;" +
+                            "function highlightAllOccurencesOfString(str) {" +
+                            "  var obj = window.document.getElementsByTagName('body')[0];" +
+                            "  var html = obj.innerHTML;" +
+                            "  var regex = new RegExp('(?<!<[^>]*>)' + str + '(?![^<]*?>)', 'gi');" +
+                            "  var allOccurrences = html.match(regex);" +
+                            "  count = allOccurrences.length;" +
+                            "  for (var i = 0; i < count; i++) {" +
+                            "    var occurrence = allOccurrences[i];" +
+                            "    var span = document.createElement('span');" +
+                            "    span.style.backgroundColor = 'yellow';" +
+                            "    span.style.color = 'black';" +
+                            "    span.style.fontWeight = 'normal';" +
+                            "    span.innerHTML = occurrence;" +
+                            "    html = html.replace(new RegExp('(?<!<[^>]*>)' + occurrence + '(?![^<]*?>)', 'gi'), span.outerHTML);" +
+                            "  }" +
+                            "  obj.innerHTML = html;" +
+                            "}" +
+                            "highlightAllOccurencesOfString('$eachWord');" +
+                            "})()"
+                    view?.loadUrl(jsCode)
+                }
             }
 
             override fun shouldOverrideUrlLoading(
@@ -575,6 +651,23 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
             }
         }
+    }
+    fun isOnlyWhitespace(str: String): Boolean {
+        val trimmedStr = str.trim()
+        return trimmedStr.isEmpty()
+    }
+    fun normalizeString(str: String): String {
+
+        // Remove any leading or trailing spaces
+        var normalizedStr = str.trim()
+
+        // Replace multiple spaces with a single space
+        normalizedStr = normalizedStr.replace("\\s+".toRegex(), " ")
+
+        // Remove any spaces that are not in between two words
+        normalizedStr = normalizedStr.replace("\\s([\\W\\s]*)\\s".toRegex(), "$1")
+
+        return normalizedStr
     }
 
 

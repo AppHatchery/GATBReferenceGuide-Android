@@ -13,7 +13,6 @@ import androidx.annotation.IdRes
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.reflect.TypeToken
 import org.apphatchery.gatbreferenceguide.R
 import org.jsoup.Jsoup
 import java.io.File
@@ -124,8 +123,12 @@ fun View.toggleVisibility(boolean: Boolean) {
 }
 
 
-fun Activity.getBottomNavigationView(): BottomNavigationView =
-    findViewById(R.id.bottomNavigationView)
+//fun Activity.getBottomNavigationView(): BottomNavigationView =
+//    findViewById(R.id.bottomNavigationView)
+/////
+fun Activity.getBottomNavigationView(): BottomNavigationView? {
+    return findViewById(R.id.bottomNavigationView)
+}
 
 fun BottomNavigationView.isChecked(@IdRes id: Int) {
     menu.findItem(id).isChecked = true

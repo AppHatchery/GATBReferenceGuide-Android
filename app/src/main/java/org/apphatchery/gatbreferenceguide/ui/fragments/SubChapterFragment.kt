@@ -68,7 +68,8 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
         }
 
         setHasOptionsMenu(true)
-        requireActivity().getBottomNavigationView().isChecked(R.id.mainFragment)
+
+        requireActivity().getBottomNavigationView()?.isChecked(R.id.mainFragment)
     }
 
 

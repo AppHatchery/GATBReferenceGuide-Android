@@ -57,8 +57,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
                 val search = viewModel.searchQuery
                 val highlightedWord = word.map { item ->
-                    val highlightSearchTerm = "<span style='background-color: yellow; color: black; font-weight: bold;'>${search.value}</span>"
-
+                    val highlightSearchTerm = "<font color='Red'>${search.value}</font>"
                     val highlightedSearchChapter = item.subChapter.replace(search.value, highlightSearchTerm, ignoreCase = true)
                     val highlightedSearchTitle = item.searchTitle.replace(search.value, highlightSearchTerm, ignoreCase = true)
                     val highlightedTextInBody = item.textInBody.replace(search.value, highlightSearchTerm, ignoreCase = true)

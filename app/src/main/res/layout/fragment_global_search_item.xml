@@ -24,7 +24,6 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:textColor="@color/my_color"
             android:gravity="start"
             android:textSize="17sp"
             android:scrollHorizontally="true"
@@ -47,7 +46,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:textSize="16sp"
-            android:textColor="@color/my_color"
             android:maxLines="2"
             tools:ignore="HardcodedText"
             tools:text="Tuberculin Skin Test (TST) " />
@@ -61,7 +59,6 @@
         android:layout_marginTop="4dp"
         android:drawablePadding="4dp"
         android:ellipsize="marquee"
-        android:textColor="@color/my_color"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:maxLines="2"
