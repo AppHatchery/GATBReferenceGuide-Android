@@ -1,6 +1,7 @@
 package org.apphatchery.gatbreferenceguide.ui.adapters
 
 import android.graphics.Typeface
+import android.text.Html.FROM_HTML_OPTION_USE_CSS_COLORS
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextUtils
@@ -8,6 +9,7 @@ import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
+import androidx.core.text.HtmlCompat.FROM_HTML_MODE_COMPACT
 import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -52,10 +54,10 @@ class FAGlobalSearchAdapter @Inject constructor(
 
                 searchTitle.text = HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)
                 subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
-                textInBody.text = HtmlCompat.fromHtml(globalSearchEntity.textInBody, FROM_HTML_MODE_LEGACY)
+                textInBody.text = HtmlCompat.fromHtml(globalSearchEntity.textInBody, HtmlCompat.FROM_HTML_OPTION_USE_CSS_COLORS)
 
                 val bodyWithTags = globalSearchEntity.textInBody
-                val pattern = ".*<span style='background-color: yellow; color: black;font-weight: bold;'>(.*?)</span>.*".toRegex()
+                val pattern = ".*<span style='background-color: yellow; color: black; font-weight: bold;'>(.*?)</span>.*".toRegex()
                 val matchResult = pattern.find(bodyWithTags)
                 val extractedSearchValue = matchResult?.groupValues?.get(1) ?: ""
 
