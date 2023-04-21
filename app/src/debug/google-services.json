@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "775187534127",
+    "firebase_url": "https://ga-tb-reference-dev-default-rtdb.firebaseio.com",
+    "project_id": "ga-tb-reference-dev",
+    "storage_bucket": "ga-tb-reference-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:775187534127:android:70bec2956a0523f03bd1da",
+        "android_client_info": {
+          "package_name": "org.apphatchery.gatbreferenceguide"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "775187534127-n64et15np71s0kjt0q4v1nksugonjj1t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.apphatchery.gatbreferenceguide",
+            "certificate_hash": "fbf3e62c00c5403f3101aa91fa2a1a468a185d60"
+          }
+        },
+        {
+          "client_id": "775187534127-1jshdh3f4cn5gtrk1cs7ofj1gqjc5s80.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCg6tBMjch1bzo-1hKFU2hzOQzznflyb9M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "775187534127-1jshdh3f4cn5gtrk1cs7ofj1gqjc5s80.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "775187534127-3e9bthe65nheftriovpieshujnmcj8h1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "edu.emory.tb.guide",
+                "app_store_id": "1583294462"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
