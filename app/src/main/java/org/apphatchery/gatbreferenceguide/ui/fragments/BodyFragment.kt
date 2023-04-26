@@ -163,7 +163,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     layoutParams = lp
                     //clears the search with multiple parameters
                     webViewClient = object : WebViewClient() {}
-                    loadUrl(url_global.toString())
+                    loadUrl(urlGlobal.toString())
                 }
             }
 
@@ -571,14 +571,14 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             snackBar(getString(R.string.note_saved))
         }
     }
-    var url_global : String? = null
+    var urlGlobal : String? = null
 
     private fun setupWebView() = bind.bodyWebView.apply {
         webViewClient = object : WebViewClient() {
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                 url_global = url
+                 urlGlobal = url
 
 
                 val searchInput = bodyUrl.searchQuery

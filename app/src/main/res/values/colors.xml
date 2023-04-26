@@ -13,6 +13,6 @@
     <color name="blue_700">#007AFF</color>
     <color name="blue_900">#5856D6</color>
     <color name="dark_black">#202025</color>
-
+    <color name="my_color">#000000</color>
 
 </resources>
