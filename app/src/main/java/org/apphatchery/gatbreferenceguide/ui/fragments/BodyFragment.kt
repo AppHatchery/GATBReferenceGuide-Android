@@ -150,7 +150,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         setupWebView()
 
-        if(bodyUrl.searchQuery.isNotEmpty()){
+        if(bodyUrl.searchQuery.isNotEmpty() && !isOnlyWhitespace(bodyUrl.searchQuery)){
             bind.searchClearText.text = bodyUrl.searchQuery
             bind.searchClearContainer.visibility = View.VISIBLE
             bind.searchClearButton.setOnClickListener {
