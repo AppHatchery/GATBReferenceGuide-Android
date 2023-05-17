@@ -283,10 +283,10 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             scaleX(scaleFactor).scaleY(scaleFactor)
             duration = 200
             setListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(animation: Animator?) = Unit
-                override fun onAnimationEnd(animation: Animator?) = onAnimationCompleted()
-                override fun onAnimationCancel(animation: Animator?) = Unit
-                override fun onAnimationRepeat(animation: Animator?) = Unit
+                override fun onAnimationStart(p0: Animator) = Unit
+                override fun onAnimationEnd(p0: Animator)  = onAnimationCompleted()
+                override fun onAnimationCancel(p0: Animator) = Unit
+                override fun onAnimationRepeat(p0: Animator) = Unit
             })
         }
 

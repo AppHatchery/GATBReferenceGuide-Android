@@ -5,21 +5,21 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id "androidx.navigation.safeargs.kotlin"
+    id "androidx.navigation.safeargs"
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
 }
 
 android {
-    compileSdk 31
+    compileSdk 33
 
     defaultConfig {
         applicationId "org.apphatchery.gatbreferenceguide"
         minSdk 24
-        targetSdk 31
-        versionCode 21
+        targetSdk 33
+        versionCode 24
 //        versionName "Development"
-        versionName "1.6"
+        versionName "1.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
