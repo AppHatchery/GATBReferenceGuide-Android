@@ -30,15 +30,6 @@
         <item name="searchBackgroundColor">@color/reddish</item>
     </style>
 
-    <style name="Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="android:textColorSecondary">@android:color/white</item>
-    </style>
-
-
-    <style name="Progress" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="colorAccent">@color/reddish</item>
-    </style>
 
     <style name="TextViewStyle" parent="android:Widget.TextView">
         <item name="android:textColor">@color/black</item>
