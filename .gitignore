@@ -14,4 +14,7 @@
 .cxx
 local.properties
 .idea/kotlinc.xml
+.idea/misc.xml
+.idea/compiler.xml
+.idea/deploymentTargetDropDown.xml
 app/google-services.json
