@@ -20,7 +20,6 @@
 
     <string name="delete">Delete</string>
     <string name="update">Update</string>
-    <string name="edit">Edit</string>
     <string name="share">Share</string>
     <string name="undo">Undo</string>
     <string name="bookmark">Bookmark</string>
@@ -57,11 +56,7 @@
     <string name="reset_title">Clear App Content</string>
     <string name="reset_summary">Reset all app data and start all over again</string>
 
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download content if available </string>
-    <string name="attachment_summary_off">Only download content when manually requested</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>
