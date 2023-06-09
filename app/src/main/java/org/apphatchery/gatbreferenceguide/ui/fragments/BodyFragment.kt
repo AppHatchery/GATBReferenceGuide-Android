@@ -58,7 +58,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
 
     companion object {
-        const val DOMAIN_LINK = "https://apphatcherygatbreferenceguide.page.link"
+        const val DOMAIN_LINK = "https://gatbreferenceguide.page.link"
         const val LOGO_URL =
             "https://raw.githubusercontent.com/AppHatchery/GA-TB-Reference-Guide-Web/main/assets/logo.jpg"
     }
