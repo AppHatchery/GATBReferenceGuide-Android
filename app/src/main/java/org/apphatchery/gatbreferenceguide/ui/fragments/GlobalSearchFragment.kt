@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.ActivityResultLauncher
@@ -76,6 +75,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
 
             faGlobalSearchAdapter.itemClickCallback {
+                bind.searchKeyword.toggleSoftKeyboard(requireContext(), false)
 
                 /*Log search keyword name*/
                 firebaseAnalytics.logEvent(
