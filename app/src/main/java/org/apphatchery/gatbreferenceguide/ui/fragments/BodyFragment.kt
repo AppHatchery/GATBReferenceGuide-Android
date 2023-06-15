@@ -255,10 +255,6 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             }
 
 
-            if (chapterEntity.chapterId == 15) {
-                bodyWebView.onZoomOut()
-            }
-
         }
 
 
@@ -322,9 +318,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         bookmarkType = BookmarkType.CHART
         textviewSubChapter.text = chartAndSubChapter!!.chartEntity.chartTitle
-
-        bodyWebView.onZoomOut()
-
+        
         val loadUrl = baseURL + PAGES_DIR + chartAndSubChapter!!.chartEntity.id + EXTENSION
         bodyWebView.loadUrl(loadUrl)
 
@@ -574,6 +568,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     var urlGlobal : String? = null
 
     private fun setupWebView() = bind.bodyWebView.apply {
+        onZoomOut()
         webViewClient = object : WebViewClient() {
 
             override fun onPageFinished(view: WebView?, url: String?) {
