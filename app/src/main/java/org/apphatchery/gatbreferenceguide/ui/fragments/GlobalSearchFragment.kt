@@ -53,16 +53,33 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             }
 
         faGlobalSearchAdapter.also { faGlobalSearchAdapter ->
-            viewModel.getGlobalSearchEntity.observe(viewLifecycleOwner) {word->
-
+            viewModel.getGlobalSearchEntity.observe(viewLifecycleOwner) { word ->
                 val search = viewModel.searchQuery
-                val highlightedWord = word.map { item ->
-                    val highlightSearchTerm = "<span style='background-color: yellow; color: black; font-weight: bold;'>${search.value}</span>"
+                val searchWords = search.value.split("\\s+".toRegex()) // Split search string by whitespace
 
-                    val highlightedSearchChapter = item.subChapter.replace(search.value, highlightSearchTerm, ignoreCase = true)
-                    val highlightedSearchTitle = item.searchTitle.replace(search.value, highlightSearchTerm, ignoreCase = true)
-                    val highlightedTextInBody = item.textInBody.replace(search.value, highlightSearchTerm, ignoreCase = true)
-                    item.copy(searchTitle = highlightedSearchTitle, textInBody = highlightedTextInBody, subChapter = highlightedSearchChapter)
+                val highlightedWord = word.map { item ->
+                    var highlightedSubChapter = item.subChapter
+                    var highlightedSearchTitle = item.searchTitle
+                    var highlightedTextInBody = item.textInBody
+
+                    // Highlight each individual word in the search query
+                    for (wordToHighlight in searchWords) {
+                        val highlightSearchTerm =
+                            "<span style='background-color: yellow; color: black; font-weight: bold;'>$wordToHighlight</span>"
+
+                        highlightedSubChapter =
+                            highlightedSubChapter.replace(wordToHighlight, highlightSearchTerm, ignoreCase = true)
+                        highlightedSearchTitle =
+                            highlightedSearchTitle.replace(wordToHighlight, highlightSearchTerm, ignoreCase = true)
+                        highlightedTextInBody =
+                            highlightedTextInBody.replace(wordToHighlight, highlightSearchTerm, ignoreCase = true)
+                    }
+
+                    item.copy(
+                        searchTitle = highlightedSearchTitle,
+                        textInBody = highlightedTextInBody,
+                        subChapter = highlightedSubChapter
+                    )
                 }
 
                 //faGlobalSearchAdapter.submitList(highlightedWord)
@@ -73,6 +90,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                     bind.searchItemCount.text = it
                 }
             }
+
 
 
             faGlobalSearchAdapter.itemClickCallback {
