@@ -41,8 +41,8 @@ class FAGlobalSearchAdapter @Inject constructor(
         textInBody.subSequence(getSearchStartPosition(textInBody), textInBody.length).toString()
 
     private fun getSearchStartPosition(textInBody: String) =
-        if (textInBody.lowercase().indexOf(searchQuery) == -1) 0
-        else textInBody.lowercase().indexOf(searchQuery)
+        if (textInBody.indexOf(searchQuery) == -1) 0
+        else textInBody.indexOf(searchQuery)
 
     inner class ViewHolder(private val fragmentGlobalSearchItemBinding: FragmentGlobalSearchItemBinding) :
         RecyclerView.ViewHolder(fragmentGlobalSearchItemBinding.root) {
