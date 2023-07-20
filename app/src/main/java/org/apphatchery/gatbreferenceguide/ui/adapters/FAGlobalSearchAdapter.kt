@@ -102,28 +102,31 @@ class FAGlobalSearchAdapter @Inject constructor(
                         // Calculate the width of the target line
                         val targetWidth = targetRect.width()
 
-                        // Calculate the new X scroll position to make the target visible
-                        val newX = when {
-                            x < textInBody.scrollX -> x.toInt()
-                            x + targetWidth > textInBody.scrollX + visibleWidth -> (x + targetWidth - visibleWidth).toInt()
-                            else -> textInBody.scrollX
-                        }
-
-                        // Calculate the new Y scroll position to make the target visible
-                        val newY = when {
-                            y < textInBody.scrollY -> y
-                            y + targetRect.height() > textInBody.scrollY + visibleHeight -> (y + targetRect.height() - visibleHeight)
-                            else -> textInBody.scrollY
-                        }
-
                         // Scroll to the new position to make the target visible
-                        textInBody.scrollTo(newX, newY)
+                        var newX = x.toInt()
+                        var newY = y
+
+                        // Loop until the target is fully visible
+                        while (newX < textInBody.scrollX || newX + targetWidth > textInBody.scrollX + visibleWidth ||
+                            newY < textInBody.scrollY || newY + targetRect.height() > textInBody.scrollY + visibleHeight) {
+                            if (newX < textInBody.scrollX) {
+                                newX += 10 // Scroll right by 10 pixels (adjust as needed)
+                            } else if (newX + targetWidth > textInBody.scrollX + visibleWidth) {
+                                newX -= 10 // Scroll left by 10 pixels (adjust as needed)
+                            }
+
+                            if (newY < textInBody.scrollY) {
+                                newY += 30 // Scroll down by 10 pixels (adjust as needed)
+                            } else if (newY + targetRect.height() > textInBody.scrollY + visibleHeight) {
+                                newY -= 30 // Scroll up by 10 pixels (adjust as needed)
+                            }
+
+                            textInBody.scrollTo(newX, newY)
+                        }
                     }
                 }
             }
-        fun hasWhiteSpace(inputString: String): Boolean {
-            return inputString.contains(" ")
-        }
+
         init {
             fragmentGlobalSearchItemBinding.root.setOnClickListener {
                 if (RecyclerView.NO_POSITION != adapterPosition) {
