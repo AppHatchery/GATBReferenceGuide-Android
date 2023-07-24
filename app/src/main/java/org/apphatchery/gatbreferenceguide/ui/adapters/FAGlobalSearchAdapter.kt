@@ -70,7 +70,6 @@ class FAGlobalSearchAdapter @Inject constructor(
 
                 val locationOfTarget =  textInBody.text.indexOf(extractedSearchValue)
 
-               // Log.d("mmmmmmmmm",extractedSearchValue+".."+searchQuery_.value)
 
                 if (locationOfTarget != -1) {
                     textInBody.maxLines = 2
