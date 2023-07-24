@@ -55,34 +55,37 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         faGlobalSearchAdapter.also { faGlobalSearchAdapter ->
             viewModel.getGlobalSearchEntity.observe(viewLifecycleOwner) { word ->
                 val search = viewModel.searchQuery
-                val searchWords = search.value.split("\\s+".toRegex()) // Split search string by whitespace
+                val searchWords = search.value.split("\\s+".toRegex())
 
-                val highlightedWord = word.map { item ->
-                    var highlightedSubChapter = item.subChapter
-                    var highlightedSearchTitle = item.searchTitle
-                    var highlightedTextInBody = item.textInBody
-
-                    // Highlight each individual word in the search query
-                    for (wordToHighlight in searchWords) {
-                        val highlightSearchTerm =
-                            "<span style='background-color: yellow; color: black; font-weight: bold;'>$wordToHighlight</span>"
-
-                        highlightedSubChapter =
-                            highlightedSubChapter.replace(wordToHighlight, highlightSearchTerm, ignoreCase = true)
-                        highlightedSearchTitle =
-                            highlightedSearchTitle.replace(wordToHighlight, highlightSearchTerm, ignoreCase = true)
-                        highlightedTextInBody =
-                            highlightedTextInBody.replace(wordToHighlight, highlightSearchTerm, ignoreCase = true)
+                fun highlightWord(original: String, wordToHighlight: String): String {
+                    val regex = Regex("(?i)\\b${Regex.escape(wordToHighlight)}\\b")
+                    return original.replace(regex) {
+                        "<span style='background-color: yellow; color: black; font-weight: bold;'>${it.value}</span>"
                     }
-
-                    item.copy(
-                        searchTitle = highlightedSearchTitle,
-                        textInBody = highlightedTextInBody,
-                        subChapter = highlightedSubChapter
-                    )
                 }
 
-                //faGlobalSearchAdapter.submitList(highlightedWord)
+                val highlightedWord = word.map { item ->
+                    val highlightedSubChapter =
+                        searchWords.fold(item.subChapter) { acc, wordToHighlight ->
+                            highlightWord(acc, wordToHighlight)
+                        }
+
+                    val highlightedSearchTitle =
+                        searchWords.fold(item.searchTitle) { acc, wordToHighlight ->
+                            highlightWord(acc, wordToHighlight)
+                        }
+
+                    val highlightedTextInBody =
+                        searchWords.fold(item.textInBody) { acc, wordToHighlight ->
+                            highlightWord(acc, wordToHighlight)
+                        }
+
+                    item.copy(
+                        subChapter = highlightedSubChapter,
+                        searchTitle = highlightedSearchTitle,
+                        textInBody = highlightedTextInBody
+                    )
+                }
 
                 faGlobalSearchAdapter.submitList(highlightedWord)
                 highlightedWord.size.noItemFound(bind.visibleViewGroup, bind.noItemFound)
@@ -93,6 +96,9 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
 
 
+
+
+
             faGlobalSearchAdapter.itemClickCallback {
 
                 /*Log search keyword name*/
@@ -100,12 +106,16 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                     ANALYTICS_SEARCH_EVENT,
                     bundleOf(Pair(ANALYTICS_SEARCH_EVENT, bind.searchKeyword.text.toString()))
                 )
-                val cleanSearchString = if(bind.searchKeyword.text.toString().isNotEmpty() && bind.searchKeyword.text.toString() != " " ) bind.searchKeyword.text.toString() else ""
+                val cleanSearchString = if (bind.searchKeyword.text.toString()
+                        .isNotEmpty() && bind.searchKeyword.text.toString() != " "
+                ) bind.searchKeyword.text.toString() else ""
                 viewModel.getSubChapterById(it.subChapterId.toString())
                     .observe(viewLifecycleOwner) { subChapter ->
                         GlobalSearchFragmentDirections.actionGlobalSearchFragmentToBodyFragment(
                             BodyUrl(
-                                ChapterEntity(it.chapterId, it.searchTitle), subChapter, cleanSearchString
+                                ChapterEntity(it.chapterId, it.searchTitle),
+                                subChapter,
+                                cleanSearchString
                             ), null
                         ).also { findNavController().navigate(it) }
                         bind.searchKeyword.clearFocus()
@@ -137,7 +147,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             searchKeyword.doAfterTextChanged { editable ->
                 if (editable != null) {
                     if (editable.isBlank()) {
-                      viewModel.searchQuery.value = ""
+                        viewModel.searchQuery.value = ""
                     }
                 }
             }
