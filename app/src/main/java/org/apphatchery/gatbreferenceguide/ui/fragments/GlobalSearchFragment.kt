@@ -53,19 +53,39 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             }
 
         faGlobalSearchAdapter.also { faGlobalSearchAdapter ->
-            viewModel.getGlobalSearchEntity.observe(viewLifecycleOwner) {word->
-
+            viewModel.getGlobalSearchEntity.observe(viewLifecycleOwner) { word ->
                 val search = viewModel.searchQuery
-                val highlightedWord = word.map { item ->
-                    val highlightSearchTerm = "<span style='background-color: yellow; color: black; font-weight: bold;'>${search.value}</span>"
+                val searchWords = search.value.split("\\s+".toRegex())
 
-                    val highlightedSearchChapter = item.subChapter.replace(search.value, highlightSearchTerm, ignoreCase = true)
-                    val highlightedSearchTitle = item.searchTitle.replace(search.value, highlightSearchTerm, ignoreCase = true)
-                    val highlightedTextInBody = item.textInBody.replace(search.value, highlightSearchTerm, ignoreCase = true)
-                    item.copy(searchTitle = highlightedSearchTitle, textInBody = highlightedTextInBody, subChapter = highlightedSearchChapter)
+                fun highlightWord(original: String, wordToHighlight: String): String {
+                    val regex = Regex("(?i)\\b${Regex.escape(wordToHighlight)}\\b")
+                    return original.replace(regex) {
+                        "<span style='background-color: yellow; color: black; font-weight: bold;'>${it.value}</span>"
+                    }
                 }
 
-                //faGlobalSearchAdapter.submitList(highlightedWord)
+                val highlightedWord = word.map { item ->
+                    val highlightedSubChapter =
+                        searchWords.fold(item.subChapter) { acc, wordToHighlight ->
+                            highlightWord(acc, wordToHighlight)
+                        }
+//
+//                    val highlightedSearchTitle =
+//                        searchWords.fold(item.searchTitle) { acc, wordToHighlight ->
+//                            highlightWord(acc, wordToHighlight)
+//                        }
+
+                    val highlightedTextInBody =
+                        searchWords.fold(item.textInBody) { acc, wordToHighlight ->
+                            highlightWord(acc, wordToHighlight)
+                        }
+
+                    item.copy(
+                        subChapter = highlightedSubChapter,
+                        searchTitle = item.searchTitle,
+                        textInBody = highlightedTextInBody
+                    )
+                }
 
                 faGlobalSearchAdapter.submitList(highlightedWord)
                 highlightedWord.size.noItemFound(bind.visibleViewGroup, bind.noItemFound)
