@@ -86,7 +86,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                     )
                 }
 
-         
+
                 faGlobalSearchAdapter.submitList(highlightedWord)
                 highlightedWord.size.noItemFound(bind.visibleViewGroup, bind.noItemFound)
                 "${highlightedWord.size} result${if (highlightedWord.size == 1) "" else "s"}".also {
