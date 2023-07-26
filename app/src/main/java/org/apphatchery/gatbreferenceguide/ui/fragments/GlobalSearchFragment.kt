@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.ActivityResultLauncher
@@ -65,15 +64,15 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                 }
 
                 val highlightedWord = word.map { item ->
-//                    val highlightedSubChapter =
-//                        searchWords.fold(item.subChapter) { acc, wordToHighlight ->
-//                            highlightWord(acc, wordToHighlight)
-//                        }
-//
-//                    val highlightedSearchTitle =
-//                        searchWords.fold(item.searchTitle) { acc, wordToHighlight ->
-//                            highlightWord(acc, wordToHighlight)
-//                        }
+                    val highlightedSubChapter =
+                        searchWords.fold(item.subChapter) { acc, wordToHighlight ->
+                            highlightWord(acc, wordToHighlight)
+                        }
+
+                    val highlightedSearchTitle =
+                        searchWords.fold(item.searchTitle) { acc, wordToHighlight ->
+                            highlightWord(acc, wordToHighlight)
+                        }
 
                     val highlightedTextInBody =
                         searchWords.fold(item.textInBody) { acc, wordToHighlight ->
@@ -81,8 +80,8 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                         }
 
                     item.copy(
-                        subChapter = item.subChapter,
-                        searchTitle = item.searchTitle,
+                        subChapter = highlightedSubChapter,
+                        searchTitle = highlightedSearchTitle,
                         textInBody = highlightedTextInBody
                     )
                 }
@@ -95,19 +94,28 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             }
 
 
+
+
+
+
             faGlobalSearchAdapter.itemClickCallback {
+                bind.searchKeyword.toggleSoftKeyboard(requireContext(), false)
 
                 /*Log search keyword name*/
                 firebaseAnalytics.logEvent(
                     ANALYTICS_SEARCH_EVENT,
                     bundleOf(Pair(ANALYTICS_SEARCH_EVENT, bind.searchKeyword.text.toString()))
                 )
-                val cleanSearchString = if(bind.searchKeyword.text.toString().isNotEmpty() && bind.searchKeyword.text.toString() != " " ) bind.searchKeyword.text.toString() else ""
+                val cleanSearchString = if (bind.searchKeyword.text.toString()
+                        .isNotEmpty() && bind.searchKeyword.text.toString() != " "
+                ) bind.searchKeyword.text.toString() else ""
                 viewModel.getSubChapterById(it.subChapterId.toString())
                     .observe(viewLifecycleOwner) { subChapter ->
                         GlobalSearchFragmentDirections.actionGlobalSearchFragmentToBodyFragment(
                             BodyUrl(
-                                ChapterEntity(it.chapterId, it.searchTitle), subChapter, cleanSearchString
+                                ChapterEntity(it.chapterId, it.searchTitle),
+                                subChapter,
+                                cleanSearchString
                             ), null
                         ).also { findNavController().navigate(it) }
                         bind.searchKeyword.clearFocus()
@@ -139,7 +147,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             searchKeyword.doAfterTextChanged { editable ->
                 if (editable != null) {
                     if (editable.isBlank()) {
-                      viewModel.searchQuery.value = ""
+                        viewModel.searchQuery.value = ""
                     }
                 }
             }
