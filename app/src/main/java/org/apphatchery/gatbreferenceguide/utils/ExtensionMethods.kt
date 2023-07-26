@@ -51,7 +51,7 @@ fun EditText.setOnTextWatcher(
             count: Int
         ) {
             charSequence?.let {
-                if (it.isNotBlank()) onTextChangedListener(it.toString().lowercase().trim())
+                if (it.isNotBlank()) onTextChangedListener(it.toString().trim())
             }
 
         }
