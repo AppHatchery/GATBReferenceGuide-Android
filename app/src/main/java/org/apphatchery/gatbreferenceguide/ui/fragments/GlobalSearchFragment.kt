@@ -64,15 +64,15 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                 }
 
                 val highlightedWord = word.map { item ->
-                    val highlightedSubChapter =
-                        searchWords.fold(item.subChapter) { acc, wordToHighlight ->
-                            highlightWord(acc, wordToHighlight)
-                        }
-
-                    val highlightedSearchTitle =
-                        searchWords.fold(item.searchTitle) { acc, wordToHighlight ->
-                            highlightWord(acc, wordToHighlight)
-                        }
+//                    val highlightedSubChapter =
+//                        searchWords.fold(item.subChapter) { acc, wordToHighlight ->
+//                            highlightWord(acc, wordToHighlight)
+//                        }
+//
+//                    val highlightedSearchTitle =
+//                        searchWords.fold(item.searchTitle) { acc, wordToHighlight ->
+//                            highlightWord(acc, wordToHighlight)
+//                        }
 
                     val highlightedTextInBody =
                         searchWords.fold(item.textInBody) { acc, wordToHighlight ->
@@ -80,12 +80,13 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                         }
 
                     item.copy(
-                        subChapter = highlightedSubChapter,
-                        searchTitle = highlightedSearchTitle,
+                        subChapter = item.subChapter,
+                        searchTitle = item.searchTitle,
                         textInBody = highlightedTextInBody
                     )
                 }
 
+         
                 faGlobalSearchAdapter.submitList(highlightedWord)
                 highlightedWord.size.noItemFound(bind.visibleViewGroup, bind.noItemFound)
                 "${highlightedWord.size} result${if (highlightedWord.size == 1) "" else "s"}".also {
