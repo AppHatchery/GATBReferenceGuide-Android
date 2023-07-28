@@ -17,6 +17,10 @@ class Repository @Inject constructor(
     private val subChapterDao = db.subChapterDao()
     private val chartDao = db.chartDao()
 
+    fun purgeData(){
+        db.purgeData()
+    }
+
 
     fun dumpChapterInfo(data: List<ChapterEntity>) = networkBoundResource(
         query = { chapterDao.getChapterEntity() },

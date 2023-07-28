@@ -19,4 +19,7 @@ interface HtmlInfoDao {
     @Query("SELECT  * FROM  HtmlInfoEntity")
    suspend fun getHtmlInfoEntitySuspended(): List<HtmlInfoEntity>
 
+    @Query("DELETE FROM HtmlInfoEntity")
+    suspend fun deleteAll()
+
 }

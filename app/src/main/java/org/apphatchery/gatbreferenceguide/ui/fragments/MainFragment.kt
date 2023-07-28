@@ -148,9 +148,14 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         fragmentMainBinding = FragmentMainBinding.bind(view)
         userPrefs.getBuildVersion.asLiveData().observe(viewLifecycleOwner) {
-            if (it != BUILD_VERSION) firstLaunch() else {
+            if (it != BUILD_VERSION)
+            {
+                firstLaunch()
+            }
+            else {
                 init()
             }
         }
@@ -301,6 +306,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
     private fun firstLaunch() {
         requireActivity().apply {
+            viewModel.purgeData()
             getBottomNavigationView()?.toggleVisibility(false)
             createHtmlAndAssetsDirectoryIfNotExists()
             prepHtmlPlusAssets()

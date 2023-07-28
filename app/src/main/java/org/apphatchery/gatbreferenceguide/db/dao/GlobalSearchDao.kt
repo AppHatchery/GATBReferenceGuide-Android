@@ -20,4 +20,7 @@ interface GlobalSearchDao {
     )
     fun getGlobalSearchEntity(keyword: String =""): Flow<List<GlobalSearchEntity>>
 
+    @Query("DELETE FROM GlobalSearchEntity")
+    suspend fun deleteAll()
+
 }
