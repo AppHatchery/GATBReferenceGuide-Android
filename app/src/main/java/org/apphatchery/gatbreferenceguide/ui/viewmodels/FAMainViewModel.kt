@@ -30,6 +30,10 @@ class FAMainViewModel @Inject constructor(
     private val taskFlowChannel = Channel<Callback>()
     val taskFlowEvent = taskFlowChannel.receiveAsFlow()
 
+    fun purgeData(){
+        repo.purgeData()
+    }
+
 
     fun dumpChapterData(data: List<ChapterEntity>) = repo.dumpChapterInfo(data).asLiveData()
 

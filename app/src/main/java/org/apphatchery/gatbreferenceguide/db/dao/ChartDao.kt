@@ -27,4 +27,7 @@ interface ChartDao {
     @Query("SELECT  * FROM  ChartEntity  JOIN SubChapterEntity USING(subChapterTitle) WHERE ChartEntity.id=:id")
     fun getChartAndSubChapterById(id: String): Flow<ChartAndSubChapter>
 
+    @Query("DELETE FROM ChartEntity")
+    suspend fun deleteAll()
+
 }

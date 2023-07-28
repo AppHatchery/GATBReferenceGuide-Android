@@ -7,7 +7,8 @@ import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 
 @Dao
 interface SubChapterDao {
-
+    @Query("DELETE FROM SubChapterEntity")
+    suspend fun deleteAll()
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(data: List<SubChapterEntity>)
 
