@@ -2,8 +2,10 @@ package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.ActivityResultLauncher
@@ -25,6 +27,7 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FAGlobalSearchAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
 import javax.inject.Inject
+
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -163,15 +166,12 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
     }
 
-
     override fun onDestroyView() {
-        bind.searchKeyword.clearFocus()
-        (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE)
-                as InputMethodManager).apply {
-            hideSoftInputFromWindow(bind.searchKeyword.windowToken, 0)
-        }
+        val activity = requireActivity()
+        val inputMethodManager = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(activity.window.decorView.windowToken, 0)
+
         super.onDestroyView()
     }
-
 
 }
