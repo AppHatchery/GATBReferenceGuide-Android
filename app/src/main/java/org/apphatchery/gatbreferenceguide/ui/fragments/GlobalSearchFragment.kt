@@ -108,6 +108,11 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             faGlobalSearchAdapter.itemClickCallback {
                 bind.searchKeyword.toggleSoftKeyboard(requireContext(), false)
 
+                val properties = hashMapOf<String, Any>()
+                properties["searchKeyword"] = bind.searchKeyword.text.toString()
+                properties["SelectedResult"] = it.searchTitle
+                Pendo.track("searchResultClicked", properties)
+
                 /*Log search keyword name*/
                 firebaseAnalytics.logEvent(
                     ANALYTICS_SEARCH_EVENT,
@@ -164,18 +169,6 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         bind.searchKeyword.apply {
             requestFocus()
             toggleSoftKeyboard(requireContext())
-            addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val properties = hashMapOf<String, Any>()
-                    properties["searchKeyword"] = s.toString()
-                    Pendo.track("searchKeywordChanged", properties)
-                }
-
-                override fun afterTextChanged(s: Editable?) {}
-            })
-
         }
 
     }
