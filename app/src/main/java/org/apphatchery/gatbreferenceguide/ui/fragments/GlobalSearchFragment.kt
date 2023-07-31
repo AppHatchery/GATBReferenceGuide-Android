@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -26,6 +28,7 @@ import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAGlobalSearchAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
+import sdk.pendo.io.Pendo
 import javax.inject.Inject
 
 
@@ -105,6 +108,11 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             faGlobalSearchAdapter.itemClickCallback {
                 bind.searchKeyword.toggleSoftKeyboard(requireContext(), false)
 
+                val properties = hashMapOf<String, Any>()
+                properties["searchKeyword"] = bind.searchKeyword.text.toString()
+                properties["SelectedResult"] = it.searchTitle
+                Pendo.track("searchResultClicked", properties)
+
                 /*Log search keyword name*/
                 firebaseAnalytics.logEvent(
                     ANALYTICS_SEARCH_EVENT,
@@ -161,7 +169,6 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         bind.searchKeyword.apply {
             requestFocus()
             toggleSoftKeyboard(requireContext())
-
         }
 
     }
