@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -26,6 +28,7 @@ import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAGlobalSearchAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
+import sdk.pendo.io.Pendo
 import javax.inject.Inject
 
 
@@ -161,6 +164,17 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         bind.searchKeyword.apply {
             requestFocus()
             toggleSoftKeyboard(requireContext())
+            addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val properties = hashMapOf<String, Any>()
+                    properties["searchKeyword"] = s.toString()
+                    Pendo.track("searchKeywordChanged", properties)
+                }
+
+                override fun afterTextChanged(s: Editable?) {}
+            })
 
         }
 
