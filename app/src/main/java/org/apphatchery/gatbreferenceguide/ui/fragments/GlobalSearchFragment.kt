@@ -46,6 +46,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
     private lateinit var bind: FragmentGlobalSearchBinding
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private val viewModel: FAGlobalSearchViewModel by viewModels()
+    private val viewModel_search: FAGlobalSearchViewModel by viewModels()
 
     @Inject
     lateinit var faGlobalSearchAdapter: FAGlobalSearchAdapter
@@ -57,7 +58,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         bind = FragmentGlobalSearchBinding.bind(view)
 
-
+        val search = viewModel.searchQuery
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 voiceSearchForActivityResult(it) { searchText ->
@@ -72,16 +73,24 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                 // Run the search and highlighting process in a coroutine tied to the lifecycle of the component
                 viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
                     // Get the search query only once outside of the coroutine
-                    val search = viewModel.searchQuery
+
                     val searchWords = search.value.split("\\s+".toRegex())
 
                     val highlightedWord = word.map { item ->
                         val highlightedTextInBody = searchWords.fold(item.textInBody) { acc, wordToHighlight ->
                             highlightWord(acc, wordToHighlight)
                         }
-                        calculatePercentage(word.size.toDouble(), count++.toDouble())
+                        item.copy(
+                            subChapter = item.subChapter,
+                            searchTitle = item.searchTitle,
+                            textInBody = highlightedTextInBody
+                        )
 
-
+                    }
+                    val highlightedWord_ = word.take(20).map { item ->
+                        val highlightedTextInBody = searchWords.fold(item.textInBody) { acc, wordToHighlight ->
+                            highlightWord(acc, wordToHighlight)
+                        }
                         item.copy(
                             subChapter = item.subChapter,
                             searchTitle = item.searchTitle,
@@ -92,14 +101,15 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
                     // Update the UI on the main thread with the results.
                     withContext(Dispatchers.Main) {
-                        faGlobalSearchAdapter.submitList(highlightedWord)
+                        val body = if (viewModel_search.searchQuery.value == "") highlightedWord_ else highlightedWord
+                        faGlobalSearchAdapter.submitList(body)
                         highlightedWord.size.noItemFound(bind.visibleViewGroup, bind.noItemFound)
                         bind.progressBar.visibility = View.GONE
-                        bind.percentIndicator.visibility = View.GONE
                         "${highlightedWord.size} result${if (highlightedWord.size == 1) "" else "s"}".also {
                             bind.searchItemCount.text = it
                         }
                     }
+
                 }
             }
 
@@ -180,28 +190,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             "<span style='background-color: yellow; color: black; font-weight: bold;'>${it.value}</span>"
         }
     }
-    fun calculatePercentage(finalValue: Double, changingValue: Double){
-        // Ensure the values are within the valid range
-        val validFinalValue = finalValue.coerceAtLeast(0.0)
-        val validChangingValue = changingValue.coerceAtLeast(0.0).coerceAtMost(validFinalValue)
 
-        // Calculate the percentage completion
-
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.Main) {
-                if (isDarkModeEnabled(requireContext())){
-                    bind.percentIndicator.setTextColor(Color.WHITE)
-                }
-                bind.percentIndicator.text = ((validChangingValue / validFinalValue) * 100.0).toInt().toString()
-            }
-        }
-
-    }
-
-    fun isDarkModeEnabled(context: Context): Boolean {
-        val uiModeManager = context.getSystemService(Context.UI_MODE_SERVICE) as? UiModeManager
-        return uiModeManager?.nightMode == Configuration.UI_MODE_NIGHT_YES
-    }
 
 
     override fun onDestroyView() {

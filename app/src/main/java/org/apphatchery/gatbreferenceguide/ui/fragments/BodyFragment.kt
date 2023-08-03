@@ -39,6 +39,10 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentBodyBinding
 import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
@@ -50,6 +54,7 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteColorAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.SwipeDecoratorCallback
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FABodyViewModel
+import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
 import javax.inject.Inject
 
@@ -67,6 +72,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private val bodyFragmentArgs: BodyFragmentArgs by navArgs()
     private lateinit var bodyUrl: BodyUrl
     private val viewModel: FABodyViewModel by viewModels()
+    private val viewModel_glob: FAGlobalSearchViewModel by viewModels()
 
     private var bookmarkEntity = BookmarkEntity()
     private lateinit var faNoteColorAdapter: FANoteColorAdapter
@@ -688,8 +694,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     }
 
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.searchView) findNavController().popBackStack()
+        CoroutineScope(Dispatchers.Main).launch {
+            viewModel_glob.searchQuery.value = ""
+            if (item.itemId == R.id.searchView) findNavController().popBackStack()
+        }
         return super.onOptionsItemSelected(item)
     }
 
