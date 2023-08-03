@@ -15,11 +15,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentGlobalSearchBinding
 import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
@@ -40,6 +44,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private val viewModel: FAGlobalSearchViewModel by viewModels()
 
+
     @Inject
     lateinit var faGlobalSearchAdapter: FAGlobalSearchAdapter
 
@@ -59,44 +64,47 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
         faGlobalSearchAdapter.also { faGlobalSearchAdapter ->
             viewModel.getGlobalSearchEntity.observe(viewLifecycleOwner) { word ->
-                val search = viewModel.searchQuery
-                val searchWords = search.value.split("\\s+".toRegex())
 
-                fun highlightWord(original: String, wordToHighlight: String): String {
-                    val regex = Regex("(?i)\\b${Regex.escape(wordToHighlight)}\\b")
-                    return original.replace(regex) {
-                        "<span style='background-color: yellow; color: black; font-weight: bold;'>${it.value}</span>"
-                    }
-                }
+                // Run the search and highlighting process in a coroutine tied to the lifecycle of the component
+                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                    // Get the search query only once outside of the coroutine
 
-                val highlightedWord = word.map { item ->
-//                    val highlightedSubChapter =
-//                        searchWords.fold(item.subChapter) { acc, wordToHighlight ->
-//                            highlightWord(acc, wordToHighlight)
-//                        }
-//
-//                    val highlightedSearchTitle =
-//                        searchWords.fold(item.searchTitle) { acc, wordToHighlight ->
-//                            highlightWord(acc, wordToHighlight)
-//                        }
+                    val searchWords = viewModel.searchQuery.value.split("\\s+".toRegex())
 
-                    val highlightedTextInBody =
-                        searchWords.fold(item.textInBody) { acc, wordToHighlight ->
+                    val highlightedWord = word.map { item ->
+                        val highlightedTextInBody = searchWords.fold(item.textInBody) { acc, wordToHighlight ->
                             highlightWord(acc, wordToHighlight)
                         }
+                        item.copy(
+                            subChapter = item.subChapter,
+                            searchTitle = item.searchTitle,
+                            textInBody = highlightedTextInBody
+                        )
 
-                    item.copy(
-                        subChapter = item.subChapter,
-                        searchTitle = item.searchTitle,
-                        textInBody = highlightedTextInBody
-                    )
-                }
+                    }
+                    val highlightedWord_ = word.take(20).map { item ->
+                        val highlightedTextInBody = searchWords.fold(item.textInBody) { acc, wordToHighlight ->
+                            highlightWord(acc, wordToHighlight)
+                        }
+                        item.copy(
+                            subChapter = item.subChapter,
+                            searchTitle = item.searchTitle,
+                            textInBody = highlightedTextInBody
+                        )
 
+                    }
 
-                faGlobalSearchAdapter.submitList(highlightedWord)
-                highlightedWord.size.noItemFound(bind.visibleViewGroup, bind.noItemFound)
-                "${highlightedWord.size} result${if (highlightedWord.size == 1) "" else "s"}".also {
-                    bind.searchItemCount.text = it
+                    // Update the UI on the main thread with the results.
+                    withContext(Dispatchers.Main) {
+                        val body = if (viewModel.searchQuery.value == "") highlightedWord_ else highlightedWord
+                        faGlobalSearchAdapter.submitList(body)
+                        highlightedWord.size.noItemFound(bind.visibleViewGroup, bind.noItemFound)
+                        bind.progressBar.visibility = View.GONE
+                        "${highlightedWord.size} result${if (highlightedWord.size == 1) "" else "s"}".also {
+                            bind.searchItemCount.text = it
+                        }
+                    }
+
                 }
             }
 
@@ -172,7 +180,13 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         }
 
     }
-
+    // Utilize a custom extension function for highlighting
+    fun highlightWord(original: String, wordToHighlight: String): String {
+        val regex = Regex("(?i)\\b${Regex.escape(wordToHighlight)}\\b")
+        return original.replace(regex) {
+            "<span style='background-color: yellow; color: black; font-weight: bold;'>${it.value}</span>"
+        }
+    }
     override fun onDestroyView() {
         val activity = requireActivity()
         val inputMethodManager = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
