@@ -68,14 +68,13 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         faGlobalSearchAdapter.also { faGlobalSearchAdapter ->
             // Inside your Fragment or Activity
             viewModel.getGlobalSearchEntity.observe(viewLifecycleOwner) { word ->
-                // Other parts of your code remain the same...
-
-                // Get the search query only once outside of the coroutine
-                val search = viewModel.searchQuery
-                val searchWords = search.value.split("\\s+".toRegex())
 
                 // Run the search and highlighting process in a coroutine tied to the lifecycle of the component
-                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Default) {
+                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                    // Get the search query only once outside of the coroutine
+                    val search = viewModel.searchQuery
+                    val searchWords = search.value.split("\\s+".toRegex())
+
                     val highlightedWord = word.map { item ->
                         val highlightedTextInBody = searchWords.fold(item.textInBody) { acc, wordToHighlight ->
                             highlightWord(acc, wordToHighlight)
@@ -137,33 +136,34 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         }
 
         bind.apply {
-            recyclerview.apply {
-                layoutManager = LinearLayoutManager(requireContext())
-                adapter = faGlobalSearchAdapter
-            }
+            CoroutineScope(Dispatchers.Main).launch {
+                recyclerview.apply {
+                    layoutManager = LinearLayoutManager(requireContext())
+                    adapter = faGlobalSearchAdapter
+                }
 
-            voiceSearch.setOnClickListener {
-                voiceSearchListener(resultLauncher)
-            }
+                voiceSearch.setOnClickListener {
+                    voiceSearchListener(resultLauncher)
+                }
 
-            searchKeyword.setOnTextWatcher(
-                onTextChangedListener = {
-                    viewModel.searchQuery.value = it
+                searchKeyword.setOnTextWatcher(
+                    onTextChangedListener = {
+                        viewModel.searchQuery.value = it
 
-                    with(bind.searchItemCount) {
-                        visibility = if (searchKeyword.text.toString().trim()
-                                .isBlank()
-                        ) View.GONE else View.VISIBLE
-                    }
-                })
-            searchKeyword.doAfterTextChanged { editable ->
-                if (editable != null) {
-                    if (editable.isBlank()) {
-                        viewModel.searchQuery.value = ""
+                        with(bind.searchItemCount) {
+                            visibility = if (searchKeyword.text.toString().trim()
+                                    .isBlank()
+                            ) View.GONE else View.VISIBLE
+                        }
+                    })
+                searchKeyword.doAfterTextChanged { editable ->
+                    if (editable != null) {
+                        if (editable.isBlank()) {
+                            viewModel.searchQuery.value = ""
+                        }
                     }
                 }
             }
-
         }
 
         bind.searchKeyword.apply {
