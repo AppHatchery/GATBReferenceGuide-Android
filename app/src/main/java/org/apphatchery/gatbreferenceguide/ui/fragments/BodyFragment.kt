@@ -689,8 +689,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.searchView) ChapterFragmentDirections.actionGlobalGlobalSearchFragment()
-            .also { findNavController().navigate(it) }
+        if (item.itemId == R.id.searchView) findNavController().popBackStack()
         return super.onOptionsItemSelected(item)
     }
 

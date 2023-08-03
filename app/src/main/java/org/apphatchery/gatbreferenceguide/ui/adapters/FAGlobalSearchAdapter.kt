@@ -63,67 +63,24 @@ class FAGlobalSearchAdapter @Inject constructor(
                 textInBody.text = HtmlCompat.fromHtml(globalSearchEntity.textInBody, FROM_HTML_MODE_LEGACY)
 
                 //  val term = globalSearchEntity.searched
-                val bodyWithTags = globalSearchEntity.textInBody
-                val pattern = ".*<span style='background-color: yellow; color: black; font-weight: bold;'>(.*?)</span>.*".toRegex()
-                val matchResult = pattern.find(bodyWithTags)
-                val extractedSearchValue = matchResult?.groupValues?.get(1) ?: ""
-
-                val locationOfTarget =  textInBody.text.indexOf(extractedSearchValue)
-
-
-                if (locationOfTarget != -1) {
-                    textInBody.maxLines = 2
-                    textInBody.ellipsize = TextUtils.TruncateAt.MARQUEE
-                    textInBody.post {
-                        val line = textInBody.layout.getLineForOffset(locationOfTarget)
-                        val y = textInBody.layout.getLineTop(line)
-                        textInBody.scrollTo(0, y)
-                    }
-                }
-                // Check if the target location is within the textInBody view
-//                if (locationOfTarget != -1) {
-//                    textInBody.maxLines = 3
-//                    textInBody.ellipsize = TextUtils.TruncateAt.START
+//                val bodyWithTags = globalSearchEntity.textInBody
+//                val pattern = ".*<span style='background-color: yellow; color: black; font-weight: bold;'>(.*?)</span>.*".toRegex()
+//                val matchResult = pattern.find(bodyWithTags)
+//                val extractedSearchValue = matchResult?.groupValues?.get(1) ?: ""
 //
+//                val locationOfTarget =  textInBody.text.indexOf(extractedSearchValue)
+//
+//
+//                if (locationOfTarget != -1) {
+//                    textInBody.maxLines = 2
+//                    textInBody.ellipsize = TextUtils.TruncateAt.MARQUEE
 //                    textInBody.post {
 //                        val line = textInBody.layout.getLineForOffset(locationOfTarget)
 //                        val y = textInBody.layout.getLineTop(line)
-//                        val x = textInBody.layout.getPrimaryHorizontal(locationOfTarget)
-//
-//                        // Calculate visible dimensions (excluding padding) of the textInBody view
-//                        val visibleWidth = textInBody.width - textInBody.paddingStart - textInBody.paddingEnd
-//                        val visibleHeight = textInBody.height - textInBody.paddingTop - textInBody.paddingBottom
-//
-//                        // Get the bounds of the line containing the target location
-//                        val targetRect = Rect()
-//                        textInBody.layout.getLineBounds(line, targetRect)
-//
-//                        // Calculate the width of the target line
-//                        val targetWidth = targetRect.width()
-//
-//                        // Scroll to the new position to make the target visible
-//                        var newX = x.toInt()
-//                        var newY = y
-//
-//                        // Loop until the target is fully visible
-//                        while (newX < textInBody.scrollX || newX + targetWidth > textInBody.scrollX + visibleWidth ||
-//                            newY < textInBody.scrollY || newY + targetRect.height() > textInBody.scrollY + visibleHeight) {
-//                            if (newX < textInBody.scrollX) {
-//                                newX += 10 // Scroll right by 10 pixels (adjust as needed)
-//                            } else if (newX + targetWidth > textInBody.scrollX + visibleWidth) {
-//                                newX -= 10 // Scroll left by 10 pixels (adjust as needed)
-//                            }
-//
-//                            if (newY < textInBody.scrollY) {
-//                                newY += 30 // Scroll down by 10 pixels (adjust as needed)
-//                            } else if (newY + targetRect.height() > textInBody.scrollY + visibleHeight) {
-//                                newY -= 30 // Scroll up by 10 pixels (adjust as needed)
-//                            }
-//
-//                            textInBody.scrollTo(0, newY)
-//                        }
+//                        textInBody.scrollTo(0, y)
 //                    }
 //                }
+
             }
 
         init {
