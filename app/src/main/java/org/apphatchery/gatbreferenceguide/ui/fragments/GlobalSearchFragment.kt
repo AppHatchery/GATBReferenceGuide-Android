@@ -28,6 +28,7 @@ import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentGlobalSearchBinding
 import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
 import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
+import org.apphatchery.gatbreferenceguide.db.entities.GlobalSearchEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAGlobalSearchAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
@@ -70,38 +71,53 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                     // Get the search query only once outside of the coroutine
 
                     val searchWords = viewModel.searchQuery.value.split("\\s+".toRegex())
+                    val normal = HighlightedWordSingleton.getHighlightedWord()
+                    var highlightedWord: List<GlobalSearchEntity>? = null
+                    var highlightedWord_: List<GlobalSearchEntity>? = null
+                   if(viewModel.searchQuery.value != ""){
+                       highlightedWord = word.map { item ->
+                           val highlightedTextInBody = searchWords.fold(item.textInBody) { acc, wordToHighlight ->
+                               highlightWord(acc, wordToHighlight)
+                           }
+                           item.copy(
+                               subChapter = item.subChapter,
+                               searchTitle = item.searchTitle,
+                               textInBody = highlightedTextInBody
+                           )
 
-                    val highlightedWord = word.map { item ->
-                        val highlightedTextInBody = searchWords.fold(item.textInBody) { acc, wordToHighlight ->
-                            highlightWord(acc, wordToHighlight)
+                       }
+                   }
+
+                    if(normal == null){
+                         highlightedWord_ = word.take(20).map { item ->
+                            val highlightedTextInBody = searchWords.fold(item.textInBody) { acc, wordToHighlight ->
+                                highlightWord(acc, wordToHighlight)
+                            }
+                            item.copy(
+                                subChapter = item.subChapter,
+                                searchTitle = item.searchTitle,
+                                textInBody = highlightedTextInBody
+                            )
+
                         }
-                        item.copy(
-                            subChapter = item.subChapter,
-                            searchTitle = item.searchTitle,
-                            textInBody = highlightedTextInBody
-                        )
-
+                        HighlightedWordSingleton.setHighlightedWord(highlightedWord_)
+                    }else{
+                        highlightedWord_ = normal
                     }
-                    val highlightedWord_ = word.take(20).map { item ->
-                        val highlightedTextInBody = searchWords.fold(item.textInBody) { acc, wordToHighlight ->
-                            highlightWord(acc, wordToHighlight)
-                        }
-                        item.copy(
-                            subChapter = item.subChapter,
-                            searchTitle = item.searchTitle,
-                            textInBody = highlightedTextInBody
-                        )
 
-                    }
 
                     // Update the UI on the main thread with the results.
                     withContext(Dispatchers.Main) {
                         val body = if (viewModel.searchQuery.value == "") highlightedWord_ else highlightedWord
                         faGlobalSearchAdapter.submitList(body)
-                        highlightedWord.size.noItemFound(bind.visibleViewGroup, bind.noItemFound)
+                        if (highlightedWord != null) {
+                            highlightedWord.size.noItemFound(bind.visibleViewGroup, bind.noItemFound)
+                        }
                         bind.progressBar.visibility = View.GONE
-                        "${highlightedWord.size} result${if (highlightedWord.size == 1) "" else "s"}".also {
-                            bind.searchItemCount.text = it
+                        if (highlightedWord != null) {
+                            "${highlightedWord.size} result${if (highlightedWord.size == 1) "" else "s"}".also {
+                                bind.searchItemCount.text = it
+                            }
                         }
                     }
 
