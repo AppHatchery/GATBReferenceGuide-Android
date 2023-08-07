@@ -29,9 +29,6 @@ class FAGlobalSearchAdapter @Inject constructor(
 ) : ListAdapter<GlobalSearchEntity, FAGlobalSearchAdapter.ViewHolder>(DiffUtilCallBack()) {
 
     var searchQuery: String = ""
-    var searchQuery_ = MutableStateFlow("")
-
-
 
     class DiffUtilCallBack : DiffUtil.ItemCallback<GlobalSearchEntity>() {
         override fun areItemsTheSame(oldItem: GlobalSearchEntity, newItem: GlobalSearchEntity) =
@@ -61,34 +58,33 @@ class FAGlobalSearchAdapter @Inject constructor(
         fun onBinding(globalSearchEntity: GlobalSearchEntity, index: Int) =
             fragmentGlobalSearchItemBinding.apply {
                 CoroutineScope(Dispatchers.Unconfined).launch {
-                    searchTitle.text = HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)
-                    subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
-                    textInBody.text = HtmlCompat.fromHtml(globalSearchEntity.textInBody, FROM_HTML_MODE_LEGACY)
-                    Log.d("mmmmmmmmmmmmmmmmmmmmm","hithithithithithithithithit")
+                    searchTitle.text =
+                        HtmlCompat.fromHtml(globalSearchEntity.searchTitle, FROM_HTML_MODE_LEGACY)
+                    subChapter.text =
+                        HtmlCompat.fromHtml(globalSearchEntity.subChapter, FROM_HTML_MODE_LEGACY)
+                    textInBody.text =
+                        HtmlCompat.fromHtml(globalSearchEntity.textInBody, FROM_HTML_MODE_LEGACY)
+
                 }.invokeOnCompletion {
-                val bodyWithTags = globalSearchEntity.textInBody
-                val pattern = ".*<span style='background-color: yellow; color: black; font-weight: bold;'>(.*?)</span>.*".toRegex()
-                val matchResult = pattern.find(bodyWithTags)
-                val extractedSearchValue = matchResult?.groupValues?.get(1) ?: ""
+                    val bodyWithTags = globalSearchEntity.textInBody
+                    val pattern =
+                        ".*<span style='background-color: yellow; color: black; font-weight: bold;'>(.*?)</span>.*".toRegex()
+                    val matchResult = pattern.find(bodyWithTags)
+                    val extractedSearchValue = matchResult?.groupValues?.get(1) ?: ""
 
-                val locationOfTarget =  textInBody.text.indexOf(extractedSearchValue)
+                    val locationOfTarget = textInBody.text.indexOf(extractedSearchValue)
 
 
-                if (locationOfTarget != -1) {
-                    textInBody.maxLines = 2
-                    textInBody.ellipsize = TextUtils.TruncateAt.MARQUEE
-                    textInBody.post {
-                        val line = textInBody.layout.getLineForOffset(locationOfTarget)
-                        val y = textInBody.layout.getLineTop(line)
-                        textInBody.scrollTo(0, y)
+                    if (locationOfTarget != -1) {
+                        textInBody.maxLines = 2
+                        textInBody.ellipsize = TextUtils.TruncateAt.MARQUEE
+                        textInBody.post {
+                            val line = textInBody.layout.getLineForOffset(locationOfTarget)
+                            val y = textInBody.layout.getLineTop(line)
+                            textInBody.scrollTo(0, y)
+                        }
                     }
                 }
-                }
-
-
-                //  val term = globalSearchEntity.searched
-
-
             }
 
         init {

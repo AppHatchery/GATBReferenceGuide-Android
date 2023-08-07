@@ -1,13 +1,9 @@
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.ActivityResultLauncher
@@ -69,30 +65,31 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                 // Run the search and highlighting process in a coroutine tied to the lifecycle of the component
                 viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
                     // Get the search query only once outside of the coroutine
-
                     val searchWords = viewModel.searchQuery.value.split("\\s+".toRegex())
                     val normal = HighlightedWordSingleton.getHighlightedWord()
                     var highlightedWord: List<GlobalSearchEntity>? = null
                     var highlightedWord_: List<GlobalSearchEntity>? = null
-                   if(viewModel.searchQuery.value != ""){
-                       highlightedWord = word.map { item ->
-                           val highlightedTextInBody = searchWords.fold(item.textInBody) { acc, wordToHighlight ->
-                               highlightWord(acc, wordToHighlight)
-                           }
-                           item.copy(
-                               subChapter = item.subChapter,
-                               searchTitle = item.searchTitle,
-                               textInBody = highlightedTextInBody
-                           )
+                    if (viewModel.searchQuery.value != "") {
+                        highlightedWord = word.map { item ->
+                            val highlightedTextInBody =
+                                searchWords.fold(item.textInBody) { acc, wordToHighlight ->
+                                    highlightWord(acc, wordToHighlight)
+                                }
+                            item.copy(
+                                subChapter = item.subChapter,
+                                searchTitle = item.searchTitle,
+                                textInBody = highlightedTextInBody
+                            )
 
-                       }
-                   }
+                        }
+                    }
 
-                    if(normal == null){
-                         highlightedWord_ = word.take(20).map { item ->
-                            val highlightedTextInBody = searchWords.fold(item.textInBody) { acc, wordToHighlight ->
-                                highlightWord(acc, wordToHighlight)
-                            }
+                    if (normal == null) {
+                        highlightedWord_ = word.take(20).map { item ->
+                            val highlightedTextInBody =
+                                searchWords.fold(item.textInBody) { acc, wordToHighlight ->
+                                    highlightWord(acc, wordToHighlight)
+                                }
                             item.copy(
                                 subChapter = item.subChapter,
                                 searchTitle = item.searchTitle,
@@ -101,18 +98,17 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
                         }
                         HighlightedWordSingleton.setHighlightedWord(highlightedWord_)
-                    }else{
+                    } else {
                         highlightedWord_ = normal
                     }
 
 
                     // Update the UI on the main thread with the results.
                     withContext(Dispatchers.Main) {
-                        val body = if (viewModel.searchQuery.value == "") highlightedWord_ else highlightedWord
+                        val body =
+                            if (viewModel.searchQuery.value == "") highlightedWord_ else highlightedWord
                         faGlobalSearchAdapter.submitList(body)
-                        if (highlightedWord != null) {
-                            highlightedWord.size.noItemFound(bind.visibleViewGroup, bind.noItemFound)
-                        }
+                        highlightedWord?.size?.noItemFound(bind.visibleViewGroup, bind.noItemFound)
                         bind.progressBar.visibility = View.GONE
                         if (highlightedWord != null) {
                             "${highlightedWord.size} result${if (highlightedWord.size == 1) "" else "s"}".also {
@@ -123,11 +119,6 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
                 }
             }
-
-
-
-
-
 
             faGlobalSearchAdapter.itemClickCallback {
                 bind.searchKeyword.toggleSoftKeyboard(requireContext(), false)
@@ -196,6 +187,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         }
 
     }
+
     // Utilize a custom extension function for highlighting
     fun highlightWord(original: String, wordToHighlight: String): String {
         val regex = Regex("(?i)\\b${Regex.escape(wordToHighlight)}\\b")
@@ -203,9 +195,11 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             "<span style='background-color: yellow; color: black; font-weight: bold;'>${it.value}</span>"
         }
     }
+
     override fun onDestroyView() {
         val activity = requireActivity()
-        val inputMethodManager = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(activity.window.decorView.windowToken, 0)
 
         super.onDestroyView()
