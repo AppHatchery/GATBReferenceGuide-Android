@@ -76,7 +76,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
         predefinedChapterList = ArrayList()
         predefinedChartList = ArrayList()
-        setupPendo()
+        //setupPendo()
 
         first6ChapterAdapter = FAMainFirst6ChapterAdapter().also { adapter ->
             viewModel.getChapter.observe(viewLifecycleOwner) {
