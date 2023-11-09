@@ -14,6 +14,7 @@ import androidx.preference.PreferenceManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.ActivityMainBinding
+import org.apphatchery.gatbreferenceguide.utils.*
 
 
 @AndroidEntryPoint
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavigationView.setupWithNavController(navController)
         setupActionBarWithNavController(navController, AppBarConfiguration(navController.graph))
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        searchState.exitSearchMode()
     }
 
     override fun onSupportNavigateUp(): Boolean {

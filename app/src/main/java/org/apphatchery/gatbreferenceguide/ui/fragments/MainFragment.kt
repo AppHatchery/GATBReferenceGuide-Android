@@ -71,7 +71,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             progressBar.isVisible = false
             group.isVisible = true
         }
-
+        searchState.exitSearchMode()
         requireActivity().getBottomNavigationView()?.toggleVisibility(true)
 
         predefinedChapterList = ArrayList()

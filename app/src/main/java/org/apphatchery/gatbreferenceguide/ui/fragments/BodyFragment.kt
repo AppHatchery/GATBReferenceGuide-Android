@@ -689,8 +689,26 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+<<<<<<< Updated upstream
         if (item.itemId == R.id.searchView) ChapterFragmentDirections.actionGlobalGlobalSearchFragment()
             .also { findNavController().navigate(it) }
+=======
+        CoroutineScope(Dispatchers.Main).launch {
+           Log.d("mushu", searchState.currentState.toString()+" from bodyfragment")
+            if(searchState.currentState.toString().equals("IN_SEARCH")){
+                if (item.itemId == R.id.searchView) findNavController().popBackStack(R.id.globalSearchFragment,false)
+            }else{
+                if (item.itemId == R.id.searchView) BodyFragmentDirections.actionGlobalGlobalSearchFragment()
+                    .also {
+                        findNavController().navigate(it)
+                    }
+            }
+            //viewModel_glob.searchQuery.value = ""
+
+
+          //  if (item.itemId == R.id.searchView) findNavController().popBackStack()
+        }
+>>>>>>> Stashed changes
         return super.onOptionsItemSelected(item)
     }
 
