@@ -1,6 +1,7 @@
 package org.apphatchery.gatbreferenceguide.utils
 
 import org.apphatchery.gatbreferenceguide.db.data.NoteColor
+import org.apphatchery.gatbreferenceguide.db.entities.GlobalSearchEntity
 
 val CSS_JS_FILES = arrayOf("assets/uikit.css", "assets/uikit.js", "assets/uikit-icons.js")
 
@@ -17,9 +18,7 @@ val NOTE_COLOR = arrayListOf(
 
 const val ANALYTICS_PAGE_EVENT = "page"
 const val ANALYTICS_SEARCH_EVENT = "search"
-<<<<<<< Updated upstream
-const val ANALYTICS_BOOKMARK_EVENT = "bookmark"
-=======
+
 const val ANALYTICS_BOOKMARK_EVENT = "bookmark"
 
 object searchState {
@@ -51,4 +50,4 @@ object HighlightedWordSingleton {
         return highlightedWordInstance
     }
 }
->>>>>>> Stashed changes
+

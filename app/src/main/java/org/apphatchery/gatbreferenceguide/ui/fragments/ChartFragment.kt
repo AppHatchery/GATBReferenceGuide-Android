@@ -70,8 +70,7 @@ class ChartFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d("mushu", searchState.currentState.toString()+" from chartFragment")
-        if(searchState.currentState.toString().equals("IN_SEARCH")){
+        if(searchState.currentState.toString() == "IN_SEARCH"){
             if (item.itemId == R.id.searchView) findNavController().popBackStack(R.id.globalSearchFragment,false)
 
         }else{
