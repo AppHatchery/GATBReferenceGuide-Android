@@ -81,8 +81,18 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+
         if(searchState.currentState.toString() == "IN_SEARCH"){
-            if (item.itemId == R.id.searchView) findNavController().popBackStack(R.id.globalSearchFragment,false)
+            if (item.itemId == R.id.searchView) {
+                var comp =   findNavController().popBackStack(R.id.globalSearchFragment,false)
+                if(!comp){
+                    if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
+                        .also {
+                            findNavController().navigate(it)
+                        }
+                }
+            }
         }else{
             if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
             .also {

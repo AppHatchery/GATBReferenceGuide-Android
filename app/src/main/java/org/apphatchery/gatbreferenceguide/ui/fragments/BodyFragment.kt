@@ -3,6 +3,7 @@ package org.apphatchery.gatbreferenceguide.ui.fragments
 import android.animation.Animator
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -26,6 +27,7 @@ import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.os.bundleOf
@@ -691,8 +693,18 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
             if(searchState.currentState.toString() == "IN_SEARCH"){
-                if (item.itemId == R.id.searchView) findNavController().popBackStack(R.id.globalSearchFragment,false)
+                if (item.itemId == R.id.searchView) {
+                  var comp =   findNavController().popBackStack(R.id.globalSearchFragment,false)
+                    if(!comp){
+                        if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
+                            .also {
+                                findNavController().navigate(it)
+                            }
+                    }
+                }
+
             }else{
                 if (item.itemId == R.id.searchView) BodyFragmentDirections.actionGlobalGlobalSearchFragment()
                     .also {
@@ -701,6 +713,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             }
         return super.onOptionsItemSelected(item)
     }
+
+
 
     private fun isBookmarkCheck() = bookmarkType == BookmarkType.CHART
 
