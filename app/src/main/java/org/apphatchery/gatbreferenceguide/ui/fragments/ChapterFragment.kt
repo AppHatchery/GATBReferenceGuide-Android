@@ -18,6 +18,7 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FAChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAChapterViewModel
 import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
 import org.apphatchery.gatbreferenceguide.utils.isChecked
+import org.apphatchery.gatbreferenceguide.utils.searchState
 
 
 @AndroidEntryPoint
@@ -64,8 +65,24 @@ class ChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.searchView) ChapterFragmentDirections.actionGlobalGlobalSearchFragment()
-            .also { findNavController().navigate(it) }
+
+        if(searchState.currentState.toString() == "IN_SEARCH"){
+            if (item.itemId == R.id.searchView) {
+                var comp =   findNavController().popBackStack(R.id.globalSearchFragment,false)
+                if(!comp){
+                    if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
+                        .also {
+                            findNavController().navigate(it)
+                        }
+                }
+            }
+        }else{
+            if (item.itemId == R.id.searchView) ChapterFragmentDirections.actionGlobalGlobalSearchFragment()
+                .also {
+                    findNavController().navigate(it)
+                }
+        }
+
         return super.onOptionsItemSelected(item)
     }
 
