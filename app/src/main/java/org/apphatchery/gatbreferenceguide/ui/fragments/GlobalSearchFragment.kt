@@ -179,6 +179,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                 }
             }
 
+
         }
 
         bind.searchKeyword.apply {

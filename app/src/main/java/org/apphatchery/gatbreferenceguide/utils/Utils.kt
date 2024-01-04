@@ -18,7 +18,26 @@ val NOTE_COLOR = arrayListOf(
 
 const val ANALYTICS_PAGE_EVENT = "page"
 const val ANALYTICS_SEARCH_EVENT = "search"
+
 const val ANALYTICS_BOOKMARK_EVENT = "bookmark"
+
+object searchState {
+    enum class SearchState {
+        IN_SEARCH,
+        OUT_OF_SEARCH
+    }
+     var currentState = SearchState.OUT_OF_SEARCH
+    fun enterSearchMode() {
+        currentState = SearchState.IN_SEARCH
+    }
+
+    // Function to change the state to OUT_OF_SEARCH
+    fun exitSearchMode() {
+        currentState = SearchState.OUT_OF_SEARCH
+    }
+
+}
+
 
 object HighlightedWordSingleton {
     private var highlightedWordInstance: List<GlobalSearchEntity>? = null
@@ -31,3 +50,4 @@ object HighlightedWordSingleton {
         return highlightedWordInstance
     }
 }
+

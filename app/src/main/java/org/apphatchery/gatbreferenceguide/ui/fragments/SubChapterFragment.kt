@@ -1,6 +1,7 @@
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -21,6 +22,7 @@ import org.apphatchery.gatbreferenceguide.ui.viewmodels.FASubChapterViewModel
 import org.apphatchery.gatbreferenceguide.utils.getActionBar
 import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
 import org.apphatchery.gatbreferenceguide.utils.isChecked
+import org.apphatchery.gatbreferenceguide.utils.searchState
 
 @AndroidEntryPoint
 class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
@@ -79,8 +81,25 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
-            .also { findNavController().navigate(it) }
+
+
+        if(searchState.currentState.toString() == "IN_SEARCH"){
+            if (item.itemId == R.id.searchView) {
+                var comp =   findNavController().popBackStack(R.id.globalSearchFragment,false)
+                if(!comp){
+                    if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
+                        .also {
+                            findNavController().navigate(it)
+                        }
+                }
+            }
+        }else{
+            if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
+            .also {
+                findNavController().navigate(it)
+            }
+        }
+
         return super.onOptionsItemSelected(item)
     }
 

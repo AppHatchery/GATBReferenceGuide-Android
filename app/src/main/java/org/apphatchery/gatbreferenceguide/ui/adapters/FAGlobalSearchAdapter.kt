@@ -12,6 +12,9 @@ import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -22,13 +25,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.apphatchery.gatbreferenceguide.databinding.FragmentGlobalSearchItemBinding
 import org.apphatchery.gatbreferenceguide.db.entities.GlobalSearchEntity
+import org.apphatchery.gatbreferenceguide.ui.viewmodels.FABodyViewModel
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
+import org.apphatchery.gatbreferenceguide.utils.searchState
 import javax.inject.Inject
 
 class FAGlobalSearchAdapter @Inject constructor(
 ) : ListAdapter<GlobalSearchEntity, FAGlobalSearchAdapter.ViewHolder>(DiffUtilCallBack()) {
 
     var searchQuery: String = ""
+
 
     class DiffUtilCallBack : DiffUtil.ItemCallback<GlobalSearchEntity>() {
         override fun areItemsTheSame(oldItem: GlobalSearchEntity, newItem: GlobalSearchEntity) =
@@ -89,9 +95,11 @@ class FAGlobalSearchAdapter @Inject constructor(
 
         init {
             fragmentGlobalSearchItemBinding.root.setOnClickListener {
+
                 if (RecyclerView.NO_POSITION != adapterPosition) {
                     val currentClickedItem = currentList[adapterPosition]
                     onItemClickListAdapter?.let {
+                        searchState.enterSearchMode()
                         it(currentClickedItem)
                     }
                 }

@@ -3,6 +3,7 @@ package org.apphatchery.gatbreferenceguide.ui.fragments
 import android.animation.Animator
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
@@ -26,6 +27,7 @@ import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.os.bundleOf
@@ -39,10 +41,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentBodyBinding
 import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
@@ -54,7 +52,6 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteColorAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.SwipeDecoratorCallback
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FABodyViewModel
-import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
 import javax.inject.Inject
 
@@ -72,7 +69,6 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private val bodyFragmentArgs: BodyFragmentArgs by navArgs()
     private lateinit var bodyUrl: BodyUrl
     private val viewModel: FABodyViewModel by viewModels()
-    private val viewModel_glob: FAGlobalSearchViewModel by viewModels()
 
     private var bookmarkEntity = BookmarkEntity()
     private lateinit var faNoteColorAdapter: FANoteColorAdapter
@@ -91,6 +87,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
+
+
 
     private fun setupBookmark(id: String) {
         viewModel.getBookmarkById(id).observe(viewLifecycleOwner) {
@@ -694,14 +692,29 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     }
 
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        CoroutineScope(Dispatchers.Main).launch {
-            viewModel_glob.searchQuery.value = ""
-            if (item.itemId == R.id.searchView) findNavController().popBackStack()
-        }
+
+            if(searchState.currentState.toString() == "IN_SEARCH"){
+                if (item.itemId == R.id.searchView) {
+                  var comp =   findNavController().popBackStack(R.id.globalSearchFragment,false)
+                    if(!comp){
+                        if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
+                            .also {
+                                findNavController().navigate(it)
+                            }
+                    }
+                }
+
+            }else{
+                if (item.itemId == R.id.searchView) BodyFragmentDirections.actionGlobalGlobalSearchFragment()
+                    .also {
+                        findNavController().navigate(it)
+                    }
+            }
         return super.onOptionsItemSelected(item)
     }
+
+
 
     private fun isBookmarkCheck() = bookmarkType == BookmarkType.CHART
 
