@@ -30,10 +30,12 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChartAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAMainViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
 import sdk.pendo.io.Pendo
+import java.util.UUID
 import javax.inject.Inject
 
 
 private const val BUILD_VERSION = 7
+private const val PENDO_RELEASE_VERSION = "August-23-"
 
 @AndroidEntryPoint
 class MainFragment : BaseFragment(R.layout.fragment_main) {
@@ -45,23 +47,25 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private lateinit var predefinedChartList: ArrayList<ChartAndSubChapter>
     private val htmlInfoEntity = ArrayList<HtmlInfoEntity>()
     private val viewModel: FAMainViewModel by viewModels()
+    private var visitor_id: String? = null
 
     @Inject
     lateinit var userPrefs: UserPrefs
 
     companion object {
-        const val VISITOR_ID = ""
+        //const val VISITOR_ID = ""
         const val ACCOUNT_ID = "GTRG"
     }
-
     private fun setupPendo() = Pendo.startSession(
-        VISITOR_ID,
+        visitor_id,
         ACCOUNT_ID,
         null,
         null
     )
 
     private fun init() {
+
+        visitor_id = getVisitorId()
 
         with(fragmentMainBinding) {
             progressBar.isVisible = false
@@ -72,7 +76,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
         predefinedChapterList = ArrayList()
         predefinedChartList = ArrayList()
-        setupPendo()
+        //setupPendo()
 
         first6ChapterAdapter = FAMainFirst6ChapterAdapter().also { adapter ->
             viewModel.getChapter.observe(viewLifecycleOwner) {
@@ -322,6 +326,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                     FAMainViewModel.Callback.InsertGlobalSearchInfoComplete -> {
                         viewLifecycleOwner.lifecycleScope.launch {
                             userPrefs.setBuildVersion(BUILD_VERSION)
+                            userPrefs.setPendoVisitorId(getVisitorId())
                         }
                         init()
                     }
@@ -330,4 +335,17 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         }
     }
 
+    private fun generatePendoVisitorId() = PENDO_RELEASE_VERSION + UUID.randomUUID().toString()
+
+    private fun getVisitorId(): String {
+        var id = ""
+        userPrefs.getPendoVisitorId.asLiveData().observe(viewLifecycleOwner){
+            if(it.isEmpty()){
+                id = generatePendoVisitorId()
+                viewLifecycleOwner.lifecycleScope.launch{ userPrefs.setPendoVisitorId(id) }
+            }
+            if (it.isNotEmpty()) id = it
+        }
+        return id
+    }
 }
