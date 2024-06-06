@@ -56,6 +56,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         //const val VISITOR_ID = ""
         const val ACCOUNT_ID = "GTRG"
     }
+
     private fun setupPendo() = Pendo.startSession(
         visitor_id,
         ACCOUNT_ID,
@@ -130,13 +131,18 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
         fragmentMainBinding.apply {
             recyclerviewFirst6Chapters.setupAdapter(first6ChapterAdapter)
-            recyclerviewFirst6Charts.setupAdapter(first6ChartAdapter, 3)
+            recyclerviewFirst6Charts.setupAdapter(first6ChartAdapter, 1)
 
-            searchView.setOnClickListener {
-                MainFragmentDirections.actionGlobalGlobalSearchFragment().also {
-                    findNavController().navigate(it)
-                }
+            btnBookmarks.setOnClickListener {
+                findNavController().navigate(R.id.savedFragment)
             }
+
+
+//            searchView.setOnClickListener {
+//                MainFragmentDirections.actionGlobalGlobalSearchFragment().also {
+//                    findNavController().navigate(it)
+//                }
+//            }
 
             textviewAllChapters.setOnClickListener {
                 findNavController().navigate(R.id.action_mainFragment_to_chapterFragment)
@@ -155,11 +161,9 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
         fragmentMainBinding = FragmentMainBinding.bind(view)
         userPrefs.getBuildVersion.asLiveData().observe(viewLifecycleOwner) {
-            if (it != BUILD_VERSION)
-            {
+            if (it != BUILD_VERSION) {
                 firstLaunch()
-            }
-            else {
+            } else {
                 init()
             }
         }
@@ -201,7 +205,8 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                             viewModel.getChapterInfo(subChapterEntity.chapterId)
                                 .observe(viewLifecycleOwner) { chapterEntity ->
                                     MainFragmentDirections.actionMainFragmentToBodyFragmentDirect(
-                                        BodyUrl(chapterEntity, subChapterEntity, ""), chartAndSubchapter
+                                        BodyUrl(chapterEntity, subChapterEntity, ""),
+                                        chartAndSubchapter
                                     ).apply {
                                         findNavController().navigate(this)
                                     }
@@ -214,7 +219,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                     viewModel.getChapterInfo(subChapterEntity.chapterId)
                         .observe(viewLifecycleOwner) { chapterEntity ->
                             MainFragmentDirections.actionMainFragmentToBodyFragmentDirect(
-                                BodyUrl(chapterEntity, subChapterEntity,""), null
+                                BodyUrl(chapterEntity, subChapterEntity, ""), null
                             ).apply {
                                 findNavController().navigate(this)
                             }
@@ -259,6 +264,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                             }
 
                         }
+
                         else -> {
                         }
                     }
@@ -278,6 +284,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                         is Resource.Success -> {
                             dumpSubChapterInfo()
                         }
+
                         else -> {
                         }
                     }
@@ -300,6 +307,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                                 viewModel.dumpSubChapterDataObserver = false
                             }
                         }
+
                         else -> {
                         }
                     }
@@ -323,6 +331,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                     FAMainViewModel.Callback.InsertHTMLInfoComplete -> {
                         viewModel.bindHtmlWithChapter()
                     }
+
                     FAMainViewModel.Callback.InsertGlobalSearchInfoComplete -> {
                         viewLifecycleOwner.lifecycleScope.launch {
                             userPrefs.setBuildVersion(BUILD_VERSION)
@@ -339,10 +348,10 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
     private fun getVisitorId(): String {
         var id = ""
-        userPrefs.getPendoVisitorId.asLiveData().observe(viewLifecycleOwner){
-            if(it.isEmpty()){
+        userPrefs.getPendoVisitorId.asLiveData().observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
                 id = generatePendoVisitorId()
-                viewLifecycleOwner.lifecycleScope.launch{ userPrefs.setPendoVisitorId(id) }
+                viewLifecycleOwner.lifecycleScope.launch { userPrefs.setPendoVisitorId(id) }
             }
             if (it.isNotEmpty()) id = it
         }

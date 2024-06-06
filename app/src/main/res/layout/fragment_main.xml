@@ -23,26 +23,38 @@
         android:layout_height="wrap_content"
         android:background="?searchBackgroundColor"
         android:orientation="vertical"
-        android:padding="8dp"
+        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!--        <androidx.appcompat.widget.AppCompatTextView-->
+        <!--            android:id="@+id/searchView"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:background="@drawable/shape_circle"-->
+        <!--            android:backgroundTint="#85D1D1D1"-->
+        <!--            android:drawableStart="@drawable/ic_baseline_search_gray"-->
+        <!--            android:drawablePadding="8dp"-->
+        <!--            android:gravity="center_vertical"-->
+        <!--            android:padding="8dp"-->
+        <!--            android:text="Search Guide"-->
+        <!--            android:textColor="@color/light_gray"-->
+        <!--            android:textSize="17sp"-->
+        <!--            tools:ignore="HardcodedText" />-->
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/searchView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_circle"
-            android:backgroundTint="#85D1D1D1"
-            android:drawableStart="@drawable/ic_baseline_search_gray"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:padding="8dp"
-            android:text="Search Guide"
-            android:textColor="@color/light_gray"
-            android:textSize="17sp"
-            tools:ignore="HardcodedText" />
+        <androidx.appcompat.widget.AppCompatButton
+            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/btnBookmarks"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="@string/my_bookmarks"
+            android:textColor="@color/gray_black"
+            android:textAllCaps="false"
+            android:paddingHorizontal="12dp"
+            android:background="@drawable/ic_rounded_bg"
+            android:drawableStart="@drawable/ic_bookmarks"
+            android:drawablePadding="8dp" />
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -138,11 +150,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                android:paddingHorizontal="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textview_all_charts"
-                app:spanCount="2"
                 tools:itemCount="5"
                 tools:listitem="@layout/fragment_main_first_6_chart_item" />
 

@@ -23,6 +23,7 @@
     <string name="share">Share</string>
     <string name="undo">Undo</string>
     <string name="bookmark">Bookmark</string>
+    <string name="my_bookmarks">My Bookmarks</string>
     <string name="note">Note</string>
     <string name="edit_concat">Edit %s</string>
 
@@ -55,6 +56,11 @@
     <string name="reset_key">reset_key</string>
     <string name="reset_title">Clear App Content</string>
     <string name="reset_summary">Reset all app data and start all over again</string>
+    <string name="chart_icon">chart_icon</string>
+    <string name="chapter_icon">chapter icon</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="settings">Settings</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

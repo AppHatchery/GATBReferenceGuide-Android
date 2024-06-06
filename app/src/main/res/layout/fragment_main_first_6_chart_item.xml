@@ -4,28 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.cardview.widget.CardView
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        app:cardCornerRadius="10dp">
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button"
-            style="@style/TextAppearance.AppCompat.Small.Inverse"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-             android:background="@drawable/ic_shape_bg_chart"
-            android:ellipsize="end"
-            android:foreground="?attr/selectableItemBackground"
-            android:gravity="center"
-            android:maxLines="4"
-            android:paddingHorizontal="10dp"
-            android:text="@string/app_name"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
-    </androidx.cardview.widget.CardView>
+        android:layout_height="56dp"
+        android:layout_marginVertical="5dp"
+        android:elevation="0dp"
+        android:backgroundTint="@null"
+        android:shadowColor="@color/white"
+        android:background="@drawable/ic_rounded_bg"
+        android:ellipsize="end"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="start|center_vertical"
+        android:maxLines="4"
+        android:paddingHorizontal="10dp"
+        android:text="@string/app_name"
+        android:textAllCaps="false"
+        android:textColor="@color/gray_black"
+        android:textSize="16sp"
+        android:drawableStart="@drawable/ic_chart"
+        android:drawablePadding="8dp" />
 
 </FrameLayout>
 

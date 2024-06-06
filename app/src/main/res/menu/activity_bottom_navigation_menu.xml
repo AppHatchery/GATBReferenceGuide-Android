@@ -3,21 +3,16 @@
 
     <item
         android:id="@+id/mainFragment"
-        android:icon="@drawable/ic_baseline_dashboard"
-        android:title="Guide" />
+        android:icon="@drawable/ic_home_selector"
+        android:title="@string/home" />
 
     <item
-        android:id="@+id/savedFragment"
-        android:icon="@drawable/ic_baseline_bookmark"
-        android:title="Saved" />
-
-<!--        <item-->
-<!--        android:id="@+id/contactFragment"-->
-<!--        android:icon="@drawable/ic_phone_book"-->
-<!--        android:title="Phone Book" />-->
+        android:id="@+id/globalSearchFragment"
+        android:icon="@drawable/ic_search_selector"
+        android:title="@string/search" />
 
     <item
         android:id="@+id/settingsFragment"
-        android:icon="@drawable/ic_baseline_settings"
-        android:title="Settings" />
+        android:icon="@drawable/ic_settings_selector"
+        android:title="@string/settings" />
 </menu>

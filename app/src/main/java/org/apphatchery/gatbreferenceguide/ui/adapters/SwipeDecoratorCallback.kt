@@ -42,7 +42,7 @@ abstract class SwipeDecoratorCallback(private val context: Context) :
             .addSwipeLeftActionIcon(R.drawable.ic_baseline_delete_forever)
             .addSwipeLeftLabel("Delete")
             .setSwipeLeftLabelColor(Color.WHITE)
-            .addSwipeLeftBackgroundColor(ContextCompat.getColor(context, R.color.reddish))
+            .addSwipeLeftBackgroundColor(ContextCompat.getColor(context, R.color.primary))
             .create()
             .decorate()
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)

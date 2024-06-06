@@ -2,37 +2,37 @@
     <!-- Base application theme. -->
     <style name="Theme.GATBReferenceGuide" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/reddish</item>
-        <item name="colorPrimaryVariant">@color/orange</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/reddish</item>
-        <item name="colorSecondaryVariant">@color/reddish</item>
+        <item name="colorSecondary">@color/primary</item>
+        <item name="colorSecondaryVariant">@color/primary</item>
         <item name="colorOnSecondary">@color/black</item>
-        <item name="colorPrimaryDark">@color/reddish</item>
+        <item name="colorPrimaryDark">@color/primary</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
+        <item name="android:statusBarColor">@color/primary</item>
         <!-- Customize your theme here. -->
 
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
 
-        <item name="chapterBackgroundColor">#e1c2b3</item>
+        <item name="chapterBackgroundColor">@color/white</item>
         <item name="colorBlackWhite">@android:color/white</item>
         <item name="colorWhiteBlack">@color/dark_black</item>
 
-        <item name="chapterBackgroundColorTop">#c98463</item>
+        <item name="chapterBackgroundColorTop">@color/primary</item>
         <item name="savedTopBar">#FFFFFF</item>
 
         <item name="android:textViewStyle">@style/TextViewStyle</item>
 
-        <item name="chartBackgroundColor">#c98463</item>
-        <item name="chartBackgroundColorTop">#823410</item>
-        <item name="searchBackgroundColor">@color/reddish</item>
+        <item name="chartBackgroundColor">@color/white</item>
+        <item name="chartBackgroundColorTop">@color/primary</item>
+        <item name="searchBackgroundColor">@color/primary</item>
     </style>
 
 
     <style name="TextViewStyle" parent="android:Widget.TextView">
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/gray_black</item>
     </style>
 
 
