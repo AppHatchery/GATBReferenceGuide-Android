@@ -112,6 +112,16 @@
             android:name="chartAndSubChapter"
             app:argType="org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_bodyFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/slide_out_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/globalSearchFragment"
@@ -201,7 +211,7 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_contactFragment_to_myContactDetailsFragment"
             app:destination="@id/myContactDetailsFragment" />
@@ -219,7 +229,7 @@
         android:id="@+id/contactDetailsFragment"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.ContactDetailsFragment"
         android:label="Public Contact"
-        tools:layout="@layout/fragment_contact_details" >
+        tools:layout="@layout/fragment_contact_details">
         <argument
             android:name="contact"
             app:argType="org.apphatchery.gatbreferenceguide.db.entities.Contact" />
@@ -230,7 +240,7 @@
     <fragment
         android:id="@+id/myContactDetailsFragment"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.MyContactDetailsFragment"
-        android:label="Private Contact" >
+        android:label="Private Contact">
         <action
             android:id="@+id/action_myContactDetailsFragment_to_contactFragment"
             app:destination="@id/contactFragment" />

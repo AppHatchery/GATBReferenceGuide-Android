@@ -89,7 +89,6 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
 
-
     private fun setupBookmark(id: String) {
         viewModel.getBookmarkById(id).observe(viewLifecycleOwner) {
             if (it != null) {
@@ -126,7 +125,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             getString(R.string.last_updated, subChapterEntity.lastUpdated)
 
 
-        getActionBar(requireActivity())?.title = HtmlCompat.fromHtml(chapterEntity.chapterTitle,FROM_HTML_MODE_LEGACY).toString()
+        getActionBar(requireActivity())?.title =
+            HtmlCompat.fromHtml(chapterEntity.chapterTitle, FROM_HTML_MODE_LEGACY).toString()
         dialog = Dialog(requireContext()).dialog()
 
 
@@ -154,7 +154,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         setupWebView()
 
-        if(bodyUrl.searchQuery.isNotEmpty() && !isOnlyWhitespace(bodyUrl.searchQuery)){
+        if (bodyUrl.searchQuery.isNotEmpty() && !isOnlyWhitespace(bodyUrl.searchQuery)) {
             bind.searchClearText.text = bodyUrl.searchQuery
             bind.searchClearContainer.visibility = View.VISIBLE
             bind.searchClearButton.setOnClickListener {
@@ -192,9 +192,19 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 if (startIndex != -1) {
                     val endIndex = startIndex + searchedWordToColor.length
                     val backgroundColorSpan = BackgroundColorSpan(Color.YELLOW)
-                    spannableString.setSpan(backgroundColorSpan, startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(
+                        backgroundColorSpan,
+                        startIndex,
+                        endIndex,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
                     val foregroundColorSpan = ForegroundColorSpan(Color.BLACK)
-                    spannableString.setSpan(foregroundColorSpan, startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(
+                        foregroundColorSpan,
+                        startIndex,
+                        endIndex,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
                 }
                 textviewSubChapter.text = spannableString
                 bodyWebView.loadUrl(baseURL + PAGES_DIR + subChapterEntity.url + EXTENSION)
@@ -236,11 +246,13 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
             shareButton.setOnClickListener {
                 createDynamicLink()
-
-
             }
 
-            shareFeedbackButton.setOnClickListener { onShareFeedbackListener() }
+            homeButton.setOnClickListener {
+                findNavController().navigate(R.id.action_bodyFragment_to_mainFragment)
+            }
+
+//            shareFeedbackButton.setOnClickListener { onShareFeedbackListener() }
             collapseActionButton.setOnClickListener {
                 bind.recyclerviewNote.apply {
                     if (isCollapsed.not()) {
@@ -283,7 +295,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             scaleX(scaleFactor).scaleY(scaleFactor)
             duration = 200
             setListener(object : Animator.AnimatorListener {
-//                override fun onAnimationStart(animation: Animator?) = Unit
+                //                override fun onAnimationStart(animation: Animator?) = Unit
 //                override fun onAnimationEnd(animation: Animator?) = onAnimationCompleted()
 //                override fun onAnimationCancel(animation: Animator?) = Unit
 //                override fun onAnimationRepeat(animation: Animator?) = Unit
@@ -337,7 +349,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         bookmarkType = BookmarkType.CHART
         textviewSubChapter.text = chartAndSubChapter!!.chartEntity.chartTitle
-        
+
         val loadUrl = baseURL + PAGES_DIR + chartAndSubChapter!!.chartEntity.id + EXTENSION
         bodyWebView.loadUrl(loadUrl)
 
@@ -584,7 +596,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             snackBar(getString(R.string.note_saved))
         }
     }
-    var urlGlobal : String? = null
+
+    var urlGlobal: String? = null
 
     private fun setupWebView() = bind.bodyWebView.apply {
         onZoomOut()
@@ -592,13 +605,17 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                 urlGlobal = url
+                urlGlobal = url
 
 
                 val searchInput = bodyUrl.searchQuery
-                if(searchInput.isNotEmpty() && !isOnlyWhitespace(searchInput)){
+                if (searchInput.isNotEmpty() && !isOnlyWhitespace(searchInput)) {
                     Handler(Looper.getMainLooper()).postDelayed({
-                        view?.findAllAsync(searchInput) }, 300) }else{ return }
+                        view?.findAllAsync(searchInput)
+                    }, 300)
+                } else {
+                    return
+                }
 
                 val allowedString = normalizeString(searchInput)
                 val searchBody = allowedString.split(" ")
@@ -646,6 +663,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                         }
                         true
                     }
+
                     link.contains("#") -> {
                         bookmarkType = BookmarkType.SUBCHAPTER
                         BodyFragmentDirections.actionBodyFragmentSelf(
@@ -655,6 +673,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                         ).also { findNavController().navigate(it) }
                         true
                     }
+
                     else -> {
                         val stripLink = link.substring(link.lastIndexOf("/") + 1, link.length)
                         stripLink.replace(EXTENSION, "")
@@ -666,10 +685,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             }
         }
     }
+
     fun isOnlyWhitespace(str: String): Boolean {
         val trimmedStr = str.trim()
         return trimmedStr.isEmpty()
     }
+
     fun normalizeString(str: String): String {
 
         // Remove any leading or trailing spaces
@@ -692,7 +713,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     if (subChapter.url == url) {
                         val subChapterFragmentDirections =
                             BodyFragmentDirections.actionBodyFragmentSelf(
-                                BodyUrl(bodyFragmentArgs.bodyUrl.chapterEntity, subChapter, ""), null
+                                BodyUrl(bodyFragmentArgs.bodyUrl.chapterEntity, subChapter, ""),
+                                null
                             )
                         findNavController().navigate(subChapterFragmentDirections)
                     }
@@ -709,33 +731,32 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-            if(searchState.currentState.toString() == "IN_SEARCH"){
-                if (item.itemId == R.id.searchView) {
-                  var comp =   findNavController().popBackStack(R.id.globalSearchFragment,false)
-                    if(!comp){
-                        if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
-                            .also {
-                                findNavController().navigate(it)
-                            }
-                    }
+        if (searchState.currentState.toString() == "IN_SEARCH") {
+            if (item.itemId == R.id.searchView) {
+                var comp = findNavController().popBackStack(R.id.globalSearchFragment, false)
+                if (!comp) {
+                    if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
+                        .also {
+                            findNavController().navigate(it)
+                        }
                 }
-
-            }else{
-                if (item.itemId == R.id.searchView) BodyFragmentDirections.actionGlobalGlobalSearchFragment()
-                    .also {
-                        findNavController().navigate(it)
-                    }
             }
+
+        } else {
+            if (item.itemId == R.id.searchView) BodyFragmentDirections.actionGlobalGlobalSearchFragment()
+                .also {
+                    findNavController().navigate(it)
+                }
+        }
         return super.onOptionsItemSelected(item)
     }
-
 
 
     private fun isBookmarkCheck() = bookmarkType == BookmarkType.CHART
 
     private fun createDynamicLink() {
         requireContext().toast(getString(R.string.dynamic_link_generation))
-         val androidQueryId = id
+        val androidQueryId = id
         val androidIsPage = if (isBookmarkCheck()) 0 else 1
         val iosHtmlFile = if (isBookmarkCheck()) chartAndSubChapter!!.chartEntity.id else
             subChapterEntity.url
@@ -744,10 +765,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             .setLink(Uri.parse("$DOMAIN_LINK?androidQueryId=$androidQueryId&androidIsPage=$androidIsPage&chapterID=$iosHtmlFile"))
             .setDomainUriPrefix(DOMAIN_LINK)
             .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
-            .setIosParameters(DynamicLink.IosParameters
-                .Builder("edu.emory.tb.guide")
-                .setAppStoreId("1583294462")
-                .build())
+            .setIosParameters(
+                DynamicLink.IosParameters
+                    .Builder("edu.emory.tb.guide")
+                    .setAppStoreId("1583294462")
+                    .build()
+            )
             .setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder()
                     .setTitle(chapterEntity.chapterTitle)
