@@ -55,6 +55,7 @@
     <string name="reset_key">reset_key</string>
     <string name="reset_title">Clear App Content</string>
     <string name="reset_summary">Reset all app data and start all over again</string>
+    <string name="home">Home</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 
