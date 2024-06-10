@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -15,6 +16,7 @@ import android.text.SpannableString
 import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -26,8 +28,11 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.os.bundleOf
@@ -36,6 +41,7 @@ import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.*
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.dynamiclinks.DynamicLink
@@ -82,6 +88,10 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private lateinit var id: String
     private lateinit var title: String
 
+    private var fontSummary: TextView? = null
+    private lateinit var sharedPreferences: SharedPreferences
+    private var fontValue: Array<String> = arrayOf("Small", "Normal", "Large", "Larger")
+
     @Inject
     lateinit var userPrefs: UserPrefs
 
@@ -108,11 +118,64 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             }
         }
 
+    private fun updateFont() {
+        val fontIndex = sharedPreferences.getString(getString(R.string.font_key), "1")?.toInt() ?: 1
+        fontSummary?.text ?: fontValue[fontIndex]
+    }
+
+    private fun showFontDialog() {
+        // Inflate the dialog layout
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_font_settings, null)
+        val radioGroup: RadioGroup = dialogView.findViewById(R.id.fontRadioGroup)
+
+        // Set the current selection
+        val currentFontIndex =
+            sharedPreferences.getString(getString(R.string.font_key), "1")?.toInt() ?: 1
+        (radioGroup.getChildAt(currentFontIndex) as RadioButton).isChecked = true
+
+        // Create and show the dialog
+        AlertDialog.Builder(requireContext())
+            .setTitle("Choose Font")
+            .setView(dialogView)
+            .setPositiveButton("OK") { _, _ ->
+                val selectedId = radioGroup.checkedRadioButtonId
+                val selectedIndex = when (selectedId) {
+                    R.id.fontSmall -> 0
+                    R.id.fontNormal -> 1
+                    R.id.fontLarge -> 2
+                    R.id.fontLarger -> 3
+                    else -> 0
+                }
+
+                // Save the new font index to SharedPreferences
+                sharedPreferences.edit()
+                    .putString(getString(R.string.font_key), selectedIndex.toString()).apply()
+
+                // Update the summary
+                updateFont()
+            }
+            .setNegativeButton("Cancel", null)
+            .create()
+            .show()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener { _, _ -> }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         bind = FragmentBodyBinding.bind(view)
         bodyUrl = bodyFragmentArgs.bodyUrl
         setHasOptionsMenu(true)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        sharedPreferences.registerOnSharedPreferenceChangeListener { prefs, key ->
+            if (key == getString(R.string.font_key)) {
+                updateFont()
+            }
+        }
+
+        fontSummary?.text ?: fontValue[1]
 
         baseURL = "file://" + requireContext().cacheDir.toString() + "/"
 
@@ -250,6 +313,10 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
             homeButton.setOnClickListener {
                 findNavController().navigate(R.id.action_bodyFragment_to_mainFragment)
+            }
+
+            changeFontSizeButton.setOnClickListener {
+                showFontDialog()
             }
 
 //            shareFeedbackButton.setOnClickListener { onShareFeedbackListener() }
