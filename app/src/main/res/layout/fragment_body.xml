@@ -204,7 +204,7 @@
             android:background="@android:color/transparent"
             android:foreground="?attr/actionBarItemBackground"
             android:padding="16dp"
-            android:src="@drawable/baseline_home_24" />
+            android:src="@drawable/ic_home" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/share_button"
@@ -214,7 +214,7 @@
             android:background="@android:color/transparent"
             android:foreground="?attr/actionBarItemBackground"
             android:padding="16dp"
-            android:src="@drawable/ic_upload" />
+            android:src="@drawable/ic_baseline_share" />
 
 
         <androidx.appcompat.widget.AppCompatImageButton
@@ -225,7 +225,7 @@
             android:background="@android:color/transparent"
             android:foreground="?attr/actionBarItemBackground"
             android:padding="16dp"
-            android:src="@drawable/ic_baseline_star_outline" />
+            android:src="@drawable/ic_baseline_folder_outline" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/add_note"
@@ -235,7 +235,7 @@
             android:background="@android:color/transparent"
             android:foreground="?attr/actionBarItemBackground"
             android:padding="16dp"
-            android:src="@drawable/ic_edit" />
+            android:src="@drawable/ic_baseline_edit" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/change_font_size_button"

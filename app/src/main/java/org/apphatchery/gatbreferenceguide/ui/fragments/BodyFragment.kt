@@ -103,13 +103,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         viewModel.getBookmarkById(id).observe(viewLifecycleOwner) {
             if (it != null) {
                 bookmarkEntity = it
-                bind.bookmarkImageButton.setImageResource(R.drawable.ic_baseline_star)
+                bind.bookmarkImageButton.setImageResource(R.drawable.ic_baseline_folder_bookmarked)
             } else {
-                bind.bookmarkImageButton.setImageResource(R.drawable.ic_baseline_star_outline)
+                bind.bookmarkImageButton.setImageResource(R.drawable.ic_baseline_folder_outline)
             }
         }
     }
-
 
     private fun onDeleteNoteSnackbar(note: NoteEntity) =
         bind.root.snackBar(getString(R.string.note_deleted)).also {
@@ -118,9 +117,21 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             }
         }
 
+    //    Different implementations to reload the Fragment
+    private fun reloadFragment() {
+//        val fragmentTransaction = parentFragmentManager.beginTransaction()
+//        fragmentTransaction.detach(this@BodyFragment).attach(this@BodyFragment).commit()
+    }
+
+    private fun invalidateViews() {
+        // Update UI elements
+        view?.postInvalidate()
+    }
+
     private fun updateFont() {
         val fontIndex = sharedPreferences.getString(getString(R.string.font_key), "1")?.toInt() ?: 1
         fontSummary?.text ?: fontValue[fontIndex]
+        reloadFragment()
     }
 
     private fun showFontDialog() {
@@ -134,34 +145,43 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         (radioGroup.getChildAt(currentFontIndex) as RadioButton).isChecked = true
 
         // Create and show the dialog
+        radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            val selectedIndex = when (checkedId) {
+                R.id.fontSmall -> 0
+                R.id.fontNormal -> 1
+                R.id.fontLarge -> 2
+                R.id.fontLarger -> 3
+                else -> 1
+            }
+
+            // Save the new font index to SharedPreferences immediately
+            sharedPreferences.edit()
+                .putString(getString(R.string.font_key), selectedIndex.toString())
+                .apply()
+
+            // Update the font immediately
+            updateFont()
+        }
+
+        // Create and show the dialog
         AlertDialog.Builder(requireContext())
             .setTitle("Choose Font")
             .setView(dialogView)
-            .setPositiveButton("OK") { _, _ ->
-                val selectedId = radioGroup.checkedRadioButtonId
-                val selectedIndex = when (selectedId) {
-                    R.id.fontSmall -> 0
-                    R.id.fontNormal -> 1
-                    R.id.fontLarge -> 2
-                    R.id.fontLarger -> 3
-                    else -> 0
-                }
-
-                // Save the new font index to SharedPreferences
-                sharedPreferences.edit()
-                    .putString(getString(R.string.font_key), selectedIndex.toString()).apply()
-
-                // Update the summary
-                updateFont()
-            }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("Close", null)
             .create()
             .show()
     }
 
+    private val sharedPreferencesListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            if (key == getString(R.string.font_key)) {
+                updateFont()
+            }
+        }
+
     override fun onDestroyView() {
         super.onDestroyView()
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener { _, _ -> }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferencesListener)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -169,11 +189,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         bodyUrl = bodyFragmentArgs.bodyUrl
         setHasOptionsMenu(true)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        sharedPreferences.registerOnSharedPreferenceChangeListener { prefs, key ->
-            if (key == getString(R.string.font_key)) {
-                updateFont()
-            }
-        }
+        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferencesListener)
 
         fontSummary?.text ?: fontValue[1]
 
