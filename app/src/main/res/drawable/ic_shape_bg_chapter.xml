@@ -1,13 +1,13 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="120dp"
-    android:height="57dp"
+    android:width="180dp"
+    android:height="62dp"
     android:viewportWidth="162"
      android:viewportHeight="77">
 
     <path
-        android:fillColor="?chapterBackgroundColor"
+        android:fillColor="?cardBackground"
         android:pathData="M0,5A5,5 0,0 1,5.06 0h137.7l6.08,6L162,18.5V72a5,5 0,0 1,-5.06 5H5.06A5,5 0,0 1,0 72Z" />
     <path
-        android:fillColor="?chapterBackgroundColorTop"
+        android:fillColor="?cardBackgroundTopBlue"
         android:pathData="M148,18.5a5,5 0,0 1,-5 -5V0l19,18.5Z" />
 </vector>

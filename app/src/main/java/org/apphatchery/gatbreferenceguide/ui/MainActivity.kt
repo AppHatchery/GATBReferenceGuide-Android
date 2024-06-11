@@ -3,6 +3,8 @@ package org.apphatchery.gatbreferenceguide.ui
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.NavController
@@ -29,12 +31,48 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.elevation = 0f
+        setSupportActionBar(findViewById(R.id.my_toolbar))
+        supportActionBar?.setDisplayShowTitleEnabled(false);
         preferenceManager = PreferenceManager.getDefaultSharedPreferences(this)
         navController = findNavController(R.id.nav_host_fragment_container)
         binding.bottomNavigationView.setupWithNavController(navController)
-        setupActionBarWithNavController(navController, AppBarConfiguration(navController.graph))
+        binding.chapterBottomNavigationView.setupWithNavController(navController)
+       setupActionBarWithNavController(navController, AppBarConfiguration(navController.graph))
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         searchState.exitSearchMode()
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            supportActionBar?.title = destination.label
+           binding.toolbarTitle.text = destination.label
+            when(destination.id){
+                R.id.mainFragment -> binding.bookmark.visibility = View.VISIBLE
+                else -> binding.bookmark.visibility  = View.GONE
+            }
+
+        }
+
+
+        binding.chapterBottomNavigationView.setOnItemSelectedListener { menuItem ->
+            when(menuItem.itemId){
+                R.id.share -> {
+                    TODO()
+                }
+                R.id.bookmark -> {
+                    TODO()
+                }
+                R.id.note -> {
+                    TODO()
+                }
+                else -> {
+                    navController.navigate(menuItem.itemId)
+                    true
+                }
+            }
+        }
+
+        binding.bookmark.setOnClickListener {
+            navController.navigate(R.id.action_mainFragment_to_savedFragment)
+        }
+
     }
 
     override fun onSupportNavigateUp(): Boolean {

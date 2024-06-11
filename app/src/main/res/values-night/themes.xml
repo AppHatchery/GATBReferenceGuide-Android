@@ -1,13 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.GATBReferenceGuide" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.GATBReferenceGuide" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/orange</item>
         <item name="colorPrimaryVariant">@color/orange</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/orange</item>
-        <item name="colorSecondaryVariant">@color/reddish</item>
+        <item name="colorSecondaryVariant">@color/primary</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="colorPrimaryDark">@color/black</item>
         <!-- Status bar color. -->
@@ -29,6 +29,11 @@
 
         <item name="actionBarStyle">@style/darkActionbar</item>
         <item name="android:windowBackground">@color/dark_black</item>
+
+        <item name="primaryColor">@color/primary_color</item>
+        <item name="cardBackground">@color/white</item>
+        <item name="cardBackgroundTopYellow">@color/yellow_main</item>
+        <item name="cardBackgroundTopBlue">@color/primary_color</item>
 
     </style>
 

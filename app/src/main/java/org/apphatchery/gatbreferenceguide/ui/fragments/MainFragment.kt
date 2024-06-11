@@ -130,21 +130,21 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
         fragmentMainBinding.apply {
             recyclerviewFirst6Chapters.setupAdapter(first6ChapterAdapter)
-            recyclerviewFirst6Charts.setupAdapter(first6ChartAdapter, 3)
+            recyclerviewFirst6Charts.setupAdapter(first6ChartAdapter, 1)
 
-            searchView.setOnClickListener {
-                MainFragmentDirections.actionGlobalGlobalSearchFragment().also {
-                    findNavController().navigate(it)
-                }
-            }
+//            searchView.setOnClickListener {
+//                MainFragmentDirections.actionGlobalGlobalSearchFragment().also {
+//                    findNavController().navigate(it)
+//                }
+//            }
 
-            textviewAllChapters.setOnClickListener {
-                findNavController().navigate(R.id.action_mainFragment_to_chapterFragment)
-            }
+//            textviewAllChapters.setOnClickListener {
+//                findNavController().navigate(R.id.action_mainFragment_to_chapterFragment)
+//            }
 
-            textviewAllCharts.setOnClickListener {
-                findNavController().navigate(R.id.action_mainFragment_to_chartFragment)
-            }
+//            textviewAllCharts.setOnClickListener {
+//                findNavController().navigate(R.id.action_mainFragment_to_chartFragment)
+//            }
         }
 
         setupDynamicLink()

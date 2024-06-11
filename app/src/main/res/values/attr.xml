@@ -9,5 +9,9 @@
     <attr name="colorBlackWhite" format="color" />
     <attr name="colorWhiteBlack" format="color" />
     <attr name="savedTopBar" format="color"/>
+    <attr name="primaryColor" format="color"/>
+    <attr name="cardBackground" format="reference|color" />
+    <attr name="cardBackgroundTopYellow" format="reference|color" />
+    <attr name="cardBackgroundTopBlue" format="reference|color" />
 
 </resources>
