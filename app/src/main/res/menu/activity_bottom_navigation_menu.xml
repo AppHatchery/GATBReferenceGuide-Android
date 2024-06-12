@@ -7,9 +7,9 @@
         android:title="Guide" />
 
     <item
-        android:id="@+id/savedFragment"
-        android:icon="@drawable/ic_baseline_bookmark"
-        android:title="Saved" />
+        android:id="@+id/globalSearchFragment"
+        android:icon="@drawable/ic_baseline_search"
+        android:title="Search" />
 
 <!--        <item-->
 <!--        android:id="@+id/contactFragment"-->

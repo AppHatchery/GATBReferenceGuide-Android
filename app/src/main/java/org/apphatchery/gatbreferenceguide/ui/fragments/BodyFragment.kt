@@ -3,7 +3,6 @@ package org.apphatchery.gatbreferenceguide.ui.fragments
 import android.animation.Animator
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -31,7 +30,6 @@ import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
@@ -42,7 +40,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.preference.PreferenceManager
-import androidx.recyclerview.widget.*
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
@@ -50,7 +52,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentBodyBinding
 import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
-import org.apphatchery.gatbreferenceguide.db.entities.*
+import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
+import org.apphatchery.gatbreferenceguide.db.entities.BookmarkEntity
+import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
+import org.apphatchery.gatbreferenceguide.db.entities.NoteEntity
+import org.apphatchery.gatbreferenceguide.db.entities.RecentEntity
+import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 import org.apphatchery.gatbreferenceguide.enums.BookmarkType
 import org.apphatchery.gatbreferenceguide.prefs.UserPrefs
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
@@ -58,7 +65,22 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteColorAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.SwipeDecoratorCallback
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FABodyViewModel
-import org.apphatchery.gatbreferenceguide.utils.*
+import org.apphatchery.gatbreferenceguide.utils.ANALYTICS_BOOKMARK_EVENT
+import org.apphatchery.gatbreferenceguide.utils.ANALYTICS_PAGE_EVENT
+import org.apphatchery.gatbreferenceguide.utils.EXTENSION
+import org.apphatchery.gatbreferenceguide.utils.NOTE_COLOR
+import org.apphatchery.gatbreferenceguide.utils.PAGES_DIR
+import org.apphatchery.gatbreferenceguide.utils.TAG
+import org.apphatchery.gatbreferenceguide.utils.alertDialog
+import org.apphatchery.gatbreferenceguide.utils.dialog
+import org.apphatchery.gatbreferenceguide.utils.getActionBar
+import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
+import org.apphatchery.gatbreferenceguide.utils.isChecked
+import org.apphatchery.gatbreferenceguide.utils.observeOnce
+import org.apphatchery.gatbreferenceguide.utils.safeDialogShow
+import org.apphatchery.gatbreferenceguide.utils.searchState
+import org.apphatchery.gatbreferenceguide.utils.snackBar
+import org.apphatchery.gatbreferenceguide.utils.toast
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -119,19 +141,22 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
     //    Different implementations to reload the Fragment
     private fun reloadFragment() {
-//        val fragmentTransaction = parentFragmentManager.beginTransaction()
-//        fragmentTransaction.detach(this@BodyFragment).attach(this@BodyFragment).commit()
+        val fragmentTransaction = childFragmentManager.beginTransaction()
+        fragmentTransaction.detach(this@BodyFragment).attach(this@BodyFragment).commit()
     }
 
     private fun invalidateViews() {
         // Update UI elements
+        println("THIS IS THE INVALIDATED VIEW!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        view?.invalidate()
         view?.postInvalidate()
+        view?.requestFocus()
     }
 
     private fun updateFont() {
         val fontIndex = sharedPreferences.getString(getString(R.string.font_key), "1")?.toInt() ?: 1
         fontSummary?.text ?: fontValue[fontIndex]
-        reloadFragment()
+        invalidateViews()
     }
 
     private fun showFontDialog() {
@@ -207,6 +232,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         getActionBar(requireActivity())?.title =
             HtmlCompat.fromHtml(chapterEntity.chapterTitle, FROM_HTML_MODE_LEGACY).toString()
         dialog = Dialog(requireContext()).dialog()
+        updateFont()
 
 
 
