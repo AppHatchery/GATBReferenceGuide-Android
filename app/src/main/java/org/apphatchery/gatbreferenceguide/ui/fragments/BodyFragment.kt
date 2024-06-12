@@ -70,7 +70,6 @@ import org.apphatchery.gatbreferenceguide.utils.ANALYTICS_PAGE_EVENT
 import org.apphatchery.gatbreferenceguide.utils.EXTENSION
 import org.apphatchery.gatbreferenceguide.utils.NOTE_COLOR
 import org.apphatchery.gatbreferenceguide.utils.PAGES_DIR
-import org.apphatchery.gatbreferenceguide.utils.TAG
 import org.apphatchery.gatbreferenceguide.utils.alertDialog
 import org.apphatchery.gatbreferenceguide.utils.dialog
 import org.apphatchery.gatbreferenceguide.utils.getActionBar
@@ -86,6 +85,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
+    private val TAG = "MyFragmentLifecycle"
 
     companion object {
         const val DOMAIN_LINK = "https://gatbreferenceguide.page.link"
@@ -110,7 +110,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private lateinit var id: String
     private lateinit var title: String
 
-    private var fontSummary: TextView? = null
+    private lateinit var webViewFont: WebView
     private lateinit var sharedPreferences: SharedPreferences
     private var fontValue: Array<String> = arrayOf("Small", "Normal", "Large", "Larger")
 
@@ -141,37 +141,27 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             }
         }
 
-    //    Different implementations to reload the Fragment
-    private fun reloadFragment() {
-        val fragmentTransaction = childFragmentManager.beginTransaction()
-        fragmentTransaction.detach(this@BodyFragment).attach(this@BodyFragment).commit()
-    }
-
-    private fun invalidateViews() {
-        // Update UI elements
-        println("THIS IS THE INVALIDATED VIEW!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        view?.invalidate()
-        view?.postInvalidate()
-        view?.requestFocus()
-    }
-
     private fun updateFont() {
         val fontIndex = sharedPreferences.getString(getString(R.string.font_key), "1")?.toInt() ?: 1
-        fontSummary?.text ?: fontValue[fontIndex]
-        invalidateViews()
+        val fontSize = when (fontIndex) {
+            0 -> 75 // Small
+            1 -> 100 // Normal
+            2 -> 150 // Large
+            3 -> 175 // Larger
+            else -> 100
+        }
+
+        webViewFont.settings.textZoom = fontSize
     }
 
     private fun showFontDialog() {
-        // Inflate the dialog layout
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_font_settings, null)
         val radioGroup: RadioGroup = dialogView.findViewById(R.id.fontRadioGroup)
 
-        // Set the current selection
         val currentFontIndex =
             sharedPreferences.getString(getString(R.string.font_key), "1")?.toInt() ?: 1
         (radioGroup.getChildAt(currentFontIndex) as RadioButton).isChecked = true
 
-        // Create and show the dialog
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
             val selectedIndex = when (checkedId) {
                 R.id.fontSmall -> 0
@@ -181,16 +171,13 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 else -> 1
             }
 
-            // Save the new font index to SharedPreferences immediately
             sharedPreferences.edit()
                 .putString(getString(R.string.font_key), selectedIndex.toString())
                 .apply()
 
-            // Update the font immediately
             updateFont()
         }
 
-        // Create and show the dialog
         AlertDialog.Builder(requireContext())
             .setTitle("Choose Font")
             .setView(dialogView)
@@ -208,7 +195,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferencesListener)
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferencesListener)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -218,7 +205,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferencesListener)
 
-        fontSummary?.text ?: fontValue[1]
+        webViewFont = bind.bodyWebView
 
         baseURL = "file://" + requireContext().cacheDir.toString() + "/"
 
