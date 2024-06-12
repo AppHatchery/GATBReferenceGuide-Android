@@ -126,8 +126,10 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             if (it != null) {
                 bookmarkEntity = it
                 bind.bookmarkImageButton.setImageResource(R.drawable.ic_baseline_folder_bookmarked)
+                bind.isBookmarkedText.setText(R.string.bookmarked)
             } else {
                 bind.bookmarkImageButton.setImageResource(R.drawable.ic_baseline_folder_outline)
+                bind.isBookmarkedText.setText(R.string.bookmark)
             }
         }
     }

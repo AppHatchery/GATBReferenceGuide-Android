@@ -23,6 +23,7 @@
     <string name="share">Share</string>
     <string name="undo">Undo</string>
     <string name="bookmark">Bookmark</string>
+    <string name="bookmarked">Bookmarked</string>
     <string name="note">Note</string>
     <string name="edit_concat">Edit %s</string>
 
