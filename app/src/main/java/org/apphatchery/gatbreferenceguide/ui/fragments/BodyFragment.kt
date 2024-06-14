@@ -26,9 +26,8 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.RadioButton
-import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
@@ -45,6 +44,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.slider.Slider
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
@@ -142,13 +142,14 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         }
 
     private fun updateFont() {
-        val fontIndex = sharedPreferences.getString(getString(R.string.font_key), "1")?.toInt() ?: 1
+        val fontIndex =
+            sharedPreferences.getString(getString(R.string.font_key), "1")?.toInt() ?: 1
         val fontSize = when (fontIndex) {
-            0 -> 75 // Small
-            1 -> 100 // Normal
+            0 -> 100 // Small
+            1 -> 125// Normal
             2 -> 150 // Large
             3 -> 175 // Larger
-            else -> 100
+            else -> 125
         }
 
         webViewFont.settings.textZoom = fontSize
@@ -156,34 +157,72 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
     private fun showFontDialog() {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_font_settings, null)
-        val radioGroup: RadioGroup = dialogView.findViewById(R.id.fontRadioGroup)
+        val fontSettingsSlider: Slider = dialogView.findViewById(R.id.font_size_slider)
+        val fontSizeText: TextView = dialogView.findViewById(R.id.font_size_text)
+        val closeDialogButton: ImageButton = dialogView.findViewById(R.id.close_dialog_button)
 
-        val currentFontIndex =
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        dialog.show()
+
+        closeDialogButton.setOnClickListener { dialog.dismiss() }
+        val currentFontSizeIndex =
             sharedPreferences.getString(getString(R.string.font_key), "1")?.toInt() ?: 1
-        (radioGroup.getChildAt(currentFontIndex) as RadioButton).isChecked = true
 
-        radioGroup.setOnCheckedChangeListener { _, checkedId ->
-            val selectedIndex = when (checkedId) {
-                R.id.fontSmall -> 0
-                R.id.fontNormal -> 1
-                R.id.fontLarge -> 2
-                R.id.fontLarger -> 3
+        when (currentFontSizeIndex) {
+            0 -> {
+                fontSizeText.setText(R.string.font_size_small)
+                fontSettingsSlider.value = 100F
+            }
+
+            1 -> {
+                fontSizeText.setText(R.string.font_size_normal)
+                fontSettingsSlider.value = 125F
+            }
+
+            2 -> {
+                fontSizeText.setText(R.string.font_size_large)
+                fontSettingsSlider.value = 150F
+            }
+
+            else -> {
+                fontSizeText.setText(R.string.font_size_larger)
+                fontSettingsSlider.value = 175F
+            }
+        }
+
+        fontSettingsSlider.addOnChangeListener { _, value, _ ->
+            val selectedIndex = when (value) {
+                100F -> 0
+                125F -> 1
+                150F -> 2
+                175F -> 3
                 else -> 1
+            }
+
+            when (selectedIndex) {
+                0 ->
+                    fontSizeText.setText(R.string.font_size_small)
+
+                1 ->
+                    fontSizeText.setText(R.string.font_size_normal)
+
+                2 ->
+                    fontSizeText.setText(R.string.font_size_large)
+
+                3 ->
+                    fontSizeText.setText(R.string.font_size_larger)
+
+                else -> fontSizeText.setText(R.string.font_size_normal)
             }
 
             sharedPreferences.edit()
                 .putString(getString(R.string.font_key), selectedIndex.toString())
                 .apply()
-
             updateFont()
         }
-
-        AlertDialog.Builder(requireContext())
-            .setTitle("Choose Font")
-            .setView(dialogView)
-            .setNegativeButton("Close", null)
-            .create()
-            .show()
     }
 
     private val sharedPreferencesListener =
