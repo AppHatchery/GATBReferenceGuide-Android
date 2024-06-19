@@ -382,7 +382,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             }
 
             homeButton.setOnClickListener {
-                findNavController().navigate(R.id.action_bodyFragment_to_mainFragment)
+                findNavController().popBackStack(R.id.mainFragment, false)
             }
 
             changeFontSizeButton.setOnClickListener {
