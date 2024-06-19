@@ -3,6 +3,7 @@ package org.apphatchery.gatbreferenceguide.ui
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.NavController
@@ -35,6 +36,16 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, AppBarConfiguration(navController.graph))
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         searchState.exitSearchMode()
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            supportActionBar?.title = destination.label
+            binding.toolbarTitle.text = destination.label
+            when(destination.id){
+                R.id.mainFragment -> binding.bookmark.visibility = View.VISIBLE
+                else -> binding.bookmark.visibility  = View.GONE
+            }
+
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
