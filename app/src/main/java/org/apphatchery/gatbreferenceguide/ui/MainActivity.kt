@@ -30,6 +30,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.elevation = 0f
+        setSupportActionBar(findViewById(R.id.my_toolbar))
+        supportActionBar?.setDisplayShowTitleEnabled(false);
         preferenceManager = PreferenceManager.getDefaultSharedPreferences(this)
         navController = findNavController(R.id.nav_host_fragment_container)
         binding.bottomNavigationView.setupWithNavController(navController)
@@ -45,6 +47,10 @@ class MainActivity : AppCompatActivity() {
                 else -> binding.bookmark.visibility  = View.GONE
             }
 
+        }
+
+        binding.bookmark.setOnClickListener {
+            navController.navigate(R.id.action_mainFragment_to_savedFragment)
         }
     }
 
