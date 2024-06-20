@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -19,6 +20,7 @@ import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FASubChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FASubChapterViewModel
+import org.apphatchery.gatbreferenceguide.ui.viewmodels.MainActivityViewModel
 import org.apphatchery.gatbreferenceguide.utils.getActionBar
 import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
 import org.apphatchery.gatbreferenceguide.utils.isChecked
@@ -33,6 +35,7 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
     private lateinit var faSubChapterAdapter: FASubChapterAdapter
     private lateinit var chapterEntity: ChapterEntity
     private val viewModel: FASubChapterViewModel by viewModels()
+    private val mainViewModel: MainActivityViewModel by activityViewModels()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -48,6 +49,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private val htmlInfoEntity = ArrayList<HtmlInfoEntity>()
     private val viewModel: FAMainViewModel by viewModels()
     private var visitor_id: String? = null
+    private lateinit var navController: NavController
 
     @Inject
     lateinit var userPrefs: UserPrefs
@@ -130,7 +132,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
         fragmentMainBinding.apply {
             recyclerviewFirst6Chapters.setupAdapter(first6ChapterAdapter)
-            recyclerviewFirst6Charts.setupAdapter(first6ChartAdapter, 3)
+            recyclerviewFirst6Charts.setupAdapter(first6ChartAdapter, 1)
 
 //            searchView.setOnClickListener {
 //                MainFragmentDirections.actionGlobalGlobalSearchFragment().also {
@@ -161,6 +163,11 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             }
             else {
                 init()
+            }
+        }
+        fragmentMainBinding.bookmark.setOnClickListener {
+            MainFragmentDirections.actionMainFragmentToSavedFragment().apply {
+                findNavController().navigate(this)
             }
         }
 
