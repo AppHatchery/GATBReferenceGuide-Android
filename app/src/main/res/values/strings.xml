@@ -23,6 +23,7 @@
     <string name="share">Share</string>
     <string name="undo">Undo</string>
     <string name="bookmark">Bookmark</string>
+    <string name="bookmarked">Bookmarked</string>
     <string name="note">Note</string>
     <string name="edit_concat">Edit %s</string>
 
@@ -55,6 +56,15 @@
     <string name="reset_key">reset_key</string>
     <string name="reset_title">Clear App Content</string>
     <string name="reset_summary">Reset all app data and start all over again</string>
+    <string name="home">Home</string>
+    <string name="font_size_settings">Font Size Settings</string>
+    <string name="font_size">Font Size:</string>
+    <string name="font_size_small">Font Size: Small</string>
+    <string name="font_size_normal">Font Size: Normal</string>
+    <string name="font_size_large">Font Size: Large</string>
+    <string name="font_size_larger">Font Size: Larger</string>
+    <string name="slider_small_font_icon">Slider Small Font Icon</string>
+    <string name="slider_large_font_icon">Slider Large Font Icon</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 
