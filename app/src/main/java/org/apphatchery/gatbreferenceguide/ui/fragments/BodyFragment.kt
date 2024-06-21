@@ -3,8 +3,8 @@ package org.apphatchery.gatbreferenceguide.ui.fragments
 import android.animation.Animator
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -15,6 +15,7 @@ import android.text.SpannableString
 import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -25,9 +26,10 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.os.bundleOf
@@ -36,7 +38,13 @@ import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.*
+import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.slider.Slider
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
@@ -44,7 +52,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentBodyBinding
 import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
-import org.apphatchery.gatbreferenceguide.db.entities.*
+import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
+import org.apphatchery.gatbreferenceguide.db.entities.BookmarkEntity
+import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
+import org.apphatchery.gatbreferenceguide.db.entities.NoteEntity
+import org.apphatchery.gatbreferenceguide.db.entities.RecentEntity
+import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 import org.apphatchery.gatbreferenceguide.enums.BookmarkType
 import org.apphatchery.gatbreferenceguide.prefs.UserPrefs
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
@@ -52,12 +65,27 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteColorAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.SwipeDecoratorCallback
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FABodyViewModel
-import org.apphatchery.gatbreferenceguide.utils.*
+import org.apphatchery.gatbreferenceguide.utils.ANALYTICS_BOOKMARK_EVENT
+import org.apphatchery.gatbreferenceguide.utils.ANALYTICS_PAGE_EVENT
+import org.apphatchery.gatbreferenceguide.utils.EXTENSION
+import org.apphatchery.gatbreferenceguide.utils.NOTE_COLOR
+import org.apphatchery.gatbreferenceguide.utils.PAGES_DIR
+import org.apphatchery.gatbreferenceguide.utils.alertDialog
+import org.apphatchery.gatbreferenceguide.utils.dialog
+import org.apphatchery.gatbreferenceguide.utils.getActionBar
+import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
+import org.apphatchery.gatbreferenceguide.utils.isChecked
+import org.apphatchery.gatbreferenceguide.utils.observeOnce
+import org.apphatchery.gatbreferenceguide.utils.safeDialogShow
+import org.apphatchery.gatbreferenceguide.utils.searchState
+import org.apphatchery.gatbreferenceguide.utils.snackBar
+import org.apphatchery.gatbreferenceguide.utils.toast
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
+    private val TAG = "MyFragmentLifecycle"
 
     companion object {
         const val DOMAIN_LINK = "https://gatbreferenceguide.page.link"
@@ -82,6 +110,10 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private lateinit var id: String
     private lateinit var title: String
 
+    private lateinit var webViewFont: WebView
+    private lateinit var sharedPreferences: SharedPreferences
+    private var fontValue: Array<String> = arrayOf("Small", "Normal", "Large", "Larger")
+
     @Inject
     lateinit var userPrefs: UserPrefs
 
@@ -89,18 +121,18 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
 
-
     private fun setupBookmark(id: String) {
         viewModel.getBookmarkById(id).observe(viewLifecycleOwner) {
             if (it != null) {
                 bookmarkEntity = it
-                bind.bookmarkImageButton.setImageResource(R.drawable.ic_baseline_star)
+                bind.bookmarkImageButton.setImageResource(R.drawable.ic_baseline_folder_bookmarked)
+                bind.isBookmarkedText.setText(R.string.bookmarked)
             } else {
-                bind.bookmarkImageButton.setImageResource(R.drawable.ic_baseline_star_outline)
+                bind.bookmarkImageButton.setImageResource(R.drawable.ic_baseline_folder_outline)
+                bind.isBookmarkedText.setText(R.string.bookmark)
             }
         }
     }
-
 
     private fun onDeleteNoteSnackbar(note: NoteEntity) =
         bind.root.snackBar(getString(R.string.note_deleted)).also {
@@ -109,11 +141,110 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             }
         }
 
+    private fun updateFont() {
+        val fontIndex =
+            sharedPreferences.getString(getString(R.string.font_key), "1")?.toInt() ?: 1
+        val fontSize = when (fontIndex) {
+            0 -> 100 // Small
+            1 -> 125// Normal
+            2 -> 150 // Large
+            3 -> 175 // Larger
+            else -> 125
+        }
+
+        webViewFont.settings.textZoom = fontSize
+    }
+
+    private fun showFontDialog() {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_font_settings, null)
+        val fontSettingsSlider: Slider = dialogView.findViewById(R.id.font_size_slider)
+        val fontSizeText: TextView = dialogView.findViewById(R.id.font_size_text)
+        val closeDialogButton: ImageButton = dialogView.findViewById(R.id.close_dialog_button)
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        dialog.show()
+
+        closeDialogButton.setOnClickListener { dialog.dismiss() }
+        val currentFontSizeIndex =
+            sharedPreferences.getString(getString(R.string.font_key), "1")?.toInt() ?: 1
+
+        when (currentFontSizeIndex) {
+            0 -> {
+                fontSizeText.setText(R.string.font_size_small)
+                fontSettingsSlider.value = 100F
+            }
+
+            1 -> {
+                fontSizeText.setText(R.string.font_size_normal)
+                fontSettingsSlider.value = 125F
+            }
+
+            2 -> {
+                fontSizeText.setText(R.string.font_size_large)
+                fontSettingsSlider.value = 150F
+            }
+
+            else -> {
+                fontSizeText.setText(R.string.font_size_larger)
+                fontSettingsSlider.value = 175F
+            }
+        }
+
+        fontSettingsSlider.addOnChangeListener { _, value, _ ->
+            val selectedIndex = when (value) {
+                100F -> 0
+                125F -> 1
+                150F -> 2
+                175F -> 3
+                else -> 1
+            }
+
+            when (selectedIndex) {
+                0 ->
+                    fontSizeText.setText(R.string.font_size_small)
+
+                1 ->
+                    fontSizeText.setText(R.string.font_size_normal)
+
+                2 ->
+                    fontSizeText.setText(R.string.font_size_large)
+
+                3 ->
+                    fontSizeText.setText(R.string.font_size_larger)
+
+                else -> fontSizeText.setText(R.string.font_size_normal)
+            }
+
+            sharedPreferences.edit()
+                .putString(getString(R.string.font_key), selectedIndex.toString())
+                .apply()
+            updateFont()
+        }
+    }
+
+    private val sharedPreferencesListener =
+        SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            if (key == getString(R.string.font_key)) {
+                updateFont()
+            }
+        }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferencesListener)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         bind = FragmentBodyBinding.bind(view)
         bodyUrl = bodyFragmentArgs.bodyUrl
         setHasOptionsMenu(true)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferencesListener)
+
+        webViewFont = bind.bodyWebView
 
         baseURL = "file://" + requireContext().cacheDir.toString() + "/"
 
@@ -126,8 +257,10 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             getString(R.string.last_updated, subChapterEntity.lastUpdated)
 
 
-        getActionBar(requireActivity())?.title = HtmlCompat.fromHtml(chapterEntity.chapterTitle,FROM_HTML_MODE_LEGACY).toString()
+        getActionBar(requireActivity())?.title =
+            HtmlCompat.fromHtml(chapterEntity.chapterTitle, FROM_HTML_MODE_LEGACY).toString()
         dialog = Dialog(requireContext()).dialog()
+        updateFont()
 
 
 
@@ -154,7 +287,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         setupWebView()
 
-        if(bodyUrl.searchQuery.isNotEmpty() && !isOnlyWhitespace(bodyUrl.searchQuery)){
+        if (bodyUrl.searchQuery.isNotEmpty() && !isOnlyWhitespace(bodyUrl.searchQuery)) {
             bind.searchClearText.text = bodyUrl.searchQuery
             bind.searchClearContainer.visibility = View.VISIBLE
             bind.searchClearButton.setOnClickListener {
@@ -192,9 +325,19 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 if (startIndex != -1) {
                     val endIndex = startIndex + searchedWordToColor.length
                     val backgroundColorSpan = BackgroundColorSpan(Color.YELLOW)
-                    spannableString.setSpan(backgroundColorSpan, startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(
+                        backgroundColorSpan,
+                        startIndex,
+                        endIndex,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
                     val foregroundColorSpan = ForegroundColorSpan(Color.BLACK)
-                    spannableString.setSpan(foregroundColorSpan, startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    spannableString.setSpan(
+                        foregroundColorSpan,
+                        startIndex,
+                        endIndex,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                    )
                 }
                 textviewSubChapter.text = spannableString
                 bodyWebView.loadUrl(baseURL + PAGES_DIR + subChapterEntity.url + EXTENSION)
@@ -236,11 +379,17 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
             shareButton.setOnClickListener {
                 createDynamicLink()
-
-
             }
 
-            shareFeedbackButton.setOnClickListener { onShareFeedbackListener() }
+            homeButton.setOnClickListener {
+                findNavController().popBackStack(R.id.mainFragment, false)
+            }
+
+            changeFontSizeButton.setOnClickListener {
+                showFontDialog()
+            }
+
+//            shareFeedbackButton.setOnClickListener { onShareFeedbackListener() }
             collapseActionButton.setOnClickListener {
                 bind.recyclerviewNote.apply {
                     if (isCollapsed.not()) {
@@ -283,7 +432,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             scaleX(scaleFactor).scaleY(scaleFactor)
             duration = 200
             setListener(object : Animator.AnimatorListener {
-//                override fun onAnimationStart(animation: Animator?) = Unit
+                //                override fun onAnimationStart(animation: Animator?) = Unit
 //                override fun onAnimationEnd(animation: Animator?) = onAnimationCompleted()
 //                override fun onAnimationCancel(animation: Animator?) = Unit
 //                override fun onAnimationRepeat(animation: Animator?) = Unit
@@ -337,7 +486,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         bookmarkType = BookmarkType.CHART
         textviewSubChapter.text = chartAndSubChapter!!.chartEntity.chartTitle
-        
+
         val loadUrl = baseURL + PAGES_DIR + chartAndSubChapter!!.chartEntity.id + EXTENSION
         bodyWebView.loadUrl(loadUrl)
 
@@ -584,7 +733,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             snackBar(getString(R.string.note_saved))
         }
     }
-    var urlGlobal : String? = null
+
+    var urlGlobal: String? = null
 
     private fun setupWebView() = bind.bodyWebView.apply {
         onZoomOut()
@@ -592,13 +742,17 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
-                 urlGlobal = url
+                urlGlobal = url
 
 
                 val searchInput = bodyUrl.searchQuery
-                if(searchInput.isNotEmpty() && !isOnlyWhitespace(searchInput)){
+                if (searchInput.isNotEmpty() && !isOnlyWhitespace(searchInput)) {
                     Handler(Looper.getMainLooper()).postDelayed({
-                        view?.findAllAsync(searchInput) }, 300) }else{ return }
+                        view?.findAllAsync(searchInput)
+                    }, 300)
+                } else {
+                    return
+                }
 
                 val allowedString = normalizeString(searchInput)
                 val searchBody = allowedString.split(" ")
@@ -646,6 +800,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                         }
                         true
                     }
+
                     link.contains("#") -> {
                         bookmarkType = BookmarkType.SUBCHAPTER
                         BodyFragmentDirections.actionBodyFragmentSelf(
@@ -655,6 +810,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                         ).also { findNavController().navigate(it) }
                         true
                     }
+
                     else -> {
                         val stripLink = link.substring(link.lastIndexOf("/") + 1, link.length)
                         stripLink.replace(EXTENSION, "")
@@ -666,10 +822,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             }
         }
     }
+
     fun isOnlyWhitespace(str: String): Boolean {
         val trimmedStr = str.trim()
         return trimmedStr.isEmpty()
     }
+
     fun normalizeString(str: String): String {
 
         // Remove any leading or trailing spaces
@@ -692,7 +850,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     if (subChapter.url == url) {
                         val subChapterFragmentDirections =
                             BodyFragmentDirections.actionBodyFragmentSelf(
-                                BodyUrl(bodyFragmentArgs.bodyUrl.chapterEntity, subChapter, ""), null
+                                BodyUrl(bodyFragmentArgs.bodyUrl.chapterEntity, subChapter, ""),
+                                null
                             )
                         findNavController().navigate(subChapterFragmentDirections)
                     }
@@ -709,33 +868,32 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-            if(searchState.currentState.toString() == "IN_SEARCH"){
-                if (item.itemId == R.id.searchView) {
-                  var comp =   findNavController().popBackStack(R.id.globalSearchFragment,false)
-                    if(!comp){
-                        if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
-                            .also {
-                                findNavController().navigate(it)
-                            }
-                    }
+        if (searchState.currentState.toString() == "IN_SEARCH") {
+            if (item.itemId == R.id.searchView) {
+                var comp = findNavController().popBackStack(R.id.globalSearchFragment, false)
+                if (!comp) {
+                    if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
+                        .also {
+                            findNavController().navigate(it)
+                        }
                 }
-
-            }else{
-                if (item.itemId == R.id.searchView) BodyFragmentDirections.actionGlobalGlobalSearchFragment()
-                    .also {
-                        findNavController().navigate(it)
-                    }
             }
+
+        } else {
+            if (item.itemId == R.id.searchView) BodyFragmentDirections.actionGlobalGlobalSearchFragment()
+                .also {
+                    findNavController().navigate(it)
+                }
+        }
         return super.onOptionsItemSelected(item)
     }
-
 
 
     private fun isBookmarkCheck() = bookmarkType == BookmarkType.CHART
 
     private fun createDynamicLink() {
         requireContext().toast(getString(R.string.dynamic_link_generation))
-         val androidQueryId = id
+        val androidQueryId = id
         val androidIsPage = if (isBookmarkCheck()) 0 else 1
         val iosHtmlFile = if (isBookmarkCheck()) chartAndSubChapter!!.chartEntity.id else
             subChapterEntity.url
@@ -744,10 +902,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             .setLink(Uri.parse("$DOMAIN_LINK?androidQueryId=$androidQueryId&androidIsPage=$androidIsPage&chapterID=$iosHtmlFile"))
             .setDomainUriPrefix(DOMAIN_LINK)
             .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
-            .setIosParameters(DynamicLink.IosParameters
-                .Builder("edu.emory.tb.guide")
-                .setAppStoreId("1583294462")
-                .build())
+            .setIosParameters(
+                DynamicLink.IosParameters
+                    .Builder("edu.emory.tb.guide")
+                    .setAppStoreId("1583294462")
+                    .build()
+            )
             .setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder()
                     .setTitle(chapterEntity.chapterTitle)
