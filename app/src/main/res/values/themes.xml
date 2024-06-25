@@ -30,6 +30,8 @@
         <item name="searchBackgroundColor">@color/reddish</item>
 
         <item name="toolbarColor">@color/reddish</item>
+        <item name="colorGrayWhite">@color/neutral_700</item>
+        <item name="colorWhiteGray">@color/white</item>
     </style>
 
 
