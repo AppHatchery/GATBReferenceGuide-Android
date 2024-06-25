@@ -11,4 +11,30 @@
     <color name="my_color">#000000</color>
     <color name="light_gray">#e9e9e9</color>
 
+    <color name="primary_600">#FF5182FF</color>
+    <color name="primary_400">#FF759BFF</color>
+    <color name="primary_300">#FF8AABFF</color>
+    <color name="primary_200">#FFCBD9FF</color>
+    <color name="primary_100">#FFE7EDFF</color>
+    <color name="neutral_900">#FF2B2B2B</color>
+    <color name="neutral_800">#FF404040</color>
+    <color name="neutral_600">#FF545454</color>
+    <color name="neutral_500">#FFB9B9B9</color>
+    <color name="neutral_400">#FFD5D5D5</color>
+    <color name="neutral_300">#FFE5E5E5</color>
+    <color name="neutral_200">#FFECECEC</color>
+    <color name="neutral_100">#FFF8F8F8</color>
+    <color name="neutral_black">#FF000000</color>
+    <color name="neutral_white">#FFFFFFFF</color>
+    <color name="secondary_yellow_500">#FFFFBE0A</color>
+    <color name="secondary_yellow_400">#FFFFCB3B</color>
+    <color name="secondary_yellow_300">#FFFFD86C</color>
+    <color name="secondary_yellow_200">#FFFFE49A</color>
+    <color name="secondary_yellow_100">#FFFFF4D7</color>
+    <color name="secondary_cyan_500">#FF009C8E</color>
+    <color name="secondary_cyan_400">#FF2DBFB2</color>
+    <color name="secondary_cyan_300">#FF59DCD1</color>
+    <color name="secondary_cyan_200">#FF65EDE1</color>
+    <color name="secondary_cyan_100">#FFCDFFFA</color>
+
 </resources>

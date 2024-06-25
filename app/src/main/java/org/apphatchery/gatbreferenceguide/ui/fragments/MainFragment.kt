@@ -2,7 +2,6 @@ package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -22,14 +21,27 @@ import kotlinx.coroutines.launch
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentMainBinding
 import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
-import org.apphatchery.gatbreferenceguide.db.entities.*
+import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
+import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
+import org.apphatchery.gatbreferenceguide.db.entities.ChartEntity
+import org.apphatchery.gatbreferenceguide.db.entities.HtmlInfoEntity
+import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 import org.apphatchery.gatbreferenceguide.prefs.UserPrefs
 import org.apphatchery.gatbreferenceguide.resource.Resource
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChartAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAMainViewModel
-import org.apphatchery.gatbreferenceguide.utils.*
+import org.apphatchery.gatbreferenceguide.utils.EXTENSION
+import org.apphatchery.gatbreferenceguide.utils.PAGES_DIR
+import org.apphatchery.gatbreferenceguide.utils.createHtmlAndAssetsDirectoryIfNotExists
+import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
+import org.apphatchery.gatbreferenceguide.utils.html2text
+import org.apphatchery.gatbreferenceguide.utils.prepHtmlPlusAssets
+import org.apphatchery.gatbreferenceguide.utils.readJsonFromAssetToString
+import org.apphatchery.gatbreferenceguide.utils.removeSlash
+import org.apphatchery.gatbreferenceguide.utils.searchState
+import org.apphatchery.gatbreferenceguide.utils.toggleVisibility
 import sdk.pendo.io.Pendo
 import java.util.UUID
 import javax.inject.Inject
@@ -58,6 +70,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         //const val VISITOR_ID = ""
         const val ACCOUNT_ID = "GTRG"
     }
+
     private fun setupPendo() = Pendo.startSession(
         visitor_id,
         ACCOUNT_ID,
@@ -167,11 +180,9 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
         fragmentMainBinding = FragmentMainBinding.bind(view)
         userPrefs.getBuildVersion.asLiveData().observe(viewLifecycleOwner) {
-            if (it != BUILD_VERSION)
-            {
+            if (it != BUILD_VERSION) {
                 firstLaunch()
-            }
-            else {
+            } else {
                 init()
             }
         }
@@ -218,7 +229,8 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                             viewModel.getChapterInfo(subChapterEntity.chapterId)
                                 .observe(viewLifecycleOwner) { chapterEntity ->
                                     MainFragmentDirections.actionMainFragmentToBodyFragmentDirect(
-                                        BodyUrl(chapterEntity, subChapterEntity, ""), chartAndSubchapter
+                                        BodyUrl(chapterEntity, subChapterEntity, ""),
+                                        chartAndSubchapter
                                     ).apply {
                                         findNavController().navigate(this)
                                     }
@@ -231,7 +243,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                     viewModel.getChapterInfo(subChapterEntity.chapterId)
                         .observe(viewLifecycleOwner) { chapterEntity ->
                             MainFragmentDirections.actionMainFragmentToBodyFragmentDirect(
-                                BodyUrl(chapterEntity, subChapterEntity,""), null
+                                BodyUrl(chapterEntity, subChapterEntity, ""), null
                             ).apply {
                                 findNavController().navigate(this)
                             }
@@ -276,6 +288,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                             }
 
                         }
+
                         else -> {
                         }
                     }
@@ -295,6 +308,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                         is Resource.Success -> {
                             dumpSubChapterInfo()
                         }
+
                         else -> {
                         }
                     }
@@ -317,6 +331,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                                 viewModel.dumpSubChapterDataObserver = false
                             }
                         }
+
                         else -> {
                         }
                     }
@@ -340,6 +355,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                     FAMainViewModel.Callback.InsertHTMLInfoComplete -> {
                         viewModel.bindHtmlWithChapter()
                     }
+
                     FAMainViewModel.Callback.InsertGlobalSearchInfoComplete -> {
                         viewLifecycleOwner.lifecycleScope.launch {
                             userPrefs.setBuildVersion(BUILD_VERSION)
@@ -356,10 +372,10 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
     private fun getVisitorId(): String {
         var id = ""
-        userPrefs.getPendoVisitorId.asLiveData().observe(viewLifecycleOwner){
-            if(it.isEmpty()){
+        userPrefs.getPendoVisitorId.asLiveData().observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
                 id = generatePendoVisitorId()
-                viewLifecycleOwner.lifecycleScope.launch{ userPrefs.setPendoVisitorId(id) }
+                viewLifecycleOwner.lifecycleScope.launch { userPrefs.setPendoVisitorId(id) }
             }
             if (it.isNotEmpty()) id = it
         }
