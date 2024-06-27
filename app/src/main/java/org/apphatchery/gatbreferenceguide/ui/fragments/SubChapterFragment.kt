@@ -1,11 +1,14 @@
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.os.Bundle
+import android.text.Html.FROM_HTML_MODE_LEGACY
 import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.core.text.HtmlCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -19,6 +22,7 @@ import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FASubChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FASubChapterViewModel
+import org.apphatchery.gatbreferenceguide.ui.viewmodels.MainActivityViewModel
 import org.apphatchery.gatbreferenceguide.utils.getActionBar
 import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
 import org.apphatchery.gatbreferenceguide.utils.isChecked
@@ -33,6 +37,7 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
     private lateinit var faSubChapterAdapter: FASubChapterAdapter
     private lateinit var chapterEntity: ChapterEntity
     private val viewModel: FASubChapterViewModel by viewModels()
+    private val mainViewModel: MainActivityViewModel by activityViewModels()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,6 +67,7 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
         bind.apply {
 
             getActionBar(requireActivity())?.title = chapterEntity.chapterTitle
+            mainViewModel.title.value = HtmlCompat.fromHtml(chapterEntity.chapterTitle, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
 
             recyclerview.apply {
                 layoutManager = LinearLayoutManager(requireContext())
