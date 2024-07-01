@@ -4,8 +4,8 @@ import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
         preferenceManager = PreferenceManager.getDefaultSharedPreferences(this)
         navController = findNavController(R.id.nav_host_fragment_container)
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
-
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.chapterFragment, R.id.subChapterFragment, R.id.bodyFragment, R.id.body_web_view, R.id.chartFragment -> bottomNavigationView.visibility =
@@ -49,6 +48,8 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, AppBarConfiguration(navController.graph))
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         searchState.exitSearchMode()
+
+
     }
 
     override fun onSupportNavigateUp(): Boolean {

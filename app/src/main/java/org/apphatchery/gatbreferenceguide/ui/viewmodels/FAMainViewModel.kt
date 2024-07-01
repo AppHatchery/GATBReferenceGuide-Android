@@ -1,5 +1,6 @@
 package org.apphatchery.gatbreferenceguide.ui.viewmodels
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -16,6 +17,8 @@ import javax.inject.Inject
 class FAMainViewModel @Inject constructor(
     private val repo: Repository
 ) : ViewModel() {
+
+    val title = MutableLiveData<String>()
 
     val getChapter = repo.db.chapterDao().getChapterEntity().asLiveData()
     val getChart = repo.db.chartDao().getChartAndSubChapter().asLiveData()

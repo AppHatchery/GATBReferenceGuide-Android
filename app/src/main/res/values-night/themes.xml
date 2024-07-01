@@ -30,6 +30,10 @@
         <item name="actionBarStyle">@style/darkActionbar</item>
         <item name="android:windowBackground">@color/dark_black</item>
 
+        <item name="toolbarColor">?chartBackgroundColor</item>
+        <item name="colorGrayWhite">@color/neutral_200</item>
+        <item name="colorWhiteGray">@color/neutral_900</item>
+
     </style>
 
 

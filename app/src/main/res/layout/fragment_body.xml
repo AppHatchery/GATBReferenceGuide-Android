@@ -194,7 +194,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/white">
+        android:background="?attr/colorWhiteGray">
         <!--Home-->
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
@@ -211,13 +211,14 @@
                 android:background="@android:color/transparent"
                 android:foreground="?attr/actionBarItemBackground"
                 android:padding="8dp"
+                android:tint="?attr/colorGrayWhite"
                 android:src="@drawable/ic_home" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="#4C4C4C"
+                android:textColor="?attr/colorGrayWhite"
                 android:textSize="12sp"
                 android:text="@string/home" />
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -239,13 +240,14 @@
                 android:background="@android:color/transparent"
                 android:foreground="?attr/actionBarItemBackground"
                 android:padding="8dp"
+                android:tint="?attr/colorGrayWhite"
                 android:src="@drawable/ic_baseline_share" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="#4C4C4C"
+                android:textColor="?attr/colorGrayWhite"
                 android:textSize="12sp"
                 android:text="@string/share" />
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -266,6 +268,7 @@
                 android:background="@android:color/transparent"
                 android:foreground="?attr/actionBarItemBackground"
                 android:padding="8dp"
+                android:tint="?attr/colorGrayWhite"
                 android:src="@drawable/ic_baseline_folder_outline" />
 
             <TextView
@@ -273,7 +276,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="#4C4C4C"
+                android:textColor="?attr/colorGrayWhite"
                 android:textSize="12sp"
                 android:text="@string/bookmark" />
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -294,14 +297,14 @@
                 android:background="@android:color/transparent"
                 android:foreground="?attr/actionBarItemBackground"
                 android:padding="8dp"
+                android:tint="?attr/colorGrayWhite"
                 android:src="@drawable/ic_baseline_edit_note" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="#4C4C4C"
-
+                android:textColor="?attr/colorGrayWhite"
                 android:textSize="12sp"
                 android:text="@string/note" />
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -322,13 +325,14 @@
                 android:background="@android:color/transparent"
                 android:foreground="?attr/actionBarItemBackground"
                 android:padding="8dp"
+                android:tint="?attr/colorGrayWhite"
                 android:src="@drawable/ic_baseline_increase_font_size" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="#4C4C4C"
+                android:textColor="?attr/colorGrayWhite"
                 android:textSize="12sp"
                 android:text="@string/font" />
         </androidx.appcompat.widget.LinearLayoutCompat>

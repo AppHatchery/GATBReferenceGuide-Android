@@ -28,6 +28,10 @@
         <item name="chartBackgroundColor">#c98463</item>
         <item name="chartBackgroundColorTop">#823410</item>
         <item name="searchBackgroundColor">@color/reddish</item>
+
+        <item name="toolbarColor">@color/reddish</item>
+        <item name="colorGrayWhite">@color/neutral_700</item>
+        <item name="colorWhiteGray">@color/white</item>
     </style>
 
 
