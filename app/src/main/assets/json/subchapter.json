@@ -4,398 +4,398 @@
     "chapterId": 1,
     "subChapterTitle": "Epidemiology",
     "url": "1_epidemiology",
-    "lastUpdated": "June 2022"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 2,
     "chapterId": 2,
     "subChapterTitle": "Introduction",
     "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 3,
     "chapterId": 2,
     "subChapterTitle": "Tuberculin Skin Test (TST)",
     "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)__a__tuberculin_skin_test",
-    "lastUpdated": "June 2022"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 4,
     "chapterId": 2,
     "subChapterTitle": "Criteria for a Positive Tuberculin Test, by Risk Group",
     "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)__b__criteria_for_a_positive_tuberculin_test_by_risk_group",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 5,
     "chapterId": 2,
     "subChapterTitle": "Two-Step Testing and the Booster Reaction",
     "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)__c__two_step_testing_and_the_booster_reaction",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 6,
     "chapterId": 2,
     "subChapterTitle": "Anergy Testing",
     "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)__d__anergy_testing",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 7,
     "chapterId": 2,
     "subChapterTitle": "Interferon-y Release Assays (IGRAs)",
     "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)__e__interferon_y_release_assays_(igras)",
-    "lastUpdated": "November 2021"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 8,
     "chapterId": 2,
     "subChapterTitle": "Targeted Testing and Diagnostic Tests for LTBI",
     "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)__f__targeted_testing_and_diagnostic_tests_for_ltbi",
-    "lastUpdated": "June 2022"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 9,
     "chapterId": 2,
     "subChapterTitle": "Medical Evaluation After Testing for LTBI",
     "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)__g__medical_evaluation_after_testing_for_ltbi",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 10,
     "chapterId": 2,
     "subChapterTitle": "Reporting of Pediatric Positive Tests for LTBI",
     "url": "2_diagnostic_tests_for_latent_tb_infection_(ltbi)__h__reporting_of_pediatric_positive_tests_for_ltbi",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 11,
     "chapterId": 3,
     "subChapterTitle": "Introduction",
     "url": "3_treatment_of_latent_tb_infection_(ltbi)",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 12,
     "chapterId": 3,
     "subChapterTitle": "Treatment Regimens",
     "url": "3_treatment_of_latent_tb_infection_(ltbi)__a__treatment_regimens",
-    "lastUpdated": "June 2022"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 13,
     "chapterId": 3,
     "subChapterTitle": "Monitoring of Patients on Treatment for LTBI",
     "url": "3_treatment_of_latent_tb_infection_(ltbi)__b__monitoring_of_patients_on_treatment_for_ltbi",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 14,
     "chapterId": 3,
     "subChapterTitle": "Contacts of MDR-TB Cases",
     "url": "3_treatment_of_latent_tb_infection_(ltbi)__c__contacts_of_mdr_tb_cases",
-    "lastUpdated": "June 2022"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 15,
     "chapterId": 4,
     "subChapterTitle": "Introduction",
     "url": "4_laboratory_diagnosis_of_active_tuberculosis",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 16,
     "chapterId": 4,
     "subChapterTitle": "Considerations",
     "url": "4_laboratory_diagnosis_of_active_tuberculosis__a__considerations",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 17,
     "chapterId": 4,
     "subChapterTitle": "Selected Diagnostic Test Characteristics",
     "url": "4_laboratory_diagnosis_of_active_tuberculosis__b__selected_diagnostic_test_characteristics",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 18,
     "chapterId": 4,
     "subChapterTitle": "Laboratory Diagnosis of Pulmonary Tuberculosis",
     "url": "4_laboratory_diagnosis_of_active_tuberculosis__c__laboratory_diagnosis_of_pulmonary_tuberculosis",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 19,
     "chapterId": 4,
     "subChapterTitle": "Laboratory Diagnosis of Extrapulmonary Tuberculosis",
     "url": "4_laboratory_diagnosis_of_active_tuberculosis__d__laboratory_diagnosis_of_extrapulmary_tuberculosis",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 20,
     "chapterId": 4,
     "subChapterTitle": "Rapid Molecular Drug Susceptibility Tests (DST)",
     "url": "4_laboratory_diagnosis_of_active_tuberculosis__e__rapid_molecular_drug_susceptibility_tests_(dst)",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 21,
     "chapterId": 5,
     "subChapterTitle": "Introduction",
     "url": "5_treatment_of_current_(active)_disease_therapy",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 22,
     "chapterId": 5,
     "subChapterTitle": "Considerations",
     "url": "5_treatment_of_current_(active)_disease_therapy__a__considerations",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 23,
     "chapterId": 5,
     "subChapterTitle": "Standard Therapy for Current (Active) Disease",
     "url": "5_treatment_of_current_(active)_disease_therapy__b__standard_therapy_for_current_(active)_disease",
-    "lastUpdated": "June 2022"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 24,
     "chapterId": 5,
     "subChapterTitle": "Special Clinical Situations",
     "url": "5_treatment_of_current_(active)_disease_therapy__c__special_clinical_situations",
-    "lastUpdated": "June 2022"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 25,
     "chapterId": 5,
     "subChapterTitle": "Drug Resistance",
     "url": "5_treatment_of_current_(active)_disease_therapy__d__drug_resistance",
-    "lastUpdated": "June 2022"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 26,
     "chapterId": 5,
     "subChapterTitle": "Monitoring Patients on Therapy for Response and Adverse Events",
     "url": "5_treatment_of_current_(active)_disease_therapy__e__monitoring_patients_on_therapy_for_response_and_adverse_events",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 27,
     "chapterId": 5,
     "subChapterTitle": "TB and HIV",
     "url": "5_treatment_of_current_(active)_disease_therapy__f__tb_and_hiv",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 28,
     "chapterId": 5,
     "subChapterTitle": "Antiretroviral Therapy (ART) and Treatment of HIV Seropositive Patients with Active Tuberculosis Disease",
     "url": "5_treatment_of_current_(active)_disease_therapy__g__antiretroviral_therapy_(art)_and_treatment_of_persons",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 29,
     "chapterId": 5,
     "subChapterTitle": "Immune Reconstitution Inflammatory Syndrome (IRIS) Associated with Initiation of Antiretroviral Therapy During the Course of TB Therapy",
     "url": "5_treatment_of_current_(active)_disease_therapy__h__immune_reconstitution_inflammatory_syndrome",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 30,
     "chapterId": 5,
     "subChapterTitle": "Treatment of Extrapulmonary TB (Table 19)",
     "url": "5_treatment_of_current_(active)_disease_therapy__i__treatment_of_extrapulmonary_tb",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 31,
     "chapterId": 5,
     "subChapterTitle": "Adjunctive Use of Corticosteroid Therapy (Table 19)",
     "url": "5_treatment_of_current_(active)_disease_therapy__j__adjunctive_use_of_corticosteroid_therapy",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 31,
     "chapterId": 6,
     "subChapterTitle": "Introduction",
     "url": "6_pregnancy_and_tb",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 32,
     "chapterId": 6,
     "subChapterTitle": "Treatment for LTBI and Risk Factors",
     "url": "6_pregnancy_and_tb__a__treatment_for_ltbi_and_risk_factors",
-    "lastUpdated": "June 2022"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 33,
     "chapterId": 6,
     "subChapterTitle": "Treatment of Active TB in Pregnancy",
     "url": "6_pregnancy_and_tb__b__treatment_of_active_tb_in_pregnancy",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 34,
     "chapterId": 7,
     "subChapterTitle": "Children Tuberculosis",
     "url": "7_childhood_tuberculosis",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 35,
     "chapterId": 7,
     "subChapterTitle": "Management Considerations",
     "url": "7_childhood_tuberculosis__a__management_considerations",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 36,
     "chapterId": 8,
     "subChapterTitle": "Tuberculosis and Long-Term Care Facilities",
     "url": "8_tuberculosis_and_long_term_care_facilities",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 37,
     "chapterId": 9,
     "subChapterTitle": "BCG Vaccination",
     "url": "9_bcg_vaccination",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 38,
     "chapterId": 10,
     "subChapterTitle": "Introduction",
     "url": "10_tb_infection_control_hospital_isolation_procedures",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 39,
     "chapterId": 10,
     "subChapterTitle": "Administrative Controls",
     "url": "10_tb_infection_control_hospital_isolation_procedures__a__administrative_controls",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 40,
     "chapterId": 10,
     "subChapterTitle": "Surveillance for Health Care Workers",
     "url": "10_tb_infection_control_hospital_isolation_procedures__b__surveillance_for_health_care_workers",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 41,
     "chapterId": 10,
     "subChapterTitle": "Environmental Controls",
     "url": "10_tb_infection_control_hospital_isolation_procedures__c__environmental_controls",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 42,
     "chapterId": 10,
     "subChapterTitle": "Personal Respiratory Protection",
     "url": "10_tb_infection_control_hospital_isolation_procedures__d__personal_respiratory_protection",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 43,
     "chapterId": 11,
     "subChapterTitle": "Introduction",
     "url": "11_community_tuberculosis_control",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 44,
     "chapterId": 11,
     "subChapterTitle": "TB Surveillance in Georgia",
     "url": "11_community_tuberculosis_control__a__tb_surveillance_in_georgia",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 45,
     "chapterId": 11,
     "subChapterTitle": "TB Case Definitions for Public Health Surveillance",
     "url": "11_community_tuberculosis_control__b__tb_case_definitions_for_public_health_surveillance",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 46,
     "chapterId": 11,
     "subChapterTitle": "Role of the Health Department",
     "url": "11_community_tuberculosis_control__c__role_of_the_health_department",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 47,
     "chapterId": 11,
     "subChapterTitle": "Hospital Discharge Planning for Patients with Suspected or Proven TB",
     "url": "11_community_tuberculosis_control__d__hospital_discharge_planning_for_patients_with_suspected_or_proven_tb",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 48,
     "chapterId": 11,
     "subChapterTitle": "The U.S.-Mexico Binational Tuberculosis Referral Program (CureTB)",
     "url": "11_community_tuberculosis_control__e__the_us_mexico_binational_tuberculosis_referral_program_(curetb)",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 48,
     "chapterId": 12,
     "subChapterTitle": "Alternative Housing Program for Homeless TB Patients in Georgia",
     "url": "12_alternative_housing_program_for_homeless_tb_patients_in_georgia",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 50,
     "chapterId": 13,
     "subChapterTitle": "Georgia Department of Public Health (DPH) Community Guidelines for Respiratory Isolation of Patients With Active TB in the Community",
     "url": "13_georgia_department_of_public_health_(dph)_community_guidelines_for_respiratory",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 51,
     "chapterId": 14,
     "subChapterTitle": "References",
     "url": "14_references",
-    "lastUpdated": "June 2022"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 52,
     "chapterId": 15,
     "subChapterTitle": "Appendix: District TB Coordinators (by district)",
     "url": "15_appendix_district_tb_coordinators_(by_district)",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 53,
     "chapterId": 16,
     "subChapterTitle": "Abbreviations",
     "url": "16_abbreviations",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 54,
     "chapterId": 17,
     "subChapterTitle": "Acknowledgements",
     "url": "17_acknowledgements",
-    "lastUpdated": "June 2022"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 55,
     "chapterId": 18,
     "subChapterTitle": "Hello and welcome clinical statement",
     "url": "18_hello_and_welcome_clinical_statement",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 56,
     "chapterId": 19,
     "subChapterTitle": "For more information",
     "url": "19_for_more_information",
-    "lastUpdated": "April 2020"
+    "lastUpdated": "June 2024"
   }
 ]
