@@ -83,6 +83,7 @@ import org.apphatchery.gatbreferenceguide.utils.safeDialogShow
 import org.apphatchery.gatbreferenceguide.utils.searchState
 import org.apphatchery.gatbreferenceguide.utils.snackBar
 import org.apphatchery.gatbreferenceguide.utils.toast
+import sdk.pendo.io.Pendo
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -783,6 +784,18 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                             "highlightAllOccurencesOfString('$eachWord');" +
                             "})()"
                     view?.loadUrl(jsCode)
+                }
+            }
+
+
+            override fun onReceivedError(view: WebView?, request: WebResourceRequest?,   error:  WebResourceError?) {
+                super.onReceivedError(view, request, error)
+                // fire pendo track event
+                if (error?.description.toString().contains("net::ERR_FILE_NOT_FOUND")) {
+                    val properties = hashMapOf<String, Any>()
+                    properties["error"] = error.toString()
+                    properties["error_desc"] = error?.description.toString()
+                    Pendo.track("missing_content", properties)
                 }
             }
 
