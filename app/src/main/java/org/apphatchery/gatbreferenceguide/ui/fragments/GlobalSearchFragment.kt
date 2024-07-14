@@ -28,7 +28,7 @@ import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAGlobalSearchAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
-import sdk.pendo.io.Pendo
+//import sdk.pendo.io.Pendo
 import javax.inject.Inject
 
 
@@ -111,7 +111,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                 val properties = hashMapOf<String, Any>()
                 properties["searchKeyword"] = bind.searchKeyword.text.toString()
                 properties["SelectedResult"] = it.searchTitle
-                Pendo.track("searchResultClicked", properties)
+                //Pendo.track("searchResultClicked", properties)
 
                 /*Log search keyword name*/
                 firebaseAnalytics.logEvent(

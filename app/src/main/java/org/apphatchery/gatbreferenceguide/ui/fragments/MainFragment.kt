@@ -30,7 +30,7 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChartAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAMainViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
-import sdk.pendo.io.Pendo
+//import sdk.pendo.io.Pendo
 import java.util.UUID
 import javax.inject.Inject
 
@@ -58,12 +58,12 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         //const val VISITOR_ID = ""
         const val ACCOUNT_ID = "GTRG"
     }
-    private fun setupPendo() = Pendo.startSession(
-        visitor_id,
-        ACCOUNT_ID,
-        null,
-        null
-    )
+//    private fun setupPendo() = Pendo.startSession(
+//        visitor_id,
+//        ACCOUNT_ID,
+//        null,
+//        null
+//    )
 
     private fun init() {
 
