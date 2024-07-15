@@ -4,7 +4,6 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-parcelize'
     id 'kotlin-android'
-
     id 'dagger.hilt.android.plugin'
     id "androidx.navigation.safeargs"
     id 'com.google.gms.google-services'
@@ -55,7 +54,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 
-
 //     Firebase
     implementation 'com.google.firebase:firebase-core:21.1.1'
     implementation 'com.google.firebase:firebase-database-ktx:21.0.0'
@@ -75,6 +73,9 @@ dependencies {
     implementation 'com.google.dagger:hilt-android:2.51.1'
     kapt 'com.google.dagger:hilt-android-compiler:2.51.1'
     kapt "androidx.hilt:hilt-compiler:1.2.0"
+
+    // Pendo
+    implementation group:'sdk.pendo.io' , name:'pendoIO', version:'3.3.0.6597', changing:true
 
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
@@ -125,7 +126,6 @@ dependencies {
     //RecyclerViewSwipeDecorator
     /*A simple utility class to add a background, an icon and a label to a RecyclerView item while swiping it left or right.*/
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.4'
-
 
     implementation 'androidx.webkit:webkit:1.11.0'
 

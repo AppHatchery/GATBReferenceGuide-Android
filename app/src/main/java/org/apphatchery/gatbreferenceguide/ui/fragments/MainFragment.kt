@@ -30,13 +30,13 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChartAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAMainViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
-//import sdk.pendo.io.Pendo
+import sdk.pendo.io.Pendo
 import java.util.UUID
 import javax.inject.Inject
 
 
 private const val BUILD_VERSION = 9
-private const val PENDO_RELEASE_VERSION = "August-23-"
+private const val PENDO_RELEASE_VERSION = "July-24-"
 
 @AndroidEntryPoint
 class MainFragment : BaseFragment(R.layout.fragment_main) {
@@ -58,12 +58,12 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         //const val VISITOR_ID = ""
         const val ACCOUNT_ID = "GTRG"
     }
-//    private fun setupPendo() = Pendo.startSession(
-//        visitor_id,
-//        ACCOUNT_ID,
-//        null,
-//        null
-//    )
+    private fun setupPendo() = Pendo.startSession(
+        visitor_id,
+        ACCOUNT_ID,
+        null,
+        null
+    )
 
     private fun init() {
 
@@ -78,7 +78,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
         predefinedChapterList = ArrayList()
         predefinedChartList = ArrayList()
-        //setupPendo()
+        setupPendo()
 
         first6ChapterAdapter = FAMainFirst6ChapterAdapter().also { adapter ->
             viewModel.getChapter.observe(viewLifecycleOwner) {

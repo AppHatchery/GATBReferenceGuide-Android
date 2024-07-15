@@ -246,7 +246,6 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         bind = FragmentBodyBinding.bind(view)
         bodyUrl = bodyFragmentArgs.bodyUrl
-        setHasOptionsMenu(true)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferencesListener)
 
@@ -272,12 +271,10 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
             menuHost.addMenuProvider(object : MenuProvider {
                 override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                    // Inflate your menu resource here
                     menuInflater.inflate(R.menu.search_menu, menu)
                 }
 
                 override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                    // Handle the menu selection
                     return handleMenuItemSelection(menuItem)
                 }
             }, viewLifecycleOwner, Lifecycle.State.RESUMED)
@@ -879,48 +876,28 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     }
 
 
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        inflater.inflate(R.menu.search_menu, menu)
-//    }
-//
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//
-//        if (searchState.currentState.toString() == "IN_SEARCH") {
-//            if (item.itemId == R.id.searchView) {
-//                var comp = findNavController().popBackStack(R.id.globalSearchFragment, false)
-//                if (!comp) {
-//                    if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
-//                        .also {
-//                            findNavController().navigate(it)
-//                        }
-//                }
-//            }
-//
-//        } else {
-//            if (item.itemId == R.id.searchView) BodyFragmentDirections.actionGlobalGlobalSearchFragment()
-//                .also {
-//                    findNavController().navigate(it)
-//                }
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
 
-    private fun handleMenuItemSelection(menuItem: MenuItem): Boolean {
-        val navController = findNavController()
-        val comp = navController.popBackStack(R.id.globalSearchFragment, false)
 
-        if (searchState.currentState.toString() == "IN_SEARCH") {
-            if (menuItem.itemId == R.id.searchView && !comp) {
-                navController.navigate(SubChapterFragmentDirections.actionGlobalGlobalSearchFragment())
+    private fun handleMenuItemSelection(item: MenuItem): Boolean {
+                if (searchState.currentState.toString() == "IN_SEARCH") {
+            if (item.itemId == R.id.searchView) {
+                val comp = findNavController().popBackStack(R.id.globalSearchFragment, false)
+                if (!comp) {
+                    if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
+                        .also {
+                            findNavController().navigate(it)
+                        }
+                }
             }
+
         } else {
-            if (menuItem.itemId == R.id.searchView) {
-                navController.navigate(BodyFragmentDirections.actionGlobalGlobalSearchFragment())
-            }
+            if (item.itemId == R.id.searchView) BodyFragmentDirections.actionGlobalGlobalSearchFragment()
+                .also {
+                    findNavController().navigate(it)
+                }
         }
 
-        return true
+        return false
     }
 
 

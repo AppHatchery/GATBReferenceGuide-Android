@@ -6,7 +6,10 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,7 +35,18 @@ class ChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         bind = FragmentWithRecyclerviewBinding.bind(view)
-        setHasOptionsMenu(true)
+
+        val menuHost: MenuHost = requireActivity()
+
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.search_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return handleMenuItemSelection(menuItem)
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         faChapterAdapter = FAChapterAdapter().also {
             viewModel.getChapterEntity.observe(viewLifecycleOwner) { data ->
@@ -58,17 +72,10 @@ class ChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
         requireActivity().getBottomNavigationView()?.isChecked(R.id.mainFragment)
     }
 
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.search_menu, menu)
-    }
-
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
+    private fun handleMenuItemSelection(item: MenuItem): Boolean {
         if(searchState.currentState.toString() == "IN_SEARCH"){
             if (item.itemId == R.id.searchView) {
-                var comp =   findNavController().popBackStack(R.id.globalSearchFragment,false)
+                val comp =   findNavController().popBackStack(R.id.globalSearchFragment,false)
                 if(!comp){
                     if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
                         .also {
@@ -82,8 +89,7 @@ class ChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
                     findNavController().navigate(it)
                 }
         }
-
-        return super.onOptionsItemSelected(item)
+        return false
     }
 
 
