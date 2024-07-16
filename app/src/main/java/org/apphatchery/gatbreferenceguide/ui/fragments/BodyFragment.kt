@@ -35,8 +35,11 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.preference.PreferenceManager
@@ -243,11 +246,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         bind = FragmentBodyBinding.bind(view)
         bodyUrl = bodyFragmentArgs.bodyUrl
-        setHasOptionsMenu(true)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPreferencesListener)
 
         webViewFont = bind.bodyWebView
+
+        val menuHost: MenuHost = requireActivity()
 
         baseURL = "file://" + requireContext().cacheDir.toString() + "/"
 
@@ -265,7 +269,15 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         dialog = Dialog(requireContext()).dialog()
         updateFont()
 
+            menuHost.addMenuProvider(object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    menuInflater.inflate(R.menu.search_menu, menu)
+                }
 
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    return handleMenuItemSelection(menuItem)
+                }
+            }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         faNoteColorAdapter = FANoteColorAdapter(requireContext()).also {
             it.submitList(NOTE_COLOR)
@@ -864,16 +876,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     }
 
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.search_menu, menu)
-    }
 
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        if (searchState.currentState.toString() == "IN_SEARCH") {
+    private fun handleMenuItemSelection(item: MenuItem): Boolean {
+                if (searchState.currentState.toString() == "IN_SEARCH") {
             if (item.itemId == R.id.searchView) {
-                var comp = findNavController().popBackStack(R.id.globalSearchFragment, false)
+                val comp = findNavController().popBackStack(R.id.globalSearchFragment, false)
                 if (!comp) {
                     if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
                         .also {
@@ -888,8 +896,10 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     findNavController().navigate(it)
                 }
         }
-        return super.onOptionsItemSelected(item)
+
+        return false
     }
+
 
 
     private fun isBookmarkCheck() = bookmarkType == BookmarkType.CHART

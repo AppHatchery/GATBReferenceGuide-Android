@@ -36,7 +36,7 @@ import javax.inject.Inject
 
 
 private const val BUILD_VERSION = 9
-private const val PENDO_RELEASE_VERSION = "August-23-"
+private const val PENDO_RELEASE_VERSION = "July-24-"
 
 @AndroidEntryPoint
 class MainFragment : BaseFragment(R.layout.fragment_main) {
@@ -78,7 +78,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
         predefinedChapterList = ArrayList()
         predefinedChartList = ArrayList()
-        //setupPendo()
+        setupPendo()
 
         first6ChapterAdapter = FAMainFirst6ChapterAdapter().also { adapter ->
             viewModel.getChapter.observe(viewLifecycleOwner) {

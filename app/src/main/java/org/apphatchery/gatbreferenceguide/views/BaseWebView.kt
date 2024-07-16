@@ -19,7 +19,7 @@ class BaseWebView(context: Context, attributeSet: AttributeSet?) : WebView(conte
     private lateinit var preferenceManager: SharedPreferences
 
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
     }
 
