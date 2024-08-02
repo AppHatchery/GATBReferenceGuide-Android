@@ -17,7 +17,7 @@ android {
         applicationId "org.apphatchery.gatbreferenceguide"
         minSdk 24
         targetSdk 34
-        versionCode 30
+        versionCode 34
         versionName "1.13"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

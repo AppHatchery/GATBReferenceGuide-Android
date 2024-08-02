@@ -19,6 +19,7 @@ import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentMainBinding
 import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
@@ -33,6 +34,7 @@ import org.apphatchery.gatbreferenceguide.utils.*
 import sdk.pendo.io.Pendo
 import java.util.UUID
 import javax.inject.Inject
+import kotlin.coroutines.resume
 
 
 private const val BUILD_VERSION = 9
@@ -56,7 +58,8 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
     companion object {
         //const val VISITOR_ID = ""
-        const val ACCOUNT_ID = "GTRG"
+//        const val ACCOUNT_ID = "GTRG"
+        const val ACCOUNT_ID = "Test"
     }
     private fun setupPendo() = Pendo.startSession(
         visitor_id,
@@ -67,82 +70,84 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
     private fun init() {
 
-        visitor_id = getVisitorId()
+        lifecycleScope.launch {
+            visitor_id = getVisitorId()
 
-        with(fragmentMainBinding) {
-            progressBar.isVisible = false
-            group.isVisible = true
-        }
-        searchState.exitSearchMode()
-        requireActivity().getBottomNavigationView()?.toggleVisibility(true)
-
-        predefinedChapterList = ArrayList()
-        predefinedChartList = ArrayList()
-        setupPendo()
-
-        first6ChapterAdapter = FAMainFirst6ChapterAdapter().also { adapter ->
-            viewModel.getChapter.observe(viewLifecycleOwner) {
-                with(predefinedChapterList) {
-                    clear()
-                    add(it[0].copy(chapterTitle = "See All Chapters"))
-                    add(it[3].copy(chapterTitle = "Diagnosis for Active TB"))
-                    add(it[4].copy(chapterTitle = "Treatment for Active TB"))
-                    add(it[1].copy(chapterTitle = "Diagnosis for LTBI"))
-                    add(it[2].copy(chapterTitle = "Treatment for LTBI"))
-                    add(it[14].copy(chapterTitle = "District TB Coordinators"))
-                    adapter.submitList(this)
-                }
+            with(fragmentMainBinding) {
+                progressBar.isVisible = false
+                group.isVisible = true
             }
+            searchState.exitSearchMode()
+            requireActivity().getBottomNavigationView()?.toggleVisibility(true)
 
-            adapter.itemClickCallback { chapterEntity ->
-                if (chapterEntity.chapterTitle == "See All Chapters") {
-                    findNavController().navigate(R.id.action_mainFragment_to_chapterFragment)
-                } else {
-                    MainFragmentDirections.actionMainFragmentToSubChapterFragment(chapterEntity).apply {
-                        findNavController().navigate(this)
+            predefinedChapterList = ArrayList()
+            predefinedChartList = ArrayList()
+            setupPendo()
+
+            first6ChapterAdapter = FAMainFirst6ChapterAdapter().also { adapter ->
+                viewModel.getChapter.observe(viewLifecycleOwner) {
+                    with(predefinedChapterList) {
+                        clear()
+                        add(it[0].copy(chapterTitle = "See All Chapters"))
+                        add(it[3].copy(chapterTitle = "Diagnosis for Active TB"))
+                        add(it[4].copy(chapterTitle = "Treatment for Active TB"))
+                        add(it[1].copy(chapterTitle = "Diagnosis for LTBI"))
+                        add(it[2].copy(chapterTitle = "Treatment for LTBI"))
+                        add(it[14].copy(chapterTitle = "District TB Coordinators"))
+                        adapter.submitList(this)
+                    }
+                }
+
+                adapter.itemClickCallback { chapterEntity ->
+                    if (chapterEntity.chapterTitle == "See All Chapters") {
+                        findNavController().navigate(R.id.action_mainFragment_to_chapterFragment)
+                    } else {
+                        MainFragmentDirections.actionMainFragmentToSubChapterFragment(chapterEntity)
+                            .apply {
+                                findNavController().navigate(this)
+                            }
                     }
                 }
             }
-        }
 
 
-        first6ChartAdapter = FAMainFirst6ChartAdapter().also { adapter ->
-            viewModel.getChart.observe(viewLifecycleOwner) { data ->
-                with(predefinedChartList) {
-                    clear()
-                    add(data[0].copy(chartEntity = data[0].chartEntity.copy(chartTitle = "See All Charts")))
-                    add(data[7].copy(chartEntity = data[7].chartEntity.copy(chartTitle = "First Line TB Drugs for Adults")))
-                    add(data[13].copy(chartEntity = data[13].chartEntity.copy(chartTitle = "IV Therapy Drugs")))
-                    add(data[14].copy(chartEntity = data[14].chartEntity.copy(chartTitle = "Alternative Regimens")))
-                    add(data[4].copy(chartEntity = data[4].chartEntity.copy(chartTitle = "Dosages for LTBI Regimens")))
-                    add(data[18].copy(chartEntity = data[18].chartEntity.copy(chartTitle = "Treatment of Extra- pulmonary TB")))
-                    add(data[19].copy(chartEntity = data[19].chartEntity.copy(chartTitle = "TB drugs in Special Situations")))
-                    adapter.submitList(this)
+            first6ChartAdapter = FAMainFirst6ChartAdapter().also { adapter ->
+                viewModel.getChart.observe(viewLifecycleOwner) { data ->
+                    with(predefinedChartList) {
+                        clear()
+                        add(data[0].copy(chartEntity = data[0].chartEntity.copy(chartTitle = "See All Charts")))
+                        add(data[7].copy(chartEntity = data[7].chartEntity.copy(chartTitle = "First Line TB Drugs for Adults")))
+                        add(data[13].copy(chartEntity = data[13].chartEntity.copy(chartTitle = "IV Therapy Drugs")))
+                        add(data[14].copy(chartEntity = data[14].chartEntity.copy(chartTitle = "Alternative Regimens")))
+                        add(data[4].copy(chartEntity = data[4].chartEntity.copy(chartTitle = "Dosages for LTBI Regimens")))
+                        add(data[18].copy(chartEntity = data[18].chartEntity.copy(chartTitle = "Treatment of Extra- pulmonary TB")))
+                        add(data[19].copy(chartEntity = data[19].chartEntity.copy(chartTitle = "TB drugs in Special Situations")))
+                        adapter.submitList(this)
+                    }
                 }
-            }
 
-            adapter.itemClickCallback { chartAndSubChapter ->
-                if (chartAndSubChapter.chartEntity.chartTitle == "See All Charts") {
-                    findNavController().navigate(R.id.action_mainFragment_to_chartFragment)
-                } else {
-                    viewModel.getChapterInfo(chartAndSubChapter.subChapterEntity.chapterId)
-                        .observe(viewLifecycleOwner) { chapterEntity ->
-                            MainFragmentDirections.actionMainFragmentToBodyFragmentDirect(
-                                BodyUrl(chapterEntity, chartAndSubChapter.subChapterEntity, ""),
-                                chartAndSubChapter
-                            ).apply {
-                                findNavController().navigate(this)
+                adapter.itemClickCallback { chartAndSubChapter ->
+                    if (chartAndSubChapter.chartEntity.chartTitle == "See All Charts") {
+                        findNavController().navigate(R.id.action_mainFragment_to_chartFragment)
+                    } else {
+                        viewModel.getChapterInfo(chartAndSubChapter.subChapterEntity.chapterId)
+                            .observe(viewLifecycleOwner) { chapterEntity ->
+                                MainFragmentDirections.actionMainFragmentToBodyFragmentDirect(
+                                    BodyUrl(chapterEntity, chartAndSubChapter.subChapterEntity, ""),
+                                    chartAndSubChapter
+                                ).apply {
+                                    findNavController().navigate(this)
+                                }
                             }
-                        }
+                    }
                 }
             }
-        }
 
 
 
-        fragmentMainBinding.apply {
-            recyclerviewFirst6Chapters.setupAdapter(first6ChapterAdapter)
-            recyclerviewFirst6Charts.setupAdapter(first6ChartAdapter, 1)
+            fragmentMainBinding.apply {
+                recyclerviewFirst6Chapters.setupAdapter(first6ChapterAdapter)
+                recyclerviewFirst6Charts.setupAdapter(first6ChartAdapter, 1)
 
 //            searchView.setOnClickListener {
 //                MainFragmentDirections.actionGlobalGlobalSearchFragment().also {
@@ -157,10 +162,10 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 //            textviewAllCharts.setOnClickListener {
 //                findNavController().navigate(R.id.action_mainFragment_to_chartFragment)
 //            }
+            }
+
+            setupDynamicLink()
         }
-
-        setupDynamicLink()
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -354,15 +359,17 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
     private fun generatePendoVisitorId() = PENDO_RELEASE_VERSION + UUID.randomUUID().toString()
 
-    private fun getVisitorId(): String {
-        var id = ""
-        userPrefs.getPendoVisitorId.asLiveData().observe(viewLifecycleOwner){
-            if(it.isEmpty()){
-                id = generatePendoVisitorId()
-                viewLifecycleOwner.lifecycleScope.launch{ userPrefs.setPendoVisitorId(id) }
+    private suspend fun getVisitorId(): String = suspendCancellableCoroutine { continuation ->
+        userPrefs.getPendoVisitorId.asLiveData().observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                val id = generatePendoVisitorId()
+                viewLifecycleOwner.lifecycleScope.launch {
+                    userPrefs.setPendoVisitorId(id)
+                    continuation.resume(id)
+                }
+            } else {
+                continuation.resume(it)
             }
-            if (it.isNotEmpty()) id = it
         }
-        return id
     }
 }
