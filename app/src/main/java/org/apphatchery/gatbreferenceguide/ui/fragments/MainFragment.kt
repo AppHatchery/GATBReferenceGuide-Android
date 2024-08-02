@@ -18,6 +18,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.apphatchery.gatbreferenceguide.R
@@ -359,17 +360,12 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
     private fun generatePendoVisitorId() = PENDO_RELEASE_VERSION + UUID.randomUUID().toString()
 
-    private suspend fun getVisitorId(): String = suspendCancellableCoroutine { continuation ->
-        userPrefs.getPendoVisitorId.asLiveData().observe(viewLifecycleOwner) {
-            if (it.isEmpty()) {
-                val id = generatePendoVisitorId()
-                viewLifecycleOwner.lifecycleScope.launch {
-                    userPrefs.setPendoVisitorId(id)
-                    continuation.resume(id)
-                }
-            } else {
-                continuation.resume(it)
-            }
+    private suspend fun getVisitorId(): String {
+        val vID = userPrefs.getPendoVisitorId.first()
+        return vID.ifEmpty {
+            val id = generatePendoVisitorId()
+            userPrefs.setPendoVisitorId(id)
+            id
         }
     }
 }
