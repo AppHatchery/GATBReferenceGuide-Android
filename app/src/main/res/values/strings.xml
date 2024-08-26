@@ -65,6 +65,11 @@
     <string name="font_size_larger">Font Size: Larger</string>
     <string name="slider_small_font_icon">Slider Small Font Icon</string>
     <string name="slider_large_font_icon">Slider Large Font Icon</string>
+    <string name="you_may_want_to_search_for">You may want to search for</string>
+    <string name="regimens">Regimens</string>
+    <string name="pregnancy">Pregnancy</string>
+    <string name="rifampin">Rifampin</string>
+    <string name="recent">Recent</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 
