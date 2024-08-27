@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textview_recent_title"
+        style="@style/body2Regular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:drawableStart="@drawable/ic_baseline_recent_24"
+        android:drawablePadding="5dp"
+        android:text="@string/regimens"
+        android:gravity="center_vertical"
+        />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

@@ -25,7 +25,4 @@ class FAGlobalSearchViewModel @Inject constructor(
 
     val getGlobalSearchEntity = taskFlow.asLiveData()
     fun getSubChapterById(id: String) = db.subChapterDao().getSubChapterById(id).asLiveData()
-
-
-
 }

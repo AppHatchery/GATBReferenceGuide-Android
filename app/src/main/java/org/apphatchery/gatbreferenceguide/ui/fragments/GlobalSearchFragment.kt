@@ -26,6 +26,7 @@ import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
 import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAGlobalSearchAdapter
+import org.apphatchery.gatbreferenceguide.ui.adapters.FASearchRecentAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
 import sdk.pendo.io.Pendo
@@ -39,6 +40,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
     private lateinit var bind: FragmentGlobalSearchBinding
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private val viewModel: FAGlobalSearchViewModel by viewModels()
+    private lateinit var recentSearchAdapter: FASearchRecentAdapter
 
     @Inject
     lateinit var faGlobalSearchAdapter: FAGlobalSearchAdapter
@@ -57,11 +59,25 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                 }
             }
 
+        recentSearchAdapter = FASearchRecentAdapter(requireContext()) { searchText ->
+            bind.searchKeyword.onSearchKeyword(searchText)
+        }
+
+        bind.recentRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = recentSearchAdapter
+        }
+
+        val isVisible = recentSearchAdapter.itemCount > 0
+        bind.recentTitle.visibility = if (isVisible) View.VISIBLE else View.GONE
+        bind.recentRecyclerView.visibility = if (isVisible) View.VISIBLE else View.GONE
+
+
         faGlobalSearchAdapter.also { faGlobalSearchAdapter ->
             viewModel.getGlobalSearchEntity.observe(viewLifecycleOwner) { word ->
                 val search = viewModel.searchQuery
                 val searchWords = search.value.split("\\s+".toRegex())
-
+                bind.searchProgressBar.visibility = View.VISIBLE
                 fun highlightWord(original: String, wordToHighlight: String): String {
                     val regex = Regex("(?i)\\b${Regex.escape(wordToHighlight)}\\b")
                     return original.replace(regex) {
@@ -70,16 +86,6 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                 }
 
                 val highlightedWord = word.map { item ->
-//                    val highlightedSubChapter =
-//                        searchWords.fold(item.subChapter) { acc, wordToHighlight ->
-//                            highlightWord(acc, wordToHighlight)
-//                        }
-//
-//                    val highlightedSearchTitle =
-//                        searchWords.fold(item.searchTitle) { acc, wordToHighlight ->
-//                            highlightWord(acc, wordToHighlight)
-//                        }
-
                     val highlightedTextInBody =
                         searchWords.fold(item.textInBody) { acc, wordToHighlight ->
                             highlightWord(acc, wordToHighlight)
@@ -94,16 +100,12 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
 
                 faGlobalSearchAdapter.submitList(highlightedWord)
+                bind.searchProgressBar.visibility = View.GONE
                 highlightedWord.size.noItemFound(bind.visibleViewGroup, bind.noItemFound)
                 "${highlightedWord.size} result${if (highlightedWord.size == 1) "" else "s"}".also {
                     bind.searchItemCount.text = it
                 }
             }
-
-
-
-
-
 
             faGlobalSearchAdapter.itemClickCallback {
                 bind.searchKeyword.toggleSoftKeyboard(requireContext(), false)
@@ -132,11 +134,22 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                         ).also { findNavController().navigate(it) }
                         bind.searchKeyword.clearFocus()
                     }
+                recentSearchAdapter.updateRecentSearches(bind.searchKeyword.text.toString())
             }
 
         }
 
         bind.apply {
+            regimens.setOnClickListener {
+                bind.searchKeyword.onSearchKeyword("Regimens")
+            }
+
+            pregnancy.setOnClickListener {
+                bind.searchKeyword.onSearchKeyword("Pregnancy")
+            }
+           rifampin.setOnClickListener {
+                bind.searchKeyword.onSearchKeyword("Rifampin")
+            }
             recyclerview.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = faGlobalSearchAdapter
@@ -146,6 +159,9 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                 voiceSearchListener(resultLauncher)
             }
 
+            recyclerview.visibility = View.GONE
+            searchProgressBar.visibility = View.GONE
+
             searchKeyword.setOnTextWatcher(
                 onTextChangedListener = {
                     viewModel.searchQuery.value = it
@@ -154,6 +170,20 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                         visibility = if (searchKeyword.text.toString().trim()
                                 .isBlank()
                         ) View.GONE else View.VISIBLE
+                    }
+
+                    viewModel.searchQuery.value = it.trim()
+
+                    if (searchKeyword.text.toString().trim()
+                            .isBlank()) {
+                        recyclerview.visibility = View.GONE
+                        bind.searchProgressBar.visibility = View.GONE
+                        bind.suggestedContent.visibility = View.VISIBLE
+                    } else {
+                        bind.recyclerview.visibility = View.VISIBLE
+                        bind.suggestedContent.visibility = View.GONE
+                        //bind.searchProgressBar.visibility = View.VISIBLE
+
                     }
                 })
             searchKeyword.doAfterTextChanged { editable ->
