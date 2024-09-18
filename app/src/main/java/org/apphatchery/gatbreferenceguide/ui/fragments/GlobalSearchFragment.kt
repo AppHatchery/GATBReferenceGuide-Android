@@ -22,8 +22,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentGlobalSearchBinding
+import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
 import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
 import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
+import org.apphatchery.gatbreferenceguide.db.entities.ChartEntity
+import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAGlobalSearchAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FASearchRecentAdapter
@@ -97,8 +100,6 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                         textInBody = highlightedTextInBody
                     )
                 }
-
-
                 faGlobalSearchAdapter.submitList(highlightedWord)
                 bind.searchProgressBar.visibility = View.GONE
                 highlightedWord.size.noItemFound(bind.visibleViewGroup, bind.noItemFound)

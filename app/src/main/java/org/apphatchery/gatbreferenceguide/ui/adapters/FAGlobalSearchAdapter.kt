@@ -1,5 +1,6 @@
 package org.apphatchery.gatbreferenceguide.ui.adapters
 
+import android.content.Context
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.text.Spannable
@@ -34,8 +35,6 @@ class FAGlobalSearchAdapter @Inject constructor(
     var searchQuery_ = MutableStateFlow("")
 
 
-
-
     class DiffUtilCallBack : DiffUtil.ItemCallback<GlobalSearchEntity>() {
         override fun areItemsTheSame(oldItem: GlobalSearchEntity, newItem: GlobalSearchEntity) =
             newItem.fileName == oldItem.fileName
@@ -68,14 +67,12 @@ class FAGlobalSearchAdapter @Inject constructor(
                 subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
                 textInBody.text = HtmlCompat.fromHtml(globalSearchEntity.textInBody, FROM_HTML_MODE_LEGACY)
 
-                //  val term = globalSearchEntity.searched
                 val bodyWithTags = globalSearchEntity.textInBody
                 val pattern = ".*<span style='background-color: yellow; color: black; font-weight: bold;'>(.*?)</span>.*".toRegex()
                 val matchResult = pattern.find(bodyWithTags)
                 val extractedSearchValue = matchResult?.groupValues?.get(1) ?: ""
 
-                val locationOfTarget =  textInBody.text.indexOf(extractedSearchValue)
-
+                val locationOfTarget = textInBody.text.indexOf(extractedSearchValue)
 
                 if (locationOfTarget != -1) {
                     textInBody.maxLines = 2
@@ -86,6 +83,13 @@ class FAGlobalSearchAdapter @Inject constructor(
                         textInBody.scrollTo(0, y)
                     }
                 }
+
+
+                Log.d("SEARCH_RESULT", "Title: ${globalSearchEntity.searchTitle}")
+                Log.d("SEARCH_RESULT", "SubChapter: ${globalSearchEntity.subChapter}")
+                Log.d("SEARCH_RESULT", "isChart: ${globalSearchEntity.isChart}")
+                Log.d("SEARCH_RESULT", "searchTExt: ${searchQuery}")
+                //Log.d("SEARCH_RESULT", "TextInBody: ${globalSearchEntity.textInBody}")
             }
 
         init {
@@ -99,9 +103,7 @@ class FAGlobalSearchAdapter @Inject constructor(
                     }
                 }
             }
-
         }
-
     }
 
     private fun setSpannableString(
@@ -121,16 +123,11 @@ class FAGlobalSearchAdapter @Inject constructor(
         }
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        FragmentGlobalSearchItemBinding.inflate(
-            LayoutInflater.from(parent.context)
-        )
+        FragmentGlobalSearchItemBinding.inflate(LayoutInflater.from(parent.context))
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.onBinding(getItem(position), position)
     }
-
-
 }
