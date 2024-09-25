@@ -67,7 +67,7 @@ class FAMainViewModel @Inject constructor(
                         javaClass.name,
                         it.url,
                         it.chapterId,
-                        it.subChapterId
+                        it.subChapterId,
                     )
                 )
             }
@@ -82,7 +82,9 @@ class FAMainViewModel @Inject constructor(
                     it.chartEntity.id,
                     it.subChapterEntity.chapterId,
                     it.subChapterEntity.subChapterId,
-                    true
+                    true,
+                    it.chartEntity.id
+
                 )
             )
             Log.d("CHART_DATA1", "Adding chart entity: ${it.chartEntity.chartTitle}")
@@ -115,7 +117,8 @@ class FAMainViewModel @Inject constructor(
                             globalSearch.fileName,
                             globalSearch.chapterId,
                             globalSearch.subChapterId,
-                            globalSearch.isChart
+                            globalSearch.isChart,
+                            globalSearch.chartId
                         )
                     )
                 }

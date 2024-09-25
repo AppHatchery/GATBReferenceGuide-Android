@@ -37,5 +37,6 @@
     <color name="secondary_cyan_300">#FF59DCD1</color>
     <color name="secondary_cyan_200">#FF65EDE1</color>
     <color name="secondary_cyan_100">#FFCDFFFA</color>
+    <color name="tab_selected_color">#8c352d</color>
 
 </resources>

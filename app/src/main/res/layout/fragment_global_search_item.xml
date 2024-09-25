@@ -9,6 +9,17 @@
     android:paddingHorizontal="16dp"
     android:paddingTop="16dp">
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/sub_chapter"
+        style="@style/subtitle1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:textColor="@color/my_color"
+        android:maxLines="2"
+        tools:ignore="HardcodedText"
+        tools:text="Tuberculin Skin Test (TST) " />
+
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompat2"
@@ -21,7 +32,8 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/search_title"
-            android:layout_width="150dp"
+            style="@style/body2Regular"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:gravity="start"
@@ -32,25 +44,6 @@
             tools:ignore="HardcodedText"
             tools:text="Diagnostic " />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/arrow_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_keyboard_arrow_right"
-            android:backgroundTint="@color/orange"
-            android:text=" "
-            tools:ignore="HardcodedText" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/sub_chapter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:textSize="16sp"
-            android:textColor="@color/my_color"
-            android:maxLines="2"
-            tools:ignore="HardcodedText"
-            tools:text="Tuberculin Skin Test (TST) " />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

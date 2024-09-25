@@ -9,14 +9,20 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.tabs.TabLayout
 import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -26,6 +32,7 @@ import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
 import org.apphatchery.gatbreferenceguide.db.entities.BodyUrl
 import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
 import org.apphatchery.gatbreferenceguide.db.entities.ChartEntity
+import org.apphatchery.gatbreferenceguide.db.entities.GlobalSearchEntity
 import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAGlobalSearchAdapter
@@ -51,9 +58,17 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
+    private var currentTab = 0
+
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         bind = FragmentGlobalSearchBinding.bind(view)
+
+
+        setupRecyclerView()
+        setupSearchView()
+        setupTabLayout()
+        observeSearchResults()
 
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -78,34 +93,8 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
         faGlobalSearchAdapter.also { faGlobalSearchAdapter ->
             viewModel.getGlobalSearchEntity.observe(viewLifecycleOwner) { word ->
-                val search = viewModel.searchQuery
-                val searchWords = search.value.split("\\s+".toRegex())
-                bind.searchProgressBar.visibility = View.VISIBLE
-                fun highlightWord(original: String, wordToHighlight: String): String {
-                    val regex = Regex("(?i)\\b${Regex.escape(wordToHighlight)}\\b")
-                    return original.replace(regex) {
-                        "<span style='background-color: yellow; color: black; font-weight: bold;'>${it.value}</span>"
-                    }
-                }
+                updateSearchResults(word)
 
-                val highlightedWord = word.map { item ->
-                    val highlightedTextInBody =
-                        searchWords.fold(item.textInBody) { acc, wordToHighlight ->
-                            highlightWord(acc, wordToHighlight)
-                        }
-
-                    item.copy(
-                        subChapter = item.subChapter,
-                        searchTitle = item.searchTitle,
-                        textInBody = highlightedTextInBody
-                    )
-                }
-                faGlobalSearchAdapter.submitList(highlightedWord)
-                bind.searchProgressBar.visibility = View.GONE
-                highlightedWord.size.noItemFound(bind.visibleViewGroup, bind.noItemFound)
-                "${highlightedWord.size} result${if (highlightedWord.size == 1) "" else "s"}".also {
-                    bind.searchItemCount.text = it
-                }
             }
 
             faGlobalSearchAdapter.itemClickCallback {
@@ -126,13 +115,24 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                 ) bind.searchKeyword.text.toString() else ""
                 viewModel.getSubChapterById(it.subChapterId.toString())
                     .observe(viewLifecycleOwner) { subChapter ->
+                        val chartEntity = ChartEntity(
+                            it.chartId,
+                            it.searchTitle,
+                            it.subChapter,
+                            it.subChapterId,
+                            0
+                        )
+                        val chartAndSubChapter = ChartAndSubChapter(chartEntity, subChapter)
+
                         GlobalSearchFragmentDirections.actionGlobalSearchFragmentToBodyFragment(
                             BodyUrl(
                                 ChapterEntity(it.chapterId, it.searchTitle),
                                 subChapter,
                                 cleanSearchString
-                            ), null
-                        ).also { findNavController().navigate(it) }
+                            ), if(it.isChart) chartAndSubChapter else null
+                        ).also {
+                            findNavController().navigate(it)
+                        }
                         bind.searchKeyword.clearFocus()
                     }
                 recentSearchAdapter.updateRecentSearches(bind.searchKeyword.text.toString())
@@ -180,9 +180,13 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                         recyclerview.visibility = View.GONE
                         bind.searchProgressBar.visibility = View.GONE
                         bind.suggestedContent.visibility = View.VISIBLE
+                        bind.tabLayout.visibility = View.GONE
+                        bind.tabLayoutContainer.visibility = View.GONE
                     } else {
                         bind.recyclerview.visibility = View.VISIBLE
                         bind.suggestedContent.visibility = View.GONE
+                        bind.tabLayout.visibility = View.VISIBLE
+                        bind.tabLayoutContainer.visibility = View.VISIBLE
                         //bind.searchProgressBar.visibility = View.VISIBLE
 
                     }
@@ -205,6 +209,8 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
     }
 
+
+
     override fun onDestroyView() {
         val activity = requireActivity()
         val inputMethodManager = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
@@ -213,4 +219,181 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         super.onDestroyView()
     }
 
+    private fun setupRecyclerView() {
+        bind.recyclerview.layoutManager = LinearLayoutManager(requireContext())
+        bind.recyclerview.adapter = faGlobalSearchAdapter
+    }
+
+    private fun setupSearchView() {
+        bind.searchKeyword.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                performSearch()
+                true
+            } else {
+                false
+            }
+        }
+    }
+
+    private fun setupTabLayout() {
+        val tabTitles = listOf("All", "Chapters", "Charts")
+        val tabIcons = listOf(
+            null,
+            R.drawable.ic_baseline_chapter_3,
+            R.drawable.ic_baseline_charts_3
+        )
+
+        for (i in tabTitles.indices){
+            val customTab = layoutInflater.inflate(R.layout.custom_tab_layout, null)
+            val tabIcon = customTab.findViewById<ImageView>(R.id.tab_icon)
+            val tabText = customTab.findViewById<TextView>(R.id.tab_text)
+
+            tabText.text = tabTitles[i]
+
+            if(tabIcons[i] != null){
+                tabIcon.setImageResource(tabIcons[i]!!)
+                tabIcon.visibility = View.VISIBLE
+            }else{
+                tabIcon.visibility = View.GONE
+            }
+
+            val tab = bind.tabLayout.newTab().setCustomView(customTab)
+            bind.tabLayout.addTab(tab)
+
+            tab.view.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+            )
+
+        }
+
+        bind.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                currentTab = tab?.position ?: 0
+                filterAndHighlightResults()
+                updateTabAppearance(tab, true)
+                updateUIWithResults(viewModel.getGlobalSearchEntity.value ?: emptyList())
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                updateTabAppearance(tab, false)
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+
+        })
+
+        updateTabAppearance(bind.tabLayout.getTabAt(0), true)
+
+        for (i in 1 until bind.tabLayout.tabCount) {
+            updateTabAppearance(bind.tabLayout.getTabAt(i), false)
+        }
+
+    }
+
+    private fun updateTabAppearance(tab: TabLayout.Tab?, isSelected: Boolean){
+        //tab?.customView?.findViewById<LinearLayout>(R.id.tab_container)?.isSelected = isSelected
+        tab?.customView?.let { customView ->
+            val container = customView.findViewById<LinearLayout>(R.id.tab_container)
+            val icon = customView.findViewById<ImageView>(R.id.tab_icon)
+            val text = customView.findViewById<TextView>(R.id.tab_text)
+
+            container.isSelected = isSelected
+
+            if(container.isSelected){
+                icon.imageTintList =   ContextCompat.getColorStateList(requireContext(), R.color.white)
+            }else{
+                icon.imageTintList =   ContextCompat.getColorStateList(requireContext(), R.color.neutral_600)
+            }
+
+
+        }
+    }
+
+    private fun observeSearchResults() {
+        viewModel.getGlobalSearchEntity.observe(viewLifecycleOwner) { results ->
+            faGlobalSearchAdapter.updateData(results)
+            updateSearchResults(results)
+        }
+    }
+
+    private fun updateSearchResults(results: List<GlobalSearchEntity>) {
+        val highlightedResults = highlightSearchResults(results)
+        faGlobalSearchAdapter.updateData(highlightedResults)
+        filterAndHighlightResults()
+       updateUIWithResults(highlightedResults)
+    }
+
+    private fun highlightSearchResults(results: List<GlobalSearchEntity>): List<GlobalSearchEntity> {
+        val search = viewModel.searchQuery.value ?: ""
+        val searchWords = search.split("\\s+".toRegex())
+
+        return results.map { item ->
+            val highlightedTextInBody = highlightText(item.textInBody, searchWords)
+            val highlightedSearchTitle = highlightText(item.searchTitle, searchWords)
+            val highlightedSubChapter = highlightText(item.subChapter, searchWords)
+
+            item.copy(
+                subChapter = highlightedSubChapter,
+                searchTitle = highlightedSearchTitle,
+                textInBody = highlightedTextInBody
+            )
+        }
+    }
+
+    private fun highlightText(original: String, wordsToHighlight: List<String>): String {
+        var result = original
+        for (word in wordsToHighlight) {
+            val regex = Regex("(?i)\\b${Regex.escape(word)}\\b")
+            result = result.replace(regex) {
+                "<span style='background-color: yellow; color: black; font-weight: bold;'>${it.value}</span>"
+            }
+        }
+        return result
+    }
+
+    private fun filterAndHighlightResults(){
+      when (currentTab) {
+            0 -> faGlobalSearchAdapter.filter(FAGlobalSearchAdapter.SearchResultType.ALL)
+            1 -> faGlobalSearchAdapter.filter(FAGlobalSearchAdapter.SearchResultType.CHAPTERS)
+            2 -> faGlobalSearchAdapter.filter(FAGlobalSearchAdapter.SearchResultType.CHARTS)
+            else -> faGlobalSearchAdapter.filter(FAGlobalSearchAdapter.SearchResultType.ALL)
+        }
+    }
+
+    private fun updateUIWithResults(allResults: List<GlobalSearchEntity>) {
+        bind.searchProgressBar.visibility = View.GONE
+
+        val filteredResults = when (currentTab) {
+            0 -> allResults
+            1 -> allResults.filter { !it.isChart }
+            2 -> allResults.filter { it.isChart }
+            else -> allResults
+        }
+
+
+        val count = filteredResults.size
+
+        bind.visibleViewGroup.visibility = if (count > 0) View.VISIBLE else View.GONE
+        bind.noItemFound.visibility = if (count == 0) View.VISIBLE else View.GONE
+
+        bind.searchItemCount.text = when (currentTab) {
+            0 -> "${count} result${if (count == 1) "" else "s"} in"
+            1 -> "${filteredResults.count { !it.isChart }} result${if (count == 1) "" else "s"} in"
+            2 -> "${filteredResults.count { it.isChart }} result${if (count == 1) "" else "s"} in"
+            else -> "${count} result${if (count == 1) "" else "s"} in"
+        }
+    }
+
+    private fun performSearch() {
+        val query = bind.searchKeyword.text.toString().trim()
+        if (query.isNotEmpty()) {
+            viewModel.searchQuery.value = query
+            bind.searchProgressBar.visibility = View.VISIBLE
+            viewModel.getGlobalSearchEntity
+        }
+    }
 }
+
+
+

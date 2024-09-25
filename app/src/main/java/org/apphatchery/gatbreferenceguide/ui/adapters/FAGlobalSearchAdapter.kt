@@ -33,6 +33,12 @@ class FAGlobalSearchAdapter @Inject constructor(
 
     var searchQuery: String = ""
     var searchQuery_ = MutableStateFlow("")
+    private var currentFilter: SearchResultType = SearchResultType.ALL
+    private var allItems: List<GlobalSearchEntity> = emptyList()
+
+    enum class SearchResultType {
+        ALL, CHARTS, CHAPTERS
+    }
 
 
     class DiffUtilCallBack : DiffUtil.ItemCallback<GlobalSearchEntity>() {
@@ -57,6 +63,21 @@ class FAGlobalSearchAdapter @Inject constructor(
         if (textInBody.indexOf(searchQuery) == -1) 0
         else textInBody.indexOf(searchQuery)
 
+    fun updateData(newItems: List<GlobalSearchEntity>) {
+        allItems = newItems
+        filter(currentFilter)
+    }
+
+    fun filter(type: SearchResultType) {
+        currentFilter = type
+        val filteredList = when (type) {
+            SearchResultType.ALL -> allItems
+            SearchResultType.CHARTS -> allItems.filter { it.isChart }
+            SearchResultType.CHAPTERS -> allItems.filter { !it.isChart }
+        }
+        submitList(filteredList)
+    }
+
     inner class ViewHolder(private val fragmentGlobalSearchItemBinding: FragmentGlobalSearchItemBinding) :
         RecyclerView.ViewHolder(fragmentGlobalSearchItemBinding.root) {
 
@@ -66,6 +87,8 @@ class FAGlobalSearchAdapter @Inject constructor(
                 searchTitle.text = HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)
                 subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
                 textInBody.text = HtmlCompat.fromHtml(globalSearchEntity.textInBody, FROM_HTML_MODE_LEGACY)
+
+                //var searchTitleNumber = HtmlCompat.fromHtml(globalSearchEntity.,FROM_HTML_MODE_LEGACY)
 
                 val bodyWithTags = globalSearchEntity.textInBody
                 val pattern = ".*<span style='background-color: yellow; color: black; font-weight: bold;'>(.*?)</span>.*".toRegex()
