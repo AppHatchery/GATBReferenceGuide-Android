@@ -33,6 +33,7 @@
         <item name="toolbarColor">?chartBackgroundColor</item>
         <item name="colorGrayWhite">@color/neutral_200</item>
         <item name="colorWhiteGray">@color/neutral_900</item>
+        <item name="colorWhiteDarkBlack">@color/black</item>
 
     </style>
 

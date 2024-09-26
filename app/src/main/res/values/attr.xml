@@ -10,6 +10,7 @@
     <attr name="colorWhiteBlack" format="color" />
     <attr name="colorGrayWhite" format="color" />
     <attr name="colorWhiteGray" format="color" />
+    <attr name="colorWhiteDarkBlack" format="color" />
     <attr name="savedTopBar" format="color"/>[
     <attr name="colorPrimary" format="reference|color"/>
     <attr name="toolbarColor" format="reference|color"/>

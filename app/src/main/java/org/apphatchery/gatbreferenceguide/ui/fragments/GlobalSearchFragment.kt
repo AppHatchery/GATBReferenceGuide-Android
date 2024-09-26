@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -20,12 +22,17 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentGlobalSearchBinding
 import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
@@ -59,6 +66,10 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private var currentTab = 0
+    private var isLoading = false
+
+    private val searchJob = Job()
+    private val searchScope = CoroutineScope(Dispatchers.Main + searchJob)
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -270,9 +281,14 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         bind.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 currentTab = tab?.position ?: 0
+                //showLoading()
                 filterAndHighlightResults()
                 updateTabAppearance(tab, true)
                 updateUIWithResults(viewModel.getGlobalSearchEntity.value ?: emptyList())
+//                Handler(Looper.getMainLooper()).postDelayed({
+//                    updateUIWithResults(viewModel.getGlobalSearchEntity.value ?: emptyList())
+//                    hideLoading()
+//                }, 300)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -309,6 +325,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
         }
     }
+
 
     private fun observeSearchResults() {
         viewModel.getGlobalSearchEntity.observe(viewLifecycleOwner) { results ->
@@ -361,7 +378,20 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         }
     }
 
+    private fun showLoading() {
+        isLoading = true
+        bind.loadingIndicator.visibility = View.VISIBLE
+        bind.recyclerview.visibility = View.GONE
+    }
+
+    private fun hideLoading() {
+        isLoading = false
+        bind.loadingIndicator.visibility = View.GONE
+        bind.recyclerview.visibility = View.VISIBLE
+    }
+
     private fun updateUIWithResults(allResults: List<GlobalSearchEntity>) {
+        //if (isLoading) return
         bind.searchProgressBar.visibility = View.GONE
 
         val filteredResults = when (currentTab) {
