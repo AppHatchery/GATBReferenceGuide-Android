@@ -68,8 +68,6 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
     private var currentTab = 0
     private var isLoading = false
 
-    private val searchJob = Job()
-    private val searchScope = CoroutineScope(Dispatchers.Main + searchJob)
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -89,7 +87,10 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             }
 
         recentSearchAdapter = FASearchRecentAdapter(requireContext()) { searchText ->
+            showLoading()
             bind.searchKeyword.onSearchKeyword(searchText)
+            bind.searchKeyword.setText(searchText)
+            hideKeyboard()
         }
 
         bind.recentRecyclerView.apply {
@@ -154,21 +155,36 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         bind.apply {
             regimens.setOnClickListener {
                 bind.searchKeyword.onSearchKeyword("Regimens")
+                hideKeyboard()
+                showLoading()
+                hideSuggestedLoading()
             }
 
             pregnancy.setOnClickListener {
                 bind.searchKeyword.onSearchKeyword("Pregnancy")
+                hideKeyboard()
+                showLoading()
+                hideSuggestedLoading()
             }
            rifampin.setOnClickListener {
                 bind.searchKeyword.onSearchKeyword("Rifampin")
+               hideKeyboard()
+               showLoading()
+               hideSuggestedLoading()
             }
             recyclerview.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = faGlobalSearchAdapter
             }
 
-            voiceSearch.setOnClickListener {
-                voiceSearchListener(resultLauncher)
+
+            clearSearch.setOnClickListener {
+                searchKeyword.text?.clear()
+                bind.recyclerview.visibility = View.GONE
+                bind.suggestedContent.visibility = View.VISIBLE
+                bind.tabLayout.visibility = View.GONE
+                bind.tabLayoutContainer.visibility = View.GONE
+                bind.searchItemCount.visibility = View.GONE
             }
 
             recyclerview.visibility = View.GONE
@@ -230,6 +246,12 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         super.onDestroyView()
     }
 
+    private fun hideKeyboard() {
+        val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
+    }
+
+
     private fun setupRecyclerView() {
         bind.recyclerview.layoutManager = LinearLayoutManager(requireContext())
         bind.recyclerview.adapter = faGlobalSearchAdapter
@@ -281,14 +303,14 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         bind.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 currentTab = tab?.position ?: 0
-                //showLoading()
+                showLoading()
                 filterAndHighlightResults()
                 updateTabAppearance(tab, true)
                 updateUIWithResults(viewModel.getGlobalSearchEntity.value ?: emptyList())
-//                Handler(Looper.getMainLooper()).postDelayed({
-//                    updateUIWithResults(viewModel.getGlobalSearchEntity.value ?: emptyList())
-//                    hideLoading()
-//                }, 300)
+                Handler(Looper.getMainLooper()).postDelayed({
+                    updateUIWithResults(viewModel.getGlobalSearchEntity.value ?: emptyList())
+                    hideLoading()
+                }, 300)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -331,6 +353,10 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         viewModel.getGlobalSearchEntity.observe(viewLifecycleOwner) { results ->
             faGlobalSearchAdapter.updateData(results)
             updateSearchResults(results)
+            Handler(Looper.getMainLooper()).postDelayed({
+                updateUIWithResults(viewModel.getGlobalSearchEntity.value ?: emptyList())
+                hideRecentLoading()
+            }, 300)
         }
     }
 
@@ -382,6 +408,12 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         isLoading = true
         bind.loadingIndicator.visibility = View.VISIBLE
         bind.recyclerview.visibility = View.GONE
+        bind.suggestedContent.visibility = View.GONE
+    }
+
+    private fun hideRecentLoading(){
+        isLoading = false
+        bind.loadingIndicator.visibility = View.GONE
     }
 
     private fun hideLoading() {
@@ -390,8 +422,15 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         bind.recyclerview.visibility = View.VISIBLE
     }
 
+    private fun hideSuggestedLoading(){
+        Handler(Looper.getMainLooper()).postDelayed({
+            updateUIWithResults(viewModel.getGlobalSearchEntity.value ?: emptyList())
+            hideLoading()
+        }, 300)
+    }
+
     private fun updateUIWithResults(allResults: List<GlobalSearchEntity>) {
-        //if (isLoading) return
+       // if (isLoading) return
         bind.searchProgressBar.visibility = View.GONE
 
         val filteredResults = when (currentTab) {

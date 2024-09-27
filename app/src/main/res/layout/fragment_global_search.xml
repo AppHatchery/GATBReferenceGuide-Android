@@ -45,14 +45,15 @@
                     tools:ignore="HardcodedText" />
 
                 <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/voiceSearch"
+                    android:id="@+id/clearSearch"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/shape_round"
                     android:foreground="?attr/selectableItemBackground"
                     android:paddingHorizontal="32dp"
-                    android:src="@drawable/ic_baseline_voice_gray" />
+                    android:tint="@color/light_gray"
+                    android:src="@drawable/ic_baseline_clear_content" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -106,26 +107,6 @@
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-<!--    app:layout_constraintEnd_toEndOf="parent"-->
-<!--    app:layout_constraintStart_toStartOf="parent"-->
-<!--    app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat3"-->
-
-<!--    app:layout_constraintTop_toBottomOf="@+id/search_item_count"-->
-<!--    app:layout_constraintStart_toStartOf="parent"-->
-<!--    app:layout_constraintEnd_toEndOf="parent"-->
-
-
-<!--    <androidx.viewpager2.widget.ViewPager2-->
-<!--        android:id="@+id/viewPager"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/tabLayout"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        android:visibility="gone" />-->
 
 
     <View
