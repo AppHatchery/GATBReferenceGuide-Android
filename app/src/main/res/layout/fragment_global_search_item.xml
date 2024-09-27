@@ -11,11 +11,11 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/sub_chapter"
-        style="@style/subtitle1"
+        style="@style/subtitle2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:textColor="@color/my_color"
+        android:textColor="@color/neutral_800"
         android:maxLines="2"
         tools:ignore="HardcodedText"
         tools:text="Tuberculin Skin Test (TST) " />
@@ -38,7 +38,7 @@
             android:ellipsize="end"
             android:gravity="start"
             android:textSize="17sp"
-            android:textColor="@color/my_color"
+            android:textColor="@color/neutral_600"
             android:scrollHorizontally="true"
             android:maxLines="2"
             tools:ignore="HardcodedText"
@@ -48,13 +48,14 @@
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.AppCompatTextView
+        style="@style/text1Regular"
         android:id="@+id/textInBody"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:drawablePadding="4dp"
         android:ellipsize="marquee"
-        android:textColor="@color/my_color"
+        android:textColor="@color/neutral_800"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:maxLines="2"

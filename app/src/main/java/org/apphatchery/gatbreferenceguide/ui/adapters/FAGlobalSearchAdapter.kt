@@ -88,6 +88,7 @@ class FAGlobalSearchAdapter @Inject constructor(
                 subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
                 textInBody.text = HtmlCompat.fromHtml(globalSearchEntity.textInBody, FROM_HTML_MODE_LEGACY)
 
+
                 //var searchTitleNumber = HtmlCompat.fromHtml(globalSearchEntity.,FROM_HTML_MODE_LEGACY)
 
                 val bodyWithTags = globalSearchEntity.textInBody
