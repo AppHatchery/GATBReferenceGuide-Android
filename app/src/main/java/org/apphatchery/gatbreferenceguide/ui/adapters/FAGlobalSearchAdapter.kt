@@ -25,6 +25,7 @@ import org.apphatchery.gatbreferenceguide.databinding.FragmentGlobalSearchItemBi
 import org.apphatchery.gatbreferenceguide.db.entities.GlobalSearchEntity
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FABodyViewModel
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
+import org.apphatchery.gatbreferenceguide.utils.ROMAN_NUMERALS
 import org.apphatchery.gatbreferenceguide.utils.searchState
 import javax.inject.Inject
 
@@ -83,8 +84,10 @@ class FAGlobalSearchAdapter @Inject constructor(
 
         fun onBinding(globalSearchEntity: GlobalSearchEntity, index: Int) =
             fragmentGlobalSearchItemBinding.apply {
+                val searchChapterID = globalSearchEntity.chapterId -1
+                val romanChapterID = ROMAN_NUMERALS[searchChapterID].uppercase()
 
-                searchTitle.text = HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)
+                searchTitle.text = "$romanChapterID. ${HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)}"
                 subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
                 textInBody.text = HtmlCompat.fromHtml(globalSearchEntity.textInBody, FROM_HTML_MODE_LEGACY)
 
@@ -108,12 +111,6 @@ class FAGlobalSearchAdapter @Inject constructor(
                     }
                 }
 
-
-                Log.d("SEARCH_RESULT", "Title: ${globalSearchEntity.searchTitle}")
-                Log.d("SEARCH_RESULT", "SubChapter: ${globalSearchEntity.subChapter}")
-                Log.d("SEARCH_RESULT", "isChart: ${globalSearchEntity.isChart}")
-                Log.d("SEARCH_RESULT", "searchTExt: ${searchQuery}")
-                //Log.d("SEARCH_RESULT", "TextInBody: ${globalSearchEntity.textInBody}")
             }
 
         init {
