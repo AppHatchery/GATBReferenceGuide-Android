@@ -38,7 +38,7 @@ import javax.inject.Inject
 import kotlin.coroutines.resume
 
 
-private const val BUILD_VERSION = 9
+private const val BUILD_VERSION = 10
 private const val PENDO_RELEASE_VERSION = "July-24-"
 
 @AndroidEntryPoint

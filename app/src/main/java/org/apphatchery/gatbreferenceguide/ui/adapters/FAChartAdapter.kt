@@ -37,7 +37,7 @@ class FAChartAdapter :
 
         fun onBinding(item: ChartAndSubChapter, index: Int) =
             bind.apply {
-                (ALPHABET[index].uppercase() + ". " + item.chartEntity.chartTitle).also {
+                (item.chartEntity.chartTitle).also {
                     textView.text = it
                 }
             }

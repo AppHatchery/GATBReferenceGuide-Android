@@ -87,8 +87,20 @@ class FAGlobalSearchAdapter @Inject constructor(
                 val searchChapterID = globalSearchEntity.chapterId -1
                 val romanChapterID = ROMAN_NUMERALS[searchChapterID].uppercase()
 
-                searchTitle.text = "$romanChapterID. ${HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)}"
-                subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
+                // Check if the result is a chart and update the title accordingly
+                if (globalSearchEntity.isChart) {
+                    // Display the chart title for chart results
+                    subChapter.text = HtmlCompat.fromHtml(
+                        "${globalSearchEntity.searchTitle}",
+                        FROM_HTML_MODE_LEGACY
+                    )
+                    searchTitle.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
+                } else {
+                    searchTitle.text = "$romanChapterID. ${HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)}"
+                    subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
+                }
+//                searchTitle.text = "$romanChapterID. ${HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)}"
+//                subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
                 textInBody.text = HtmlCompat.fromHtml(globalSearchEntity.textInBody, FROM_HTML_MODE_LEGACY)
 
 

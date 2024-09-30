@@ -3,147 +3,147 @@
     "id": "table_1_interpretation_criteria_for_the_quantiferon_tb_gold_plus_test",
     "subChapterTitle": "Interferon-y Release Assays (IGRAs)",
     "subChapterId": 7,
-    "chartTitle": "Interpretation Criteria for the QuantiFERON-TB Gold Plus Test (QFT-Plus)",
+    "chartTitle": "Table 1: Interpretation Criteria for the QuantiFERON-TB Gold Plus Test (QFT-Plus)",
     "chartHomePosition": 0
   },
   {
     "id": "table_2_interpretation_criteria_for_the_t_spot_tb_test",
     "subChapterTitle": "Interferon-y Release Assays (IGRAs)",
     "subChapterId": 7,
-    "chartTitle": "Interpretation Criteria for the T-SPOT.TB Test (TSpot)",
+    "chartTitle": "Table 2: Interpretation Criteria for the T-SPOT.TB Test (TSpot)",
     "chartHomePosition": 0
   },
   {
     "id": "table_3_high_prevalence_and_high_risk_groups",
     "subChapterTitle": "Targeted Testing and Diagnostic Tests for LTBI",
     "subChapterId": 8,
-    "chartTitle": "High Prevalence and High-Risk Groups",
+    "chartTitle": "Table 3: High Prevalence and High-Risk Groups",
     "chartHomePosition": 0
   },
   {
     "id": "table_4_recommendations_for_regimens_to_treat_latent_tuberculosis_infection",
     "subChapterTitle": "Treatment Regimens",
     "subChapterId": 12,
-    "chartTitle": "Recommendations for regimens to treat latent tuberculosis infection",
+    "chartTitle": "Table 4: Recommendations for regimens to treat latent tuberculosis infection",
     "chartHomePosition": 0
   },
   {
     "id": "table_5_dosages_for_recommended_lbti_treatment_regimens",
     "subChapterTitle": "Treatment Regimens",
     "subChapterId": 12,
-    "chartTitle": "Dosages for recommended LBTI treatment regimens ",
+    "chartTitle": "Table 5: Dosages for recommended LBTI treatment regimens",
     "chartHomePosition": 0
   },
   {
     "id": "table_6_ltbi_treatment_drug_adverse_reactions",
     "subChapterTitle": "Treatment Regimens",
     "subChapterId": 12,
-    "chartTitle": "LTBI Treatment Drug Adverse Reactions",
+    "chartTitle": "Table 6: LTBI Treatment Drug Adverse Reactions",
     "chartHomePosition": 0
   },
   {
     "id": "table_7_recommended_regimens_for_treatment_of_adults_and_children_with_drug_susceptible_tb_pulmonary_tb",
     "subChapterTitle": "Special Clinical Situations",
     "subChapterId": 24,
-    "chartTitle": "Recommended Regimens for Treatment of Adults and Children with Drug-Susceptible TB Pulmonary TB",
+    "chartTitle": "Table 7: Recommended Regimens for Treatment of Adults and Children with Drug-Susceptible TB Pulmonary TB",
     "chartHomePosition": 0
   },
   {
     "id": "table_8_first-line_tb_drugs_dosing_for_adults_(ages_16_and_over)_directly_observed_therapy_(dot)_is_mandatory",
     "subChapterTitle": "Special Clinical Situations",
     "subChapterId": 24,
-    "chartTitle": "First-Line TB Drugs: Dosing for Adults (ages 16 and over) Directly ObservedTherapy (DOT) is mandatory",
+    "chartTitle": "Table 8: First-Line TB Drugs: Dosing for Adults (ages 16 and over) Directly ObservedTherapy (DOT) is mandatory",
     "chartHomePosition": 0
   },
   {
     "id": "table_9_pediatric_dosage_isoniazid_in_children_(birth_to_15_years)",
     "subChapterTitle": "Special Clinical Situations",
     "subChapterId": 24,
-    "chartTitle": "Pediatric dosage - isoniazid in children (birth to 15 years)",
+    "chartTitle": "Table 9: Pediatric dosage - isoniazid in children (birth to 15 years)",
     "chartHomePosition": 0
   },
   {
     "id": "table_10_pediatric_dosages_rifampin_in_children_(birth_to_15_years)",
     "subChapterTitle": "Special Clinical Situations",
     "subChapterId": 24,
-    "chartTitle": "Pediatric dosages - rifampin in children (birth to 15 years) dose for either daily or twice weekly therapy",
+    "chartTitle": "Table 10: Pediatric dosages - rifampin in children (birth to 15 years) dose for either daily or twice weekly therapy",
     "chartHomePosition": 0
   },
   {
     "id": "table_11_pediatric_dosages_ethambutol_in_children_(birth_to_15_years)",
     "subChapterTitle": "Special Clinical Situations",
     "subChapterId": 24,
-    "chartTitle": "Pediatric dosages - Ethambutol in children (birth to 15 years)\nEthambutol is available in 100mg and 400 mg tablets",
+    "chartTitle": "Table 11: Pediatric dosages - Ethambutol in children (birth to 15 years)\nEthambutol is available in 100mg and 400 mg tablets",
     "chartHomePosition": 0
   },
   {
     "id": "table_12_pediatric_dosages_pyrazinamide_in_children_(birth_to_15_years)",
     "subChapterTitle": "Special Clinical Situations",
     "subChapterId": 24,
-    "chartTitle": "Pediatric Dosages - Pyrazinamide in children (birth to 15 years)\nPyrazinamide is available in 500 mg tablets which are scored and can be cut in ½.",
+    "chartTitle": "Table 12: Pediatric Dosages - Pyrazinamide in children (birth to 15 years)\nPyrazinamide is available in 500 mg tablets which are scored and can be cut in ½.",
     "chartHomePosition": 0
   },
   {
     "id": "table_13_antituberculosis_antibiotics_in_adult_patients_with_renal_impairment",
     "subChapterTitle": "Special Clinical Situations",
     "subChapterId": 24,
-    "chartTitle": "Antituberculosis antibiotics in adult patients with renal impairment",
+    "chartTitle": "Table 13: Antituberculosis antibiotics in adult patients with renal impairment",
     "chartHomePosition": 0
   },
   {
     "id": "table_14_antituberculosis_medications_which_may_be_used_for_patients_who_have_contraindications_to_or_intolerance",
     "subChapterTitle": "Special Clinical Situations",
     "subChapterId": 24,
-    "chartTitle": "Antituberculosis medications which may be used for patients who have contraindications to or intolerance of first line agents or who require IV therapy during acute or critical illness",
+    "chartTitle": "Table 14: Antituberculosis medications which may be used for patients who have contraindications to or intolerance of first line agents or who require IV therapy during acute or critical illness",
     "chartHomePosition": 0
   },
   {
     "id": "table_15_clinical_situations_for_which_standard_therapy_cannot_be_given_or_is_not_well_tolerated",
     "subChapterTitle": "Special Clinical Situations",
     "subChapterId": 24,
-    "chartTitle": "Clinical Situations for which standard therapy cannot be given or is not well- tolerated or may not be effective: Potential Alternative Regimens (Dosing and/or Drugs)",
+    "chartTitle": "Table 15: Clinical Situations for which standard therapy cannot be given or is not well- tolerated or may not be effective: Potential Alternative Regimens (Dosing and/or Drugs)",
     "chartHomePosition": 0
   },
   {
     "id": "table_16_when_to_start_hiv_therapy",
     "subChapterTitle": "Antiretroviral Therapy (ART) and Treatment of HIV Seropositive Patients with Active Tuberculosis Disease",
     "subChapterId": 28,
-    "chartTitle": "HHS Panel Recommendations on treatment of Tuberculosis Disease with HIV co-infection: Timing of Antiretroviral Therapy (ART) Initiation relative to TB treatment",
+    "chartTitle": "Table 16: HHS Panel Recommendations on treatment of Tuberculosis Disease with HIV co-infection: Timing of Antiretroviral Therapy (ART) Initiation relative to TB treatment",
     "chartHomePosition": 0
   },
   {
     "id": "table_17_what_to_start_choice_of_tb_therapy_and_antiretroviral_therapy_(art)_when)treating_co-infected_patients",
     "subChapterTitle": "Antiretroviral Therapy (ART) and Treatment of HIV Seropositive Patients with Active Tuberculosis Disease",
     "subChapterId": 28,
-    "chartTitle": "What to start: Choice of TB therapy and Antiretroviral Therapy (ART) when treating co-infected patients",
+    "chartTitle": "Table 17: What to start: Choice of TB therapy and Antiretroviral Therapy (ART) when treating co-infected patients",
     "chartHomePosition": 0
   },
   {
     "id": "table_18_dosage_adjustments_for_art_and_rifamycins_when_used_in_combination",
     "subChapterTitle": "Antiretroviral Therapy (ART) and Treatment of HIV Seropositive Patients with Active Tuberculosis Disease",
     "subChapterId": 28,
-    "chartTitle": "Dosage Adjustments for ART and Rifamycins when used in Combination",
+    "chartTitle": "Table 18: Dosage Adjustments for ART and Rifamycins when used in Combination",
     "chartHomePosition": 0
   },
   {
     "id": "table_19_guidelines_for_treatment_of_extrapulmonary_tuberculosis",
     "subChapterTitle": "Adjunctive Use of Corticosteroid Therapy (Table 19)",
     "subChapterId": 31,
-    "chartTitle": "Guidelines for Treatment of Extrapulmonary* Tuberculosis: Length of therapy and Adjunctive Use of Corticosteroids",
+    "chartTitle": "Table 19: Guidelines for Treatment of Extrapulmonary* Tuberculosis: Length of therapy and Adjunctive Use of Corticosteroids",
     "chartHomePosition": 0
   },
   {
     "id": "table_20_use_of_anti-tb_medications_in_special_situations_pregnancy_tuberculosis_meningitis_and_renal_failure",
     "subChapterTitle": "Treatment of Active TB in Pregnancy",
     "subChapterId": 33,
-    "chartTitle": "Use of Anti-TB Medications in Special Situations: Pregnancy, Tuberculous Meningitis and Renal Failure",
+    "chartTitle": "Table 20: Use of Anti-TB Medications in Special Situations: Pregnancy, Tuberculous Meningitis and Renal Failure",
     "chartHomePosition": 0
   },
   {
     "id": "table_21_grady_hospital_tb_isolation_policy",
     "subChapterTitle": "Surveillance for Health Care Workers",
     "subChapterId": 40,
-    "chartTitle": "Grady Hospital TB Isolation Policy",
+    "chartTitle": "Table 21: Grady Hospital TB Isolation Policy",
     "chartHomePosition": 0
   }
 ]
