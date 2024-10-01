@@ -10,6 +10,7 @@ import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -67,13 +68,18 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
     private var currentTab = 0
     private var isLoading = false
+    private var lastSearchQuery = ""
+    private var isManualTabSelection = false
+
+    private val handler = Handler(Looper.getMainLooper())
+    private var scrollRunnable: Runnable? = null
 
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         bind = FragmentGlobalSearchBinding.bind(view)
 
-
+       currentTab = savedInstanceState?.getInt("currentTab") ?: 0
         setupRecyclerView()
         setupSearchView()
         setupTabLayout()
@@ -236,12 +242,28 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("currentTab", currentTab)
+    }
 
+    override fun onResume() {
+        super.onResume()
+        if (!isManualTabSelection) {
+            syncTabWithContent()
+        }
+        isManualTabSelection = false
+        scrollRunnable?.let { handler.removeCallbacks(it) }
+
+        scrollRunnable = Runnable { scrollToTop() }
+        handler.postDelayed(scrollRunnable!!, 500)
+    }
 
     override fun onDestroyView() {
         val activity = requireActivity()
         val inputMethodManager = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(activity.window.decorView.windowToken, 0)
+        scrollRunnable?.let { handler.removeCallbacks(it) }
 
         super.onDestroyView()
     }
@@ -268,6 +290,22 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         }
     }
 
+    private fun syncTabWithContent() {
+        val results = viewModel.getGlobalSearchEntity.value ?: emptyList()
+        val newTab = when {
+            results.isEmpty() -> 0
+            results.all { !it.isChart } -> 1
+            results.all { it.isChart } -> 2
+            else -> 0
+        }
+        if (newTab != currentTab) {
+            currentTab = newTab
+            bind.tabLayout.getTabAt(currentTab)?.select()
+            filterAndHighlightResults()
+            scrollToTop()
+        }
+    }
+
     private fun setupTabLayout() {
         val tabTitles = listOf("All", "Chapters", "Charts")
         val tabIcons = listOf(
@@ -276,7 +314,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             R.drawable.ic_baseline_charts_3
         )
 
-        for (i in tabTitles.indices){
+       for (i in tabTitles.indices){
             val customTab = layoutInflater.inflate(R.layout.custom_tab_layout, null)
             val tabIcon = customTab.findViewById<ImageView>(R.id.tab_icon)
             val tabText = customTab.findViewById<TextView>(R.id.tab_text)
@@ -310,6 +348,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                 Handler(Looper.getMainLooper()).postDelayed({
                     updateUIWithResults(viewModel.getGlobalSearchEntity.value ?: emptyList())
                     hideLoading()
+                    scrollToTop()
                 }, 300)
             }
 
@@ -320,6 +359,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             override fun onTabReselected(tab: TabLayout.Tab?) {}
 
         })
+
 
         updateTabAppearance(bind.tabLayout.getTabAt(0), true)
 
@@ -451,6 +491,12 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             1 -> "${filteredResults.count { !it.isChart }} result${if (count == 1) "" else "s"} in"
             2 -> "${filteredResults.count { it.isChart }} result${if (count == 1) "" else "s"} in"
             else -> "${count} result${if (count == 1) "" else "s"} in"
+        }
+    }
+
+    private fun scrollToTop() {
+        bind.recyclerview.post {
+            bind.recyclerview.smoothScrollToPosition(0)
         }
     }
 
