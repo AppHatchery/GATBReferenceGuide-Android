@@ -34,6 +34,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentGlobalSearchBinding
 import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
@@ -318,6 +319,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             val customTab = layoutInflater.inflate(R.layout.custom_tab_layout, null)
             val tabIcon = customTab.findViewById<ImageView>(R.id.tab_icon)
             val tabText = customTab.findViewById<TextView>(R.id.tab_text)
+           val tabContainer = customTab.findViewById<LinearLayout>(R.id.tab_container)
 
             tabText.text = tabTitles[i]
 
@@ -332,7 +334,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             bind.tabLayout.addTab(tab)
 
             tab.view.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT
             )
 
@@ -375,7 +377,6 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             val container = customView.findViewById<LinearLayout>(R.id.tab_container)
             val icon = customView.findViewById<ImageView>(R.id.tab_icon)
             val text = customView.findViewById<TextView>(R.id.tab_text)
-
             container.isSelected = isSelected
 
             if(container.isSelected){
@@ -401,10 +402,15 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
     }
 
     private fun updateSearchResults(results: List<GlobalSearchEntity>) {
-        val highlightedResults = highlightSearchResults(results)
-        faGlobalSearchAdapter.updateData(highlightedResults)
-        filterAndHighlightResults()
-       updateUIWithResults(highlightedResults)
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO){
+            val highlightedResults = highlightSearchResults(results)
+            faGlobalSearchAdapter.updateData(highlightedResults)
+            filterAndHighlightResults()
+            withContext(Dispatchers.Main){
+                updateUIWithResults(highlightedResults)
+            }
+        }
+
     }
 
     private fun highlightSearchResults(results: List<GlobalSearchEntity>): List<GlobalSearchEntity> {

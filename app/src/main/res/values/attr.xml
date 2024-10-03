@@ -14,5 +14,7 @@
     <attr name="savedTopBar" format="color"/>[
     <attr name="colorPrimary" format="reference|color"/>
     <attr name="toolbarColor" format="reference|color"/>
+    <attr name="colorTextBlackWhite" format="reference|color"/>
+    <attr name="colorTextBlackWhite2" format="reference|color"/>
 
 </resources>

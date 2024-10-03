@@ -23,6 +23,7 @@
     <style name="subtitle2" parent="@android:style/TextAppearance.Small">
         <item name="android:fontFamily">@font/inter_semibold</item>
         <item name="android:textSize">18sp</item>
+        <item name="lineHeight">22sp</item>
     </style>
 
     <style name="subtitle3" parent="@android:style/TextAppearance.Small">
@@ -58,6 +59,7 @@
     <style name="body2Regular" parent="@android:style/TextAppearance.Small">
         <item name="android:fontFamily">@font/inter_regular</item>
         <item name="android:textSize">14sp</item>
+        <item name="lineHeight">17sp</item>
     </style>
 
     <style name="text1SemiBold" parent="@android:style/TextAppearance.Small">
@@ -73,6 +75,7 @@
     <style name="text1Regular" parent="@android:style/TextAppearance.Small">
         <item name="android:fontFamily">@font/inter_regular</item>
         <item name="android:textSize">12sp</item>
+        <item name="lineHeight">16sp</item>
     </style>
 
     <style name="text1Italic" parent="@android:style/TextAppearance.Small">

@@ -19,8 +19,11 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import org.apphatchery.gatbreferenceguide.databinding.FragmentGlobalSearchItemBinding
 import org.apphatchery.gatbreferenceguide.db.entities.GlobalSearchEntity
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FABodyViewModel
@@ -84,42 +87,43 @@ class FAGlobalSearchAdapter @Inject constructor(
 
         fun onBinding(globalSearchEntity: GlobalSearchEntity, index: Int) =
             fragmentGlobalSearchItemBinding.apply {
-                val searchChapterID = globalSearchEntity.chapterId -1
-                val romanChapterID = ROMAN_NUMERALS[searchChapterID].uppercase()
+                CoroutineScope(Dispatchers.Unconfined).launch {
+                    val searchChapterID = globalSearchEntity.chapterId -1
+                    val romanChapterID = ROMAN_NUMERALS[searchChapterID].uppercase()
 
-                // Check if the result is a chart and update the title accordingly
-                if (globalSearchEntity.isChart) {
-                    // Display the chart title for chart results
-                    subChapter.text = HtmlCompat.fromHtml(
-                        "${globalSearchEntity.searchTitle}",
-                        FROM_HTML_MODE_LEGACY
-                    )
-                    searchTitle.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
-                } else {
-                    searchTitle.text = "$romanChapterID. ${HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)}"
-                    subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
-                }
+                    // Check if the result is a chart and update the title accordingly
+                    if (globalSearchEntity.isChart) {
+                        // Display the chart title for chart results
+                        subChapter.text = HtmlCompat.fromHtml(
+                            "${globalSearchEntity.searchTitle}",
+                            FROM_HTML_MODE_LEGACY
+                        )
+                        searchTitle.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
+                    } else {
+                        searchTitle.text = "$romanChapterID. ${HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)}"
+                        subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
+                    }
 //                searchTitle.text = "$romanChapterID. ${HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)}"
 //                subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
-                textInBody.text = HtmlCompat.fromHtml(globalSearchEntity.textInBody, FROM_HTML_MODE_LEGACY)
+                    textInBody.text = HtmlCompat.fromHtml(globalSearchEntity.textInBody, FROM_HTML_MODE_LEGACY)
+                }.invokeOnCompletion {
+                    //var searchTitleNumber = HtmlCompat.fromHtml(globalSearchEntity.,FROM_HTML_MODE_LEGACY)
 
+                    val bodyWithTags = globalSearchEntity.textInBody
+                    val pattern = ".*<span style='background-color: yellow; color: black; font-weight: bold;'>(.*?)</span>.*".toRegex()
+                    val matchResult = pattern.find(bodyWithTags)
+                    val extractedSearchValue = matchResult?.groupValues?.get(1) ?: ""
 
-                //var searchTitleNumber = HtmlCompat.fromHtml(globalSearchEntity.,FROM_HTML_MODE_LEGACY)
+                    val locationOfTarget = textInBody.text.indexOf(extractedSearchValue)
 
-                val bodyWithTags = globalSearchEntity.textInBody
-                val pattern = ".*<span style='background-color: yellow; color: black; font-weight: bold;'>(.*?)</span>.*".toRegex()
-                val matchResult = pattern.find(bodyWithTags)
-                val extractedSearchValue = matchResult?.groupValues?.get(1) ?: ""
-
-                val locationOfTarget = textInBody.text.indexOf(extractedSearchValue)
-
-                if (locationOfTarget != -1) {
-                    textInBody.maxLines = 2
-                    textInBody.ellipsize = TextUtils.TruncateAt.MARQUEE
-                    textInBody.post {
-                        val line = textInBody.layout.getLineForOffset(locationOfTarget)
-                        val y = textInBody.layout.getLineTop(line)
-                        textInBody.scrollTo(0, y)
+                    if (locationOfTarget != -1) {
+                        textInBody.maxLines = 2
+                        textInBody.ellipsize = TextUtils.TruncateAt.MARQUEE
+                        textInBody.post {
+                            val line = textInBody.layout.getLineForOffset(locationOfTarget)
+                            val y = textInBody.layout.getLineTop(line)
+                            textInBody.scrollTo(0, y)
+                        }
                     }
                 }
 
