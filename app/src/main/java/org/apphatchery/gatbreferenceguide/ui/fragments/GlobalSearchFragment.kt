@@ -33,6 +33,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.apphatchery.gatbreferenceguide.R
@@ -50,6 +51,7 @@ import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
 import sdk.pendo.io.Pendo
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 
 @ExperimentalCoroutinesApi
@@ -75,6 +77,9 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
     private val handler = Handler(Looper.getMainLooper())
     private var scrollRunnable: Runnable? = null
 
+    private var searchJob: Job? = null
+
+
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -93,12 +98,8 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                 }
             }
 
-        recentSearchAdapter = FASearchRecentAdapter(requireContext()) { searchText ->
-            showLoading()
-            bind.searchKeyword.onSearchKeyword(searchText)
-            bind.searchKeyword.setText(searchText)
-            hideKeyboard()
-        }
+        setupRecentSearchAdapter()
+
 
         bind.recentRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -197,34 +198,37 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             recyclerview.visibility = View.GONE
             searchProgressBar.visibility = View.GONE
 
-            searchKeyword.setOnTextWatcher(
-                onTextChangedListener = {
-                    viewModel.searchQuery.value = it
 
-                    with(bind.searchItemCount) {
-                        visibility = if (searchKeyword.text.toString().trim()
-                                .isBlank()
-                        ) View.GONE else View.VISIBLE
-                    }
+            setupSearchTextWatcher()
 
-                    viewModel.searchQuery.value = it.trim()
-
-                    if (searchKeyword.text.toString().trim()
-                            .isBlank()) {
-                        recyclerview.visibility = View.GONE
-                        bind.searchProgressBar.visibility = View.GONE
-                        bind.suggestedContent.visibility = View.VISIBLE
-                        bind.tabLayout.visibility = View.GONE
-                        bind.tabLayoutContainer.visibility = View.GONE
-                    } else {
-                        bind.recyclerview.visibility = View.VISIBLE
-                        bind.suggestedContent.visibility = View.GONE
-                        bind.tabLayout.visibility = View.VISIBLE
-                        bind.tabLayoutContainer.visibility = View.VISIBLE
-                        //bind.searchProgressBar.visibility = View.VISIBLE
-
-                    }
-                })
+//            searchKeyword.setOnTextWatcher(
+//                onTextChangedListener = {
+//                    viewModel.searchQuery.value = it
+//
+//                    with(bind.searchItemCount) {
+//                        visibility = if (searchKeyword.text.toString().trim()
+//                                .isBlank()
+//                        ) View.GONE else View.VISIBLE
+//                    }
+//
+//                    viewModel.searchQuery.value = it.trim()
+//
+//                    if (searchKeyword.text.toString().trim()
+//                            .isBlank()) {
+//                        recyclerview.visibility = View.GONE
+//                        bind.searchProgressBar.visibility = View.GONE
+//                        bind.suggestedContent.visibility = View.VISIBLE
+//                        bind.tabLayout.visibility = View.GONE
+//                        bind.tabLayoutContainer.visibility = View.GONE
+//                    } else {
+//                        bind.recyclerview.visibility = View.VISIBLE
+//                        bind.suggestedContent.visibility = View.GONE
+//                        bind.tabLayout.visibility = View.VISIBLE
+//                        bind.tabLayoutContainer.visibility = View.VISIBLE
+//                        //bind.searchProgressBar.visibility = View.VISIBLE
+//
+//                    }
+//                })
             searchKeyword.doAfterTextChanged { editable ->
                 if (editable != null) {
                     if (editable.isBlank()) {
@@ -361,8 +365,6 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             override fun onTabReselected(tab: TabLayout.Tab?) {}
 
         })
-
-
         updateTabAppearance(bind.tabLayout.getTabAt(0), true)
 
         for (i in 1 until bind.tabLayout.tabCount) {
@@ -389,30 +391,86 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         }
     }
 
-
     private fun observeSearchResults() {
         viewModel.getGlobalSearchEntity.observe(viewLifecycleOwner) { results ->
-            faGlobalSearchAdapter.updateData(results)
-            updateSearchResults(results)
-            Handler(Looper.getMainLooper()).postDelayed({
-                updateUIWithResults(viewModel.getGlobalSearchEntity.value ?: emptyList())
-                hideRecentLoading()
-            }, 300)
+            searchJob?.cancel() // Cancel any ongoing search
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                try {
+                    updateSearchResults(results)
+                    delay(300)
+                    updateUIWithResults(viewModel.getGlobalSearchEntity.value ?: emptyList())
+                    hideRecentLoading()
+                } catch (e: CancellationException) {
+                    throw e
+                }
+            }
         }
     }
 
     private fun updateSearchResults(results: List<GlobalSearchEntity>) {
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO){
-            val highlightedResults = highlightSearchResults(results)
-            faGlobalSearchAdapter.updateData(highlightedResults)
-            filterAndHighlightResults()
-            withContext(Dispatchers.Main){
-                updateUIWithResults(highlightedResults)
+        searchJob?.cancel()
+        searchJob = viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val highlightedResults = withContext(Dispatchers.IO) {
+                    highlightSearchResults(results)
+                }
+                withContext(Dispatchers.Main) {
+                    faGlobalSearchAdapter.updateData(highlightedResults)
+                    filterAndHighlightResults()
+                    updateUIWithResults(highlightedResults)
+                }
+            } catch (e: CancellationException) {
+                throw e
             }
         }
-
     }
 
+    private fun setupRecentSearchAdapter() {
+        recentSearchAdapter = FASearchRecentAdapter(requireContext()) { searchText ->
+            searchJob?.cancel()
+            showLoading()
+
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+                try {
+                    bind.searchKeyword.setText(searchText)
+                    bind.searchKeyword.onSearchKeyword(searchText)
+                    hideKeyboard()
+                    delay(100)
+                } catch (e: CancellationException) {
+                    throw e
+                }
+            }
+        }
+    }
+
+
+    private fun setupSearchTextWatcher() {
+        bind.searchKeyword.setOnTextWatcher(
+            onTextChangedListener = { text ->
+                searchJob?.cancel() // Cancel any ongoing search
+
+                val trimmedText = text.trim()
+                viewModel.searchQuery.value = trimmedText
+
+                with(bind.searchItemCount) {
+                    visibility = if (trimmedText.isBlank()) View.GONE else View.VISIBLE
+                }
+
+                updateSearchViewVisibility(trimmedText.isBlank())
+            }
+        )
+    }
+
+    private fun updateSearchViewVisibility(isBlank: Boolean) {
+        with(bind) {
+            recyclerview.visibility = if (isBlank) View.GONE else View.VISIBLE
+            searchProgressBar.visibility = View.GONE
+            suggestedContent.visibility = if (isBlank) View.VISIBLE else View.GONE
+            tabLayout.visibility = if (isBlank) View.GONE else View.VISIBLE
+            tabLayoutContainer.visibility = if (isBlank) View.GONE else View.VISIBLE
+        }
+    }
     private fun highlightSearchResults(results: List<GlobalSearchEntity>): List<GlobalSearchEntity> {
         val search = viewModel.searchQuery.value ?: ""
         val searchWords = search.split("\\s+".toRegex())

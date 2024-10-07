@@ -103,6 +103,11 @@ class FAGlobalSearchAdapter @Inject constructor(
                         searchTitle.text = "$romanChapterID. ${HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)}"
                         subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
                     }
+                    Log.d("SEARCH_RESULT", "Title: ${globalSearchEntity.searchTitle}")
+                    Log.d("SEARCH_RESULT", "SubChapter: ${globalSearchEntity.subChapter}")
+                    Log.d("SEARCH_RESULT", "isChart: ${globalSearchEntity.isChart}")
+                    Log.d("SEARCH_RESULT", "searchTExt: ${searchQuery}")
+
 //                searchTitle.text = "$romanChapterID. ${HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)}"
 //                subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
                     textInBody.text = HtmlCompat.fromHtml(globalSearchEntity.textInBody, FROM_HTML_MODE_LEGACY)

@@ -39,7 +39,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:gravity="start"
-            android:textSize="17sp"
             android:textColor="?attr/colorTextBlackWhite2"
             android:scrollHorizontally="true"
             android:maxLines="2"
