@@ -1,12 +1,20 @@
 package org.apphatchery.gatbreferenceguide.ui.viewmodels
 
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import org.apphatchery.gatbreferenceguide.db.Database
+import org.apphatchery.gatbreferenceguide.db.entities.GlobalSearchEntity
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
@@ -25,4 +33,6 @@ class FAGlobalSearchViewModel @Inject constructor(
 
     val getGlobalSearchEntity = taskFlow.asLiveData()
     fun getSubChapterById(id: String) = db.subChapterDao().getSubChapterById(id).asLiveData()
+
+
 }

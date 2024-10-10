@@ -18,7 +18,7 @@
     <color name="primary_100">#FFE7EDFF</color>
     <color name="neutral_900">#FF2B2B2B</color>
     <color name="neutral_800">#FF404040</color>
-    <color name="neutral_600">#FF545454</color>
+    <color name="neutral_600">#FF747474</color>
     <color name="neutral_700">#4C4C4C</color>
     <color name="neutral_500">#FFB9B9B9</color>
     <color name="neutral_400">#FFD5D5D5</color>
@@ -37,5 +37,6 @@
     <color name="secondary_cyan_300">#FF59DCD1</color>
     <color name="secondary_cyan_200">#FF65EDE1</color>
     <color name="secondary_cyan_100">#FFCDFFFA</color>
+    <color name="tab_selected_color">#8c352d</color>
 
 </resources>

@@ -9,6 +9,18 @@
     android:paddingHorizontal="16dp"
     android:paddingTop="16dp">
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/sub_chapter"
+        style="@style/subtitle2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:textColor="?attr/colorTextBlackWhite"
+        android:maxLines="2"
+        android:layout_marginBottom="4dp"
+        tools:ignore="HardcodedText"
+        tools:text="Tuberculin Skin Test (TST) " />
+
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompat2"
@@ -17,51 +29,34 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="2dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/search_title"
-            android:layout_width="150dp"
+            style="@style/body2Regular"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:gravity="start"
-            android:textSize="17sp"
-            android:textColor="@color/my_color"
+            android:textColor="?attr/colorTextBlackWhite2"
             android:scrollHorizontally="true"
             android:maxLines="2"
             tools:ignore="HardcodedText"
             tools:text="Diagnostic " />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/arrow_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_keyboard_arrow_right"
-            android:backgroundTint="@color/orange"
-            android:text=" "
-            tools:ignore="HardcodedText" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/sub_chapter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:textSize="16sp"
-            android:textColor="@color/my_color"
-            android:maxLines="2"
-            tools:ignore="HardcodedText"
-            tools:text="Tuberculin Skin Test (TST) " />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.AppCompatTextView
+        style="@style/text1Regular"
         android:id="@+id/textInBody"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:drawablePadding="4dp"
         android:ellipsize="marquee"
-        android:textColor="@color/my_color"
+        android:textColor="?attr/colorTextBlackWhite"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:maxLines="2"

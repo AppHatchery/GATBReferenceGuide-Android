@@ -13,12 +13,21 @@ interface GlobalSearchDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(data: List<GlobalSearchEntity>)
 
-
     @Query(
         """SELECT  * FROM  GlobalSearchEntity WHERE GlobalSearchEntity 
             MATCH :keyword ORDER BY GlobalSearchEntity.chapterId ASC, GlobalSearchEntity.subChapterId ASC"""
     )
     fun getGlobalSearchEntity(keyword: String =""): Flow<List<GlobalSearchEntity>>
+
+//    @Query(
+//        """SELECT * FROM GlobalSearchEntity WHERE GlobalSearchEntity MATCH :keyword AND isChart = 0 ORDER BY GlobalSearchEntity.chapterId ASC, GlobalSearchEntity.subChapterId ASC"""
+//    )
+//    fun getChapters(keyword: String =""): Flow<List<GlobalSearchEntity>>
+//
+//    @Query(
+//        """SELECT * FROM GlobalSearchEntity WHERE GlobalSearchEntity MATCH :keyword AND isChart = 1 ORDER BY GlobalSearchEntity.chapterId ASC, GlobalSearchEntity.subChapterId ASC"""
+//    )
+//    fun getCharts(keyword: String =""): Flow<List<GlobalSearchEntity>>
 
     @Query("DELETE FROM GlobalSearchEntity")
     suspend fun deleteAll()

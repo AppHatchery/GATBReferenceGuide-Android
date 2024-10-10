@@ -32,12 +32,17 @@
         <item name="toolbarColor">@color/reddish</item>
         <item name="colorGrayWhite">@color/neutral_700</item>
         <item name="colorWhiteGray">@color/white</item>
+        <item name="colorWhiteDarkBlack">@color/white</item>
+        <item name="colorTextBlackWhite">@color/neutral_800</item>
+        <item name="colorTextBlackWhite2">@color/neutral_600</item>
     </style>
 
 
     <style name="TextViewStyle" parent="android:Widget.TextView">
         <item name="android:textColor">@color/black</item>
     </style>
+
+
 
 
 </resources>

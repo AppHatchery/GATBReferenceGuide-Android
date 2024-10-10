@@ -45,14 +45,15 @@
                     tools:ignore="HardcodedText" />
 
                 <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/voiceSearch"
+                    android:id="@+id/clearSearch"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/shape_round"
                     android:foreground="?attr/selectableItemBackground"
                     android:paddingHorizontal="32dp"
-                    android:src="@drawable/ic_baseline_voice_gray" />
+                    android:tint="@color/light_gray"
+                    android:src="@drawable/ic_baseline_clear_content" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -72,19 +73,49 @@
         android:visibility="gone"
         />
 
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/search_item_count"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tabLayoutContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat3"
-        tools:text="Displaying 90 items" />
+        android:visibility="gone"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="3dp"
+        >
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/search_item_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            android:textSize="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tabLayout"
+            tools:text="Displaying 90 items" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:tag="?colorBlackWhite"
+            app:tabIndicatorHeight="0dp"
+            app:tabMaxWidth="0dp"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            app:tabBackground="?colorBlackWhite"
+            app:layout_constraintStart_toEndOf="@id/search_item_count"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <View
@@ -97,7 +128,17 @@
         android:background="#4DC6C6C8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_item_count" />
+        app:layout_constraintTop_toBottomOf="@+id/tabLayoutContainer" />
+
+    <ProgressBar
+        android:id="@+id/loadingIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view2" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"

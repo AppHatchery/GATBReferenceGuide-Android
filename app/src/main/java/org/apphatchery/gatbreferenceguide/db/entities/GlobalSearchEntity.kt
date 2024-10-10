@@ -13,6 +13,7 @@ data class GlobalSearchEntity(
     val fileName: String = "",
     val chapterId: Int = 0,
     val subChapterId: Int = 0,
-    val isChart: Boolean = false
+    val isChart: Boolean = false,
+    val chartId: String = ""
 )
 

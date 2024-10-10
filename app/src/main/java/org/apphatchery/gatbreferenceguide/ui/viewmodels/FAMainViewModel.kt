@@ -1,5 +1,6 @@
 package org.apphatchery.gatbreferenceguide.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -66,7 +67,7 @@ class FAMainViewModel @Inject constructor(
                         javaClass.name,
                         it.url,
                         it.chapterId,
-                        it.subChapterId
+                        it.subChapterId,
                     )
                 )
             }
@@ -81,10 +82,27 @@ class FAMainViewModel @Inject constructor(
                     it.chartEntity.id,
                     it.subChapterEntity.chapterId,
                     it.subChapterEntity.subChapterId,
-                    true
+                    true,
+                    it.chartEntity.id
+
                 )
             )
+            Log.d("CHART_DATA1", "Adding chart entity: ${it.chartEntity.chartTitle}")
         }
+
+//        repo.db.chartDao().getChartAndSubChapterSuspend().forEach {
+//            val chartEntity = GlobalSearchEntity(
+//                it.chartEntity.chartTitle,
+//                it.subChapterEntity.subChapterTitle,
+//                javaClass.name,
+//                it.chartEntity.id,
+//                it.subChapterEntity.chapterId,
+//                it.subChapterEntity.subChapterId,
+//                true // This indicates it's a chart
+//            )
+//            Log.d("CHART_DATA", "Adding chart entity: ${chartEntity.searchTitle}")
+//            globalSearch.add(chartEntity)
+//        }
 
 
         val globalSearchComplete = ArrayList<GlobalSearchEntity>()
@@ -99,7 +117,8 @@ class FAMainViewModel @Inject constructor(
                             globalSearch.fileName,
                             globalSearch.chapterId,
                             globalSearch.subChapterId,
-                            globalSearch.isChart
+                            globalSearch.isChart,
+                            globalSearch.chartId
                         )
                     )
                 }

@@ -270,15 +270,15 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         dialog = Dialog(requireContext()).dialog()
         updateFont()
 
-            menuHost.addMenuProvider(object : MenuProvider {
-                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                    menuInflater.inflate(R.menu.search_menu, menu)
-                }
-
-                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                    return handleMenuItemSelection(menuItem)
-                }
-            }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+//            menuHost.addMenuProvider(object : MenuProvider {
+//                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+//                    menuInflater.inflate(R.menu.search_menu, menu)
+//                }
+//
+//                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+//                    return handleMenuItemSelection(menuItem)
+//                }
+//            }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         faNoteColorAdapter = FANoteColorAdapter(requireContext()).also {
             it.submitList(NOTE_COLOR)
@@ -323,7 +323,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             // add bottom margin
             bind.bodyWebView.apply {
                 val lp = layoutParams as ViewGroup.MarginLayoutParams
-                lp.bottomMargin = 20 + bind.searchClearContainer.height
+                lp.bottomMargin = 100 + bind.searchClearContainer.height
                 layoutParams = lp
             }
         }

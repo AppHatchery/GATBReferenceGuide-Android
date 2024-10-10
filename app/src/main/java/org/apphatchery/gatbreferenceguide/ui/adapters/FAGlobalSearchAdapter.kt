@@ -1,5 +1,6 @@
 package org.apphatchery.gatbreferenceguide.ui.adapters
 
+import android.content.Context
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.text.Spannable
@@ -18,12 +19,16 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import org.apphatchery.gatbreferenceguide.databinding.FragmentGlobalSearchItemBinding
 import org.apphatchery.gatbreferenceguide.db.entities.GlobalSearchEntity
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FABodyViewModel
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
+import org.apphatchery.gatbreferenceguide.utils.ROMAN_NUMERALS
 import org.apphatchery.gatbreferenceguide.utils.searchState
 import javax.inject.Inject
 
@@ -32,8 +37,12 @@ class FAGlobalSearchAdapter @Inject constructor(
 
     var searchQuery: String = ""
     var searchQuery_ = MutableStateFlow("")
+    private var currentFilter: SearchResultType = SearchResultType.ALL
+    private var allItems: List<GlobalSearchEntity> = emptyList()
 
-
+    enum class SearchResultType {
+        ALL, CHARTS, CHAPTERS
+    }
 
 
     class DiffUtilCallBack : DiffUtil.ItemCallback<GlobalSearchEntity>() {
@@ -58,34 +67,71 @@ class FAGlobalSearchAdapter @Inject constructor(
         if (textInBody.indexOf(searchQuery) == -1) 0
         else textInBody.indexOf(searchQuery)
 
+    fun updateData(newItems: List<GlobalSearchEntity>) {
+        allItems = newItems
+        filter(currentFilter)
+    }
+
+    fun filter(type: SearchResultType) {
+        currentFilter = type
+        val filteredList = when (type) {
+            SearchResultType.ALL -> allItems
+            SearchResultType.CHARTS -> allItems.filter { it.isChart }
+            SearchResultType.CHAPTERS -> allItems.filter { !it.isChart }
+        }
+        submitList(filteredList)
+    }
+
     inner class ViewHolder(private val fragmentGlobalSearchItemBinding: FragmentGlobalSearchItemBinding) :
         RecyclerView.ViewHolder(fragmentGlobalSearchItemBinding.root) {
 
         fun onBinding(globalSearchEntity: GlobalSearchEntity, index: Int) =
             fragmentGlobalSearchItemBinding.apply {
+                CoroutineScope(Dispatchers.Unconfined).launch {
+                    val searchChapterID = globalSearchEntity.chapterId -1
+                    val romanChapterID = ROMAN_NUMERALS[searchChapterID].uppercase()
 
-                searchTitle.text = HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)
-                subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
-                textInBody.text = HtmlCompat.fromHtml(globalSearchEntity.textInBody, FROM_HTML_MODE_LEGACY)
+                    // Check if the result is a chart and update the title accordingly
+                    if (globalSearchEntity.isChart) {
+                        // Display the chart title for chart results
+                        subChapter.text = HtmlCompat.fromHtml(
+                            "${globalSearchEntity.searchTitle}",
+                            FROM_HTML_MODE_LEGACY
+                        )
+                        searchTitle.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
+                    } else {
+                        searchTitle.text = "$romanChapterID. ${HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)}"
+                        subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
+                    }
+                    Log.d("SEARCH_RESULT", "Title: ${globalSearchEntity.searchTitle}")
+                    Log.d("SEARCH_RESULT", "SubChapter: ${globalSearchEntity.subChapter}")
+                    Log.d("SEARCH_RESULT", "isChart: ${globalSearchEntity.isChart}")
+                    Log.d("SEARCH_RESULT", "searchTExt: ${searchQuery}")
 
-                //  val term = globalSearchEntity.searched
-                val bodyWithTags = globalSearchEntity.textInBody
-                val pattern = ".*<span style='background-color: yellow; color: black; font-weight: bold;'>(.*?)</span>.*".toRegex()
-                val matchResult = pattern.find(bodyWithTags)
-                val extractedSearchValue = matchResult?.groupValues?.get(1) ?: ""
+//                searchTitle.text = "$romanChapterID. ${HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)}"
+//                subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
+                    textInBody.text = HtmlCompat.fromHtml(globalSearchEntity.textInBody, FROM_HTML_MODE_LEGACY)
+                }.invokeOnCompletion {
+                    //var searchTitleNumber = HtmlCompat.fromHtml(globalSearchEntity.,FROM_HTML_MODE_LEGACY)
 
-                val locationOfTarget =  textInBody.text.indexOf(extractedSearchValue)
+                    val bodyWithTags = globalSearchEntity.textInBody
+                    val pattern = ".*<span style='background-color: yellow; color: black; font-weight: bold;'>(.*?)</span>.*".toRegex()
+                    val matchResult = pattern.find(bodyWithTags)
+                    val extractedSearchValue = matchResult?.groupValues?.get(1) ?: ""
 
+                    val locationOfTarget = textInBody.text.indexOf(extractedSearchValue)
 
-                if (locationOfTarget != -1) {
-                    textInBody.maxLines = 2
-                    textInBody.ellipsize = TextUtils.TruncateAt.MARQUEE
-                    textInBody.post {
-                        val line = textInBody.layout.getLineForOffset(locationOfTarget)
-                        val y = textInBody.layout.getLineTop(line)
-                        textInBody.scrollTo(0, y)
+                    if (locationOfTarget != -1) {
+                        textInBody.maxLines = 2
+                        textInBody.ellipsize = TextUtils.TruncateAt.MARQUEE
+                        textInBody.post {
+                            val line = textInBody.layout.getLineForOffset(locationOfTarget)
+                            val y = textInBody.layout.getLineTop(line)
+                            textInBody.scrollTo(0, y)
+                        }
                     }
                 }
+
             }
 
         init {
@@ -99,9 +145,7 @@ class FAGlobalSearchAdapter @Inject constructor(
                     }
                 }
             }
-
         }
-
     }
 
     private fun setSpannableString(
@@ -121,16 +165,11 @@ class FAGlobalSearchAdapter @Inject constructor(
         }
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        FragmentGlobalSearchItemBinding.inflate(
-            LayoutInflater.from(parent.context)
-        )
+        FragmentGlobalSearchItemBinding.inflate(LayoutInflater.from(parent.context))
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.onBinding(getItem(position), position)
     }
-
-
 }
