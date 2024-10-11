@@ -200,35 +200,6 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
 
             setupSearchTextWatcher()
-
-//            searchKeyword.setOnTextWatcher(
-//                onTextChangedListener = {
-//                    viewModel.searchQuery.value = it
-//
-//                    with(bind.searchItemCount) {
-//                        visibility = if (searchKeyword.text.toString().trim()
-//                                .isBlank()
-//                        ) View.GONE else View.VISIBLE
-//                    }
-//
-//                    viewModel.searchQuery.value = it.trim()
-//
-//                    if (searchKeyword.text.toString().trim()
-//                            .isBlank()) {
-//                        recyclerview.visibility = View.GONE
-//                        bind.searchProgressBar.visibility = View.GONE
-//                        bind.suggestedContent.visibility = View.VISIBLE
-//                        bind.tabLayout.visibility = View.GONE
-//                        bind.tabLayoutContainer.visibility = View.GONE
-//                    } else {
-//                        bind.recyclerview.visibility = View.VISIBLE
-//                        bind.suggestedContent.visibility = View.GONE
-//                        bind.tabLayout.visibility = View.VISIBLE
-//                        bind.tabLayoutContainer.visibility = View.VISIBLE
-//                        //bind.searchProgressBar.visibility = View.VISIBLE
-//
-//                    }
-//                })
             searchKeyword.doAfterTextChanged { editable ->
                 if (editable != null) {
                     if (editable.isBlank()) {
@@ -306,8 +277,8 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         if (newTab != currentTab) {
             currentTab = newTab
             bind.tabLayout.getTabAt(currentTab)?.select()
-            filterAndHighlightResults()
             scrollToTop()
+            filterAndHighlightResults()
         }
     }
 
@@ -353,8 +324,8 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                 updateUIWithResults(viewModel.getGlobalSearchEntity.value ?: emptyList())
                 Handler(Looper.getMainLooper()).postDelayed({
                     updateUIWithResults(viewModel.getGlobalSearchEntity.value ?: emptyList())
-                    hideLoading()
                     scrollToTop()
+                    hideLoading()
                 }, 300)
             }
 
@@ -444,24 +415,25 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         }
     }
 
-
     private fun setupSearchTextWatcher() {
-        bind.searchKeyword.setOnTextWatcher(
-            onTextChangedListener = { text ->
-                searchJob?.cancel() // Cancel any ongoing search
-
-                val trimmedText = text.trim()
-                viewModel.searchQuery.value = trimmedText
-
-                with(bind.searchItemCount) {
-                    visibility = if (trimmedText.isBlank()) View.GONE else View.VISIBLE
-                }
-
-                updateSearchViewVisibility(trimmedText.isBlank())
+        bind.searchKeyword.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                handleSearchTextChange(s?.toString() ?: "")
             }
-        )
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
     }
 
+    private fun handleSearchTextChange(text: String) {
+        searchJob?.cancel()
+        val trimmedText = text.trim()
+        viewModel.searchQuery.value = text
+        with(bind.searchItemCount) {
+            visibility = if (trimmedText.isBlank()) View.GONE else View.VISIBLE
+        }
+        updateSearchViewVisibility(trimmedText.isBlank())
+    }
     private fun updateSearchViewVisibility(isBlank: Boolean) {
         with(bind) {
             recyclerview.visibility = if (isBlank) View.GONE else View.VISIBLE
@@ -491,13 +463,14 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
     private fun highlightText(original: String, wordsToHighlight: List<String>): String {
         var result = original
         for (word in wordsToHighlight) {
-            val regex = Regex("(?i)\\b${Regex.escape(word)}\\b")
+            val regex = Regex("(?i)${Regex.escape(word)}")
             result = result.replace(regex) {
                 "<span style='background-color: yellow; color: black; font-weight: bold;'>${it.value}</span>"
             }
         }
         return result
     }
+
 
     private fun filterAndHighlightResults(){
       when (currentTab) {

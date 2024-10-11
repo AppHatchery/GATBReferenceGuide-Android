@@ -36,7 +36,7 @@ class FAGlobalSearchAdapter @Inject constructor(
 ) : ListAdapter<GlobalSearchEntity, FAGlobalSearchAdapter.ViewHolder>(DiffUtilCallBack()) {
 
     var searchQuery: String = ""
-    var searchQuery_ = MutableStateFlow("")
+    //var searchQuery_ = MutableStateFlow("")
     private var currentFilter: SearchResultType = SearchResultType.ALL
     private var allItems: List<GlobalSearchEntity> = emptyList()
 
@@ -103,16 +103,8 @@ class FAGlobalSearchAdapter @Inject constructor(
                         searchTitle.text = "$romanChapterID. ${HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)}"
                         subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
                     }
-                    Log.d("SEARCH_RESULT", "Title: ${globalSearchEntity.searchTitle}")
-                    Log.d("SEARCH_RESULT", "SubChapter: ${globalSearchEntity.subChapter}")
-                    Log.d("SEARCH_RESULT", "isChart: ${globalSearchEntity.isChart}")
-                    Log.d("SEARCH_RESULT", "searchTExt: ${searchQuery}")
-
-//                searchTitle.text = "$romanChapterID. ${HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)}"
-//                subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
                     textInBody.text = HtmlCompat.fromHtml(globalSearchEntity.textInBody, FROM_HTML_MODE_LEGACY)
                 }.invokeOnCompletion {
-                    //var searchTitleNumber = HtmlCompat.fromHtml(globalSearchEntity.,FROM_HTML_MODE_LEGACY)
 
                     val bodyWithTags = globalSearchEntity.textInBody
                     val pattern = ".*<span style='background-color: yellow; color: black; font-weight: bold;'>(.*?)</span>.*".toRegex()
@@ -124,11 +116,13 @@ class FAGlobalSearchAdapter @Inject constructor(
                     if (locationOfTarget != -1) {
                         textInBody.maxLines = 2
                         textInBody.ellipsize = TextUtils.TruncateAt.MARQUEE
-                        textInBody.post {
+
+                        // Add 2ms delay using Handler
+                        textInBody.postDelayed({
                             val line = textInBody.layout.getLineForOffset(locationOfTarget)
                             val y = textInBody.layout.getLineTop(line)
                             textInBody.scrollTo(0, y)
-                        }
+                        }, 5)  // 2 milliseconds delay
                     }
                 }
 
