@@ -1,6 +1,7 @@
 package org.apphatchery.gatbreferenceguide.ui.viewmodels
 
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
@@ -25,14 +26,15 @@ class FAGlobalSearchViewModel @Inject constructor(
 
     val searchQuery = MutableStateFlow("")
 
-    private val taskFlow = searchQuery.flatMapLatest {
-        val searchQuery =
-            if (it.isEmpty()) "e" else it.replace(Regex.fromLiteral("\""), "\"\"").trim()
-        db.globalSearchDao().getGlobalSearchEntity("*$searchQuery*")
+    private val taskFlow = searchQuery.flatMapLatest { query ->
+        val cleanedQuery = query.filter { it.isLetterOrDigit() || it.isWhitespace() }
+        val searchTerms = cleanedQuery.split(" ").map { it.trim() }.filter { it.isNotEmpty() }
+        val queryList = if (searchTerms.isEmpty()) listOf("e") else searchTerms
+        val formattedQuery = queryList.joinToString(separator = " OR ") { "*$it*" }
+        db.globalSearchDao().getGlobalSearchEntity(formattedQuery)
     }
 
     val getGlobalSearchEntity = taskFlow.asLiveData()
     fun getSubChapterById(id: String) = db.subChapterDao().getSubChapterById(id).asLiveData()
-
 
 }
