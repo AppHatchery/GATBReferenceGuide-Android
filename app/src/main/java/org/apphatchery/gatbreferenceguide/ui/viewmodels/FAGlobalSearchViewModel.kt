@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.apphatchery.gatbreferenceguide.db.Database
 import org.apphatchery.gatbreferenceguide.db.entities.GlobalSearchEntity
@@ -26,13 +27,26 @@ class FAGlobalSearchViewModel @Inject constructor(
 
     val searchQuery = MutableStateFlow("")
 
-    private val taskFlow = searchQuery.flatMapLatest { query ->
-        val cleanedQuery = query.filter { it.isLetterOrDigit() || it.isWhitespace() }
-        val searchTerms = cleanedQuery.split(" ").map { it.trim() }.filter { it.isNotEmpty() }
-        val queryList = if (searchTerms.isEmpty()) listOf("e") else searchTerms
-        val formattedQuery = queryList.joinToString(separator = " OR ") { "*$it*" }
-        db.globalSearchDao().getGlobalSearchEntity(formattedQuery)
-    }
+
+    private val validSearchFlow = searchQuery
+        .map { query ->
+            query.split(Regex("[\\s.,]+"))
+                .filter { it.isNotEmpty() }
+                .joinToString(" ")
+        }
+
+
+    private val taskFlow = validSearchFlow
+        .flatMapLatest { query ->
+            if (query.isBlank()) {
+                flow { emit(emptyList()) }
+            } else {
+                val searchTerms = query.split(" ")
+                    .filter { it.isNotEmpty() }
+                val formattedQuery = searchTerms.joinToString(separator = " OR ") { "*$it*" }
+                db.globalSearchDao().getGlobalSearchEntity(formattedQuery)
+            }
+        }
 
     val getGlobalSearchEntity = taskFlow.asLiveData()
     fun getSubChapterById(id: String) = db.subChapterDao().getSubChapterById(id).asLiveData()
