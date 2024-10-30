@@ -186,6 +186,11 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                 findNavController().navigate(this)
             }
         }
+        fragmentMainBinding.web.setOnClickListener {
+           MainFragmentDirections.actionMainFragmentToWebViewFragment().apply {
+               findNavController().navigate(this)
+           }
+        }
 
 
     }
