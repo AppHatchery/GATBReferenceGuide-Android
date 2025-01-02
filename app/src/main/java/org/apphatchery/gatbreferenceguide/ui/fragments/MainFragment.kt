@@ -4,6 +4,8 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.webkit.JavascriptInterface
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
@@ -12,8 +14,15 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Visibility
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ConfigUpdate
+import com.google.firebase.remoteconfig.ConfigUpdateListener
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,6 +62,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private val viewModel: FAMainViewModel by viewModels()
     private var visitor_id: String? = null
     private lateinit var navController: NavController
+    private lateinit var remoteConfig: FirebaseRemoteConfig
 
     @Inject
     lateinit var userPrefs: UserPrefs
@@ -111,6 +121,9 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                 }
             }
 
+            viewModel.downloadAndSavePage("https://tbguide.framer.website/tb-coordinator", requireContext())
+
+
 
             first6ChartAdapter = FAMainFirst6ChartAdapter().also { adapter ->
                 viewModel.getChart.observe(viewLifecycleOwner) { data ->
@@ -150,19 +163,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                 recyclerviewFirst6Chapters.setupAdapter(first6ChapterAdapter)
                 recyclerviewFirst6Charts.setupAdapter(first6ChartAdapter, 1)
 
-//            searchView.setOnClickListener {
-//                MainFragmentDirections.actionGlobalGlobalSearchFragment().also {
-//                    findNavController().navigate(it)
-//                }
-//            }
 
-//            textviewAllChapters.setOnClickListener {
-//                findNavController().navigate(R.id.action_mainFragment_to_chapterFragment)
-//            }
-//
-//            textviewAllCharts.setOnClickListener {
-//                findNavController().navigate(R.id.action_mainFragment_to_chartFragment)
-//            }
             }
 
             setupDynamicLink()
@@ -186,13 +187,62 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                 findNavController().navigate(this)
             }
         }
-        fragmentMainBinding.web.setOnClickListener {
-           MainFragmentDirections.actionMainFragmentToWebViewFragment().apply {
-               findNavController().navigate(this)
-           }
+
+
+        remoteConfig = Firebase.remoteConfig
+        val configSettings = remoteConfigSettings {
+            minimumFetchIntervalInSeconds = 3600 // 1 hour
         }
+        remoteConfig.setConfigSettingsAsync(configSettings)
+                remoteConfig.addOnConfigUpdateListener(object: ConfigUpdateListener{
+            override fun onUpdate(configUpdate: ConfigUpdate) {
+                Log.d("skibidi", "onUpdate: " + configUpdate.updatedKeys)
+                if (configUpdate.updatedKeys.contains("update_value")) {
+                    remoteConfig.activate().addOnCompleteListener {
+                        val fetchedValue = remoteConfig.getLong("update_value").toInt()
+                        val savedValue = userPrefs.getSavedUpdateValue()
+                        Log.d("skibidi", "first launch>>>>>>>>>>>>>>>>>: ${userPrefs.isFirstLaunch}")
+                        if (savedValue != fetchedValue && !userPrefs.isFirstLaunch) {
+                            fragmentMainBinding.popupCard.visibility = View.VISIBLE
+                        fragmentMainBinding.popupDownloadButton.setOnClickListener {
+                            Log.d("skibidi", "onUpdate: this is from the button")
+                            viewModel.checkAndUpdatePage(
+                                "https://tbguide.framer.website/tb-coordinator",
+                                requireContext(),
+                                "15_appendix_district_tb_coordinators_(by_district).html"
+                            )
+                            fragmentMainBinding.popupCard.visibility = View.GONE
+                        }
+                            val properties = hashMapOf<String, Any>()
+                            properties["updated"] = fetchedValue
+                            Pendo.track("Value Updated", properties)
+                        }
+
+                        userPrefs.isFirstLaunch = false
+                        Log.d("skibidi", "second check launch>>>>>>>>>>>>>>>>>: ${userPrefs.isFirstLaunch}")
+                        userPrefs.saveUpdateValue(fetchedValue)
+                        Log.d("skibidi", "activity: THIS HAS WORKED")
+                    }
+                }
+            }
+
+            override fun onError(error: FirebaseRemoteConfigException) {
+                Log.d("skibidi", "onError: " + error.code, error)
+            }
+
+        })
+
+    }
 
 
+    private fun onGuideButtonClicked(){
+        Log.d(TAG, "skibidi: the button did something ")
+    }
+
+
+    @JavascriptInterface
+    fun triggerAction(){
+        (context as? MainFragment)?.onGuideButtonClicked()
     }
 
     private fun RecyclerView.setupAdapter(

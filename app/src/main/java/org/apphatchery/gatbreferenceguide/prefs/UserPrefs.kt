@@ -26,6 +26,8 @@ class UserPrefs @Inject constructor(
         val PENDO_VISITOR_ID = stringPreferencesKey("PENDO_VISITOR_ID")
     }
 
+    private val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+
 
     suspend fun setBuildVersion(version: Int) =
         dataStore.edit { it[BUILD_VERSION] = version }
@@ -36,5 +38,23 @@ class UserPrefs @Inject constructor(
     val getBuildVersion: Flow<Int> = dataStore.data.map { it[BUILD_VERSION] ?: 1 }
 
     val getPendoVisitorId: Flow<String> = dataStore.data.map { it[PENDO_VISITOR_ID] ?: "" }
+
+    fun getSavedUpdateValue(): Int {
+        return sharedPreferences.getInt("KEY_UPDATE_VALUE", -1) // Default to -1 if not set
+    }
+
+    fun saveUpdateValue(value: Int) {
+        sharedPreferences.edit()
+            .putInt("KEY_UPDATE_VALUE", value)
+            .apply()
+    }
+
+
+    var isFirstLaunch: Boolean
+        get() = sharedPreferences.getBoolean("is_first_launch", true)
+        set(value) {
+            sharedPreferences.edit().putBoolean("is_first_launch", value).apply()
+        }
+
 
 }

@@ -43,6 +43,11 @@ object AppModule {
         @ApplicationContext context: Context
     ): FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
+//    @Singleton
+//    @Provides
+//    fun providesContent(
+//        @ApplicationContext context: Context
+//    ): Context = context
 
 
 //    @Singleton

@@ -3,7 +3,9 @@ package org.apphatchery.gatbreferenceguide.ui
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -13,10 +15,19 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.Firebase
+import com.google.firebase.remoteconfig.ConfigUpdate
+import com.google.firebase.remoteconfig.ConfigUpdateListener
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
+import com.google.firebase.remoteconfig.remoteConfig
+import com.google.firebase.remoteconfig.remoteConfigSettings
 import dagger.hilt.android.AndroidEntryPoint
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.ActivityMainBinding
+import org.apphatchery.gatbreferenceguide.prefs.UserPrefs
 import org.apphatchery.gatbreferenceguide.utils.*
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -43,6 +54,15 @@ class MainActivity : AppCompatActivity() {
                 else -> bottomNavigationView.visibility = View.VISIBLE
             }
         }
+
+        val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
+        val configSettings = remoteConfigSettings {
+            minimumFetchIntervalInSeconds = 3600
+        }
+        remoteConfig.setConfigSettingsAsync(configSettings)
+
+
+
 
         binding.bottomNavigationView.setupWithNavController(navController)
         setupActionBarWithNavController(navController, AppBarConfiguration(navController.graph))
