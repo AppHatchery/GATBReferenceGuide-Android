@@ -121,7 +121,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                 }
             }
 
-            viewModel.downloadAndSavePage("https://tbguide.framer.website/tb-coordinator", requireContext())
+            viewModel.downloadAndSavePage("https://apphatchery.github.io/GA-TB-Reference-Guide-Web/pages/15_appendix_district_tb_coordinators_(by_district).html", requireContext())
 
 
 
@@ -207,7 +207,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                         fragmentMainBinding.popupDownloadButton.setOnClickListener {
                             Log.d("skibidi", "onUpdate: this is from the button")
                             viewModel.checkAndUpdatePage(
-                                "https://tbguide.framer.website/tb-coordinator",
+                                "https://apphatchery.github.io/GA-TB-Reference-Guide-Web/pages/15_appendix_district_tb_coordinators_(by_district).html",
                                 requireContext(),
                                 "15_appendix_district_tb_coordinators_(by_district).html"
                             )

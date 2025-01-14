@@ -72,7 +72,7 @@ class WebViewFragment : BaseFragment(R.layout.activity_web_view){
                 val response = apiService.getPages().execute()
                 if (response.isSuccessful) {
                     val pages = response.body()
-                    val targetPage = pages?.find { it.name == "10_tb_infection_control_hospital_isolation_procedures__a__administrative_controls.html" }
+                    val targetPage = pages?.find { it.name == "15_appendix_district_tb_coordinators_(by_district).html" }
                     if (targetPage != null){
                         Log.d("TargetPage", "fetchData: ${targetPage.downloadUrl}")
                         fetchAndDisplayContent(targetPage.downloadUrl)

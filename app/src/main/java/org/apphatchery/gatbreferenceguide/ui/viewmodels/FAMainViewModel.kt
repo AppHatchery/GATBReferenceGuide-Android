@@ -157,7 +157,7 @@ class FAMainViewModel @Inject constructor(
             saveFile(htmlFilename, htmlContent, context)
 
             // Parse the HTML to find dependencies
-            val doc = Jsoup.parse(htmlContent)
+            val doc = Jsoup.parse(htmlContent, url)
 
             // Download and save resources (CSS, JS, images)
             doc.select("link[rel=stylesheet], script[src], img[src]").forEach { element ->
