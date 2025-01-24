@@ -2,6 +2,7 @@ package org.apphatchery.gatbreferenceguide.ui.viewmodels
 
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -139,7 +140,6 @@ class FAMainViewModel @Inject constructor(
             // Check if content has already been downloaded
             val sharedPrefs = context.getSharedPreferences("DownloadPrefs", Context.MODE_PRIVATE)
             if (sharedPrefs.getBoolean("isDownloaded", false)) {
-                Log.d("skibidi", "Content already downloaded, skipping...")
                 return@launch
             }
 
@@ -193,10 +193,8 @@ class FAMainViewModel @Inject constructor(
 
             // Notify success on the main thread
             withContext(Dispatchers.Main) {
-                Log.d("skibidi", "downloadAndSavePage: ")
             }
         } catch (e: Exception) {
-            Log.e("skibidi", "Failed to download page", e)
         }
     }
 

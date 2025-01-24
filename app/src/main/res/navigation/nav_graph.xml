@@ -58,12 +58,6 @@
         <action
             android:id="@+id/action_mainFragment_to_savedFragment"
             app:destination="@id/savedFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_webViewFragment"
-            app:destination="@id/webViewFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_framerFragment"
-            app:destination="@id/framerFragment" />
     </fragment>
 
     <fragment
@@ -257,12 +251,6 @@
             android:name="contact"
             app:argType="org.apphatchery.gatbreferenceguide.db.entities.PrivateContact" />
     </fragment>
-    <fragment
-        android:id="@+id/webViewFragment"
-        android:name="org.apphatchery.gatbreferenceguide.retrofit.WebViewFragment"
-        android:label="WebViewFragment" />
-    <fragment
-        android:id="@+id/framerFragment"
-        android:name="org.apphatchery.gatbreferenceguide.framer.FramerFragment"
-        android:label="FramerFragment" />
+
+
 </navigation>

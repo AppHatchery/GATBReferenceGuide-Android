@@ -2,9 +2,11 @@ package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.webkit.JavascriptInterface
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -26,6 +28,7 @@ import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -63,6 +66,9 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private var visitor_id: String? = null
     private lateinit var navController: NavController
     private lateinit var remoteConfig: FirebaseRemoteConfig
+    private var progressBar : ProgressBar? = null
+    private var i = 0
+    private val handler = Handler()
 
     @Inject
     lateinit var userPrefs: UserPrefs
@@ -122,7 +128,20 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             }
 
             viewModel.downloadAndSavePage("https://apphatchery.github.io/GA-TB-Reference-Guide-Web/pages/15_appendix_district_tb_coordinators_(by_district).html", requireContext())
-
+// circular progress bar
+//            fragmentMainBinding.popupDownloadButton.setOnClickListener {
+//                fragmentMainBinding.popupCard.visibility = View.GONE
+//                fragmentMainBinding.pbar.isVisible = true
+//                viewModel.checkAndUpdatePage(
+//                    "https://apphatchery.github.io/GA-TB-Reference-Guide-Web/pages/15_appendix_district_tb_coordinators_(by_district).html",
+//                    requireContext(),
+//                    "15_appendix_district_tb_coordinators_(by_district).html"
+//                )
+//                handler.postDelayed({
+//                    fragmentMainBinding.pbar.isVisible = false
+//                }, 1000)
+//               // fragmentMainBinding.progressBar.isVisible = false
+//            }
 
 
             first6ChartAdapter = FAMainFirst6ChartAdapter().also { adapter ->
@@ -196,38 +215,55 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         remoteConfig.setConfigSettingsAsync(configSettings)
                 remoteConfig.addOnConfigUpdateListener(object: ConfigUpdateListener{
             override fun onUpdate(configUpdate: ConfigUpdate) {
-                Log.d("skibidi", "onUpdate: " + configUpdate.updatedKeys)
                 if (configUpdate.updatedKeys.contains("update_value")) {
                     remoteConfig.activate().addOnCompleteListener {
                         val fetchedValue = remoteConfig.getLong("update_value").toInt()
                         val savedValue = userPrefs.getSavedUpdateValue()
-                        Log.d("skibidi", "first launch>>>>>>>>>>>>>>>>>: ${userPrefs.isFirstLaunch}")
                         if (savedValue != fetchedValue && !userPrefs.isFirstLaunch) {
                             fragmentMainBinding.popupCard.visibility = View.VISIBLE
-                        fragmentMainBinding.popupDownloadButton.setOnClickListener {
-                            Log.d("skibidi", "onUpdate: this is from the button")
-                            viewModel.checkAndUpdatePage(
-                                "https://apphatchery.github.io/GA-TB-Reference-Guide-Web/pages/15_appendix_district_tb_coordinators_(by_district).html",
-                                requireContext(),
-                                "15_appendix_district_tb_coordinators_(by_district).html"
-                            )
-                            fragmentMainBinding.popupCard.visibility = View.GONE
-                        }
+                            fragmentMainBinding.popupDownloadButton.setOnClickListener {
+                                fragmentMainBinding.simpleProgressBar.visibility = View.VISIBLE
+                                fragmentMainBinding.popupDownloadButton.visibility = View.GONE
+
+                                i = fragmentMainBinding.simpleProgressBar.progress
+
+                                Thread {
+                                    while (i < 10) {
+                                        i += 1
+
+                                        handler.post {
+                                            fragmentMainBinding.simpleProgressBar.progress = i
+                                        }
+                                        try {
+                                            Thread.sleep(100)
+                                        } catch (e: InterruptedException){
+                                            e.printStackTrace()
+                                        }
+                                    }
+
+                                    handler.post{
+                                        fragmentMainBinding.popupCard.visibility = View.GONE
+                                    }
+                                }.start()
+                                viewModel.checkAndUpdatePage(
+                                    "https://apphatchery.github.io/GA-TB-Reference-Guide-Web/pages/15_appendix_district_tb_coordinators_(by_district).html",
+                                    requireContext(),
+                                    "15_appendix_district_tb_coordinators_(by_district).html"
+                                )
+
+                            }
                             val properties = hashMapOf<String, Any>()
                             properties["updated"] = fetchedValue
                             Pendo.track("Value Updated", properties)
                         }
 
                         userPrefs.isFirstLaunch = false
-                        Log.d("skibidi", "second check launch>>>>>>>>>>>>>>>>>: ${userPrefs.isFirstLaunch}")
                         userPrefs.saveUpdateValue(fetchedValue)
-                        Log.d("skibidi", "activity: THIS HAS WORKED")
                     }
                 }
             }
 
             override fun onError(error: FirebaseRemoteConfigException) {
-                Log.d("skibidi", "onError: " + error.code, error)
             }
 
         })
@@ -235,15 +271,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     }
 
 
-    private fun onGuideButtonClicked(){
-        Log.d(TAG, "skibidi: the button did something ")
-    }
-
-
-    @JavascriptInterface
-    fun triggerAction(){
-        (context as? MainFragment)?.onGuideButtonClicked()
-    }
 
     private fun RecyclerView.setupAdapter(
         listAdapter: RecyclerView.Adapter<*>,

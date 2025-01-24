@@ -13,9 +13,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.db.Database
-import org.apphatchery.gatbreferenceguide.retrofit.GitHubService
-import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
 import javax.inject.Singleton
 
 @Module
