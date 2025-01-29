@@ -134,29 +134,38 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-<!--    <ProgressBar-->
-<!--        android:id="@+id/pbar"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        android:visibility="gone"-->
-<!--        />-->
+    <ProgressBar
+        android:id="@+id/pbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        />
+
+    <FrameLayout
+        android:id="@+id/popup_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/popup_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:visibility="gone"
         app:cardElevation="8dp"
         app:cardCornerRadius="8dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_gravity="center"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -169,7 +178,7 @@
                 android:id="@+id/popup_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Content Available"
+                android:text="@string/new_content_available"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="?attr/colorTextBlackWhite" />
@@ -178,32 +187,24 @@
                 android:id="@+id/popup_body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fresh updates are ready for you! Please download the latest content to continue enjoying the app."
+                android:text="@string/update_card_message"
                 android:textSize="16sp"
                 android:layout_marginTop="8dp"
                 android:textColor="?attr/colorTextBlackWhite" />
 
-            <ProgressBar
-                android:id="@+id/simpleProgressBar"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:max="10"
-                android:visibility="gone"
-                android:progress="0"
-                android:progressTint="?attr/colorPrimary"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
+
 
             <Button
                 android:id="@+id/popup_download_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Download Now"
+                android:text="@string/download_now"
                 android:backgroundTint="?attr/colorPrimary"
                 android:textColor="@color/white" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+    </FrameLayout>
 
 
     <androidx.constraintlayout.widget.Group

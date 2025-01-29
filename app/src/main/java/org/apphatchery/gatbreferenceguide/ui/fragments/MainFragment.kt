@@ -128,21 +128,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             }
 
             viewModel.downloadAndSavePage("https://apphatchery.github.io/GA-TB-Reference-Guide-Web/pages/15_appendix_district_tb_coordinators_(by_district).html", requireContext())
-// circular progress bar
-//            fragmentMainBinding.popupDownloadButton.setOnClickListener {
-//                fragmentMainBinding.popupCard.visibility = View.GONE
-//                fragmentMainBinding.pbar.isVisible = true
-//                viewModel.checkAndUpdatePage(
-//                    "https://apphatchery.github.io/GA-TB-Reference-Guide-Web/pages/15_appendix_district_tb_coordinators_(by_district).html",
-//                    requireContext(),
-//                    "15_appendix_district_tb_coordinators_(by_district).html"
-//                )
-//                handler.postDelayed({
-//                    fragmentMainBinding.pbar.isVisible = false
-//                }, 1000)
-//               // fragmentMainBinding.progressBar.isVisible = false
-//            }
-
 
             first6ChartAdapter = FAMainFirst6ChartAdapter().also { adapter ->
                 viewModel.getChart.observe(viewLifecycleOwner) { data ->
@@ -220,37 +205,20 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                         val fetchedValue = remoteConfig.getLong("update_value").toInt()
                         val savedValue = userPrefs.getSavedUpdateValue()
                         if (savedValue != fetchedValue && !userPrefs.isFirstLaunch) {
-                            fragmentMainBinding.popupCard.visibility = View.VISIBLE
+                            fragmentMainBinding.popupContainer.visibility = View.VISIBLE
+                            //circular progress bar
                             fragmentMainBinding.popupDownloadButton.setOnClickListener {
-                                fragmentMainBinding.simpleProgressBar.visibility = View.VISIBLE
-                                fragmentMainBinding.popupDownloadButton.visibility = View.GONE
-
-                                i = fragmentMainBinding.simpleProgressBar.progress
-
-                                Thread {
-                                    while (i < 10) {
-                                        i += 1
-
-                                        handler.post {
-                                            fragmentMainBinding.simpleProgressBar.progress = i
-                                        }
-                                        try {
-                                            Thread.sleep(100)
-                                        } catch (e: InterruptedException){
-                                            e.printStackTrace()
-                                        }
-                                    }
-
-                                    handler.post{
-                                        fragmentMainBinding.popupCard.visibility = View.GONE
-                                    }
-                                }.start()
+                                fragmentMainBinding.popupContainer.visibility = View.GONE
+                                fragmentMainBinding.pbar.isVisible = true
                                 viewModel.checkAndUpdatePage(
                                     "https://apphatchery.github.io/GA-TB-Reference-Guide-Web/pages/15_appendix_district_tb_coordinators_(by_district).html",
                                     requireContext(),
                                     "15_appendix_district_tb_coordinators_(by_district).html"
                                 )
-
+                                handler.postDelayed({
+                                    fragmentMainBinding.pbar.isVisible = false
+                                    Toast.makeText(requireContext(), "Download Complete", Toast.LENGTH_SHORT).show()
+                                }, 1000)
                             }
                             val properties = hashMapOf<String, Any>()
                             properties["updated"] = fetchedValue

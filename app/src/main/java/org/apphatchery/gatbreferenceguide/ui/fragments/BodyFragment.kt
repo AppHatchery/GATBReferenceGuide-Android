@@ -373,6 +373,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 val fileFromDir = filesURL + subChapterEntity.url + EXTENSION
                 val myURL = "file://${requireContext().filesDir.absolutePath}/${subChapterEntity.url}$EXTENSION"
                 if(subChapterEntity.url == "15_appendix_district_tb_coordinators_(by_district)"){
+                    textviewSubChapter.visibility = View.GONE
+                    lastUpdateTextView.visibility = View.GONE
                     bodyWebView.loadUrl(fileFromDir)
                 }else{
                     bodyWebView.loadUrl(loadUrl)
