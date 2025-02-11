@@ -425,6 +425,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         })
     }
 
+
     private fun handleSearchTextChange(text: String) {
         searchJob?.cancel()
         val trimmedText = text.trim()
@@ -434,6 +435,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         }
         updateSearchViewVisibility(trimmedText.isBlank())
     }
+
     private fun updateSearchViewVisibility(isBlank: Boolean) {
         with(bind) {
             recyclerview.visibility = if (isBlank) View.GONE else View.VISIBLE
@@ -443,9 +445,11 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             tabLayoutContainer.visibility = if (isBlank) View.GONE else View.VISIBLE
         }
     }
+
     private fun highlightSearchResults(results: List<GlobalSearchEntity>): List<GlobalSearchEntity> {
         val search = viewModel.searchQuery.value ?: ""
-        val searchWords = search.split("\\s+".toRegex())
+        val searchWords = search.split(Regex("[\\s.,]+"))
+            .filter { it.isNotEmpty() }
 
         return results.map { item ->
             val highlightedTextInBody = highlightText(item.textInBody, searchWords)
@@ -461,11 +465,17 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
     }
 
     private fun highlightText(original: String, wordsToHighlight: List<String>): String {
+        if (wordsToHighlight.isEmpty() || original.isEmpty()) return original
         var result = original
         for (word in wordsToHighlight) {
-            val regex = Regex("(?i)${Regex.escape(word)}")
-            result = result.replace(regex) {
-                "<span style='background-color: yellow; color: black; font-weight: bold;'>${it.value}</span>"
+            if (word.isNotEmpty()) {
+                val pattern = word.replace(Regex("[\\s.,]+"), "")
+                if (pattern.isNotEmpty()) {
+                    val regex = Regex("(?i)($pattern)")
+                    result = result.replace(regex) {
+                        "<span style='background-color: yellow; color: black; font-weight: bold;'>${it.value}</span>"
+                    }
+                }
             }
         }
         return result
@@ -521,7 +531,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         val count = filteredResults.size
 
         bind.visibleViewGroup.visibility = if (count > 0) View.VISIBLE else View.GONE
-        bind.noItemFound.visibility = if (count == 0) View.VISIBLE else View.GONE
+        bind.noItemFound.visibility = if (count == 0 && bind.suggestedContent.visibility == View.GONE) View.VISIBLE else View.GONE
 
         bind.searchItemCount.text = when (currentTab) {
             0 -> "${count} result${if (count == 1) "" else "s"} in"

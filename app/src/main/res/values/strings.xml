@@ -70,6 +70,9 @@
     <string name="pregnancy">Pregnancy</string>
     <string name="rifampin">Rifampin</string>
     <string name="recent">Recent</string>
+    <string name="update_card_message">Fresh updates are ready for you! Please download the latest content to continue enjoying the app.</string>
+    <string name="new_content_available">New Content Available</string>
+    <string name="download_now">Download Now</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

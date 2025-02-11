@@ -2,8 +2,12 @@ package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.webkit.JavascriptInterface
+import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
@@ -12,11 +16,19 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Visibility
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ConfigUpdate
+import com.google.firebase.remoteconfig.ConfigUpdateListener
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -53,6 +65,10 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private val viewModel: FAMainViewModel by viewModels()
     private var visitor_id: String? = null
     private lateinit var navController: NavController
+    private lateinit var remoteConfig: FirebaseRemoteConfig
+    private var progressBar : ProgressBar? = null
+    private var i = 0
+    private val handler = Handler()
 
     @Inject
     lateinit var userPrefs: UserPrefs
@@ -111,6 +127,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                 }
             }
 
+            viewModel.downloadAndSavePage("https://apphatchery.github.io/GA-TB-Reference-Guide-Web/pages/15_appendix_district_tb_coordinators_(by_district).html", requireContext())
 
             first6ChartAdapter = FAMainFirst6ChartAdapter().also { adapter ->
                 viewModel.getChart.observe(viewLifecycleOwner) { data ->
@@ -150,19 +167,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                 recyclerviewFirst6Chapters.setupAdapter(first6ChapterAdapter)
                 recyclerviewFirst6Charts.setupAdapter(first6ChartAdapter, 1)
 
-//            searchView.setOnClickListener {
-//                MainFragmentDirections.actionGlobalGlobalSearchFragment().also {
-//                    findNavController().navigate(it)
-//                }
-//            }
 
-//            textviewAllChapters.setOnClickListener {
-//                findNavController().navigate(R.id.action_mainFragment_to_chapterFragment)
-//            }
-//
-//            textviewAllCharts.setOnClickListener {
-//                findNavController().navigate(R.id.action_mainFragment_to_chartFragment)
-//            }
             }
 
             setupDynamicLink()
@@ -188,7 +193,52 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         }
 
 
+        remoteConfig = Firebase.remoteConfig
+        val configSettings = remoteConfigSettings {
+            minimumFetchIntervalInSeconds = 3600 // 1 hour
+        }
+        remoteConfig.setConfigSettingsAsync(configSettings)
+                remoteConfig.addOnConfigUpdateListener(object: ConfigUpdateListener{
+            override fun onUpdate(configUpdate: ConfigUpdate) {
+                if (configUpdate.updatedKeys.contains("update_value")) {
+                    remoteConfig.activate().addOnCompleteListener {
+                        val fetchedValue = remoteConfig.getLong("update_value").toInt()
+                        val savedValue = userPrefs.getSavedUpdateValue()
+                        if (savedValue != fetchedValue && !userPrefs.isFirstLaunch) {
+                            fragmentMainBinding.popupContainer.visibility = View.VISIBLE
+                            //circular progress bar
+                            fragmentMainBinding.popupDownloadButton.setOnClickListener {
+                                fragmentMainBinding.popupContainer.visibility = View.GONE
+                                fragmentMainBinding.pbar.isVisible = true
+                                viewModel.checkAndUpdatePage(
+                                    "https://apphatchery.github.io/GA-TB-Reference-Guide-Web/pages/15_appendix_district_tb_coordinators_(by_district).html",
+                                    requireContext(),
+                                    "15_appendix_district_tb_coordinators_(by_district).html"
+                                )
+                                handler.postDelayed({
+                                    fragmentMainBinding.pbar.isVisible = false
+                                    Toast.makeText(requireContext(), "Download Complete", Toast.LENGTH_SHORT).show()
+                                }, 1000)
+                            }
+                            val properties = hashMapOf<String, Any>()
+                            properties["updated"] = fetchedValue
+                            Pendo.track("Value Updated", properties)
+                        }
+
+                        userPrefs.isFirstLaunch = false
+                        userPrefs.saveUpdateValue(fetchedValue)
+                    }
+                }
+            }
+
+            override fun onError(error: FirebaseRemoteConfigException) {
+            }
+
+        })
+
     }
+
+
 
     private fun RecyclerView.setupAdapter(
         listAdapter: RecyclerView.Adapter<*>,

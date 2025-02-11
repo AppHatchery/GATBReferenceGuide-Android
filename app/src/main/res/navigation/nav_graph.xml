@@ -251,4 +251,6 @@
             android:name="contact"
             app:argType="org.apphatchery.gatbreferenceguide.db.entities.PrivateContact" />
     </fragment>
+
+
 </navigation>

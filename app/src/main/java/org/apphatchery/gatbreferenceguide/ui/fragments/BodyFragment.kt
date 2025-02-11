@@ -3,6 +3,7 @@ package org.apphatchery.gatbreferenceguide.ui.fragments
 import android.animation.Animator
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -29,6 +30,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
@@ -88,6 +90,7 @@ import org.apphatchery.gatbreferenceguide.utils.snackBar
 import org.apphatchery.gatbreferenceguide.utils.toast
 import sdk.pendo.io.Pendo
 import javax.inject.Inject
+import kotlin.math.log
 
 @AndroidEntryPoint
 class BodyFragment : BaseFragment(R.layout.fragment_body) {
@@ -113,6 +116,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private lateinit var subChapterEntity: SubChapterEntity
     private lateinit var chapterEntity: ChapterEntity
     private var baseURL = ""
+    private var filesURL = ""
     private var isCollapsed = false
     private lateinit var id: String
     private lateinit var title: String
@@ -252,9 +256,18 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         webViewFont = bind.bodyWebView
 
+        webViewFont.settings.apply {
+            javaScriptEnabled = true
+            domStorageEnabled = true
+            allowFileAccess = true // 10
+            allowContentAccess = true
+        }
+
         val menuHost: MenuHost = requireActivity()
 
+       // baseURL = "file://" + requireContext().cacheDir.toString() + "/"
         baseURL = "file://" + requireContext().cacheDir.toString() + "/"
+        filesURL = "file://" + requireContext().filesDir.absolutePath.toString() + "/"
 
         chartAndSubChapter = bodyFragmentArgs.chartAndSubChapter
         subChapterEntity = bodyUrl.subChapterEntity
@@ -302,7 +315,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
 
         setupWebView()
-
+//search query
         if (bodyUrl.searchQuery.isNotEmpty() && !isOnlyWhitespace(bodyUrl.searchQuery)) {
             bind.searchClearText.text = bodyUrl.searchQuery
             bind.searchClearContainer.visibility = View.VISIBLE
@@ -356,7 +369,18 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     )
                 }
                 textviewSubChapter.text = spannableString
-                bodyWebView.loadUrl(baseURL + PAGES_DIR + subChapterEntity.url + EXTENSION)
+                val loadUrl = baseURL + PAGES_DIR + subChapterEntity.url + EXTENSION
+                val fileFromDir = filesURL + subChapterEntity.url + EXTENSION
+                val myURL = "file://${requireContext().filesDir.absolutePath}/${subChapterEntity.url}$EXTENSION"
+                if(subChapterEntity.url == "15_appendix_district_tb_coordinators_(by_district)"){
+                    textviewSubChapter.visibility = View.GONE
+                    lastUpdateTextView.visibility = View.GONE
+                    bodyWebView.loadUrl(fileFromDir)
+                }else{
+                    bodyWebView.loadUrl(loadUrl)
+                }
+
+
             }
 
 
@@ -502,7 +526,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         bookmarkType = BookmarkType.CHART
         textviewSubChapter.text = chartAndSubChapter!!.chartEntity.chartTitle
-
+// here is where the chart webview is being loaded
         val loadUrl = baseURL + PAGES_DIR + chartAndSubChapter!!.chartEntity.id + EXTENSION
         bodyWebView.loadUrl(loadUrl)
 
@@ -825,6 +849,18 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                                         .setData(Uri.parse(link))
                                 )
                             }
+                        }
+                        true
+                    }
+
+                    link.contains("mailto:") -> {
+                        val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = Uri.parse(link)
+                        }
+                        try{
+                            startActivity(emailIntent)
+                        } catch(e: ActivityNotFoundException){
+                            Toast.makeText(requireContext(), "No email client found", Toast.LENGTH_SHORT).show()
                         }
                         true
                     }

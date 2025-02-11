@@ -29,20 +29,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-<!--        <androidx.appcompat.widget.AppCompatTextView-->
-<!--            android:id="@+id/searchView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@drawable/shape_circle"-->
-<!--            android:backgroundTint="#85D1D1D1"-->
-<!--            android:drawableStart="@drawable/ic_baseline_search_gray"-->
-<!--            android:drawablePadding="8dp"-->
-<!--            android:gravity="center_vertical"-->
-<!--            android:padding="8dp"-->
-<!--            android:text="Search Guide"-->
-<!--            android:textColor="@color/light_gray"-->
-<!--            android:textSize="17sp"-->
-<!--            tools:ignore="HardcodedText" />-->
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/bookmark"
@@ -61,6 +47,13 @@
             android:textSize="17sp"
             tools:ignore="HardcodedText"
             />
+
+<!--        <androidx.appcompat.widget.AppCompatButton-->
+<!--            android:id="@+id/web"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="web"-->
+<!--            />-->
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -96,19 +89,6 @@
                 tools:ignore="HardcodedText" />
 
 
-<!--            <androidx.appcompat.widget.AppCompatTextView-->
-<!--                android:id="@+id/textview_all_chapters"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="8dp"-->
-<!--                android:drawableEnd="@drawable/ic_keyboard_arrow_right"-->
-<!--                android:foreground="?attr/selectableItemBackgroundBorderless"-->
-<!--                android:paddingHorizontal="8dp"-->
-<!--                android:paddingVertical="16dp"-->
-<!--                android:text="See All Chapters"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                tools:ignore="HardcodedText" />-->
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerview_first_6_chapters"
@@ -123,19 +103,6 @@
                 tools:listitem="@layout/fragment_main_first_6_chapter_item" />
 
 
-<!--            <androidx.appcompat.widget.AppCompatTextView-->
-<!--                android:id="@+id/textview_all_charts"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="8dp"-->
-<!--                android:drawableEnd="@drawable/ic_keyboard_arrow_right"-->
-<!--                android:foreground="?attr/selectableItemBackgroundBorderless"-->
-<!--                android:paddingHorizontal="8dp"-->
-<!--                android:paddingVertical="16dp"-->
-<!--                android:text="See All Charts"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/recyclerview_first_6_chapters"-->
-<!--                tools:ignore="HardcodedText" />-->
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textview_charts"
@@ -166,6 +133,78 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/pbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        />
+
+    <FrameLayout
+        android:id="@+id/popup_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/popup_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardElevation="8dp"
+        app:cardCornerRadius="8dp"
+        android:layout_gravity="center"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/popup_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/new_content_available"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorTextBlackWhite" />
+
+            <TextView
+                android:id="@+id/popup_body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/update_card_message"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"
+                android:textColor="?attr/colorTextBlackWhite" />
+
+
+
+            <Button
+                android:id="@+id/popup_download_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/download_now"
+                android:backgroundTint="?attr/colorPrimary"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    </FrameLayout>
 
 
     <androidx.constraintlayout.widget.Group

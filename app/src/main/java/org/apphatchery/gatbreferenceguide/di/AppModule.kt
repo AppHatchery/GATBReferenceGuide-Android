@@ -39,4 +39,26 @@ object AppModule {
     fun providesFirebaseAnalytics(
         @ApplicationContext context: Context
     ): FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+
+//    @Singleton
+//    @Provides
+//    fun providesContent(
+//        @ApplicationContext context: Context
+//    ): Context = context
+
+
+//    @Singleton
+//    @Provides
+//    fun providesRetrofit(): Retrofit {
+//        return Retrofit.Builder()
+//            .baseUrl("https://api.github.com/repos/apphatchery/GA-TB-Reference-Guide-Web/contents/pages")
+//            .addConverterFactory(ScalarsConverterFactory.create())
+//            .build()
+//    }
+//
+//    @Singleton
+//    @Provides
+//    fun providesGitHubService(retrofit: Retrofit): GitHubService {
+//        return retrofit.create(GitHubService::class.java)
+//    }
 }
