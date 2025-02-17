@@ -198,12 +198,40 @@ class FAMainViewModel @Inject constructor(
             // Mark content as downloaded in SharedPreferences
             sharedPrefs.edit().putBoolean("isDownloaded", true).apply()
 
+            dumpUpdatedHTMLInfo(context)
+            bindHtmlWithChapter()
+
             // Notify success on the main thread
             withContext(Dispatchers.Main) {
             }
         } catch (e: Exception) {
         }
     }
+
+    private fun dumpUpdatedHTMLInfo(context: Context) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            val fileName = "15_appendix_district_tb_coordinators_(by_district).html"
+            val file = File(context.filesDir, fileName)
+
+            if (!file.exists()) {
+                Log.e("DumpHTMLInfo", "File does not exist in filesDir: $fileName")
+                return@launch
+            }
+
+            val htmlContent = file.readText()
+            val extractedText = Jsoup.parse(htmlContent).text()
+
+            // Create entity and insert into Room DB
+            val htmlInfoEntity = HtmlInfoEntity(fileName.replace(".html", ""), extractedText)
+            repo.db.htmlInfoDao().insert(listOf(htmlInfoEntity))
+
+        } catch (e: Exception) {
+            Log.e("DumpHTMLInfo", "Error updating HTML content", e)
+        }
+    }
+
+
+
 
     private fun downloadSvgLocally(context: Context): String? {
         val svgUrl = "https://apphatchery.github.io/GA-TB-Reference-Guide-Web/assets/ic_title_icon.SVG"

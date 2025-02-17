@@ -1,6 +1,7 @@
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.animation.Animator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ActivityNotFoundException
@@ -34,6 +35,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.animation.doOnEnd
 import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
@@ -429,28 +431,58 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 showFontDialog()
             }
 
-//            shareFeedbackButton.setOnClickListener { onShareFeedbackListener() }
-            collapseActionButton.setOnClickListener {
-                bind.recyclerviewNote.apply {
-                    if (isCollapsed.not()) {
-                        scaleAnimate(this, 0f) {
-                            (it as ImageView).setImageResource(R.drawable.ic_baseline_arrow_down)
-                            visibility = View.GONE
-                        }
-                    } else {
-                        visibility = View.VISIBLE
-                        scaleAnimate(this, 1f) {
-                            (it as ImageView).setImageResource(R.drawable.ic_baseline_arrow_up)
-                        }
+
+
+
+            fun expandRecyclerView(recyclerView: RecyclerView) {
+                recyclerView.measure(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+                val targetHeight = recyclerView.measuredHeight
+
+                recyclerView.layoutParams.height = 0
+                recyclerView.visibility = View.VISIBLE
+
+                val animator = ValueAnimator.ofInt(0, targetHeight).apply {
+                    duration = 300 // Adjust duration as needed
+                    addUpdateListener { animation ->
+                        recyclerView.layoutParams.height = animation.animatedValue as Int
+                        recyclerView.requestLayout()
                     }
-                    isCollapsed = !isCollapsed
                 }
+                animator.start()
             }
 
+            fun collapseRecyclerView(recyclerView: RecyclerView) {
+                val initialHeight = recyclerView.measuredHeight
+
+                val animator = ValueAnimator.ofInt(initialHeight, 0).apply {
+                    duration = 300
+                    addUpdateListener { animation ->
+                        recyclerView.layoutParams.height = animation.animatedValue as Int
+                        recyclerView.requestLayout()
+                    }
+                    doOnEnd { recyclerView.visibility = View.GONE }
+                }
+                animator.start()
+            }
+
+            fun toggleRecyclerViewVisibility(recyclerView: RecyclerView, toggleButton: ImageView, isCollapsed: Boolean) {
+                if (isCollapsed) {
+                    expandRecyclerView(recyclerView)
+                    toggleButton.setImageResource(R.drawable.ic_baseline_arrow_up)
+                } else {
+                    collapseRecyclerView(recyclerView)
+                    toggleButton.setImageResource(R.drawable.ic_baseline_arrow_down)
+                }
+            }
+            collapseActionButton.setOnClickListener {
+                toggleRecyclerViewVisibility(bind.recyclerviewNote, collapseActionButton, isCollapsed)
+                isCollapsed = !isCollapsed
+            }
 
         }
-
-
 
         setupBookmark(id)
 
@@ -477,20 +509,18 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 //                override fun onAnimationCancel(animation: Animator?) = Unit
 //                override fun onAnimationRepeat(animation: Animator?) = Unit
                 override fun onAnimationStart(p0: Animator) {
-                    TODO("Not yet implemented")
                 }
 
                 override fun onAnimationEnd(p0: Animator) {
-                    TODO("Not yet implemented")
                 }
 
                 override fun onAnimationCancel(p0: Animator) {
-                    TODO("Not yet implemented")
                 }
 
                 override fun onAnimationRepeat(p0: Animator) {
-                    TODO("Not yet implemented")
                 }
+
+
             })
         }
 

@@ -49,6 +49,7 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FAGlobalSearchAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FASearchRecentAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAGlobalSearchViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
+import org.jsoup.Jsoup
 import sdk.pendo.io.Pendo
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
@@ -135,9 +136,10 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                 ) bind.searchKeyword.text.toString() else ""
                 viewModel.getSubChapterById(it.subChapterId.toString())
                     .observe(viewLifecycleOwner) { subChapter ->
+                        val cleanedTitle = Jsoup.parse(it.searchTitle).text()
                         val chartEntity = ChartEntity(
                             it.chartId,
-                            it.searchTitle,
+                            cleanedTitle,
                             it.subChapter,
                             it.subChapterId,
                             0
