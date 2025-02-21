@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.room.withTransaction
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -130,6 +131,15 @@ class FAMainViewModel @Inject constructor(
 
     }
 
+    private fun checkTriggerValue(remoteConfig: FirebaseRemoteConfig, context: Context){
+        val sharedPrefs = context.getSharedPreferences("KEY_UPDATE_VALUE", Context.MODE_PRIVATE)
+        remoteConfig.fetchAndActivate()
+            .addOnCompleteListener{task ->
+                val initUpdateValue = remoteConfig.getLong("update_value").toInt()
+                sharedPrefs.edit().putInt("KEY_UPDATE_VALUE", initUpdateValue).apply()
+            }
+    }
+
     // Download and save framer page
     fun downloadAndSavePage(
         url: String,
@@ -197,6 +207,7 @@ class FAMainViewModel @Inject constructor(
 
             // Mark content as downloaded in SharedPreferences
             sharedPrefs.edit().putBoolean("isDownloaded", true).apply()
+            checkTriggerValue(FirebaseRemoteConfig.getInstance(), context)
 
             dumpUpdatedHTMLInfo(context)
             bindHtmlWithChapter()
