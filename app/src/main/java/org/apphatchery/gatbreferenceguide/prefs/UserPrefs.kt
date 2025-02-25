@@ -40,7 +40,7 @@ class UserPrefs @Inject constructor(
     val getPendoVisitorId: Flow<String> = dataStore.data.map { it[PENDO_VISITOR_ID] ?: "" }
 
     fun getSavedUpdateValue(): Int {
-        return sharedPreferences.getInt("KEY_UPDATE_VALUE", -1) // Default to -1 if not set
+        return sharedPreferences.getInt("KEY_UPDATE_VALUE", 0) // Default to -1 if not set
     }
 
     fun saveUpdateValue(value: Int) {

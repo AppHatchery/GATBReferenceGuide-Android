@@ -1,5 +1,7 @@
 package org.apphatchery.gatbreferenceguide.ui.viewmodels
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -17,11 +19,12 @@ class FASettingsViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-
-    fun resetInfo() = viewModelScope.launch  {
+    fun resetInfo(context: Context) = viewModelScope.launch  {
         db.bookmarkDao().clearBookmarks()
         db.noteDao().clearNotes()
         db.recentDao().clearRecent()
+        val sharedPreferences = context.getSharedPreferences("RECENT_SEARCHES", Context.MODE_PRIVATE)
+        sharedPreferences.edit().remove("RECENT_SEARCHES_LIST").apply()
     }
 
 

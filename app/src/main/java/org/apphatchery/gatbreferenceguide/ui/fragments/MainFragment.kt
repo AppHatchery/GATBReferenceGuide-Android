@@ -69,6 +69,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private var progressBar : ProgressBar? = null
     private var i = 0
     private val handler = Handler()
+    private var initUpdateValue = 0
 
     @Inject
     lateinit var userPrefs: UserPrefs
@@ -127,7 +128,10 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                 }
             }
 
-            viewModel.downloadAndSavePage("https://apphatchery.github.io/GA-TB-Reference-Guide-Web/pages/15_appendix_district_tb_coordinators_(by_district).html", requireContext())
+            viewModel.downloadAndSavePage(
+                "https://apphatchery.github.io/GA-TB-Reference-Guide-Web/pages/15_appendix_district_tb_coordinators_(by_district).html",
+                requireContext()
+            )
 
             first6ChartAdapter = FAMainFirst6ChartAdapter().also { adapter ->
                 viewModel.getChart.observe(viewLifecycleOwner) { data ->

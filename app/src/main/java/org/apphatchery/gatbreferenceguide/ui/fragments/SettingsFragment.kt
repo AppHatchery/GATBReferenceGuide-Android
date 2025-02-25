@@ -115,7 +115,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     noButton.setOnClickListener { dismiss() }
                     yesButton.setOnClickListener {
                         dismiss()
-                        viewModel.resetInfo()
+                        viewModel.resetInfo(requireContext())
                         requireContext().toast("App data has been reset.")
                     }
                     safeDialogShow()
