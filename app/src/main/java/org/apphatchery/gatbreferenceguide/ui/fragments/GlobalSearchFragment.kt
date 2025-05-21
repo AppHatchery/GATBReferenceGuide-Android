@@ -432,6 +432,12 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         searchJob?.cancel()
         val trimmedText = text.trim()
         viewModel.searchQuery.value = text
+
+        if(trimmedText.isBlank()){
+            currentTab = 0
+            bind.tabLayout.getTabAt(0)?.select()
+        }
+
         with(bind.searchItemCount) {
             visibility = if (trimmedText.isBlank()) View.GONE else View.VISIBLE
         }
@@ -445,6 +451,10 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
             suggestedContent.visibility = if (isBlank) View.VISIBLE else View.GONE
             tabLayout.visibility = if (isBlank) View.GONE else View.VISIBLE
             tabLayoutContainer.visibility = if (isBlank) View.GONE else View.VISIBLE
+
+            if(isBlank){
+                recyclerview.scrollToPosition(0)
+            }
         }
     }
 
