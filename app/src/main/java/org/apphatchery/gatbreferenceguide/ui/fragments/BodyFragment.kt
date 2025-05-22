@@ -435,6 +435,10 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
 
             fun expandRecyclerView(recyclerView: RecyclerView) {
+
+                recyclerView.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                recyclerView.requestLayout()
+
                 recyclerView.measure(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
@@ -450,12 +454,15 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                         recyclerView.layoutParams.height = animation.animatedValue as Int
                         recyclerView.requestLayout()
                     }
+                    doOnEnd {
+                        recyclerView.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                    }
                 }
                 animator.start()
             }
 
             fun collapseRecyclerView(recyclerView: RecyclerView) {
-                val initialHeight = recyclerView.measuredHeight
+                val initialHeight = recyclerView.height
 
                 val animator = ValueAnimator.ofInt(initialHeight, 0).apply {
                     duration = 300
@@ -463,7 +470,11 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                         recyclerView.layoutParams.height = animation.animatedValue as Int
                         recyclerView.requestLayout()
                     }
-                    doOnEnd { recyclerView.visibility = View.GONE }
+                    doOnEnd {
+                        recyclerView.visibility = View.GONE
+
+                        recyclerView.layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                    }
                 }
                 animator.start()
             }
