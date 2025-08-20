@@ -15,7 +15,7 @@
 <body>
 
 <div class="uk-container">
-    <p>In some persons (especially individuals > 50 years of age) with
+    <p class="uk-paragraph">In some persons (especially individuals > 50 years of age) with
         LTBI, delayed-type hypersensitivity reactions to tuberculin may
         wane over time. When a TST is performed years after infection
         has occurred, these persons may have an initial negative tuberculin skin test result. However, this initial
@@ -26,14 +26,15 @@
         true conversion due to recent infection. Two-step tuberculin skin
         testing is used to distinguish between boosted reactions and
         reactions due to new infection.</p>
-    <p>Two-step testing (at baseline) is recommended for employees or
+    <p class="uk-paragraph">Two-step testing (at baseline) is recommended for employees or
         residents in institutional settings (such as health care workers or
         correctional facility employees) who may undergo periodic tuberculin screening (and have not had a TST in
         the past year), and
         for whom it is important to distinguish between new infection
         and a boosted reaction from past infection.</p>
 
-    <h4> Two-Step Testing</h4>
+    <h4 class="toggle-title" onclick="toggleItem(this)"><span>Two-Step Testing</span><span class="chevron-up">⌃</span></h4>
+    <div class="item">
     <ol>
         <li>Place the first test with 0.1 ml (5 TU) of tuberculin.</li>
         <li>If the reaction to the first test is negative, give a
@@ -64,4 +65,5 @@
 
 <script src="../assets/uikit.js" type="text/javascript"></script>
 <script src="../assets/uikit-icons.js" type="text/javascript"></script>
+<script src="../assets/main.js" type="text/javascript"></script>
 </html>

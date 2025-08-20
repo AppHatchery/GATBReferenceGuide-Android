@@ -4,50 +4,170 @@
 <head>
     <meta charset="utf-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
-<!--    <meta content="width=device-width, initial-scale=1.0" name="viewport">-->
+    <!--    <meta content="width=device-width, initial-scale=1.0" name="viewport">-->
     <title>GA TB Reference Guide </title>
     <meta content="GA TB Reference Guide" name="description">
     <meta content="SitePoint" name="author">
     <link href="../assets/uikit.css" rel="stylesheet">
     <link href="../assets/style.css" rel="stylesheet">
+    <style>
+        /* Scoped styles for Table 18 */
+        .table-18-container .uk-table th,
+        .table-18-container .uk-table td {
+            width: 50% !important;
+        }
 
+        .table-18-container .tab-button {
+            width: 250px;
+            height: 100px;
+            white-space: normal;
+            text-align: center;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            flex: none;
+        }
+
+        .table-18-container .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 1rem;
+            justify-content: center;
+        }
+
+        /* Responsive adjustments for tabs */
+        @media (max-width: 959px) {
+            .table-18-container .tab-button {
+                width: 200px;
+                height: 70px;
+            }
+        }
+    </style>
 </head>
 
 
 <body>
 <div class="uk-container">
     <h4 id="table18">Table 18. Dosage Adjustments for ART and Rifamycins when used in Combination</h4>
-    <img src="table18.png">
-    
-    <p>*Preliminary data suggest that there is an increased risk of neural tube defects in infants born to women
-        who were receiving DTG at the time of conception. DTG is contraindicated for pregnant women during first
-        trimester and for women who are planning to become pregnant or are not using effective contraception.
-        DTG is the preferred integrase inhibitor after first trimester.</p>
+    <div class="uk-overflow-auto table-18-container">
+        <div class="tabs">
+            <button class="tab-button" onclick="switchTab(0, event)">Integrase<br>Inhibitor</button>
+            <button class="tab-button" onclick="switchTab(1, event)">Boosted PI</button>
+            <button class="tab-button" onclick="switchTab(2, event)">NNRTI</button>
+        </div>
 
-    <ul>
-        <li>NNRTIs: non-nucleoside reverse transcriptase inhibitors</li>
-        <li>PIs: protease inhibitors</li>
-        <li>ATV/r: Atazanavir/ritonavir</li>
-        <li>DRV/r: Daraunavir/ritonavir</li>
-        <li>LPV/r: Lopinavir/ritonavir</li>
-        <li>RAL: Raltegravir</li>
-        <li>DTG: Dolutegravir</li>
-        <li>/c : boosted with cobicistat</li>
-    </ul>
+        <div class="tab-content">
+            <p>Dolutegravir (DTG)</p>
+            <table class="uk-table uk-table-small uk-table-divider">
+                <tbody>
 
-    <p>Table 18 is based on guidelines developed by the Department of Health and Human Services (DHHS) Panel on
-        Guidelines for Use of Antiretroviral Agents for Adults and Adolescents and Use of Antiretroviral Drugs
-        in Pregnant Women with HIV Infection and Interventions to Reduce Perinatal Transmission in the United
-        States, last reviewed and updated April 15, 2019
-        <a href="http://aidsinfo.nih.gov/guidelines">(aidsinfo.nih.gov/guidelines)</a></p>
+                <tr>
+                    <th>Drug</th>
+                    <th>Dosing</th>
+                </tr>
+                <tr>
+                    <th class="uk-text-nowrap">Rifampin (RIF)</th>
+                    <td>RIF: No change (600 mg)<br>DTG: Increase to 50 mg BID</td>
+                </tr>
+                <tr>
+                    <th class="uk-text-nowrap">Rifabutin (RBT)</th>
+                    <td>RBT: No change (300 mg)<br>DTG: No change (50 mg)</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <p>1-Data on integrase inhibitors and pregnancy outcomes is rapidly evolving and DHHS
-        guidelines are frequently updated.</p>
+        <div class="tab-content">
+            <p>ATV/r, DRV/r </p>
+            <table class="uk-table uk-table-small uk-table-divider">
+                <tbody>
+                <tr>
+                    <th>Drug</th>
+                    <th>Dosing</th>
+                </tr>
+                <tr>
+                    <th class="uk-text-nowrap">Rifampin (RIF)</th>
+                    <td>DO NOT USE</td>
+                </tr>
+                <tr>
+                    <th class="uk-text-nowrap">Rifabutin (RBT)</th>
+                    <td>RBT: decrease to 150 mg/d<br>PIs: no change</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <p>2-Cobicistat is currently not recommended for pregnant women.</p>
+        <div class="tab-content">
+            <p>Efavirenz (EFV) <br> (Note: No longer a first line ART)</p>
+            <table class="uk-table uk-table-small uk-table-divider">
+                <tbody>
+                <tr>
+                    <th>Drug</th>
+                    <th>Dosing</th>
+                </tr>
+                <tr>
+                    <th class="uk-text-nowrap">Rifampin (RIF)</th>
+                    <td>RIF no change (600 mg)<br>EFV: no change (600 mg qhs)</td>
+                </tr>
+                <tr>
+                    <th class="uk-text-nowrap">Rifabutin (RBT)</th>
+                    <td>DO NOT USE</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <p>
+            Department of Human Health Services links for ART drug-drug interactions – these are updated frequently</p>
+        <p>Protease inhibitors: <a href="https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-protease-inhibitors?view=full">https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-protease-inhibitors?view=full</a></p>
+
+        <p>NNRTIs: <a href="https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-nnrti?view=full">https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-nnrti?view=full</a></p>
+
+        <p>NRTIs: <a href="https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-nrti?view=full">https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-nrti?view=full</a></p>
+
+        <p>Integrase inhibitors: <a href="https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-insti?view=full">https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-insti?view=full</a></p>
+
+        <p>*Preliminary data suggest that there is an increased risk of neural tube defects in infants born to women
+            who were receiving DTG at the time of conception. DTG is contraindicated for pregnant women during first
+            trimester and for women who are planning to become pregnant or are not using effective contraception.
+            DTG is the preferred integrase inhibitor after first trimester.</p>
+
+        <ul>
+            <li>NNRTIs: non-nucleoside reverse transcriptase inhibitors</li>
+            <li>PIs: protease inhibitors</li>
+            <li>ATV/r: Atazanavir/ritonavir</li>
+            <li>DRV/r: Daraunavir/ritonavir</li>
+            <li>LPV/r: Lopinavir/ritonavir</li>
+            <li>RAL: Raltegravir</li>
+            <li>DTG: Dolutegravir</li>
+            <li>/c : boosted with cobicistat</li>
+        </ul>
+
+        <p>Table 18 is based on guidelines developed by the Department of Health and Human Services (DHHS) Panel on
+            Guidelines for Use of Antiretroviral Agents for Adults and Adolescents and Use of Antiretroviral Drugs
+            in Pregnant Women with HIV Infection and Interventions to Reduce Perinatal Transmission in the United
+            States, last reviewed and updated April 15, 2019
+            <a href="http://aidsinfo.nih.gov/guidelines">(aidsinfo.nih.gov/guidelines)</a></p>
+
+        <p>1-Data on integrase inhibitors and pregnancy outcomes is rapidly evolving and DHHS
+            guidelines are frequently updated.</p>
+
+        <p>2-Cobicistat is currently not recommended for pregnant women.</p>
+    </div>
 </div>
 </body>
 
 <script src="../assets/uikit.js" type="text/javascript"></script>
 <script src="../assets/uikit-icons.js" type="text/javascript"></script>
+<script src="../assets/main.js" type="text/javascript"></script>
+<script>
+    // Initialize the first tab as active
+    document.addEventListener('DOMContentLoaded', function() {
+        const tableContainer = document.querySelector('.table-18-container');
+        const firstTab = tableContainer.querySelector('.tab-button');
+        firstTab.classList.add('active-option');
+        const firstContent = tableContainer.querySelector('.tab-content');
+        firstContent.classList.add('active-tab');
+        firstContent.classList.add('active-option');
+    });
+</script>
 </html>
