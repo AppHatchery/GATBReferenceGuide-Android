@@ -73,6 +73,11 @@
     <string name="update_card_message">Fresh updates are ready for you! Please download the latest content to continue enjoying the app.</string>
     <string name="new_content_available">New Content Available</string>
     <string name="download_now">Download Now</string>
+    <string name="guide">Guide</string>
+    <string name="bookmarked_message">Bookmarked! Now you can quickly access this content through <font color="#5182FF">My Bookmarks</font> on <font color="#5182FF">Home</font> page</string>
+    <string name="state_guide">State guidelines have changed for LTBI Treatment</string>
+    <string name="edit_note">Edit Note</string>
+    <string name="delete_this_note">Delete this note?</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

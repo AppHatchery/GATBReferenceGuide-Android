@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
@@ -93,6 +94,17 @@ import org.apphatchery.gatbreferenceguide.utils.toast
 import sdk.pendo.io.Pendo
 import javax.inject.Inject
 import kotlin.math.log
+import android.view.inputmethod.InputMethodManager
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import android.content.ClipboardManager
+import android.content.ClipData
+import android.widget.RelativeLayout
+import android.widget.FrameLayout
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+// (Removed duplicate ambiguous imports; already imported above)
+import android.content.pm.ResolveInfo
 
 @AndroidEntryPoint
 class BodyFragment : BaseFragment(R.layout.fragment_body) {
@@ -275,15 +287,18 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         subChapterEntity = bodyUrl.subChapterEntity
         chapterEntity = bodyUrl.chapterEntity
 
+        val contentTitle = if (chartAndSubChapter != null) {
+            // For charts, use the chart title from the list
+            chartAndSubChapter!!.chartEntity.chartTitle
+        } else {
+            // For regular content, use the subchapter title
+            HtmlCompat.fromHtml(subChapterEntity.subChapterTitle, FROM_HTML_MODE_LEGACY).toString()
+        }
+        setActionBarTitle(contentTitle)
+        bind.lastUpdateTextView.text = getString(R.string.last_updated, subChapterEntity.lastUpdated)
 
-        bind.lastUpdateTextView.text =
-            getString(R.string.last_updated, subChapterEntity.lastUpdated)
-
-
-        getActionBar(requireActivity())?.title =
-            HtmlCompat.fromHtml(chapterEntity.chapterTitle, FROM_HTML_MODE_LEGACY).toString()
-        dialog = Dialog(requireContext()).dialog()
-        updateFont()
+        // Setup search functionality
+        setupSearch()
 
 //            menuHost.addMenuProvider(object : MenuProvider {
 //                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -420,7 +435,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             }
 
             shareButton.setOnClickListener {
-                createDynamicLink()
+                showCustomShareSheet()
             }
 
             homeButton.setOnClickListener {
@@ -587,9 +602,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         deleteButton.apply {
             text = getString(R.string.delete)
             setOnClickListener {
-                requireContext().alertDialog(
-                    message = getString(R.string.note_confirm_deletion)
-                ) {
+                showNoteDeletionConfirmationPopup {
                     dismiss()
                     viewModel.deleteNote(note)
                     onDeleteNoteSnackbar(note)
@@ -688,8 +701,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         Dialog(requireContext()).dialog().apply {
             setContentView(R.layout.dialog_bookmark)
-            val cancelButton = findViewById<Button>(R.id.bookmarkCancelButton)
-            val saveButton = findViewById<Button>(R.id.bookmarkSaveButton)
+            val cancelButton = findViewById<TextView>(R.id.bookmarkCancelButton)
+            val saveButton = findViewById<TextView>(R.id.bookmarkSaveButton)
             val bookTitleTextInputEditText =
                 findViewById<AppCompatEditText>(R.id.bookmarkTitleTextInputEditText)
             bookTitleTextInputEditText.also {
@@ -704,8 +717,10 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 dismiss()
             }
 
-
-            findViewById<View>(R.id.close_dialog).setOnClickListener { dismiss() }
+            // clears the text field
+            findViewById<View>(R.id.close_dialog).setOnClickListener {
+                bookTitleTextInputEditText.setText("")
+            }
 
 
             if (bookmarkEntity.bookmarkId != "0") {
@@ -786,7 +801,138 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         firebaseAnalytics.logEvent(bookmarkUrl, null)
 
-        requireContext().toast(getString(R.string.bookmark_saved))
+        showBookmarkSuccessPopup()
+    }
+
+    private fun showBookmarkSuccessPopup() {
+        Dialog(requireContext()).dialog().apply {
+            setContentView(R.layout.dialog_bookmark_success)
+            
+            val bookmarkedText = findViewById<TextView>(R.id.bookmarked_text)
+            val visitButton = findViewById<AppCompatButton>(R.id.visit_button)
+            val dismissButton = findViewById<AppCompatButton>(R.id.dismiss_button)
+            
+            // Set the text with HTML formatting to make "My Bookmarks" and "Home" blue
+            bookmarkedText.text = HtmlCompat.fromHtml(
+                getString(R.string.bookmarked_message), 
+                HtmlCompat.FROM_HTML_MODE_LEGACY
+            )
+            
+            visitButton.setOnClickListener {
+                dismiss()
+                // Navigate to bookmarks/home page
+                findNavController().popBackStack(R.id.mainFragment, false)
+            }
+            
+            dismissButton.setOnClickListener {
+                dismiss()
+            }
+            
+            safeDialogShow()
+        }
+    }
+
+    private fun showNoteDeletionConfirmationPopup(onConfirm: () -> Unit) {
+        Dialog(requireContext()).dialog().apply {
+            setContentView(R.layout.dialog_note_deletion_confirmation)
+
+            val yesButton = findViewById<AppCompatButton>(R.id.cancelButton)
+            val cancelButton = findViewById<AppCompatButton>(R.id.yesButton)
+
+            yesButton.setOnClickListener {
+                dismiss()
+                onConfirm()
+            }
+
+            cancelButton.setOnClickListener {
+                dismiss()
+            }
+
+            safeDialogShow()
+        }
+    }
+
+    private fun showCustomShareSheet() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val contentView = layoutInflater.inflate(R.layout.dialog_share_sheet, null)
+        bottomSheetDialog.setContentView(contentView)
+
+        bottomSheetDialog.setOnShowListener {
+            val bottomSheet = bottomSheetDialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+            bottomSheet?.let { sheet ->
+                val behavior = BottomSheetBehavior.from(sheet)
+                val gapTopPx = (420f * resources.displayMetrics.density).toInt()
+                val screenHeight = resources.displayMetrics.heightPixels
+                behavior.isFitToContents = false
+                behavior.peekHeight = (screenHeight - gapTopPx).coerceAtLeast((100f * resources.displayMetrics.density).toInt())
+                behavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+        }
+
+        // Set up the header with current page info
+        val shareTitle = contentView.findViewById<TextView>(R.id.share_title)
+        val shareUrl = contentView.findViewById<TextView>(R.id.share_url)
+
+        shareTitle.text = subChapterEntity.subChapterTitle
+        shareUrl.text = "GeorgiaTBReferenceGuide.com/${chapterEntity.chapterId}/${subChapterEntity.subChapterId}"
+
+        // Close button
+        val closeButton = contentView.findViewById<RelativeLayout>(R.id.close_button)
+        closeButton.setOnClickListener { bottomSheetDialog.dismiss() }
+
+        // Copy link row
+        val copyLinkRow = contentView.findViewById<RelativeLayout>(R.id.copy_link_row)
+        copyLinkRow.setOnClickListener {
+            copyLinkToClipboard()
+            bottomSheetDialog.dismiss()
+        }
+
+        // Reading list row
+        val readingListRow = contentView.findViewById<RelativeLayout>(R.id.reading_list_row)
+        readingListRow.setOnClickListener {
+            requireContext().toast("Reading list feature coming soon")
+            bottomSheetDialog.dismiss()
+        }
+
+        // Bookmark row
+        val bookmarkRow = contentView.findViewById<RelativeLayout>(R.id.bookmark_row)
+        bookmarkRow.setOnClickListener {
+            onBookmarkListener()
+            bottomSheetDialog.dismiss()
+        }
+
+        // Share-to-apps list (Resolve share targets)
+        val appsRecycler = contentView.findViewById<RecyclerView>(R.id.share_apps_recycler)
+        appsRecycler.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        createDynamicLink { link ->
+            val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, link)
+            }
+            val pm = requireContext().packageManager
+            val resolveList: List<ResolveInfo> = pm.queryIntentActivities(sendIntent, 0)
+            appsRecycler.adapter = ShareTargetsAdapter(resolveList) { info ->
+                // Launch selected app
+                val targeted = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, link)
+                    `package` = info.activityInfo.packageName
+                }
+                startActivity(targeted)
+                bottomSheetDialog.dismiss()
+            }
+        }
+
+        bottomSheetDialog.show()
+    }
+
+    private fun copyLinkToClipboard() {
+        createDynamicLink { link ->
+            val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("Page Link", link)
+            clipboard.setPrimaryClip(clip)
+            requireContext().toast("Link copied to clipboard")
+        }
     }
 
     private fun onSaveNote(noteBody: String) = bind.root.apply {
@@ -984,6 +1130,23 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private fun isBookmarkCheck() = bookmarkType == BookmarkType.CHART
 
     private fun createDynamicLink() {
+        createDynamicLink { link ->
+            // This is the old system share sheet behavior
+            Intent(Intent.ACTION_SEND)
+                .putExtra(Intent.EXTRA_TEXT, link)
+                .setType("text/plain")
+                .also {
+                    requireActivity().startActivity(
+                        Intent.createChooser(
+                            it,
+                            getString(R.string.share)
+                        )
+                    )
+                }
+        }
+    }
+
+    private fun createDynamicLink(onLinkGenerated: (String) -> Unit) {
         requireContext().toast(getString(R.string.dynamic_link_generation))
         val androidQueryId = id
         val androidIsPage = if (isBookmarkCheck()) 0 else 1
@@ -1009,22 +1172,43 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             )
             .buildShortDynamicLink()
             .addOnSuccessListener { result ->
-                Intent(Intent.ACTION_SEND)
-                    .putExtra(Intent.EXTRA_TEXT, result.shortLink.toString())
-                    .setType("text/plain")
-                    .also {
-                        requireActivity().startActivity(
-                            Intent.createChooser(
-                                it,
-                                getString(R.string.share)
-                            )
-                        )
-                    }
+                onLinkGenerated(result.shortLink.toString())
             }
             .addOnFailureListener {
                 Log.e(TAG, "createDynamicLink: ", it)
                 requireContext().toast(getString(R.string.dynamic_link_failed_to_generate))
             }
+    }
+
+    private fun setupSearch() {
+        Log.d("BodyFragment", "Setting up search...")
+        // Show the search bar in the action bar
+        setActionBarSearchVisible(true)
+        Log.d("BodyFragment", "Called setActionBarSearchVisible(true)")
+        
+        // Setup search functionality using the action bar components
+        setupActionBarSearch(
+            onSearchAction = { searchQuery ->
+                Log.d("BodyFragment", "Search action triggered: $searchQuery")
+                // Navigate to global search with the query
+                val directions = BodyFragmentDirections.actionGlobalGlobalSearchFragment()
+                findNavController().navigate(directions)
+            },
+            onSearchIconClick = { searchQuery ->
+                Log.d("BodyFragment", "Search icon clicked: $searchQuery")
+                performInPageSearch(searchQuery)
+            }
+        )
+        Log.d("BodyFragment", "Search setup completed")
+    }
+
+    private fun performInPageSearch(searchQuery: String) {
+        bind.bodyWebView.findAllAsync(searchQuery)
+        bind.searchClearText.text = searchQuery
+        bind.searchClearContainer.visibility = View.VISIBLE
+
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
     }
 
 }

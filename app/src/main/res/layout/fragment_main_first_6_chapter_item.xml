@@ -9,8 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        app:cardCornerRadius="10dp">
-
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="?attr/chapterBackgroundColorGrey">
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button"
             style="@style/TextAppearance.AppCompat.Medium"
@@ -23,6 +24,8 @@
             android:maxLines="3"
             android:paddingHorizontal="20dp"
             android:textAllCaps="false"
+            android:drawableTop="@drawable/ic_baseline_chapter_1"
+            android:drawablePadding="8dp"
             android:textColor="@color/black"
             tools:text="@string/app_name" />
     </androidx.cardview.widget.CardView>

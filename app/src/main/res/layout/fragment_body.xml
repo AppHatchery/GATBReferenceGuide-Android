@@ -14,8 +14,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:clickable="true"
-        android:visibility="visible"
-        android:drawableStart="@drawable/ic_title_icon"
+        android:visibility="gone"
         android:drawablePadding="10dp"
         android:focusable="true"
         android:gravity="center_vertical"
@@ -32,22 +31,23 @@
         android:layout_height="wrap_content"
         android:textStyle="italic"
         android:visibility="visible"
-        app:layout_constraintStart_toStartOf="@+id/textview_sub_chapter"
-        app:layout_constraintTop_toBottomOf="@+id/textview_sub_chapter"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/table_viewLinearLayoutCompat"
         tools:ignore="HardcodedText"
         tools:text="Last updated 06/17/21" />
 
     <View
         android:id="@+id/view"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:background="#C6C6C8"
+        android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/last_update_textView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -81,6 +81,18 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
+    <!-- Search View - positioned right after action bar -->
+    <include
+        android:id="@+id/search_view_include"
+        layout="@layout/search_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Update the main content constraint to start from search view instead -->
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -90,7 +102,7 @@
         app:layout_constraintBottom_toTopOf="@+id/bottom_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/table_viewLinearLayoutCompat">
+        app:layout_constraintTop_toBottomOf="@+id/search_view_include">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/collapsable_note_root"
@@ -272,7 +284,6 @@
                 android:background="@android:color/transparent"
                 android:foreground="?attr/actionBarItemBackground"
                 android:padding="8dp"
-                android:tint="?attr/colorGrayWhite"
                 android:src="@drawable/ic_baseline_folder_outline" />
 
             <TextView

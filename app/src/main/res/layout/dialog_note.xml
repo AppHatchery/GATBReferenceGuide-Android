@@ -1,121 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="16dp"
-    android:background="@drawable/shape_dialog_rounded"
-    android:orientation="vertical"
-    android:padding="16dp"
-    >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="281dp"
+    android:layout_height="251dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:background="@drawable/note_dialog_background">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical">
+    <!-- Header with Edit Note title and close button -->
+    <TextView
+        android:id="@+id/noteTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="22dp"
+        android:gravity="center_vertical"
+        android:text="@string/edit_note"
+        android:textAppearance="@style/EditNoteTextStyle" />
 
+    <RelativeLayout
+        android:id="@+id/closeDialog"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="22dp"
+        android:layout_marginRight="16dp"
+        android:clipToOutline="true">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/noteTitle"
-            style="@style/TextAppearance.AppCompat.Medium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Add New Note"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            tools:ignore="HardcodedText" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/closeDialog"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:foreground="?attr/selectableItemBackground"
-            android:padding="10dp"
-            android:src="@drawable/ic_close" />
-
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerInParent="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_close"
+            app:tint="#5182FF" />
+    </RelativeLayout>
+    <!-- Note input field -->
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/noteBody"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/shape_gradient_rounded_with_stroke"
-        android:gravity="start"
+        android:layout_width="243dp"
+        android:layout_height="38dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/noteTitle"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/note_edit_field_background"
         android:hint="Enter notes ..."
         android:inputType="textMultiLine|textAutoComplete|textAutoCorrect|textCapSentences"
-        android:maxHeight="150dp"
-        android:padding="16dp"
-        tools:ignore="HardcodedText" />
-
-
-    <androidx.appcompat.widget.AppCompatTextView
-        style="@style/TextAppearance.AppCompat.Medium"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Add a tag"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        tools:ignore="HardcodedText" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/noteRecyclerViewColor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="?colorBlackWhite"
         android:padding="8dp"
-        android:paddingVertical="5dp"
-        tools:itemCount="1"
-        tools:listitem="@layout/dialog_note_color_item" />
+        android:textSize="14sp"
+        android:textColor="#343434"
+        android:textColorHint="#999999" />
 
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
+    <!-- Edit Tag label -->
+    <TextView
+        android:id="@+id/editTagLabel"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/noteBody"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Edit Tag"
+        android:textAppearance="@style/EditNoteTextStyle" />
+
+    <!-- Color picker container -->
+    <RelativeLayout
+        android:id="@+id/colorPickerContainer"
+        android:layout_width="259dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/editTagLabel"
         android:layout_marginTop="8dp"
-        android:gravity="center">
+        android:background="@drawable/color_picker_container_background">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/noteRecyclerViewColor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:padding="4dp" />
+    </RelativeLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/noteCancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_gradient_rounded_with_stroke"
-            android:drawableStart="@drawable/ic_trash"
-            android:drawablePadding="10dp"
-            android:paddingHorizontal="20dp"
-            android:layout_weight="1"
-            android:text="Cancel"
-            android:textAllCaps="false"
-            tools:ignore="HardcodedText" />
+    <!-- Delete Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/noteCancelButton"
+        android:layout_width="141dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bookmark_popup_visit_button_bg"
+        android:backgroundTint="@null"
+        android:text="Delete"
+        android:textColor="#343434"
+        android:textSize="14sp"
+        android:textAllCaps="false" />
 
-        <View
-            android:layout_width="30dp"
-            android:layout_height="0dp" />
+    <!-- Save Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/noteSaveButton"
+        android:layout_width="140dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bookmark_popup_dismiss_button_bg"
+        android:backgroundTint="@null"
+        android:text="Save"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:textAllCaps="false" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/noteSaveButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/shape_gradient_rounded_with_stroke"
-            android:drawableStart="@drawable/ic_check"
-            android:drawablePadding="10dp"
-            android:paddingHorizontal="20dp"
-            android:text="Save"
-            android:textAllCaps="false"
-            tools:ignore="HardcodedText" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
-
-</androidx.appcompat.widget.LinearLayoutCompat>
-
-
-
-
-
+</RelativeLayout>

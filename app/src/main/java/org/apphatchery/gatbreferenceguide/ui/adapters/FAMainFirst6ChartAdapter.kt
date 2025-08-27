@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentMainFirst6ChartItemBinding
 import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
 import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
@@ -36,6 +37,12 @@ class FAMainFirst6ChartAdapter :
 
         fun onBinding(chapterEntity: ChartAndSubChapter) = first6ChartItemBinding.apply {
             button.text = chapterEntity.chartEntity.chartTitle
+
+            if (chapterEntity.chartEntity.chartTitle == "All Charts>") {
+                button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_see_all_content, 0, 0, 0)
+            } else {
+                button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_charts_1, 0, 0, 0)
+            }
         }
 
         init {
@@ -47,7 +54,6 @@ class FAMainFirst6ChartAdapter :
                     }
                 }
             }
-
         }
 
     }

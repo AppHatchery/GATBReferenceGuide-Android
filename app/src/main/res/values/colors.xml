@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="reddish">#8c352d</color>
+    <color name="reddish">#5182FF</color>
     <color name="orange">#ba6233</color>
 
     <color name="pink">#FF2D55</color>

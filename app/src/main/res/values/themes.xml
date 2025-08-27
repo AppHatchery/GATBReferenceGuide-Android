@@ -1,6 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.GATBReferenceGuide" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="android:windowBackground">#F9F9F9</item>
+        <item name="chapterBackgroundColorGrey">#F9F9F9</item>
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/reddish</item>
         <item name="colorPrimaryVariant">@color/orange</item>
@@ -11,21 +13,22 @@
         <item name="colorOnSecondary">@color/black</item>
         <item name="colorPrimaryDark">@color/reddish</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/reddish</item>
         <!-- Customize your theme here. -->
 
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
 
-        <item name="chapterBackgroundColor">#e1c2b3</item>
+        <item name="chapterBackgroundColor">@android:color/white</item>
         <item name="colorBlackWhite">@android:color/white</item>
         <item name="colorWhiteBlack">@color/dark_black</item>
 
-        <item name="chapterBackgroundColorTop">#c98463</item>
+        <item name="chapterBackgroundColorTop">#5182FF</item>
+        <item name="chapterBackgroundColorTopSeeAll">#FFBE0A</item>
         <item name="savedTopBar">#FFFFFF</item>
 
         <item name="android:textViewStyle">@style/TextViewStyle</item>
 
-        <item name="chartBackgroundColor">#c98463</item>
+        <item name="chartBackgroundColor">#FFFFFF</item>
         <item name="chartBackgroundColorTop">#823410</item>
         <item name="searchBackgroundColor">@color/reddish</item>
 
@@ -42,7 +45,26 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="BookmarkedTextStyle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#343434</item>
+        <item name="android:fontFamily">@font/inter_regular</item>
+        <item name="android:lineSpacingExtra">3sp</item>
+    </style>
 
+    <style name="StateGuideTextStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#343434</item>
+        <item name="android:fontFamily">@font/inter_regular</item>
+        <item name="android:lineSpacingExtra">3sp</item>
+    </style>
+
+    <style name="EditNoteTextStyle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">#343434</item>
+        <item name="android:fontFamily">@font/inter_regular</item>
+        <item name="android:lineSpacingExtra">3sp</item>
+    </style>
 
 
 </resources>

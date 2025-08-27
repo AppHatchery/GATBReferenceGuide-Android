@@ -106,18 +106,18 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                 viewModel.getChapter.observe(viewLifecycleOwner) {
                     with(predefinedChapterList) {
                         clear()
-                        add(it[0].copy(chapterTitle = "See All Chapters"))
-                        add(it[3].copy(chapterTitle = "Diagnosis for Active TB"))
-                        add(it[4].copy(chapterTitle = "Treatment for Active TB"))
-                        add(it[1].copy(chapterTitle = "Diagnosis for LTBI"))
-                        add(it[2].copy(chapterTitle = "Treatment for LTBI"))
+                        add(it[0].copy(chapterTitle = "All Chapters>"))
+                        add(it[3].copy(chapterTitle = "Diagnosis of Active TB"))
+                        add(it[4].copy(chapterTitle = "Treatment of Active TB"))
+                        add(it[1].copy(chapterTitle = "Diagnosis of LTBI"))
+                        add(it[2].copy(chapterTitle = "Treatment of LTBI"))
                         add(it[14].copy(chapterTitle = "District TB Coordinators"))
                         adapter.submitList(this)
                     }
                 }
 
                 adapter.itemClickCallback { chapterEntity ->
-                    if (chapterEntity.chapterTitle == "See All Chapters") {
+                    if (chapterEntity.chapterTitle == "All Chapters>") {
                         findNavController().navigate(R.id.action_mainFragment_to_chapterFragment)
                     } else {
                         MainFragmentDirections.actionMainFragmentToSubChapterFragment(chapterEntity)
@@ -137,7 +137,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                 viewModel.getChart.observe(viewLifecycleOwner) { data ->
                     with(predefinedChartList) {
                         clear()
-                        add(data[0].copy(chartEntity = data[0].chartEntity.copy(chartTitle = "See All Charts")))
+                        add(data[0].copy(chartEntity = data[0].chartEntity.copy(chartTitle = "All Charts>")))
                         add(data[7].copy(chartEntity = data[7].chartEntity.copy(chartTitle = "First Line TB Drugs for Adults")))
                         add(data[13].copy(chartEntity = data[13].chartEntity.copy(chartTitle = "IV Therapy Drugs")))
                         add(data[14].copy(chartEntity = data[14].chartEntity.copy(chartTitle = "Alternative Regimens")))
@@ -149,7 +149,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                 }
 
                 adapter.itemClickCallback { chartAndSubChapter ->
-                    if (chartAndSubChapter.chartEntity.chartTitle == "See All Charts") {
+                    if (chartAndSubChapter.chartEntity.chartTitle == "All Charts>") {
                         findNavController().navigate(R.id.action_mainFragment_to_chartFragment)
                     } else {
                         viewModel.getChapterInfo(chartAndSubChapter.subChapterEntity.chapterId)

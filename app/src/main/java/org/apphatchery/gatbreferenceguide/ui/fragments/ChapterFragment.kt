@@ -36,17 +36,6 @@ class ChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         bind = FragmentWithRecyclerviewBinding.bind(view)
 
-        val menuHost: MenuHost = requireActivity()
-
-        menuHost.addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.search_menu, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return handleMenuItemSelection(menuItem)
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         faChapterAdapter = FAChapterAdapter().also {
             viewModel.getChapterEntity.observe(viewLifecycleOwner) { data ->
@@ -70,26 +59,6 @@ class ChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
             }
         }
         requireActivity().getBottomNavigationView()?.isChecked(R.id.mainFragment)
-    }
-
-    private fun handleMenuItemSelection(item: MenuItem): Boolean {
-        if(searchState.currentState.toString() == "IN_SEARCH"){
-            if (item.itemId == R.id.searchView) {
-                val comp =   findNavController().popBackStack(R.id.globalSearchFragment,false)
-                if(!comp){
-                    if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
-                        .also {
-                            findNavController().navigate(it)
-                        }
-                }
-            }
-        }else{
-            if (item.itemId == R.id.searchView) ChapterFragmentDirections.actionGlobalGlobalSearchFragment()
-                .also {
-                    findNavController().navigate(it)
-                }
-        }
-        return false
     }
 
 

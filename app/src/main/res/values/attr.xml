@@ -2,10 +2,11 @@
 <resources>
     <attr name="chapterBackgroundColor" format="reference|color" />
     <attr name="chapterBackgroundColorTop" format="reference|color" />
-
+    <attr name="chapterBackgroundColorGrey" format="reference|color" />
     <attr name="chartBackgroundColor" format="reference|color" />
     <attr name="chartBackgroundColorTop" format="reference|color" />
     <attr name="searchBackgroundColor" format="reference|color" />
+    <attr name="chapterBackgroundColorTopSeeAll" format="reference|color" />
     <attr name="colorBlackWhite" format="color" />
     <attr name="colorWhiteBlack" format="color" />
     <attr name="colorGrayWhite" format="color" />

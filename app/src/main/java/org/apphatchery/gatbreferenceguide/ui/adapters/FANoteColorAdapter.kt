@@ -34,12 +34,20 @@ class FANoteColorAdapter(private val context: Context) :
 
         fun onBinding(noteColor: NoteColor) =
             dialogNoteColorItemBinding.apply {
-                colorSchema.background.setTint(Color.parseColor(noteColor.color))
+                val color = Color.parseColor(noteColor.color)
+                
                 if (selectedColor == noteColor.color) {
-                    dialogNoteColorItemBinding.root.background =
-                        ContextCompat.getDrawable(context, R.drawable.shape_circle_border)
+                    // Show selected state
+                    unselectedTag.visibility = android.view.View.GONE
+                    selectedTag.visibility = android.view.View.VISIBLE
+                    selectedColorInner.visibility = android.view.View.VISIBLE
+                    selectedColorInner.background.setTint(color)
                 } else {
-                    dialogNoteColorItemBinding.root.background = null
+                    // Show unselected state
+                    unselectedTag.visibility = android.view.View.VISIBLE
+                    selectedTag.visibility = android.view.View.GONE
+                    selectedColorInner.visibility = android.view.View.GONE
+                    unselectedTag.background.setTint(color)
                 }
             }
 
