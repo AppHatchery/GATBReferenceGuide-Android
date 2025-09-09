@@ -98,13 +98,12 @@ import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.content.ClipboardManager
+import androidx.core.content.ContextCompat
+import android.text.TextWatcher
+import android.text.Editable
+import androidx.activity.OnBackPressedCallback
 import android.content.ClipData
 import android.widget.RelativeLayout
-import android.widget.FrameLayout
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-// (Removed duplicate ambiguous imports; already imported above)
-import android.content.pm.ResolveInfo
 
 @AndroidEntryPoint
 class BodyFragment : BaseFragment(R.layout.fragment_body) {
@@ -128,6 +127,16 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private var chartAndSubChapter: ChartAndSubChapter? = null
     private var bookmarkType: BookmarkType = BookmarkType.SUBCHAPTER
     private lateinit var subChapterEntity: SubChapterEntity
+    private lateinit var searchContainer: RelativeLayout
+    private lateinit var searchEditText: EditText
+    private lateinit var searchClear: ImageView
+    private lateinit var searchCounter: TextView
+    private lateinit var searchPrevious: ImageView
+    private lateinit var searchNext: ImageView
+    private var backPressedCallback: OnBackPressedCallback? = null
+    private var isExpanded = false
+    private var currentMatch = 0
+    private var totalMatches = 0
     private lateinit var chapterEntity: ChapterEntity
     private var baseURL = ""
     private var filesURL = ""
@@ -258,6 +267,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         }
 
     override fun onDestroyView() {
+        backPressedCallback?.isEnabled = false
         super.onDestroyView()
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferencesListener)
     }
@@ -334,28 +344,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         setupWebView()
 //search query
         if (bodyUrl.searchQuery.isNotEmpty() && !isOnlyWhitespace(bodyUrl.searchQuery)) {
-            bind.searchClearText.text = bodyUrl.searchQuery
-            bind.searchClearContainer.visibility = View.VISIBLE
-            bind.searchClearButton.setOnClickListener {
-
-                bind.searchClearContainer.visibility = View.GONE
-                bind.bodyWebView.apply {
-                    clearMatches()//clears the search without multiple parameters
-                    val lp = layoutParams as ViewGroup.MarginLayoutParams
-                    lp.bottomMargin = 0
-                    layoutParams = lp
-                    //clears the search with multiple parameters
-                    webViewClient = object : WebViewClient() {}
-                    loadUrl(urlGlobal.toString())
-                }
-            }
-
-            // add bottom margin
-            bind.bodyWebView.apply {
-                val lp = layoutParams as ViewGroup.MarginLayoutParams
-                lp.bottomMargin = 100 + bind.searchClearContainer.height
-                layoutParams = lp
-            }
+            // Do not display the bottom search-clear container anymore
+            bind.searchClearContainer.visibility = View.GONE
         }
 
         bind.apply {
@@ -364,7 +354,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
             if (chartAndSubChapter != null) isChartView() else {
 
-                val originalTitle = subChapterEntity.subChapterTitle
+                val originalTitle = chapterEntity.chapterTitle
                 val searchedWordToColor = bodyUrl.searchQuery
                 val spannableString = SpannableString(originalTitle)
                 val startIndex = originalTitle.indexOf(searchedWordToColor)
@@ -435,7 +425,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             }
 
             shareButton.setOnClickListener {
-                showCustomShareSheet()
+                createDynamicLink()
             }
 
             homeButton.setOnClickListener {
@@ -562,7 +552,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             }
 
         textviewSubChapter.setCompoundDrawablesRelativeWithIntrinsicBounds(
-            R.drawable.ic_baseline_bar_chart,
+            R.drawable.ic_baseline_charts_2,
             0,
             0,
             0
@@ -852,89 +842,6 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         }
     }
 
-    private fun showCustomShareSheet() {
-        val bottomSheetDialog = BottomSheetDialog(requireContext())
-        val contentView = layoutInflater.inflate(R.layout.dialog_share_sheet, null)
-        bottomSheetDialog.setContentView(contentView)
-
-        bottomSheetDialog.setOnShowListener {
-            val bottomSheet = bottomSheetDialog.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
-            bottomSheet?.let { sheet ->
-                val behavior = BottomSheetBehavior.from(sheet)
-                val gapTopPx = (420f * resources.displayMetrics.density).toInt()
-                val screenHeight = resources.displayMetrics.heightPixels
-                behavior.isFitToContents = false
-                behavior.peekHeight = (screenHeight - gapTopPx).coerceAtLeast((100f * resources.displayMetrics.density).toInt())
-                behavior.state = BottomSheetBehavior.STATE_COLLAPSED
-            }
-        }
-
-        // Set up the header with current page info
-        val shareTitle = contentView.findViewById<TextView>(R.id.share_title)
-        val shareUrl = contentView.findViewById<TextView>(R.id.share_url)
-
-        shareTitle.text = subChapterEntity.subChapterTitle
-        shareUrl.text = "GeorgiaTBReferenceGuide.com/${chapterEntity.chapterId}/${subChapterEntity.subChapterId}"
-
-        // Close button
-        val closeButton = contentView.findViewById<RelativeLayout>(R.id.close_button)
-        closeButton.setOnClickListener { bottomSheetDialog.dismiss() }
-
-        // Copy link row
-        val copyLinkRow = contentView.findViewById<RelativeLayout>(R.id.copy_link_row)
-        copyLinkRow.setOnClickListener {
-            copyLinkToClipboard()
-            bottomSheetDialog.dismiss()
-        }
-
-        // Reading list row
-        val readingListRow = contentView.findViewById<RelativeLayout>(R.id.reading_list_row)
-        readingListRow.setOnClickListener {
-            requireContext().toast("Reading list feature coming soon")
-            bottomSheetDialog.dismiss()
-        }
-
-        // Bookmark row
-        val bookmarkRow = contentView.findViewById<RelativeLayout>(R.id.bookmark_row)
-        bookmarkRow.setOnClickListener {
-            onBookmarkListener()
-            bottomSheetDialog.dismiss()
-        }
-
-        // Share-to-apps list (Resolve share targets)
-        val appsRecycler = contentView.findViewById<RecyclerView>(R.id.share_apps_recycler)
-        appsRecycler.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        createDynamicLink { link ->
-            val sendIntent = Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT, link)
-            }
-            val pm = requireContext().packageManager
-            val resolveList: List<ResolveInfo> = pm.queryIntentActivities(sendIntent, 0)
-            appsRecycler.adapter = ShareTargetsAdapter(resolveList) { info ->
-                // Launch selected app
-                val targeted = Intent(Intent.ACTION_SEND).apply {
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_TEXT, link)
-                    `package` = info.activityInfo.packageName
-                }
-                startActivity(targeted)
-                bottomSheetDialog.dismiss()
-            }
-        }
-
-        bottomSheetDialog.show()
-    }
-
-    private fun copyLinkToClipboard() {
-        createDynamicLink { link ->
-            val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText("Page Link", link)
-            clipboard.setPrimaryClip(clip)
-            requireContext().toast("Link copied to clipboard")
-        }
-    }
-
     private fun onSaveNote(noteBody: String) = bind.root.apply {
         if (noteBody.isBlank()) snackBar(getString(R.string.note_enter_to_save_prompt)) else {
             viewModel.insertNote(
@@ -954,6 +861,20 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
     private fun setupWebView() = bind.bodyWebView.apply {
         onZoomOut()
+        
+        // Add JavaScript interface for search results
+        addJavascriptInterface(object {
+            @android.webkit.JavascriptInterface
+            fun onSearchResultsFound(count: Int) {
+                requireActivity().runOnUiThread {
+                    totalMatches = count
+                    currentMatch = if (totalMatches > 0) 1 else 0
+                    updateSearchUI()
+                    Log.d("BodyFragment", "Found $totalMatches search results")
+                }
+            }
+        }, "AndroidInterface")
+        
         webViewClient = object : WebViewClient() {
 
             override fun onPageFinished(view: WebView?, url: String?) {
@@ -1182,33 +1103,272 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
     private fun setupSearch() {
         Log.d("BodyFragment", "Setting up search...")
-        // Show the search bar in the action bar
-        setActionBarSearchVisible(true)
-        Log.d("BodyFragment", "Called setActionBarSearchVisible(true)")
         
-        // Setup search functionality using the action bar components
-        setupActionBarSearch(
-            onSearchAction = { searchQuery ->
-                Log.d("BodyFragment", "Search action triggered: $searchQuery")
-                // Navigate to global search with the query
-                val directions = BodyFragmentDirections.actionGlobalGlobalSearchFragment()
-                findNavController().navigate(directions)
-            },
-            onSearchIconClick = { searchQuery ->
-                Log.d("BodyFragment", "Search icon clicked: $searchQuery")
-                performInPageSearch(searchQuery)
+        // Initialize the search container and views
+        searchContainer = bind.searchViewInclude.root as RelativeLayout
+        searchEditText = searchContainer.findViewById(R.id.search_edit_text)
+        searchClear = searchContainer.findViewById(R.id.search_clear)
+        searchCounter = searchContainer.findViewById(R.id.search_counter)
+        searchPrevious = searchContainer.findViewById(R.id.search_previous)
+        searchNext = searchContainer.findViewById(R.id.search_next)
+        
+        // Initially hide the search view
+        searchContainer.visibility = View.GONE
+        
+        // Show the search view when content is loaded
+        showSearchView()
+        
+        // Setup search listeners
+        setupSearchListeners()
+        
+        // Setup back press handling to collapse search when expanded
+        backPressedCallback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                if (searchContainer.visibility == View.VISIBLE && isExpanded) {
+                    collapseSearchView()
+                    isEnabled = false
+                }
             }
-        )
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressedCallback!!)
+        
         Log.d("BodyFragment", "Search setup completed")
     }
 
-    private fun performInPageSearch(searchQuery: String) {
-        bind.bodyWebView.findAllAsync(searchQuery)
-        bind.searchClearText.text = searchQuery
-        bind.searchClearContainer.visibility = View.VISIBLE
-
-        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-
+    private fun showSearchView() {
+        searchContainer.visibility = View.VISIBLE
+        backPressedCallback?.isEnabled = true
     }
 
+    private fun setupSearchListeners() {
+        searchEditText.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus && !isExpanded) {
+                expandSearchView()
+            }
+        }
+
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                val query = s?.toString()?.trim() ?: ""
+                
+                // Show/hide search counter based on text
+                searchCounter.visibility = if (query.isBlank()) View.GONE else View.VISIBLE
+                
+                if (query.isNotEmpty()) {
+                    searchClear.visibility = View.VISIBLE
+                    if (isExpanded) {
+                        performInPageSearch(query)
+                    }
+                } else {
+                    searchClear.visibility = View.GONE
+                    if (isExpanded) {
+                        showEmptySearchState()
+                    }
+                }
+            }
+        })
+
+        searchEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                hideKeyboard()
+                val query = searchEditText.text.toString().trim()
+                if (query.isNotEmpty()) {
+                    if (!isExpanded) {
+                        expandSearchView()
+                    }
+                    performInPageSearch(query)
+                }
+                true
+            } else false
+        }
+
+        searchClear.setOnClickListener {
+            // Clear the search text
+            searchEditText.text.clear()
+            // Clear WebView search
+            clearWebViewSearch()
+            // Collapse the search view
+            collapseSearchView()
+        }
+
+        searchPrevious.setOnClickListener { navigatePrevious() }
+        searchNext.setOnClickListener { navigateNext() }
+    }
+
+    private fun expandSearchView() {
+        if (isExpanded) return
+        isExpanded = true
+
+        // Animate EditText width to 213dp
+        val targetWidth = (213 * resources.displayMetrics.density).toInt()
+
+        ValueAnimator.ofInt(searchEditText.width, targetWidth).apply {
+            duration = 250
+            addUpdateListener { animation ->
+                val layoutParams = searchEditText.layoutParams
+                layoutParams.width = animation.animatedValue as Int
+                searchEditText.layoutParams = layoutParams
+            }
+            doOnEnd {
+                // Change background and show controls
+                searchEditText.background = ContextCompat.getDrawable(requireContext(), R.drawable.search_input_background)
+                showSearchControls()
+                
+                val query = searchEditText.text.toString().trim()
+                if (query.isNotEmpty()) {
+                    searchClear.visibility = View.VISIBLE
+                    performInPageSearch(query)
+                } else {
+                    showEmptySearchState()
+                }
+            }
+        }.start()
+    }
+
+    private fun showSearchControls() {
+        searchClear.visibility = View.VISIBLE
+        searchCounter.visibility = View.VISIBLE
+        searchPrevious.visibility = View.VISIBLE
+        searchNext.visibility = View.VISIBLE
+    }
+
+    private fun showEmptySearchState() {
+        totalMatches = 0
+        currentMatch = 0
+        searchCounter.text = "0/0"
+        searchCounter.visibility = View.VISIBLE
+        searchPrevious.visibility = View.VISIBLE
+        searchNext.visibility = View.VISIBLE
+        searchClear.visibility = View.VISIBLE
+        Log.d("BodyFragment", "Showing empty search state")
+    }
+
+    private fun collapseSearchView() {
+        if (!isExpanded) return
+        isExpanded = false
+
+        // Hide controls first
+        searchCounter.visibility = View.GONE
+        searchPrevious.visibility = View.GONE
+        searchNext.visibility = View.GONE
+        searchClear.visibility = View.GONE
+
+        // Animate back to full width
+        val targetWidth = ViewGroup.LayoutParams.MATCH_PARENT
+        val parentWidth = (searchContainer.parent as? View)?.width ?: resources.displayMetrics.widthPixels
+        val actualTargetWidth = parentWidth - searchContainer.paddingStart - searchContainer.paddingEnd
+
+        ValueAnimator.ofInt(searchEditText.width, actualTargetWidth).apply {
+            duration = 250
+            addUpdateListener { animation ->
+                val layoutParams = searchEditText.layoutParams
+                layoutParams.width = animation.animatedValue as Int
+                searchEditText.layoutParams = layoutParams
+            }
+            doOnEnd {
+                val layoutParams = searchEditText.layoutParams
+                layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+                searchEditText.layoutParams = layoutParams
+                searchEditText.background = ContextCompat.getDrawable(requireContext(), R.drawable.frame_16)
+            }
+        }.start()
+
+        searchEditText.clearFocus()
+        clearWebViewSearch()
+    }
+
+    private fun performInPageSearch(searchQuery: String) {
+        if (searchQuery.isNotEmpty()) {
+            // Set up the search result listener
+            bind.bodyWebView.setOnSearchResultListener { totalMatches, currentMatch ->
+                this.totalMatches = totalMatches
+                this.currentMatch = currentMatch
+                updateSearchUI()
+            }
+            
+            // Perform WebView search
+            bind.bodyWebView.findAllAsync(searchQuery)
+            // Do not show bottom search-clear container during search
+            bind.searchClearContainer.visibility = View.GONE
+            
+            Log.d("BodyFragment", "Performing search for: $searchQuery")
+        }
+    }
+
+    private fun updateSearchCount(query: String) {
+        // Use JavaScript to count actual occurrences in the WebView content
+        val jsCode = """
+            javascript:(function() {
+                var searchText = '$query';
+                var bodyText = document.body.innerText || document.body.textContent || '';
+                var regex = new RegExp(searchText.replace(/[.*+?^${'$'}{}()|[\]\\]/g, '\\$&'), 'gi');
+                var matches = bodyText.match(regex);
+                var count = matches ? matches.length : 0;
+                window.AndroidInterface.onSearchResultsFound(count);
+            })();
+        """.trimIndent()
+        
+        bind.bodyWebView.evaluateJavascript(jsCode) { result ->
+            // If JavaScript fails, use fallback estimation
+            if (result == null || result == "null") {
+                totalMatches = when {
+                    query.length < 2 -> 0
+                    query.length < 3 -> 1
+                    query.length < 5 -> 2
+                    query.length < 7 -> 4
+                    else -> 6
+                }
+                currentMatch = if (totalMatches > 0) 1 else 0
+                updateSearchUI()
+                Log.d("BodyFragment", "Fallback: Estimated $totalMatches matches for query: $query")
+            }
+        }
+    }
+
+    private fun updateSearchUI() {
+        val count = totalMatches
+        searchCounter.text = "${currentMatch}/${count}"
+        
+        searchCounter.visibility = View.VISIBLE
+        searchPrevious.visibility = View.VISIBLE
+        searchNext.visibility = View.VISIBLE
+        searchClear.visibility = View.VISIBLE
+        
+        Log.d("BodyFragment", "Updated search UI: ${currentMatch}/${count}")
+    }
+
+    private fun navigatePrevious() {
+        if (totalMatches > 0) {
+            // Navigate to previous match in WebView
+            bind.bodyWebView.findNext(false) // false = previous
+            // The listener will update currentMatch automatically
+        }
+    }
+
+    private fun navigateNext() {
+        if (totalMatches > 0) {
+            // Navigate to next match in WebView
+            bind.bodyWebView.findNext(true) // true = next
+            // The listener will update currentMatch automatically
+        }
+    }
+
+    private fun updateSearchCounter() {
+        val count = totalMatches
+        searchCounter.text = "${currentMatch}/${count}"
+        Log.d("BodyFragment", "Updated search counter: ${currentMatch}/${count}")
+    }
+
+    private fun clearWebViewSearch() {
+        bind.bodyWebView.clearMatches()
+        bind.searchClearContainer.visibility = View.GONE
+        Log.d("BodyFragment", "Cleared WebView search")
+    }
+
+    private fun hideKeyboard() {
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(requireView().windowToken, 0)
+    }
 }

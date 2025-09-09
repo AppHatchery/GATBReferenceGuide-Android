@@ -1,75 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="22dp"
+    android:layout_marginVertical="8dp">
 
-    <androidx.cardview.widget.CardView
-        android:foreground="?attr/selectableItemBackground"
+    <!-- Content Container with Background -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="3dp">
+        android:layout_height="95dp"
+        android:background="@drawable/note_item_background"
+        android:elevation="32dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/textview_note_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="@string/app_name"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/view"
-                app:layout_constraintTop_toTopOf="parent" />
-
+        <!-- Left colored bar -->
             <View
-                android:id="@+id/view"
-                android:layout_width="8dp"
+            android:id="@+id/note_left_bar"
+            android:layout_width="6dp"
                 android:layout_height="0dp"
-                android:background="@color/black"
+            android:background="@drawable/note_left_bar"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Note Title -->
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textview_note_body"
-                android:layout_width="match_parent"
+            android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="8dp"
-                android:paddingBottom="8dp"
-                android:textStyle="italic"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/view"
-                app:layout_constraintTop_toBottomOf="@+id/textview_note_title"
-                tools:text="@string/appbar_scrolling_view_behavior" />
+            android:minHeight="34dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="17dp"
+            android:layout_marginEnd="30dp"
+            android:text="@string/state_guide"
+            android:textAppearance="@style/state_guide"
+            android:gravity="top"
+            app:layout_constraintEnd_toStartOf="@+id/note_edit_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="State guidelines have changed for LTBI Treatment" />
 
+        <!-- Edit Icon -->
+        <ImageView
+            android:id="@+id/note_edit_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+            android:layout_marginTop="14dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_baseline_edit_note"
+            android:contentDescription="Edit note"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/reddish"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Note Subtitle -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textview_note_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="17dp"
+            android:text="@string/note_last_e"
+            android:textAppearance="@style/note_last_e"
+            android:gravity="top"
+                app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textview_note_body"
+            tools:text="Note - Last Edited 03/12/2024" />
+
+        <!-- Show in chapter (Hidden by default) -->
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textview_show_chapter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
                 android:layout_marginBottom="8dp"
                 android:drawableEnd="@drawable/ic_keyboard_arrow_right"
                 android:text="Show in chapter"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/textview_note_body"
-                app:layout_constraintTop_toBottomOf="@+id/textview_note_body"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textview_note_title"
                 tools:ignore="HardcodedText" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.cardview.widget.CardView>
-
-</androidx.appcompat.widget.LinearLayoutCompat>
-
+</FrameLayout>

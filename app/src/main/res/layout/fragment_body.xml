@@ -6,40 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragments.BodyFragment">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/textview_sub_chapter"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:clickable="true"
-        android:visibility="gone"
-        android:drawablePadding="10dp"
-        android:focusable="true"
-        android:gravity="center_vertical"
-        android:textSize="17sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="HardcodedText"
-        tools:text="@string/app_name" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/last_update_textView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textStyle="italic"
-        android:visibility="visible"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/table_viewLinearLayoutCompat"
-        tools:ignore="HardcodedText"
-        tools:text="Last updated 06/17/21" />
-
     <View
         android:id="@+id/view"
         android:layout_width="0dp"
@@ -81,7 +47,7 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <!-- Search View - positioned right after action bar -->
+    <!-- Search View positioned after action bar -->
     <include
         android:id="@+id/search_view_include"
         layout="@layout/search_view"
@@ -92,57 +58,116 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Update the main content constraint to start from search view instead -->
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <!-- Updated the main content constraint to start from search view -->
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        android:paddingHorizontal="8dp"
-        android:paddingBottom="32dp"
+        android:layout_marginTop="27.5dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_view_include">
+        app:layout_constraintTop_toBottomOf="@+id/search_view_include"
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/collapsable_note_root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical">
+            android:orientation="vertical"
+            android:paddingHorizontal="8dp"
+            android:paddingBottom="32dp">
 
+            <!-- Chapter Title -->
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/note_count_textView"
-                android:layout_width="wrap_content"
+                android:id="@+id/textview_sub_chapter"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/notes_count"
-                android:textStyle="bold" />
+                android:layout_marginStart="36dp"
+                android:layout_marginEnd="0dp"
+                android:clickable="true"
+                android:drawableStart="@drawable/ic_baseline_chapter_2"
+                android:drawablePadding="6dp"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:minHeight="17dp"
+                android:textSize="17sp"
+                android:visibility="visible"
+                tools:ignore="HardcodedText"
+                tools:text="@string/app_name" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/collapse_action_button"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/shape_circle"
-                android:foreground="?attr/selectableItemBackgroundBorderless"
-                android:padding="8dp"
-                android:src="@drawable/ic_baseline_arrow_up" />
+            <!-- Last Update Text -->
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/last_update_textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="0dp"
+                android:textStyle="italic"
+                android:visibility="visible"
+                tools:ignore="HardcodedText"
+                tools:text="Last updated 06/17/21" />
 
+            <!-- Separator -->
+            <View
+                android:id="@+id/separator"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/separator" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/collapsable_note_root"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="36dp"
+                android:gravity="center_vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/note_count_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/notes_count"
+                    android:textStyle="bold" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/collapse_action_button"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/shape_circle"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_baseline_arrow_up" />
+
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerviewNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="37dp"
+                android:layout_marginEnd="36dp" />
+
+            <org.apphatchery.gatbreferenceguide.views.BaseWebView
+                android:id="@+id/body_web_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                android:paddingBottom="16dp"
+                android:scrollbars="vertical" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerviewNote"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <org.apphatchery.gatbreferenceguide.views.BaseWebView
-            android:id="@+id/body_web_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            android:paddingBottom="16dp" />
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.core.widget.NestedScrollView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
 
@@ -203,7 +228,11 @@
         android:id="@+id/bottom_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:minHeight="84dp"
+        android:paddingStart="34dp"
+        android:paddingEnd="34dp"
+        android:paddingTop="17dp"
+        android:paddingBottom="26dp"
         android:gravity="center"
         android:translationZ="500dp"
         android:orientation="horizontal"
@@ -243,6 +272,8 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
             android:orientation="vertical"
             android:layout_gravity="center"
             android:layout_weight="1">
@@ -272,6 +303,8 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
             android:orientation="vertical"
             android:layout_weight="1">
 
@@ -300,6 +333,8 @@
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
             android:orientation="vertical"
             android:layout_weight="1">
 

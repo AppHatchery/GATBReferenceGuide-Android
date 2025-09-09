@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="33dp"
+    android:layout_marginEnd="33dp"
+    android:layout_marginBottom="32dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="112dp"
+        android:background="@drawable/bookmark_item_background"
+        android:elevation="32dp">
+
+        <View
+            android:id="@+id/bookmark_left_bar"
+            android:layout_width="6dp"
+            android:layout_height="0dp"
+            android:background="@drawable/bookmark_left_bar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textview_bookmark_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="19dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="17dp"
+            android:layout_marginEnd="30dp"
+            android:text="@string/treatment_r"
+            android:textSize="16sp"
+            android:textAppearance="@style/treatment_r"
+            android:gravity="top"
+            android:singleLine="true"
+            android:ellipsize="end"
+            app:layout_constraintEnd_toStartOf="@+id/bookmark_edit_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Treatment Regimens" />
+
+        <ImageView
+            android:id="@+id/bookmark_edit_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="14dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_baseline_edit_note"
+            android:contentDescription="Edit bookmark"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/reddish"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textview_bookmark_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="13.5dp"
+            android:layout_marginEnd="16dp"
+            android:drawableStart="@drawable/ic_baseline_chapter_2"
+            android:drawablePadding="6dp"
+            android:gravity="top"
+            android:minHeight="19dp"
+            android:text="@string/treatment_r"
+            android:textAppearance="@style/state_guide"
+            android:singleLine="true"
+            android:ellipsize="end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textview_bookmark_title"
+            tools:text="Treatment Regimens" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textview_chapter_source"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="18dp"
+            android:text="@string/iii_treatme"
+            android:textAppearance="@style/iii_treatme"
+            android:gravity="top"
+            android:singleLine="true"
+            android:ellipsize="end"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textview_bookmark_name"
+            tools:text="III. Treatment of Latent TB Infection (LTBI)" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

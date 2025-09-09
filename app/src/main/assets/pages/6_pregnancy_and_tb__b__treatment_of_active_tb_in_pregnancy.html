@@ -16,15 +16,15 @@
 
 <div class="uk-container">
 
-    <p>
-        <i><b>TB disease discovered during pregnancy should be treated without delay. </b></i>Because of the risk
-            for tuberculosis to the fetus, treatment of TB in pregnant women should be initiated whenever the
-            probability of maternal disease is moderate to high. Three sputum samples should be submitted for
-            examination. The outcome of the cultures and susceptibility test results will determine the regimen for
-            continuation of treatment.</p>
-    <ul class="uk-list uk-list-decimal">
-        <li>Drug Treatment in
-        Pregnancy
+    <p class="uk-paragraph">
+        <i><b>TB disease discovered during pregnancy should be treated without delay. </b></i>Because of 
+        the risk for tuberculosis to the fetus, treatment of TB in pregnant women should be initiated whenever 
+        the probability of maternal disease is moderate to high. A minimum of two sputum samples should be submitted 
+        for examination. The outcome of the AFB cultures and drug susceptibility test results will determine the regimen for continuation of treatment.</p>
+    <ol>
+        <li class="toggle-title" onclick="toggleItem(this)"><span><b>Drug Treatment in
+        Pregnancy</b></span><span class="chevron-up">⌃</span></li>
+        <div class="item">
         <ul>
             <li>The
         initial treatment regimen usually consists of INH, RIF and EMB; consideration should be given to including PZA.</li>
@@ -39,15 +39,16 @@
         pregnant women because of potential adverse effects on the fetus. Fluoroquinolones (e.g., levofloxacin, moxifloxacin) have been associated
         with arthropathies in young animals; therefore, they should be avoided if possible in pregnant women.</li>
         </ul>
-        </li>
-    <li>Breast Feeding
+        </div>
+    <li class="toggle-title" onclick="toggleItem(this)"><span><b>Breast Feeding</b></span><span class="chevron-up">⌃</span></li>
+    <div class="item">
     <p>
         The small concentrations of first line TB drugs in breast milk do not have a toxic effect on nursing newborns
         and <b>breast feeding should not be discouraged. </b>Conversely, drugs in breast milk should not be considered
         to serve as effective treatment for disease or as treatment of LTBI in a nursing infant.</p>
-        </li>
-    </ul>
-    <h4 id="table20">Table 20. Use of Anti-TB Medications in Special Situations: <br>Pregnancy, Tuberculous Meningitis
+        </div>
+    </ol>
+    <h4 id="table20" class="custom-table-title">Table 20. Use of Anti-TB Medications in Special Situations: <br>Pregnancy, Tuberculous Meningitis
         and Renal Failure</h4>
         <div ID="table_20_use_of_anti-tb_medications_in_special_situations_pregnancy_tuberculosis_meningitis_and_renal_failure" class="uk-overflow-auto">
             <table class="uk-table uk-table-small uk-table-divider">
@@ -135,16 +136,15 @@
     <p><b>Do Not Use: </b>Associated with premature labor, congenital malformations or teratogenicity.</p>
     <p><b>NOTES: Table 20 Special Situations</b></p>
 
-    <p>(1) As
-        with all medications given during pregnancy, anti-TB drugs should be used with caution. The risk of TB to the
-        fetus far outweighs the risk of medications. Pregnant patients with active TB should be treated. Data are
-        limited on the safety of some anti-TB drugs during pregnancy. Table 20 presents a consensus of published data
-        and recommendations. Although detailed teratogenic data is not available, PZA can probably be used safely for
-        pregnant patients. Concentrations of anti-TB drugs in breast milk are low; treatment with these medications is
-        not a contraindication to breastfeeding. (Conversely, medication present in breast milk is not sufficient to
-        prevent or treat TB in the newborn.) Consult a medical expert when treating a pregnant patient who has TB. For
-        treatment of LTBI, most authorities recommend beginning INH several months after delivery, unless the woman is
-        at high risk for progression to active TB (e.g., recent TST or IGRA conversion, HIV-infected).</p>
+    <p>(1) As with all medications given during pregnancy, anti-TB drugs should be used with caution. The risk of TB to
+         the fetus far outweighs the risk of medications. Pregnant patients with active TB should be treated. Data are limited
+          on the safety of some anti-TB drugs during pregnancy. Table 20 presents a consensus of published data and recommendations.
+           Although detailed teratogenic data is not available, PZA can probably be used safely for pregnant patients. Concentrations
+            of anti-TB drugs in breast milk are low; treatment with these medications is not a contraindication to breastfeeding.
+             Conversely, medication present in breast milk is not sufficient to prevent or treat TB in the newborn. Consult a
+              medical expert when treating a pregnant patient who has TB. For treatment of LTBI, most authorities recommend beginning 
+              INH 3 months after delivery (as discussed in the text), unless the woman is at high risk for progression to active TB (e.g., 
+              recent infection as evidenced by being a close contact of an infectious TB case, recent TST or IGRA conversion, HIV-infected with CD4<350).</p>
     <p>(2) Steroid treatment appears to improve outcome in TB meningitis, particularly in patients with altered mental
         status.</p>
     <p>(3) If possible, monitor serum drug levels of patients with renal insufficiency. See page 71 for dosage.</p>
@@ -156,4 +156,7 @@
 </div>
 </body>
 
+<script src="../assets/uikit.js" type="text/javascript"></script>
+<script src="../assets/script.js" type="text/javascript"></script>
+<script src="../assets/main.js" type="text/javascript"></script>
 </html>

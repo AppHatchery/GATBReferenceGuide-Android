@@ -76,8 +76,17 @@
     <string name="guide">Guide</string>
     <string name="bookmarked_message">Bookmarked! Now you can quickly access this content through <font color="#5182FF">My Bookmarks</font> on <font color="#5182FF">Home</font> page</string>
     <string name="state_guide">State guidelines have changed for LTBI Treatment</string>
+    <string name="note_last_e">Note - Last Edited 03/12/2024</string>
+    <string name="treatment_r">Treatment Regimens</string>
+    <string name="iii_treatme">III. Treatment of Latent TB Infection (LTBI)</string>
+    <string name="firstline">FirstLine</string>
+    <string name="first_line_">First Line TB Drugs for Adults</string>
+    <string name="bookmark_na">Bookmark Name</string>
+    <string name="bookmark_so">Bookmark Source</string>
+    <string name="bookmark_tr">Bookmark %1$s Deleted!</string>
     <string name="edit_note">Edit Note</string>
     <string name="delete_this_note">Delete this note?</string>
+    <string name="search_counter_placeholder">%d/%d</string>
 
     <!-- TODO: Remove or change this placeholder text -->
 

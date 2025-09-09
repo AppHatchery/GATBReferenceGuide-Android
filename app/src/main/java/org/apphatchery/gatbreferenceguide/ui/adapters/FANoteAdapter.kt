@@ -34,7 +34,7 @@ class FANoteAdapter(val viewInChapter: Int = View.GONE) :
 
         fun onBinding(note: NoteEntity) =
             fragmentNoteItemBinding.apply {
-                view.setBackgroundColor(Color.parseColor(note.noteColor))
+                noteLeftBar.setBackgroundColor(Color.parseColor(note.noteColor))
                 textviewNoteBody.text = note.noteText
                 ("Note - Last edited " + note.lastEditDateFormat).also {
                     textviewNoteTitle.text =
@@ -45,7 +45,7 @@ class FANoteAdapter(val viewInChapter: Int = View.GONE) :
         init {
             fragmentNoteItemBinding.apply {
                 textviewShowChapter.visibility = viewInChapter
-                root.setOnClickListener {
+                noteEditIcon.setOnClickListener {
                     if (RecyclerView.NO_POSITION != adapterPosition) {
                         val currentClickedItem = currentList[adapterPosition]
                         onItemClickListAdapter?.let {

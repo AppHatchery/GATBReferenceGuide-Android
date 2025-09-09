@@ -6,21 +6,18 @@
     android:orientation="horizontal"
     android:gravity="center_vertical">
 
-    <!-- Back button (hidden by default) -->
     <ImageView
         android:id="@+id/action_bar_back_button"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="15dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/ic_baseline_back"
         app:tint="@color/white"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:padding="4dp"
         android:contentDescription="Navigate back"
         android:visibility="gone" />
 
-    <!-- Title centered -->
     <TextView
         android:id="@+id/action_bar_title"
         android:layout_width="0dp"
@@ -30,9 +27,11 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/white"
         android:textSize="18sp"
-        android:gravity="center" />
+        android:gravity="center"
+        android:maxLines="2"
+        android:ellipsize="end"
+        />
 
-    <!-- Spacer to balance the back button when visible -->
     <View
         android:id="@+id/action_bar_spacer"
         android:layout_width="24dp"

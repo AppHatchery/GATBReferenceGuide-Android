@@ -28,11 +28,13 @@ import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentMainBinding
 import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
@@ -328,7 +330,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             viewModel.dumpChartData(it)
                 .observe(viewLifecycleOwner) { resource ->
                     when (resource) {
-                        is Resource.Success -> {
+                        is Resource.Success<*> -> {
 
                             if (viewModel.dumpChartDataObserve) {
                                 dumpChapterInfo()
@@ -352,7 +354,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             viewModel.dumpChapterData(it)
                 .observe(viewLifecycleOwner) { resource ->
                     when (resource) {
-                        is Resource.Success -> {
+                        is Resource.Success<*> -> {
                             dumpSubChapterInfo()
                         }
                         else -> {
@@ -371,7 +373,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             viewModel.dumpSubChapterData(it)
                 .observe(viewLifecycleOwner) { resource ->
                     when (resource) {
-                        is Resource.Success -> {
+                        is Resource.Success<*> -> {
                             if (viewModel.dumpSubChapterDataObserver) {
                                 dumpHTMLInfo()
                                 viewModel.dumpSubChapterDataObserver = false
@@ -385,33 +387,39 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     }
 
 
-    private fun firstLaunch() {
-        requireActivity().apply {
-            viewModel.purgeData()
-            getBottomNavigationView()?.toggleVisibility(false)
+   private fun firstLaunch() {
+    requireActivity().apply {
+        viewModel.purgeData()
+        getBottomNavigationView()?.toggleVisibility(false)
+        
+        // moved the heavy I/O operations to a background thread to prevent WebView renderer crashes
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             createHtmlAndAssetsDirectoryIfNotExists()
             prepHtmlPlusAssets()
-            dumpChartData()
+            
+            // Switch back to main thread for UI operations
+            withContext(Dispatchers.Main) {
+                dumpChartData()
+            }
         }
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.taskFlowEvent.collect {
-
-                when (it) {
-                    FAMainViewModel.Callback.InsertHTMLInfoComplete -> {
-                        viewModel.bindHtmlWithChapter()
+    }
+    viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        viewModel.taskFlowEvent.collect {
+            when (it) {
+                FAMainViewModel.Callback.InsertHTMLInfoComplete -> {
+                    viewModel.bindHtmlWithChapter()
+                }
+                FAMainViewModel.Callback.InsertGlobalSearchInfoComplete -> {
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        userPrefs.setBuildVersion(BUILD_VERSION)
+                        userPrefs.setPendoVisitorId(getVisitorId())
                     }
-                    FAMainViewModel.Callback.InsertGlobalSearchInfoComplete -> {
-                        viewLifecycleOwner.lifecycleScope.launch {
-                            userPrefs.setBuildVersion(BUILD_VERSION)
-                            userPrefs.setPendoVisitorId(getVisitorId())
-                        }
-                        init()
-                    }
+                    init()
                 }
             }
         }
     }
-
+}
     private fun generatePendoVisitorId() = PENDO_RELEASE_VERSION + UUID.randomUUID().toString()
 
     private suspend fun getVisitorId(): String {

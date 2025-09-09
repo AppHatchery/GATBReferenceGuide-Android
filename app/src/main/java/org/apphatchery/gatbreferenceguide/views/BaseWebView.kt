@@ -17,6 +17,11 @@ import org.apphatchery.gatbreferenceguide.R
 class BaseWebView(context: Context, attributeSet: AttributeSet?) : WebView(context, attributeSet) {
 
     private lateinit var preferenceManager: SharedPreferences
+    private var searchResultListener: ((Int, Int) -> Unit)? = null
+    
+    fun setOnSearchResultListener(listener: (totalMatches: Int, currentMatch: Int) -> Unit) {
+        searchResultListener = listener
+    }
 
 
     override fun onDraw(canvas: Canvas) {
@@ -64,6 +69,13 @@ class BaseWebView(context: Context, attributeSet: AttributeSet?) : WebView(conte
 
         }
         applyFontSize()
+        
+        // Override the find listener to capture search results
+        setFindListener { activeMatchOrdinal, numberOfMatches, isDoneCounting ->
+            if (isDoneCounting) {
+                searchResultListener?.invoke(numberOfMatches, activeMatchOrdinal + 1)
+            }
+        }
     }
 
 

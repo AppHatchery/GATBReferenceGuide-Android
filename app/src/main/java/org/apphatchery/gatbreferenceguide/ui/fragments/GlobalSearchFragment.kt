@@ -293,18 +293,17 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         )
 
        for (i in tabTitles.indices){
-            val customTab = layoutInflater.inflate(R.layout.custom_tab_layout, null)
-            val tabIcon = customTab.findViewById<ImageView>(R.id.tab_icon)
+            val layoutRes = if (tabIcons[i] == null) R.layout.custom_tab_layout_text_only else R.layout.custom_tab_layout
+            val customTab = layoutInflater.inflate(layoutRes, null)
+            val tabIcon = customTab.findViewById<ImageView?>(R.id.tab_icon)
             val tabText = customTab.findViewById<TextView>(R.id.tab_text)
            val tabContainer = customTab.findViewById<LinearLayout>(R.id.tab_container)
 
             tabText.text = tabTitles[i]
 
             if(tabIcons[i] != null){
-                tabIcon.setImageResource(tabIcons[i]!!)
-                tabIcon.visibility = View.VISIBLE
-            }else{
-                tabIcon.visibility = View.GONE
+                tabIcon?.setImageResource(tabIcons[i]!!)
+                tabIcon?.visibility = View.VISIBLE
             }
 
             val tab = bind.tabLayout.newTab().setCustomView(customTab)
@@ -350,14 +349,17 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         //tab?.customView?.findViewById<LinearLayout>(R.id.tab_container)?.isSelected = isSelected
         tab?.customView?.let { customView ->
             val container = customView.findViewById<LinearLayout>(R.id.tab_container)
-            val icon = customView.findViewById<ImageView>(R.id.tab_icon)
+            val icon = customView.findViewById<ImageView?>(R.id.tab_icon)
             val text = customView.findViewById<TextView>(R.id.tab_text)
             container.isSelected = isSelected
 
-            if(container.isSelected){
-                icon.imageTintList =   ContextCompat.getColorStateList(requireContext(), R.color.white)
-            }else{
-                icon.imageTintList =   ContextCompat.getColorStateList(requireContext(), R.color.neutral_600)
+            // Only tint when an icon exists
+            icon?.let {
+                if (container.isSelected) {
+                    it.imageTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+                } else {
+                    it.imageTintList = ContextCompat.getColorStateList(requireContext(), R.color.neutral_600)
+                }
             }
 
 
@@ -435,6 +437,8 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         with(bind.searchItemCount) {
             visibility = if (trimmedText.isBlank()) View.GONE else View.VISIBLE
         }
+        // Toggle clear icon visibility based on text content
+        bind.clearSearch.visibility = if (trimmedText.isBlank()) View.GONE else View.VISIBLE
         updateSearchViewVisibility(trimmedText.isBlank())
     }
 
