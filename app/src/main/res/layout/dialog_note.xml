@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="281dp"
-    android:layout_height="251dp"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="center"
     android:background="@drawable/note_dialog_background">
@@ -11,12 +11,12 @@
         android:id="@+id/noteTitle"
         android:layout_width="wrap_content"
         android:layout_height="23dp"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:gravity="center_vertical"
-        android:text="@string/edit_note"
+        android:text="@string/add_new_note"
         android:textAppearance="@style/EditNoteTextStyle" />
 
     <RelativeLayout
@@ -41,12 +41,12 @@
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/noteBody"
         android:layout_width="243dp"
-        android:layout_height="38dp"
+        android:layout_height="48dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/noteTitle"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/note_edit_field_background"
-        android:hint="Enter notes ..."
+        android:hint="@string/enter_notes"
         android:inputType="textMultiLine|textAutoComplete|textAutoCorrect|textCapSentences"
         android:padding="8dp"
         android:textSize="14sp"
@@ -58,11 +58,11 @@
         android:id="@+id/editTagLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@id/noteBody"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Edit Tag"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/add_a_tag"
         android:textAppearance="@style/EditNoteTextStyle" />
 
     <!-- Color picker container -->
@@ -73,14 +73,60 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/editTagLabel"
         android:layout_marginTop="8dp"
-        android:background="@drawable/color_picker_container_background">
+
+        android:background="@drawable/color_picker_container_background"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/noteRecyclerViewColor"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:padding="4dp" />
+            android:layout_marginStart="20dp"
+            android:padding="4dp"
+            android:clipChildren="false"
+            android:clipToPadding="false" />
+    </RelativeLayout>
+
+    <!-- Submit feedback checkbox and text container -->
+    <RelativeLayout
+        android:id="@+id/feedback_container"
+        android:layout_width="259dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/colorPickerContainer"
+        android:layout_marginTop="20dp">
+
+        <!-- Checkbox -->
+        <CheckBox
+            android:id="@+id/select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:buttonTint="@color/checkbox_tint"
+            android:backgroundTint="#FFFFFF"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:minWidth="24dp"
+            android:minHeight="24dp"
+            android:scaleX="0.8"
+            android:scaleY="0.8" />
+
+        <!-- Submit note text -->
+        <TextView
+            android:id="@+id/submit_note"
+            android:layout_width="228dp"
+            android:layout_height="wrap_content"
+            android:minHeight="37dp"
+            android:layout_toRightOf="@id/select"
+            android:layout_marginLeft="7dp"
+            android:layout_centerVertical="true"
+            android:text="@string/submit_note"
+            android:textAppearance="@style/submit_note"
+            android:gravity="center_vertical" />
+
     </RelativeLayout>
 
     <!-- Delete Button -->
@@ -88,11 +134,13 @@
         android:id="@+id/noteCancelButton"
         android:layout_width="141dp"
         android:layout_height="40dp"
+    
         android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/feedback_container"
+        android:layout_marginTop="20dp"
         android:background="@drawable/bookmark_popup_visit_button_bg"
         android:backgroundTint="@null"
-        android:text="Delete"
+        android:text="Cancel"
         android:textColor="#343434"
         android:textSize="14sp"
         android:textAllCaps="false" />
@@ -103,7 +151,8 @@
         android:layout_width="140dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/feedback_container"
+        android:layout_marginTop="20dp"
         android:background="@drawable/bookmark_popup_dismiss_button_bg"
         android:backgroundTint="@null"
         android:text="Save"

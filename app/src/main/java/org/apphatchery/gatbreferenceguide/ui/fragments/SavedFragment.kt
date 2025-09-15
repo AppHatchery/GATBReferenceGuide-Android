@@ -154,12 +154,11 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
             .setView(dialogView)
             .create()
         
-        // Make dialog background transparent so our custom background shows
+        // Make dialog background transparent so custom background shows
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         
         // Get dialog views
         val bookmarkNameEdit = dialogView.findViewById<android.widget.EditText>(R.id.bookmark_name_edit)
-        // Read-only source views
         val sourceNameText = dialogView.findViewById<android.widget.TextView>(R.id.bookmark_source_name)
         val sourceFullText = dialogView.findViewById<android.widget.TextView>(R.id.bookmark_source_full)
         val closeButton = dialogView.findViewById<android.widget.ImageView>(R.id.close_dialog)
@@ -203,8 +202,6 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
             )
             messageTextView.text = spannable
 
-            // Button texts already set in layout
-
             cancelButton.setOnClickListener { confirmDialog.dismiss() }
 
             deleteButtonConfirm.setOnClickListener {
@@ -212,7 +209,7 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
                 // Close both dialogs
                 confirmDialog.dismiss()
                 dialog.dismiss()
-                // Show reusable confirmation card overlay
+
                 showDeleteDeletionCard(bookmark.bookmarkTitle)
             }
 

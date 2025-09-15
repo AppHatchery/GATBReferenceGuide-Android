@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:padding="3dp">
+    android:layout_height="40dp"
+    android:paddingTop="7dp"
+    android:paddingBottom="6dp"
+    android:paddingStart="4dp"
+    android:paddingEnd="4dp"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
-    <!-- Unselected tag circle (20dp) -->
+    <!-- Unselected tag circle -->
     <View
         android:id="@+id/unselected_tag"
-        android:layout_width="20dp"
+        android:layout_width="19dp"
         android:layout_height="20dp"
+        android:layout_centerVertical="true"
         android:layout_centerInParent="true"
         android:background="@drawable/unselected_tag_circle"
         android:visibility="visible" />
 
-    <!-- Selected tag circle (26dp with blue border) -->
+    <!-- Selected tag circle -->
     <View
         android:id="@+id/selected_tag"
         android:layout_width="26dp"
@@ -25,7 +31,7 @@
     <!-- Inner color circle for selected state -->
     <View
         android:id="@+id/selected_color_inner"
-        android:layout_width="20dp"
+        android:layout_width="19dp"
         android:layout_height="20dp"
         android:layout_centerInParent="true"
         android:background="@drawable/unselected_tag_circle"

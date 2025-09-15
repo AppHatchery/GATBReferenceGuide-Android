@@ -160,70 +160,70 @@ class MainActivity : AppCompatActivity(), ActionBarController {
                     title = "All Charts", 
                     showBackButton = true
                 )
-                setActionBarSearchVisible(false) // Contract toolbar
+                setActionBarSearchVisible(false)
             }
             R.id.globalSearchFragment -> {
                 setActionBarConfig(
                     title = "Search",
                     showBackButton = false
                 )
-                setActionBarSearchVisible(false) // Contract toolbar
+                setActionBarSearchVisible(false)
             }
             R.id.settingsFragment -> {
                 setActionBarConfig(
                     title = "Settings",
                     showBackButton = false
                 )
-                setActionBarSearchVisible(false) // Contract toolbar
+                setActionBarSearchVisible(false)
             }
             R.id.contactFragment -> {
                 setActionBarConfig(
                     title = "Contacts",
                     showBackButton = true
                 )
-                setActionBarSearchVisible(false) // Contract toolbar
+                setActionBarSearchVisible(false)
             }
             R.id.contactAddFragment -> {
                 setActionBarConfig(
                     title = "New Contact",
                     showBackButton = true
                 )
-                setActionBarSearchVisible(false) // Contract toolbar
+                setActionBarSearchVisible(false)
             }
             R.id.privacyPolicy -> {
                 setActionBarConfig(
                     title = "Privacy Policy",
                     showBackButton = true
                 )
-                setActionBarSearchVisible(false) // Contract toolbar
+                setActionBarSearchVisible(false)
             }
             R.id.about -> {
                 setActionBarConfig(
                     title = "About Us",
                     showBackButton = true
                 )
-                setActionBarSearchVisible(false) // Contract toolbar
+                setActionBarSearchVisible(false)
             }
             R.id.contactDetailsFragment -> {
                 setActionBarConfig(
                     title = "Public Contact",
                     showBackButton = true
                 )
-                setActionBarSearchVisible(false) // Contract toolbar
+                setActionBarSearchVisible(false)
             }
             R.id.myContactDetailsFragment -> {
                 setActionBarConfig(
                     title = "Private Contact",
                     showBackButton = true
                 )
-                setActionBarSearchVisible(false) // Contract toolbar
+                setActionBarSearchVisible(false)
             }
             else -> {
                 setActionBarConfig(
                     title = destinationLabel ?: getString(R.string.guide),
                     showBackButton = true
                 )
-                setActionBarSearchVisible(false) // Contract toolbar
+                setActionBarSearchVisible(false)
             }
         }
     }

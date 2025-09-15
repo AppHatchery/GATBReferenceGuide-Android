@@ -29,6 +29,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -104,6 +105,9 @@ import android.text.Editable
 import androidx.activity.OnBackPressedCallback
 import android.content.ClipData
 import android.widget.RelativeLayout
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class BodyFragment : BaseFragment(R.layout.fragment_body) {
@@ -168,12 +172,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         }
     }
 
-    private fun onDeleteNoteSnackbar(note: NoteEntity) =
-        bind.root.snackBar(getString(R.string.note_deleted)).also {
-            it.setAction(getString(R.string.undo)) {
-                viewModel.insertNote(note)
-            }
-        }
+    private fun onDeleteNoteSnackbar(note: NoteEntity) {
+        showNoteDeletedCard("Note Deleted")
+        // undo functionality with a delay
+        // Handler(Looper.getMainLooper()).postDelayed({
+        // }, 3000)
+    }
 
     private fun updateFont() {
         val fontIndex =
@@ -307,8 +311,17 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         setActionBarTitle(contentTitle)
         bind.lastUpdateTextView.text = getString(R.string.last_updated, subChapterEntity.lastUpdated)
 
-        // Setup search functionality
-        setupSearch()
+        // Setup search functionality only for subchapter content (not charts)
+        if (chartAndSubChapter == null) {
+            setupSearch()
+            // floating button for subchapters
+            setupFloatingButton(false)
+        } else {
+            // Hide search view for charts
+            bind.searchViewInclude.root.visibility = View.GONE
+            // Position floating button 14dp from top for charts
+            setupFloatingButton(true)
+        }
 
 //            menuHost.addMenuProvider(object : MenuProvider {
 //                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -324,20 +337,6 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             it.submitList(NOTE_COLOR)
         }
 
-        val swipeHandler = object : SwipeDecoratorCallback(requireContext()) {
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-                val note = faNoteAdapter.currentList[position]
-                viewModel.deleteNote(note)
-                onDeleteNoteSnackbar(note)
-            }
-        }
-
-
-
-        ItemTouchHelper(swipeHandler).also {
-            it.attachToRecyclerView(bind.recyclerviewNote)
-        }
 
 
 
@@ -353,6 +352,22 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             bookmarkImageButton.setOnClickListener { onBookmarkListener() }
 
             if (chartAndSubChapter != null) isChartView() else {
+                // For regular content, show the main chapter title and hide "View in Chapter" section
+                textviewSubChapter.visibility = View.VISIBLE
+                lastUpdateTextView.visibility = View.VISIBLE
+                separator.visibility = View.VISIBLE
+                viewInCha.visibility = View.GONE
+                chartLastUpdateTextView.visibility = View.GONE
+                chartSeparator.visibility = View.GONE
+
+                // Reset NestedScrollView to original position below search view
+                val nestedScrollView = root.findViewById<androidx.core.widget.NestedScrollView>(R.id.nestedScrollView)
+                val layoutParams = nestedScrollView?.layoutParams as? androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+                layoutParams?.let {
+                    it.topToBottom = R.id.search_view_include
+                    it.topMargin = (27.5 * resources.displayMetrics.density).toInt()
+                    nestedScrollView.layoutParams = it
+                }
 
                 val originalTitle = chapterEntity.chapterTitle
                 val searchedWordToColor = bodyUrl.searchQuery
@@ -405,23 +420,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             faNoteAdapter = FANoteAdapter().also {
                 viewModel.getNote(id).observe(viewLifecycleOwner) { data ->
                     it.submitList(data)
-                    showNoteCollapseControl(data.isEmpty())
-                    bind.noteCountTextView.text = getString(R.string.notes_count, data.size)
                 }
 
                 it.itemClickCallback { onNoteListenerEdit(it) }
-            }
-
-
-            recyclerviewNote.apply {
-                addItemDecoration(
-                    DividerItemDecoration(
-                        requireContext(),
-                        DividerItemDecoration.VERTICAL
-                    )
-                )
-                layoutManager = GridLayoutManager(requireContext(), 1)
-                adapter = faNoteAdapter
             }
 
             shareButton.setOnClickListener {
@@ -439,53 +440,6 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
 
 
-            fun expandRecyclerView(recyclerView: RecyclerView) {
-                recyclerView.measure(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-                )
-                val targetHeight = recyclerView.measuredHeight
-
-                recyclerView.layoutParams.height = 0
-                recyclerView.visibility = View.VISIBLE
-
-                val animator = ValueAnimator.ofInt(0, targetHeight).apply {
-                    duration = 300 // Adjust duration as needed
-                    addUpdateListener { animation ->
-                        recyclerView.layoutParams.height = animation.animatedValue as Int
-                        recyclerView.requestLayout()
-                    }
-                }
-                animator.start()
-            }
-
-            fun collapseRecyclerView(recyclerView: RecyclerView) {
-                val initialHeight = recyclerView.measuredHeight
-
-                val animator = ValueAnimator.ofInt(initialHeight, 0).apply {
-                    duration = 300
-                    addUpdateListener { animation ->
-                        recyclerView.layoutParams.height = animation.animatedValue as Int
-                        recyclerView.requestLayout()
-                    }
-                    doOnEnd { recyclerView.visibility = View.GONE }
-                }
-                animator.start()
-            }
-
-            fun toggleRecyclerViewVisibility(recyclerView: RecyclerView, toggleButton: ImageView, isCollapsed: Boolean) {
-                if (isCollapsed) {
-                    expandRecyclerView(recyclerView)
-                    toggleButton.setImageResource(R.drawable.ic_baseline_arrow_up)
-                } else {
-                    collapseRecyclerView(recyclerView)
-                    toggleButton.setImageResource(R.drawable.ic_baseline_arrow_down)
-                }
-            }
-            collapseActionButton.setOnClickListener {
-                toggleRecyclerViewVisibility(bind.recyclerviewNote, collapseActionButton, isCollapsed)
-                isCollapsed = !isCollapsed
-            }
 
         }
 
@@ -529,16 +483,50 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             })
         }
 
-    private fun showNoteCollapseControl(isEmpty: Boolean) {
-        bind.collapsableNoteRoot.visibility =
-            if (isEmpty) View.GONE else View.VISIBLE
-    }
 
     private fun isChartView() = bind.apply {
+        // Hide the main chapter title for charts and show the "View in Chapter" section instead
+        textviewSubChapter.visibility = View.GONE
+        lastUpdateTextView.visibility = View.GONE
+        separator.visibility = View.GONE
+        viewInCha.visibility = View.VISIBLE
+        chartLastUpdateTextView.visibility = View.VISIBLE
+        chartSeparator.visibility = View.VISIBLE
+
+        // Set the chart last update text
+        chartLastUpdateTextView.text = getString(R.string.last_updated, subChapterEntity.lastUpdated)
+
+        // Update NestedScrollView to position below chart separator
+        val nestedScrollView = root.findViewById<androidx.core.widget.NestedScrollView>(R.id.nestedScrollView)
+        val layoutParams = nestedScrollView?.layoutParams as? androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+        layoutParams?.let {
+            it.topToBottom = R.id.chart_separator
+            // add 12dp space between separator and content
+            it.topMargin = (12 * resources.displayMetrics.density).toInt()
+            nestedScrollView.layoutParams = it
+        }
+
         viewModel.getChapterById(chartAndSubChapter!!.subChapterEntity.chapterId)
             .observeOnce(viewLifecycleOwner) { chapterEntity ->
-                tableName.apply {
-                    text = chartAndSubChapter!!.subChapterEntity.subChapterTitle
+                viewInCha.apply {
+                    // Format the text with blue color for chapter title
+                    val fullText = getString(R.string.view_in_cha, chapterEntity.chapterTitle)
+                    val spannableString = SpannableString(fullText)
+                    
+                    // Find the chapter title part and color it blue
+                    val startIndex = fullText.indexOf(chapterEntity.chapterTitle)
+                    if (startIndex != -1) {
+                        val endIndex = startIndex + chapterEntity.chapterTitle.length
+                        val colorSpan = ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.reddish))
+                        spannableString.setSpan(
+                            colorSpan,
+                            startIndex,
+                            endIndex,
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                        )
+                    }
+                    
+                    text = spannableString
                     setOnClickListener {
                         val directions =
                             BodyFragmentDirections.actionBodyFragmentSelf(
@@ -551,17 +539,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 }
             }
 
-        textviewSubChapter.setCompoundDrawablesRelativeWithIntrinsicBounds(
-            R.drawable.ic_baseline_charts_2,
-            0,
-            0,
-            0
-        )
-
-
         bookmarkType = BookmarkType.CHART
-        textviewSubChapter.text = chartAndSubChapter!!.chartEntity.chartTitle
-// here is where the chart webview is being loaded
+        // Load the chart content
         val loadUrl = baseURL + PAGES_DIR + chartAndSubChapter!!.chartEntity.id + EXTENSION
         bodyWebView.loadUrl(loadUrl)
 
@@ -574,6 +553,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         val noteBody = findViewById<AppCompatEditText>(R.id.noteBody)
         val noteTitle = findViewById<TextView>(R.id.noteTitle)
         val noteColorRecyclerView = findViewById<RecyclerView>(R.id.noteRecyclerViewColor)
+        val editTagLabel = findViewById<TextView>(R.id.editTagLabel)
+        val feedbackContainer = findViewById<RelativeLayout>(R.id.feedback_container)
+        
         noteColorRecyclerView.apply {
             faNoteColorAdapter.selectedColor = note.noteColor
             adapter = faNoteColorAdapter
@@ -583,6 +565,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
         findViewById<View>(R.id.closeDialog).setOnClickListener { dismiss() }
         noteTitle.text = getString(R.string.edit_concat, getString(R.string.note))
+        editTagLabel.text = "Edit Tag" // Change from "Add tag" to "Edit tag"
+        feedbackContainer.visibility = View.GONE // Hide feedback container in edit mode
+        
         noteBody.apply {
             setText(note.noteText)
             setSelection(note.noteText.length)
@@ -615,7 +600,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                         )
                     )
                     dismiss()
-                    requireContext().toast(getString(R.string.note_updated))
+                    showNoteDeletedCard("Note Updated")
                 }
             }
         }
@@ -629,6 +614,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         val saveButton = findViewById<AppCompatButton>(R.id.noteSaveButton)
         val noteBody = findViewById<AppCompatEditText>(R.id.noteBody)
         val noteColorRecyclerView = findViewById<RecyclerView>(R.id.noteRecyclerViewColor)
+        val checkBox = findViewById<CheckBox>(R.id.select)
         findViewById<View>(R.id.closeDialog).setOnClickListener { dismiss() }
         noteColorRecyclerView.apply {
             adapter = faNoteColorAdapter
@@ -644,7 +630,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         saveButton.apply {
             setCompoundDrawables(null, null, null, null)
             setOnClickListener {
-                onSaveNote(noteBody.text.toString().trim())
+                val isSubmitFeedback = checkBox?.isChecked ?: false
+                onSaveNote(noteBody.text.toString().trim(), isSubmitFeedback)
                 dismiss()
             }
         }
@@ -733,21 +720,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 }
 
                 cancelButton.setOnClickListener {
-                    requireContext().alertDialog(
-                        message = getString(
-                            R.string.bookmark_confirm_deletion,
-                            bookmarkEntity.bookmarkTitle
-                        )
-                    ) {
+                    showBookmarkDeletionConfirmation(bookmarkEntity) {
                         dismiss()
-                        viewModel.deleteBookmark(bookmarkEntity)
-                        requireContext().toast(
-                            getString(
-                                R.string.bookmark_deleted,
-                                bookmarkEntity.bookmarkTitle
-                            )
-                        )
-                        bookmarkEntity = BookmarkEntity()
                     }
                 }
                 saveButton.setOnClickListener {
@@ -756,7 +730,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     ).also {
                         dismiss()
                         viewModel.updateBookmark(it)
-                        requireContext().toast(getString(R.string.bookmark_updated))
+                        showNoteDeletedCard(getString(R.string.bookmark_updated))
                     }
                 }
             } else {
@@ -842,7 +816,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         }
     }
 
-    private fun onSaveNote(noteBody: String) = bind.root.apply {
+    private fun onSaveNote(noteBody: String, isSubmitFeedback: Boolean = false) = bind.root.apply {
         if (noteBody.isBlank()) snackBar(getString(R.string.note_enter_to_save_prompt)) else {
             viewModel.insertNote(
                 NoteEntity(
@@ -853,7 +827,18 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     noteText = noteBody
                 )
             )
-            snackBar(getString(R.string.note_saved))
+            // Show confirmation card
+            showNoteDeletedCard("Note Saved")
+            
+            // Show thank you dialog and send feedback to Pendo if checkbox was ticked
+            if (isSubmitFeedback) {
+                // Send note body to Pendo as feedback
+                sendNoteToPendo(noteBody)
+                
+                Handler(Looper.getMainLooper()).postDelayed({
+                    showThankYouDialog()
+                }, 3000) 
+            }
         }
     }
 
@@ -862,7 +847,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private fun setupWebView() = bind.bodyWebView.apply {
         onZoomOut()
         
-        // Add JavaScript interface for search results
+        // JavaScript interface for search results
         addJavascriptInterface(object {
             @android.webkit.JavascriptInterface
             fun onSearchResultsFound(count: Int) {
@@ -1052,7 +1037,6 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
     private fun createDynamicLink() {
         createDynamicLink { link ->
-            // This is the old system share sheet behavior
             Intent(Intent.ACTION_SEND)
                 .putExtra(Intent.EXTRA_TEXT, link)
                 .setType("text/plain")
@@ -1271,7 +1255,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 val layoutParams = searchEditText.layoutParams
                 layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
                 searchEditText.layoutParams = layoutParams
-                searchEditText.background = ContextCompat.getDrawable(requireContext(), R.drawable.frame_16)
+                searchEditText.background = ContextCompat.getDrawable(requireContext(), R.drawable.search_input_background)
             }
         }.start()
 
@@ -1290,7 +1274,6 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             
             // Perform WebView search
             bind.bodyWebView.findAllAsync(searchQuery)
-            // Do not show bottom search-clear container during search
             bind.searchClearContainer.visibility = View.GONE
             
             Log.d("BodyFragment", "Performing search for: $searchQuery")
@@ -1298,7 +1281,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     }
 
     private fun updateSearchCount(query: String) {
-        // Use JavaScript to count actual occurrences in the WebView content
+        // Using JavaScript to count actual occurrences in the WebView content
         val jsCode = """
             javascript:(function() {
                 var searchText = '$query';
@@ -1342,16 +1325,14 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private fun navigatePrevious() {
         if (totalMatches > 0) {
             // Navigate to previous match in WebView
-            bind.bodyWebView.findNext(false) // false = previous
-            // The listener will update currentMatch automatically
+            bind.bodyWebView.findNext(false)
         }
     }
 
     private fun navigateNext() {
         if (totalMatches > 0) {
             // Navigate to next match in WebView
-            bind.bodyWebView.findNext(true) // true = next
-            // The listener will update currentMatch automatically
+            bind.bodyWebView.findNext(true)
         }
     }
 
@@ -1370,5 +1351,189 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private fun hideKeyboard() {
         val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
+    }
+
+    private fun showNoteDeletedCard(message: String) {
+        val container = view?.findViewById<RelativeLayout>(R.id.delete_card_container)
+        val textView = view?.findViewById<TextView>(R.id.delete_card_text)
+        
+        if (container != null && textView != null) {
+            textView.text = message
+            container.visibility = View.VISIBLE
+            
+            // Auto-hide after 3 seconds
+            container.postDelayed({
+                container.visibility = View.GONE
+            }, 3000)
+        }
+    }
+
+    private fun showBookmarkDeletionConfirmation(bookmark: BookmarkEntity, onEditDialogDismiss: () -> Unit) {
+        // Show bookmark confirmation dialog
+        val confirmView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_bookmark_deletion_confirmation, null)
+        val confirmDialog = AlertDialog.Builder(requireContext())
+            .setView(confirmView)
+            .create()
+
+        confirmDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val messageTextView = confirmView.findViewById<TextView>(R.id.deletionMessage)
+        val cancelButton = confirmView.findViewById<AppCompatButton>(R.id.cancelButton)
+        val deleteButtonConfirm = confirmView.findViewById<AppCompatButton>(R.id.confirmDeleteButton)
+
+        // Build: "Delete Bookmark?\n<title>" and color only <title> with @color/reddish
+        val baseText = "Delete Bookmark?\n${bookmark.bookmarkTitle}"
+        val spannable = SpannableString(baseText)
+        val prefix = "Delete Bookmark?\n"
+        val start = prefix.length
+        val end = start + bookmark.bookmarkTitle.length
+        val color = ContextCompat.getColor(requireContext(), R.color.reddish)
+        spannable.setSpan(
+            ForegroundColorSpan(color),
+            start,
+            end,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        messageTextView.text = spannable
+
+        cancelButton.setOnClickListener { confirmDialog.dismiss() }
+
+        deleteButtonConfirm.setOnClickListener {
+            viewModel.deleteBookmark(bookmark)
+            // Close both dialogs
+            confirmDialog.dismiss()
+            onEditDialogDismiss()
+            // Show reusable confirmation card overlay
+            showBookmarkDeletedCard(bookmark.bookmarkTitle)
+            // Reset bookmark entity
+            bookmarkEntity = BookmarkEntity()
+        }
+
+        confirmDialog.show()
+    }
+
+    private fun showBookmarkDeletedCard(bookmarkTitle: String) {
+        val container = view?.findViewById<RelativeLayout>(R.id.delete_card_container)
+        val textView = view?.findViewById<TextView>(R.id.delete_card_text)
+        if (container != null && textView != null) {
+            val fullText = "Bookmark deleted\n$bookmarkTitle"
+            val spannable = SpannableString(fullText)
+            val start = "Bookmark deleted\n".length
+            val end = start + bookmarkTitle.length
+            val color = ContextCompat.getColor(requireContext(), R.color.reddish)
+            spannable.setSpan(ForegroundColorSpan(color), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            textView.text = spannable
+            container.visibility = View.VISIBLE
+            container.postDelayed({
+                container.visibility = View.GONE
+            }, 3000)
+        }
+    }
+
+    private fun showThankYouDialog() = Dialog(requireContext()).dialog().apply {
+        setContentView(R.layout.dialog_thankyou_note)
+        val visitButton = findViewById<AppCompatButton>(R.id.visit_button)
+        val dismissButton = findViewById<AppCompatButton>(R.id.dismiss_button)
+        
+        visitButton.setOnClickListener {
+            dismiss()
+            // Navigate to settings page
+            findNavController().navigate(R.id.settingsFragment)
+        }
+        
+        dismissButton.setOnClickListener {
+            dismiss()
+        }
+        
+        safeDialogShow()
+    }
+
+    private fun setupFloatingButton(isChart: Boolean) {
+        val floatingButton = bind.floatingNotesButton
+        
+        if (isChart) {
+            // For charts: position 14dp from top (coz there is no search view)
+            val layoutParams = floatingButton.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+            layoutParams.topToTop = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
+            layoutParams.topToBottom = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.UNSET
+            layoutParams.topMargin = (14 * resources.displayMetrics.density).toInt()
+            floatingButton.layoutParams = layoutParams
+        }
+
+        floatingButton.setOnClickListener {
+            showNotesBottomModal()
+        }
+    }
+
+    private fun showNotesBottomModal() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val view = layoutInflater.inflate(R.layout.bottom_modal_notes, null)
+        
+        val notesRecyclerView = view.findViewById<RecyclerView>(R.id.modal_notes_recycler)
+        val notesTitle = view.findViewById<TextView>(R.id.notes_title)
+        
+        // Setup swipe-to-delete functionality
+        val swipeHandler = object : SwipeDecoratorCallback(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val note = faNoteAdapter.currentList[position]
+                viewModel.deleteNote(note)
+                onDeleteNoteSnackbar(note)
+            }
+        }
+        
+        // Setup RecyclerView
+        notesRecyclerView.apply {
+            addItemDecoration(
+                DividerItemDecoration(
+                    requireContext(),
+                    DividerItemDecoration.VERTICAL
+                )
+            )
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = faNoteAdapter
+        }
+        
+        // Attach swipe handler to modal RecyclerView
+        ItemTouchHelper(swipeHandler).also {
+            it.attachToRecyclerView(notesRecyclerView)
+        }
+        
+        // Update title with note count
+        viewModel.getNote(id).observe(viewLifecycleOwner) { notes ->
+            notesTitle.text = "Notes (${notes.size})"
+        }
+        
+        bottomSheetDialog.setContentView(view)
+        
+        // bottom sheet background
+        bottomSheetDialog.setOnShowListener { dialog ->
+            val bottomSheetDialog = dialog as BottomSheetDialog
+            val bottomSheet = bottomSheetDialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            bottomSheet?.background = null
+            
+            // make the dialog window background transparent
+            bottomSheetDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        }
+        
+        bottomSheetDialog.show()
+    }
+
+    private fun sendNoteToPendo(noteBody: String) {
+        try {
+            // TODO: Replace with actual Pendo implementation
+            // Pendo track event:
+            // Pendo.track("user_feedback_submitted", mapOf(
+            //     "feedback_text" to noteBody,
+            //     "chapter_id" to this.id,
+            //     "chapter_title" to this.title,
+            //     "subchapter_id" to subChapterEntity.subChapterId,
+            //     "timestamp" to System.currentTimeMillis()
+            // ))
+            
+            Log.d("PendoFeedback", "Note feedback sent to Pendo: $noteBody")
+        } catch (e: Exception) {
+            Log.e("PendoFeedback", "Failed to send feedback to Pendo", e)
+        }
     }
 }

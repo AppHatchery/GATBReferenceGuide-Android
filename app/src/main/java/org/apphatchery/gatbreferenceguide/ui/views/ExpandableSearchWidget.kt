@@ -159,7 +159,7 @@ class ExpandableSearchWidget @JvmOverloads constructor(
                 val layoutParams = searchEditText.layoutParams
                 layoutParams.width = LayoutParams.MATCH_PARENT
                 searchEditText.layoutParams = layoutParams
-                searchEditText.background = ContextCompat.getDrawable(context, R.drawable.frame_16)
+                searchEditText.background = ContextCompat.getDrawable(context, R.drawable.search_input_background)
             }
         }.start()
 

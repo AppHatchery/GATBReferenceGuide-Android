@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_alignParentStart="true"
-                android:background="@drawable/frame_16"
+                android:background="@drawable/search_input_background"
                 android:drawableStart="@drawable/ic_baseline_search_24"
                 android:drawablePadding="10dp"
                 android:hint="Enter Keywords to Search"

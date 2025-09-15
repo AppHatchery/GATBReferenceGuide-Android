@@ -16,36 +16,53 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/table_viewLinearLayoutCompat"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/view_in_cha"
+        android:layout_width="281dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/view_in_cha"
+        android:textAppearance="@style/view_in_cha"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:foreground="?attr/selectableItemBackground"
+        android:drawableEnd="@drawable/ic_baseline_next"
+        android:drawablePadding="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_view_include"
+        tools:text="View in Chapter -> Treatment Regimens" />
+
+    <!-- Last Update Text for Charts -->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/chart_last_update_textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:gravity="center"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="0dp"
+        android:textStyle="italic"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view">
+        app:layout_constraintTop_toBottomOf="@+id/view_in_cha"
+        tools:ignore="HardcodedText"
+        tools:text="Last updated 06/17/21" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/ic_keyboard_arrow_right"
-            android:text="@string/view_in_chapter" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/table_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:foreground="?attr/selectableItemBackground"
-            android:padding="8dp"
-            android:textStyle="bold"
-            tools:text="@string/appbar_scrolling_view_behavior" />
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    <!-- Separator for Charts -->
+    <View
+        android:id="@+id/chart_separator"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:paddingBottom="16dp"
+        android:background="@drawable/separator"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chart_last_update_textView" />
 
     <!-- Search View positioned after action bar -->
     <include
@@ -61,6 +78,7 @@
     <!-- Updated the main content constraint to start from search view -->
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="27.5dp"
@@ -120,41 +138,6 @@
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/separator" />
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/collapsable_note_root"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="37dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="36dp"
-                android:gravity="center_vertical">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/note_count_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/notes_count"
-                    android:textStyle="bold" />
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/collapse_action_button"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/shape_circle"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_baseline_arrow_up" />
-
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerviewNote"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="37dp"
-                android:layout_marginEnd="36dp" />
 
             <org.apphatchery.gatbreferenceguide.views.BaseWebView
                 android:id="@+id/body_web_view"
@@ -388,4 +371,32 @@
         </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <!-- Floating Notes Button -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_notes_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_baseline_edit_note"
+        android:contentDescription="Show Notes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_view_include"
+        app:backgroundTint="@color/reddish"
+        app:tint="@android:color/white" />
+
+    <!-- Note Deletion Confirmation Card -->
+    <include
+        android:id="@+id/delete_card_container"
+        layout="@layout/include_confirmation_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

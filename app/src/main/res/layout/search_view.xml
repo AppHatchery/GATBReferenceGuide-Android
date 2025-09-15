@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentStart="true"
-        android:background="@drawable/frame_16"
+        android:background="@drawable/search_input_background"
         android:hint="Enter Keywords to Search"
         android:textColorHint="#666666"
         android:textColor="#000000"

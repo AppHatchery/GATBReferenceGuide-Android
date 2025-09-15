@@ -397,7 +397,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             createHtmlAndAssetsDirectoryIfNotExists()
             prepHtmlPlusAssets()
             
-            // Switch back to main thread for UI operations
+            // Switch back to main thread for ui operations
             withContext(Dispatchers.Main) {
                 dumpChartData()
             }
