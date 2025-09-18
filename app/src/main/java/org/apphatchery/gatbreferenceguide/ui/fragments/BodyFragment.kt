@@ -314,13 +314,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         // Setup search functionality only for subchapter content (not charts)
         if (chartAndSubChapter == null) {
             setupSearch()
-            // floating button for subchapters
-            setupFloatingButton(false)
         } else {
             // Hide search view for charts
             bind.searchViewInclude.root.visibility = View.GONE
-            // Position floating button 14dp from top for charts
-            setupFloatingButton(true)
         }
 
 //            menuHost.addMenuProvider(object : MenuProvider {
@@ -444,6 +440,15 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         }
 
         setupBookmark(id)
+
+        // Setup floating button 
+        if (chartAndSubChapter == null) {
+            // floating button for subchapters
+            setupFloatingButton(false)
+        } else {
+            // Position floating button 24dp from top for charts
+            setupFloatingButton(true)
+        }
 
         requireActivity().getBottomNavigationView()?.isChecked(R.id.mainFragment)
 
@@ -1450,14 +1455,21 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
     private fun setupFloatingButton(isChart: Boolean) {
         val floatingButton = bind.floatingNotesButton
+        val notesCountText = bind.floatingNotesCount
         
         if (isChart) {
-            // For charts: position 14dp from top (coz there is no search view)
             val layoutParams = floatingButton.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
             layoutParams.topToTop = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
             layoutParams.topToBottom = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.UNSET
-            layoutParams.topMargin = (14 * resources.displayMetrics.density).toInt()
+            layoutParams.topMargin = (24 * resources.displayMetrics.density).toInt()
             floatingButton.layoutParams = layoutParams
+        }
+
+        // Observe note count and update floating button display
+        viewModel.getNote(id).observe(viewLifecycleOwner) { notes ->
+            val noteCount = notes.size
+            notesCountText.text = "($noteCount)"
+            notesCountText.visibility = View.VISIBLE
         }
 
         floatingButton.setOnClickListener {

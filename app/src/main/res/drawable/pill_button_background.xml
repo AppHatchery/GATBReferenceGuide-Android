@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    
+    <!-- Pill-shaped corners with radius of 14dp (half of height 28dp) -->
+    <corners android:radius="14dp" />
+    
+    <!-- Background color matching the design (#F0C858) -->
+    <solid android:color="#F0C858" />
+    
+</shape>
