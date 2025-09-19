@@ -19,8 +19,6 @@ import android.text.style.BackgroundColorSpan
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -42,15 +40,11 @@ import androidx.core.os.bundleOf
 import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -75,8 +69,6 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FANoteColorAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.SwipeDecoratorCallback
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FABodyViewModel
-import org.apphatchery.gatbreferenceguide.ui.viewmodels.MainActivityViewModel
-import org.apphatchery.gatbreferenceguide.utils.*
 import org.apphatchery.gatbreferenceguide.utils.ANALYTICS_BOOKMARK_EVENT
 import org.apphatchery.gatbreferenceguide.utils.ANALYTICS_PAGE_EVENT
 import org.apphatchery.gatbreferenceguide.utils.EXTENSION
@@ -84,7 +76,6 @@ import org.apphatchery.gatbreferenceguide.utils.NOTE_COLOR
 import org.apphatchery.gatbreferenceguide.utils.PAGES_DIR
 import org.apphatchery.gatbreferenceguide.utils.alertDialog
 import org.apphatchery.gatbreferenceguide.utils.dialog
-import org.apphatchery.gatbreferenceguide.utils.getActionBar
 import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
 import org.apphatchery.gatbreferenceguide.utils.isChecked
 import org.apphatchery.gatbreferenceguide.utils.observeOnce
@@ -94,20 +85,16 @@ import org.apphatchery.gatbreferenceguide.utils.snackBar
 import org.apphatchery.gatbreferenceguide.utils.toast
 import sdk.pendo.io.Pendo
 import javax.inject.Inject
-import kotlin.math.log
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import android.content.ClipboardManager
 import androidx.core.content.ContextCompat
 import android.text.TextWatcher
 import android.text.Editable
 import androidx.activity.OnBackPressedCallback
-import android.content.ClipData
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class BodyFragment : BaseFragment(R.layout.fragment_body) {
@@ -289,6 +276,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             domStorageEnabled = true
             allowFileAccess = true // 10
             allowContentAccess = true
+            // Enable smooth scrolling for better search result navigation
+            setSupportZoom(true)
+            builtInZoomControls = false
         }
 
         val menuHost: MenuHost = requireActivity()
@@ -1101,6 +1091,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         searchPrevious = searchContainer.findViewById(R.id.search_previous)
         searchNext = searchContainer.findViewById(R.id.search_next)
         
+        // Get reference to the search controls container 
+        val searchControlsContainer = searchContainer.findViewById<LinearLayout>(R.id.search_controls_container)
+        
         // Initially hide the search view
         searchContainer.visibility = View.GONE
         
@@ -1151,6 +1144,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                         performInPageSearch(query)
                     }
                 } else {
+                    // Clear WebView search highlights when search text is cleared
+                    clearWebViewSearch()
+                    collapseSearchView()
                     searchClear.visibility = View.GONE
                     if (isExpanded) {
                         showEmptySearchState()
@@ -1190,8 +1186,11 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         if (isExpanded) return
         isExpanded = true
 
-        // Animate EditText width to 213dp
-        val targetWidth = (213 * resources.displayMetrics.density).toInt()
+        // Calculate available space for EditText based on screen width and controls container
+        val screenWidth = resources.displayMetrics.widthPixels
+        val containerPadding = searchContainer.paddingStart + searchContainer.paddingEnd
+        val controlsWidth = (120 * resources.displayMetrics.density).toInt() // Approximate width for controls
+        val targetWidth = maxOf((screenWidth - containerPadding - controlsWidth), (160 * resources.displayMetrics.density).toInt())
 
         ValueAnimator.ofInt(searchEditText.width, targetWidth).apply {
             duration = 250
@@ -1218,18 +1217,17 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
     private fun showSearchControls() {
         searchClear.visibility = View.VISIBLE
-        searchCounter.visibility = View.VISIBLE
-        searchPrevious.visibility = View.VISIBLE
-        searchNext.visibility = View.VISIBLE
+        val searchControlsContainer = searchContainer.findViewById<LinearLayout>(R.id.search_controls_container)
+        searchControlsContainer.visibility = View.VISIBLE
     }
 
     private fun showEmptySearchState() {
         totalMatches = 0
         currentMatch = 0
         searchCounter.text = "0/0"
-        searchCounter.visibility = View.VISIBLE
-        searchPrevious.visibility = View.VISIBLE
-        searchNext.visibility = View.VISIBLE
+       
+        val searchControlsContainer = searchContainer.findViewById<LinearLayout>(R.id.search_controls_container)
+        searchControlsContainer.visibility = View.VISIBLE
         searchClear.visibility = View.VISIBLE
         Log.d("BodyFragment", "Showing empty search state")
     }
@@ -1238,10 +1236,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         if (!isExpanded) return
         isExpanded = false
 
-        // Hide controls first
-        searchCounter.visibility = View.GONE
-        searchPrevious.visibility = View.GONE
-        searchNext.visibility = View.GONE
+        // Hide controls
+        val searchControlsContainer = searchContainer.findViewById<LinearLayout>(R.id.search_controls_container)
+        searchControlsContainer.visibility = View.GONE
         searchClear.visibility = View.GONE
 
         // Animate back to full width
@@ -1319,9 +1316,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         val count = totalMatches
         searchCounter.text = "${currentMatch}/${count}"
         
-        searchCounter.visibility = View.VISIBLE
-        searchPrevious.visibility = View.VISIBLE
-        searchNext.visibility = View.VISIBLE
+        val searchControlsContainer = searchContainer.findViewById<LinearLayout>(R.id.search_controls_container)
+        searchControlsContainer.visibility = View.VISIBLE
         searchClear.visibility = View.VISIBLE
         
         Log.d("BodyFragment", "Updated search UI: ${currentMatch}/${count}")
@@ -1329,16 +1325,57 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
     private fun navigatePrevious() {
         if (totalMatches > 0) {
-            // Navigate to previous match in WebView
+            // Navigate to previous match in WebView and update counter
             bind.bodyWebView.findNext(false)
+            
+            // Update current match counter (cycle from 1 to totalMatches)
+            currentMatch = if (currentMatch <= 1) totalMatches else currentMatch - 1
+            updateSearchCounter()
+            
+            // Ensure smooth scrolling to the highlighted result
+            ensureSearchResultVisible()
+            
+            Log.d("BodyFragment", "Navigated to previous match: ${currentMatch}/${totalMatches}")
         }
     }
 
     private fun navigateNext() {
         if (totalMatches > 0) {
-            // Navigate to next match in WebView
+            // Navigate to next match in WebView and update counter
             bind.bodyWebView.findNext(true)
+            
+            // Update current match counter (cycle from 1 to totalMatches)
+            currentMatch = if (currentMatch >= totalMatches) 1 else currentMatch + 1
+            updateSearchCounter()
+            
+            // Ensure smooth scrolling to the highlighted result
+            ensureSearchResultVisible()
+            
+            Log.d("BodyFragment", "Navigated to next match: ${currentMatch}/${totalMatches}")
         }
+    }
+    
+    private fun ensureSearchResultVisible() {
+        // JavaScript to ensure the current highlighted search result is properly centered in view
+        val jsCode = """
+            javascript:(function() {
+                // Find the currently highlighted search result
+                var highlighted = document.querySelector('span[style*="background-color: yellow"], span[style*="background: yellow"]');
+                if (highlighted) {
+                    // Scroll to the highlighted element with smooth behavior
+                    highlighted.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center',
+                        inline: 'center'
+                    });
+                }
+            })();
+        """.trimIndent()
+        
+        // Execute with a small delay to ensure WebView has processed findNext
+        Handler(Looper.getMainLooper()).postDelayed({
+            bind.bodyWebView.evaluateJavascript(jsCode, null)
+        }, 100)
     }
 
     private fun updateSearchCounter() {
