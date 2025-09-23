@@ -416,6 +416,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             }
 
             homeButton.setOnClickListener {
+                hideKeyboard() // Dismiss keyboard before navigating to home
                 findNavController().popBackStack(R.id.mainFragment, false)
             }
 
@@ -572,11 +573,15 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         deleteButton.apply {
             text = getString(R.string.delete)
             setOnClickListener {
-                showNoteDeletionConfirmationPopup {
-                    dismiss()
-                    viewModel.deleteNote(note)
-                    onDeleteNoteSnackbar(note)
-                }
+                showNoteDeletionConfirmationPopup(
+                    onEditDialogHide = { hide() }, 
+                    onEditDialogShow = { show() }, 
+                    onEditDialogDismiss = { dismiss() },
+                    onConfirm = {
+                        viewModel.deleteNote(note)
+                        onDeleteNoteSnackbar(note)
+                    }
+                )
             }
         }
 
@@ -715,9 +720,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 }
 
                 cancelButton.setOnClickListener {
-                    showBookmarkDeletionConfirmation(bookmarkEntity) {
-                        dismiss()
-                    }
+                    showBookmarkDeletionConfirmation(
+                        bookmarkEntity,
+                        onEditDialogHide = { hide() }, 
+                        onEditDialogShow = { show() }, 
+                        onEditDialogDismiss = { dismiss() } 
+                    )
                 }
                 saveButton.setOnClickListener {
                     bookmarkEntity.copy(
@@ -779,6 +787,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             
             visitButton.setOnClickListener {
                 dismiss()
+                hideKeyboard() // Dismiss keyboard before navigating to home
                 // Navigate to bookmarks/home page
                 findNavController().popBackStack(R.id.mainFragment, false)
             }
@@ -791,7 +800,10 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         }
     }
 
-    private fun showNoteDeletionConfirmationPopup(onConfirm: () -> Unit) {
+    private fun showNoteDeletionConfirmationPopup(onEditDialogHide: () -> Unit, onEditDialogShow: () -> Unit, onEditDialogDismiss: () -> Unit, onConfirm: () -> Unit) {
+        // Hide edit dialog 
+        onEditDialogHide()
+        
         Dialog(requireContext()).dialog().apply {
             setContentView(R.layout.dialog_note_deletion_confirmation)
 
@@ -801,10 +813,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             yesButton.setOnClickListener {
                 dismiss()
                 onConfirm()
+                onEditDialogDismiss()
             }
 
             cancelButton.setOnClickListener {
                 dismiss()
+                onEditDialogShow()
             }
 
             safeDialogShow()
@@ -1410,7 +1424,10 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         }
     }
 
-    private fun showBookmarkDeletionConfirmation(bookmark: BookmarkEntity, onEditDialogDismiss: () -> Unit) {
+    private fun showBookmarkDeletionConfirmation(bookmark: BookmarkEntity, onEditDialogHide: () -> Unit, onEditDialogShow: () -> Unit, onEditDialogDismiss: () -> Unit) {
+        // Hide edit dialog 
+        onEditDialogHide()
+        
         // Show bookmark confirmation dialog
         val confirmView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_bookmark_deletion_confirmation, null)
         val confirmDialog = AlertDialog.Builder(requireContext())
@@ -1438,11 +1455,15 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         )
         messageTextView.text = spannable
 
-        cancelButton.setOnClickListener { confirmDialog.dismiss() }
+        // When cancel is clicked, restore the edit dialog and dismiss confirmation
+        cancelButton.setOnClickListener { 
+            confirmDialog.dismiss()
+            onEditDialogShow()
+        }
 
         deleteButtonConfirm.setOnClickListener {
             viewModel.deleteBookmark(bookmark)
-            // Close both dialogs
+            // Close confirmation dialog and properly dismiss edit dialog
             confirmDialog.dismiss()
             onEditDialogDismiss()
             // Show reusable confirmation card overlay

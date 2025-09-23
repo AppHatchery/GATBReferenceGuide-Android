@@ -44,7 +44,7 @@
         <item name="dialogEditTextBackgroundColor">#ECECEC</item>
         <item name="dialogButtonLeftColor">#ECECEC</item>
         <item name="iconTintColor">@color/neutral_700</item>
-        <item name="dialogButtonTextColor">@color/neutral_600</item>
+        <item name="dialogButtonTextColor">@color/neutral_800</item>
     </style>
 
 
