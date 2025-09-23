@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity(), ActionBarController {
         navController = findNavController(R.id.nav_host_fragment_container)
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
         bottomNavigationView.itemIconTintList = null
-        bottomNavigationView.itemTextColor = ContextCompat.getColorStateList(this, android.R.color.black)
+        bottomNavigationView.itemTextColor = ContextCompat.getColorStateList(this, R.color.bottom_nav_text_color)
         
         navController.addOnDestinationChangedListener { _, destination, _ ->
             // Handle bottom navigation visibility
@@ -230,18 +230,50 @@ class MainActivity : AppCompatActivity(), ActionBarController {
     
     // Implement ActionBarController interface
     override fun setActionBarTitle(title: String) {
-        actionBarTitle.text = title
+        // guard for config/theme changes where fragments may call this before the action bar view is re-created
+        if (::actionBarTitle.isInitialized) {
+            actionBarTitle.text = title
+        } else {
+            // Defer the update until views are available to prevent lateinit crash during activity relaunch
+            window.decorView.post {
+                if (::actionBarTitle.isInitialized) {
+                    actionBarTitle.text = title
+                }
+            }
+        }
     }
     
     override fun setActionBarConfig(title: String, showBackButton: Boolean) {
-        actionBarTitle.text = title
-        
-        if (showBackButton) {
-            actionBarBackButton.visibility = View.VISIBLE
-            actionBarSpacer.visibility = View.VISIBLE
+        // Apply title safely in case action bar components are not yet initialized after a relaunch
+        if (::actionBarTitle.isInitialized) {
+            actionBarTitle.text = title
         } else {
-            actionBarBackButton.visibility = View.GONE
-            actionBarSpacer.visibility = View.GONE
+            window.decorView.post {
+                if (::actionBarTitle.isInitialized) actionBarTitle.text = title
+            }
+        }
+
+        if (::actionBarBackButton.isInitialized && ::actionBarSpacer.isInitialized) {
+            if (showBackButton) {
+                actionBarBackButton.visibility = View.VISIBLE
+                actionBarSpacer.visibility = View.VISIBLE
+            } else {
+                actionBarBackButton.visibility = View.GONE
+                actionBarSpacer.visibility = View.GONE
+            }
+        } else {
+            // Defer visibility changes if needed during configuration relaunch
+            window.decorView.post {
+                if (::actionBarBackButton.isInitialized && ::actionBarSpacer.isInitialized) {
+                    if (showBackButton) {
+                        actionBarBackButton.visibility = View.VISIBLE
+                        actionBarSpacer.visibility = View.VISIBLE
+                    } else {
+                        actionBarBackButton.visibility = View.GONE
+                        actionBarSpacer.visibility = View.GONE
+                    }
+                }
+            }
         }
     }
 

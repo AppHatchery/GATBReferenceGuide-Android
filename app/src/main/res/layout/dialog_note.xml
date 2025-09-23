@@ -17,7 +17,8 @@
         android:layout_marginTop="16dp"
         android:gravity="center_vertical"
         android:text="@string/add_new_note"
-        android:textAppearance="@style/EditNoteTextStyle" />
+        android:textAppearance="@style/EditNoteTextStyle"
+        android:textColor="?attr/colorTextBlackWhite" />
 
     <RelativeLayout
         android:id="@+id/closeDialog"
@@ -35,7 +36,7 @@
             android:layout_centerInParent="true"
             android:scaleType="centerInside"
             android:src="@drawable/ic_close"
-            app:tint="#5182FF" />
+            app:tint="@color/reddish" />
     </RelativeLayout>
     <!-- Note input field -->
     <androidx.appcompat.widget.AppCompatEditText
@@ -50,8 +51,8 @@
         android:inputType="textMultiLine|textAutoComplete|textAutoCorrect|textCapSentences"
         android:padding="8dp"
         android:textSize="14sp"
-        android:textColor="#343434"
-        android:textColorHint="#999999" />
+        android:textColor="?attr/colorTextBlackWhite"
+        android:textColorHint="?attr/colorTextBlackWhite2" />
 
     <!-- Edit Tag label -->
     <TextView
@@ -63,7 +64,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="30dp"
         android:text="@string/add_a_tag"
-        android:textAppearance="@style/EditNoteTextStyle" />
+        android:textAppearance="@style/EditNoteTextStyle"
+        android:textColor="?attr/colorTextBlackWhite" />
 
     <!-- Color picker container -->
     <RelativeLayout
@@ -123,8 +125,9 @@
             android:layout_toRightOf="@id/select"
             android:layout_marginLeft="7dp"
             android:layout_centerVertical="true"
-            android:text="@string/submit_note"
-            android:textAppearance="@style/submit_note"
+        android:text="@string/submit_note"
+        android:textAppearance="@style/submit_note"
+        android:textColor="?attr/colorTextBlackWhite"
             android:gravity="center_vertical" />
 
     </RelativeLayout>
@@ -141,7 +144,7 @@
         android:background="@drawable/bookmark_popup_visit_button_bg"
         android:backgroundTint="@null"
         android:text="Cancel"
-        android:textColor="#343434"
+        android:textColor="?attr/dialogButtonTextColor"
         android:textSize="14sp"
         android:textAllCaps="false" />
 

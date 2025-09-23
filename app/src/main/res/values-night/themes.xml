@@ -2,34 +2,35 @@
     <!-- Base application theme. -->
     <style name="Theme.GATBReferenceGuide" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/orange</item>
-        <item name="colorPrimaryVariant">@color/orange</item>
+        <item name="colorPrimary">@color/reddish</item>
+        <item name="colorPrimaryVariant">@color/reddish</item>
         <item name="colorOnPrimary">@color/black</item>
+        <item name="chapterBackgroundColorWhite">#2B2B2B</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/orange</item>
+        <item name="colorSecondary">@color/reddish</item>
         <item name="colorSecondaryVariant">@color/reddish</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="colorPrimaryDark">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
-        <!-- Customize your theme here. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/reddish</item>
 
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
 
-        <item name="chapterBackgroundColor">#BEB0AC</item>
-        <item name="chapterBackgroundColorTop">#A55C3C</item>
+        <item name="chapterBackgroundColor">#343434</item>
+        <item name="chapterBackgroundColorTop">@color/reddish</item>
         <item name="colorBlackWhite">@color/dark_black</item>
         <item name="colorWhiteBlack">@android:color/white</item>
 
         <item name="savedTopBar">@color/dark_black</item>
-        <item name="chartBackgroundColor">#823410</item>
+        <item name="chartBackgroundColor">@color/reddish</item>
         <item name="chartBackgroundColorTop">#BD998A</item>
-        <item name="searchBackgroundColor">#823410</item>
+        <item name="searchBackgroundColor">@color/reddish</item>
+        <item name="chapterBackgroundColorTopSeeAll">#FFBE0A</item>
         <item name="android:textColor">@color/white</item>
 
         <item name="actionBarStyle">@style/darkActionbar</item>
-        <item name="android:windowBackground">@color/dark_black</item>
-        <item name="chapterBackgroundColorGrey">@color/dark_black</item>
+        <item name="android:windowBackground">#2B2B2B</item>
+        <item name="chapterBackgroundColorGrey">#343434</item>
 
         <item name="toolbarColor">?chartBackgroundColor</item>
         <item name="colorGrayWhite">@color/neutral_200</item>
@@ -37,6 +38,12 @@
         <item name="colorWhiteDarkBlack">@color/black</item>
         <item name="colorTextBlackWhite">@color/white</item>
         <item name="colorTextBlackWhite2">@color/white</item>
+        <item name="dialogBackgroundColor">#2B2B2B</item>
+        <item name="dialogEditTextBackgroundColor">#545454</item>
+        <item name="dialogButtonLeftColor">#747474</item>
+        <item name="iconTintColor">@color/white</item>
+        <item name="dialogButtonTextColor">@color/white</item>
+        <item name="cardItemBackground">#343434</item>
 
     </style>
 

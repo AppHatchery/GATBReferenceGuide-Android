@@ -16,7 +16,8 @@
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="@string/delete_this_note"
-        android:textAppearance="@style/StateGuideTextStyle" />
+        android:textAppearance="@style/StateGuideTextStyle"
+        android:textColor="?attr/colorTextBlackWhite" />
 
     <!-- Cancel Button -->
     <androidx.appcompat.widget.AppCompatButton
@@ -28,7 +29,7 @@
         android:background="@drawable/bookmark_popup_visit_button_bg"
         android:backgroundTint="@null"
         android:text="Yes"
-        android:textColor="#343434"
+        android:textColor="?attr/dialogButtonTextColor"
         android:textSize="14sp"
         android:textAllCaps="false" />
 

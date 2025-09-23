@@ -12,7 +12,7 @@
 />
 <path
   android:pathData="M0 0V37H323V0"
-  android:fillColor="#ECECEC"
+  android:fillColor="?attr/dialogEditTextBackgroundColor"
 />
 </group>
 </vector>

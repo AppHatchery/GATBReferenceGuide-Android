@@ -29,7 +29,6 @@
         android:maxLines="1"
         android:ellipsize="end"
         android:foreground="?attr/selectableItemBackground"
-        android:drawableEnd="@drawable/ic_baseline_next"
         android:drawablePadding="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_view_include"
@@ -181,6 +180,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Searching: "
+                android:textColor="?attr/colorTextBlackWhite"
                 tools:ignore="HardcodedText"
                 tools:text="Last updated 06/17/21" />
 
@@ -189,6 +189,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
+                android:textColor="?attr/colorTextBlackWhite"
                 tools:text="Last updated 06/17/21" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -396,8 +397,8 @@
             android:layout_marginTop="4dp"
             android:layout_marginStart="12dp"
             android:src="@drawable/ic_baseline_edit_note"
-            android:tint="@android:color/black"
-            android:contentDescription="@string/show_notes" />
+            android:contentDescription="@string/show_notes"
+            app:tint="?attr/colorOnSecondary" />
 
         <TextView
             android:id="@+id/floating_notes_count"
@@ -407,7 +408,7 @@
             android:layout_toEndOf="@+id/floating_notes_icon"
             android:layout_marginStart="6dp"
             android:text="(0)"
-            android:textColor="@android:color/black"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="12sp"
             android:textStyle="bold"
             android:visibility="visible" />

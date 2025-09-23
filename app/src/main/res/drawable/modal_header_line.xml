@@ -8,6 +8,6 @@
     <path
         android:pathData="M2.5,2.5 L115.5,2.5"
         android:strokeWidth="5"
-        android:strokeColor="#000000"
+        android:strokeColor="?attr/iconTintColor"
         android:strokeLineCap="round" />
 </vector>

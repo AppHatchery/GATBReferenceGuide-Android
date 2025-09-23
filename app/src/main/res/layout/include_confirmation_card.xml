@@ -23,7 +23,8 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:gravity="center"
-            android:textAppearance="@style/bookmark_tr" />
+            android:textAppearance="@style/bookmark_tr"
+            android:textColor="?attr/colorTextBlackWhite" />
 
     </RelativeLayout>
 

@@ -29,6 +29,7 @@
         android:maxLines="1"
         android:drawableStart="@drawable/ic_baseline_search_24"
         android:drawablePadding="10dp"
+        android:drawableTint="#666666"
         android:paddingStart="9dp"
         android:paddingEnd="40dp" />
 

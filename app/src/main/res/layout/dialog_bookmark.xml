@@ -17,7 +17,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="30dp"
         android:text="Bookmark name"
-        android:textColor="@color/neutral_800"
+        android:textColor="?attr/colorTextBlackWhite"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -45,8 +45,8 @@
             android:maxLines="1"
             android:paddingStart="16dp"
             android:paddingEnd="8dp"
-            android:textColor="@color/neutral_800"
-            android:textColorHint="@color/neutral_500"
+            android:textColor="?attr/colorTextBlackWhite"
+            android:textColorHint="?attr/colorTextBlackWhite2"
             android:textSize="14sp"
             tools:ignore="HardcodedText" />
 
@@ -78,7 +78,7 @@
             android:foreground="?attr/selectableItemBackground"
         android:gravity="center"
         android:text="Cancel"
-        android:textColor="@color/neutral_600"
+        android:textColor="?attr/dialogButtonTextColor"
         android:textSize="16sp"
         tools:ignore="HardcodedText" />
 

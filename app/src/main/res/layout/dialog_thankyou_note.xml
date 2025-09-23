@@ -18,6 +18,7 @@
         android:layout_marginEnd="31dp"
         android:text="@string/thank_you_note"
         android:textAppearance="@style/BookmarkedTextStyle"
+        android:textColor="?attr/colorTextBlackWhite"
         android:gravity="top" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -30,7 +31,7 @@
         android:background="@drawable/bookmark_popup_visit_button_bg"
         android:backgroundTint="@null"
         android:text="Visit"
-        android:textColor="#343434"
+        android:textColor="?attr/dialogButtonTextColor"
         android:textSize="14sp"
         android:textAllCaps="false" />
 

@@ -14,6 +14,7 @@
         android:layout_marginTop="44dp"
         android:text="@string/bookmarked_message"
         android:textAppearance="@style/BookmarkedTextStyle"
+        android:textColor="?attr/colorTextBlackWhite"
         android:gravity="top" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -26,7 +27,7 @@
         android:background="@drawable/bookmark_popup_visit_button_bg"
         android:backgroundTint="@null"
         android:text="Visit"
-        android:textColor="#343434"
+        android:textColor="?attr/dialogButtonTextColor"
         android:textSize="14sp"
         android:textAllCaps="false" />
 
@@ -41,7 +42,7 @@
         android:background="@drawable/bookmark_popup_dismiss_button_bg"
         android:backgroundTint="@null"
         android:text="Dismiss"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         android:textSize="14sp"
         android:textAllCaps="false" />
 

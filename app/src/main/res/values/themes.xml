@@ -2,7 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.GATBReferenceGuide" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="android:windowBackground">#F9F9F9</item>
-        <item name="chapterBackgroundColorGrey">#F9F9F9</item>
+        <item name="chapterBackgroundColorGrey">@android:color/white</item>
+        <item name="chapterBackgroundColorWhite">#F9F9F9</item>
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/reddish</item>
         <item name="colorPrimaryVariant">@color/orange</item>
@@ -23,6 +24,7 @@
         <item name="colorWhiteBlack">@color/dark_black</item>
 
         <item name="chapterBackgroundColorTop">#5182FF</item>
+        <item name="cardItemBackground">#FFFFFF</item>
         <item name="chapterBackgroundColorTopSeeAll">#FFBE0A</item>
         <item name="savedTopBar">#FFFFFF</item>
 
@@ -38,6 +40,11 @@
         <item name="colorWhiteDarkBlack">@color/white</item>
         <item name="colorTextBlackWhite">@color/neutral_800</item>
         <item name="colorTextBlackWhite2">@color/neutral_600</item>
+        <item name="dialogBackgroundColor">@android:color/white</item>
+        <item name="dialogEditTextBackgroundColor">#ECECEC</item>
+        <item name="dialogButtonLeftColor">#ECECEC</item>
+        <item name="iconTintColor">@color/neutral_700</item>
+        <item name="dialogButtonTextColor">@color/neutral_600</item>
     </style>
 
 
@@ -72,6 +79,7 @@
         <item name="android:fontFamily">@font/inter_regular</item>
         <item name="android:lineSpacingExtra">3sp</item>
     </style>
+
 
 
 </resources>

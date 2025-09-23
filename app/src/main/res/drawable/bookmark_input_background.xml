@@ -10,6 +10,6 @@
             android:pathData="M8 0H205C209.418 0 213 3.58172 213 8V32C213 36.4183 209.418 40 205 40H8C3.58172 40 0 36.4183 0 32V8C0 3.58172 3.58172 0 8 0Z" />
         <path
             android:pathData="M0 0V40H213V0"
-            android:fillColor="#ECECEC" />
+            android:fillColor="?attr/dialogEditTextBackgroundColor" />
     </group>
 </vector>

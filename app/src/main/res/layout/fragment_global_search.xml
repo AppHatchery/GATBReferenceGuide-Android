@@ -186,6 +186,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
+            android:layout_marginTop="25dp"
             android:text="@string/recent"
             android:visibility="gone" />
 
@@ -204,6 +205,7 @@
             style="@style/subtitle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
             android:layout_marginBottom="20dp"
             android:text="@string/you_may_want_to_search_for" />
 

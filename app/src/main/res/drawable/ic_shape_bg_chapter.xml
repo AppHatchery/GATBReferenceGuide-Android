@@ -5,7 +5,7 @@
      android:viewportHeight="77">
 
     <path
-        android:fillColor="?chapterBackgroundColor"
+        android:fillColor="?chapterBackgroundColorGrey"
         android:pathData="M0,5A5,5 0,0 1,5.06 0h137.7l6.08,6L162,18.5V72a5,5 0,0 1,-5.06 5H5.06A5,5 0,0 1,0 72Z" />
     <path
         android:fillColor="?chapterBackgroundColorTop"

@@ -68,8 +68,8 @@
             android:ellipsize="end"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
-            android:textColor="#343434"
-            android:textColorHint="#747474"
+            android:textColor="?attr/colorTextBlackWhite"
+            android:textColorHint="?attr/colorTextBlackWhite2"
             android:textSize="14sp"
             tools:ignore="HardcodedText" />
 
@@ -113,7 +113,7 @@
             android:drawablePadding="6dp"
             android:text="@string/treatment_r"
             android:textAppearance="@style/treatment_r"
-            android:textColor="#747474"
+            android:textColor="?attr/colorTextBlackWhite2"
             android:singleLine="true"
             android:ellipsize="end" />
 
@@ -128,7 +128,7 @@
             android:layout_marginBottom="8dp"
             android:text="@string/iii_treatme"
             android:textAppearance="@style/iii_treatme"
-            android:textColor="#747474"
+            android:textColor="?attr/colorTextBlackWhite2"
             android:singleLine="true"
             android:ellipsize="end" />
 
@@ -147,7 +147,7 @@
         android:background="@drawable/bookmark_popup_visit_button_bg"
         android:backgroundTint="@null"
         android:text="Delete"
-        android:textColor="#343434"
+        android:textColor="?attr/dialogButtonTextColor"
         android:textSize="14sp"
         android:textAllCaps="false" />
 
