@@ -1591,15 +1591,15 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
     private fun sendNoteToPendo(noteBody: String) {
         try {
-            // TODO: Replace with actual Pendo implementation
-            // Pendo track event:
-            // Pendo.track("user_feedback_submitted", mapOf(
-            //     "feedback_text" to noteBody,
-            //     "chapter_id" to this.id,
-            //     "chapter_title" to this.title,
-            //     "subchapter_id" to subChapterEntity.subChapterId,
-            //     "timestamp" to System.currentTimeMillis()
-            // ))
+            // Track user note-feedback submission to Pendo with relevant context
+            val properties = hashMapOf<String, Any>()
+            properties["feedback_text"] = noteBody
+            properties["chapter_id"] = id
+            properties["chapter_title"] = title
+            properties["subchapter_id"] = subChapterEntity.subChapterId
+            properties["timestamp"] = System.currentTimeMillis()
+            
+            Pendo.track("user_feedback_submitted", properties)
             
             Log.d("PendoFeedback", "Note feedback sent to Pendo: $noteBody")
         } catch (e: Exception) {
