@@ -86,8 +86,10 @@
         android:layout_marginTop="24dp"
         android:layout_marginStart="0dp"
         android:layout_marginBottom="0dp"
-        android:layout_marginEnd="3dp"
+        android:layout_marginEnd="0dp"
         android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:clipToPadding="false"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -112,7 +114,7 @@
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:tag="?colorBlackWhite"
             android:visibility="gone"
@@ -124,7 +126,7 @@
             app:tabGravity="fill"
             app:tabIndicatorHeight="0dp"
             app:tabMaxWidth="0dp"
-            app:tabMode="fixed" />
+            app:tabMode="scrollable" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -174,19 +176,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="20dp"
         android:orientation="vertical"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat3">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/recent_title"
             style="@style/subtitle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="0dp"
             android:text="@string/recent"
             android:visibility="gone" />
 
@@ -194,7 +197,7 @@
             android:id="@+id/recent_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="35dp"
+            android:layout_marginBottom="0dp"
             android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:spanCount="2"
@@ -205,7 +208,7 @@
             style="@style/subtitle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:text="@string/you_may_want_to_search_for" />
 

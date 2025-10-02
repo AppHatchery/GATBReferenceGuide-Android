@@ -174,6 +174,9 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
         closeButton.setOnClickListener { dialog.dismiss() }
         
         deleteButton.setOnClickListener {
+            // Temporarily hide edit dialog to avoid stacking
+            dialog.hide()
+
             // Show dedicated bookmark confirmation dialog
             val confirmView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_bookmark_deletion_confirmation, null)
             val confirmDialog = android.app.AlertDialog.Builder(requireContext())
@@ -187,12 +190,12 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
             val cancelButton = confirmView.findViewById<androidx.appcompat.widget.AppCompatButton>(R.id.cancelButton)
             val deleteButtonConfirm = confirmView.findViewById<androidx.appcompat.widget.AppCompatButton>(R.id.confirmDeleteButton)
 
-            // Build: "Delete Bookmark?\n<title>" and color only <title> with @color/reddish
-            val baseText = "Delete Bookmark?\n${bookmark.bookmarkTitle}"
+            // Color entire title line 
+            val titleLine = bookmark.bookmarkTitle + "\u200B"
+            val baseText = "Delete Bookmark?\n$titleLine"
+            val start = baseText.indexOf('\n') + 1
+            val end = baseText.length
             val spannable = android.text.SpannableString(baseText)
-            val prefix = "Delete Bookmark\n"
-            val start = prefix.length
-            val end = start + bookmark.bookmarkTitle.length
             val color = ContextCompat.getColor(requireContext(), R.color.reddish)
             spannable.setSpan(
                 android.text.style.ForegroundColorSpan(color),
@@ -202,14 +205,17 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
             )
             messageTextView.text = spannable
 
-            cancelButton.setOnClickListener { confirmDialog.dismiss() }
+            cancelButton.setOnClickListener {
+                confirmDialog.dismiss()
+                // Restore the edit dialog on cancel
+                dialog.show()
+            }
 
             deleteButtonConfirm.setOnClickListener {
                 viewModel.deleteBookmark(bookmark)
                 // Close both dialogs
                 confirmDialog.dismiss()
                 dialog.dismiss()
-
                 showDeleteDeletionCard(bookmark.bookmarkTitle)
             }
 
@@ -217,8 +223,13 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
         }
         
         saveButton.setOnClickListener {
+            val newTitle = bookmarkNameEdit.text.toString().trim()
+            if (newTitle.isEmpty()) {
+                bookmarkNameEdit.error = getString(R.string.bookmark_title_required)
+                return@setOnClickListener
+            }
             val updatedBookmark = bookmark.copy(
-                bookmarkTitle = bookmarkNameEdit.text.toString()
+                bookmarkTitle = newTitle
             )
             viewModel.updateBookmark(updatedBookmark)
             dialog.dismiss()

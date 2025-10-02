@@ -91,6 +91,7 @@ import android.widget.EditText
 import androidx.core.content.ContextCompat
 import android.text.TextWatcher
 import android.text.Editable
+import android.text.SpannableStringBuilder
 import androidx.activity.OnBackPressedCallback
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
@@ -261,6 +262,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         backPressedCallback?.isEnabled = false
         super.onDestroyView()
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferencesListener)
+    }
+
+    override fun onPause() {
+        // Ensure keyboard is dismissed when leaving this screen 
+        hideKeyboard()
+        super.onPause()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -690,7 +697,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             cancelButton.setOnClickListener { dismiss() }
 
             saveButton.setOnClickListener {
-                onSaveBookmark(bookTitleTextInputEditText.text.toString().trim())
+                val enteredTitle = bookTitleTextInputEditText.text.toString().trim()
+                if (enteredTitle.isEmpty()) {
+                    bookTitleTextInputEditText.error = getString(R.string.bookmark_title_required)
+                    return@setOnClickListener
+                }
+                onSaveBookmark(enteredTitle)
                 dismiss()
             }
 
@@ -728,8 +740,13 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     )
                 }
                 saveButton.setOnClickListener {
+                    val newTitle = bookTitleTextInputEditText.text.toString().trim()
+                    if (newTitle.isEmpty()) {
+                        bookTitleTextInputEditText.error = getString(R.string.bookmark_title_required)
+                        return@setOnClickListener
+                    }
                     bookmarkEntity.copy(
-                        bookmarkTitle = bookTitleTextInputEditText.text.toString().trim()
+                        bookmarkTitle = newTitle
                     ).also {
                         dismiss()
                         viewModel.updateBookmark(it)
@@ -1121,6 +1138,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         backPressedCallback = object : OnBackPressedCallback(false) {
             override fun handleOnBackPressed() {
                 if (searchContainer.visibility == View.VISIBLE && isExpanded) {
+                    // Dismiss keyboard and collapse the search UI on back press while searching
+                    hideKeyboard()
                     collapseSearchView()
                     isEnabled = false
                 }
@@ -1190,10 +1209,18 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             clearWebViewSearch()
             // Collapse the search view
             collapseSearchView()
+            // Dismiss keyboard when clearing search
+            hideKeyboard()
         }
 
-        searchPrevious.setOnClickListener { navigatePrevious() }
-        searchNext.setOnClickListener { navigateNext() }
+        searchPrevious.setOnClickListener {
+            hideKeyboard()
+            navigatePrevious()
+        }
+        searchNext.setOnClickListener {
+            hideKeyboard()
+            navigateNext()
+        }
     }
 
     private fun expandSearchView() {
@@ -1440,20 +1467,22 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         val cancelButton = confirmView.findViewById<AppCompatButton>(R.id.cancelButton)
         val deleteButtonConfirm = confirmView.findViewById<AppCompatButton>(R.id.confirmDeleteButton)
 
-        // Build: "Delete Bookmark?\n<title>" and color only <title> with @color/reddish
-        val baseText = "Delete Bookmark?\n${bookmark.bookmarkTitle}"
-        val spannable = SpannableString(baseText)
-        val prefix = "Delete Bookmark?\n"
-        val start = prefix.length
-        val end = start + bookmark.bookmarkTitle.length
+        // Build with a Spannable and append a zero-width space to ensure final glyph is included in span
+        val titleLine = bookmark.bookmarkTitle + "\u200B" 
+        val builder = SpannableStringBuilder()
+        builder.append("Delete Bookmark?")
+        builder.append('\n')
+        val start = builder.length
+        builder.append(titleLine)
+        val end = builder.length
         val color = ContextCompat.getColor(requireContext(), R.color.reddish)
-        spannable.setSpan(
+        builder.setSpan(
             ForegroundColorSpan(color),
             start,
             end,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
-        messageTextView.text = spannable
+        messageTextView.setText(builder, TextView.BufferType.SPANNABLE)
 
         // When cancel is clicked, restore the edit dialog and dismiss confirmation
         cancelButton.setOnClickListener { 

@@ -5,6 +5,7 @@
     <string name="bookmark_updated">Bookmark has been updated.</string>
     <string name="bookmark_saved">Bookmark saved</string>
     <string name="bookmark_add">Add Bookmark</string>
+    <string name="bookmark_title_required">Title is required.</string>
 
     <string name="notes_count">My Notes (%d)</string>
     <string name="note_saved">Note saved.</string>
