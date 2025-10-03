@@ -15,18 +15,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
+<!-- Chart View in Chapter-->
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/view_in_cha"
         android:layout_width="281dp"
-        android:layout_height="28dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
         android:layout_marginTop="24dp"
         android:text="@string/view_in_cha"
         android:textAppearance="@style/view_in_cha"
         android:gravity="center_vertical"
         android:visibility="gone"
-        android:maxLines="1"
+        android:maxLines="2"
         android:ellipsize="end"
         android:foreground="?attr/selectableItemBackground"
         android:drawablePadding="8dp"
@@ -74,7 +74,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Updated the main content constraint to start from search view -->
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
@@ -102,12 +101,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="36dp"
                 android:layout_marginEnd="0dp"
+                android:paddingEnd="90dp"
                 android:clickable="true"
                 android:drawableStart="@drawable/ic_baseline_chapter_2"
                 android:drawablePadding="6dp"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:minHeight="17dp"
+                android:maxLines="6"
+                android:breakStrategy="high_quality"
+                android:hyphenationFrequency="normal"
                 android:textSize="17sp"
                 android:visibility="visible"
                 tools:ignore="HardcodedText"
@@ -374,12 +377,14 @@
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <!-- Floating Notes Button -->
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/floating_notes_button"
         android:layout_width="65dp"
         android:layout_height="30dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="15dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:clipToOutline="true"
         android:background="@drawable/pill_button_background"
         android:elevation="4dp"
@@ -393,9 +398,8 @@
             android:id="@+id/floating_notes_icon"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:layout_centerVertical="true"
-            android:layout_marginTop="4dp"
             android:layout_marginStart="12dp"
+            android:layout_marginTop="2dp"
             android:src="@drawable/ic_baseline_edit_note"
             android:contentDescription="@string/show_notes"
             app:tint="?attr/colorOnSecondary" />
@@ -404,8 +408,6 @@
             android:id="@+id/floating_notes_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/floating_notes_icon"
             android:layout_marginStart="6dp"
             android:text="(0)"
             android:textColor="?attr/colorOnSecondary"
@@ -413,7 +415,8 @@
             android:textStyle="bold"
             android:visibility="visible" />
 
-    </RelativeLayout>
+    </LinearLayout>
+
 
     <!-- Note Deletion Confirmation Card -->
     <include

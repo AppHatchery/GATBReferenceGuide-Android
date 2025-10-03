@@ -1544,6 +1544,10 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         val floatingButton = bind.floatingNotesButton
         val notesCountText = bind.floatingNotesCount
         
+        // Hide by default
+        floatingButton.visibility = View.GONE
+        notesCountText.visibility = View.GONE
+
         if (isChart) {
             val layoutParams = floatingButton.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
             layoutParams.topToTop = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
@@ -1555,8 +1559,15 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         // Observe note count and update floating button display
         viewModel.getNote(id).observe(viewLifecycleOwner) { notes ->
             val noteCount = notes.size
-            notesCountText.text = "($noteCount)"
-            notesCountText.visibility = View.VISIBLE
+            // Show the floating notes button only when there is at least one note.
+            if (noteCount > 0) {
+                floatingButton.visibility = View.VISIBLE
+                notesCountText.text = "($noteCount)"
+                notesCountText.visibility = View.VISIBLE
+            } else {
+                floatingButton.visibility = View.GONE
+                notesCountText.visibility = View.GONE
+            }
         }
 
         floatingButton.setOnClickListener {
