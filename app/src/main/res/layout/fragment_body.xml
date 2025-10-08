@@ -15,54 +15,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<!-- Chart View in Chapter-->
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/view_in_cha"
-        android:layout_width="281dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="24dp"
-        android:text="@string/view_in_cha"
-        android:textAppearance="@style/view_in_cha"
-        android:gravity="center_vertical"
-        android:visibility="gone"
-        android:maxLines="2"
-        android:ellipsize="end"
-        android:foreground="?attr/selectableItemBackground"
-        android:drawablePadding="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_view_include"
-        tools:text="View in Chapter -> Treatment Regimens" />
-
-    <!-- Last Update Text for Charts -->
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/chart_last_update_textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="0dp"
-        android:textStyle="italic"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view_in_cha"
-        tools:ignore="HardcodedText"
-        tools:text="Last updated 06/17/21" />
-
-    <!-- Separator for Charts -->
-    <View
-        android:id="@+id/chart_separator"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        android:paddingBottom="16dp"
-        android:background="@drawable/separator"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chart_last_update_textView" />
-
     <!-- Search View positioned after action bar -->
     <include
         android:id="@+id/search_view_include"
@@ -75,84 +27,29 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
+    <!-- Content container -->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/content_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="27.5dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="vertical"
+        android:paddingHorizontal="8dp"
+        android:paddingBottom="0dp"
         app:layout_constraintTop_toBottomOf="@+id/search_view_include"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_toolbar">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+
+        <org.apphatchery.gatbreferenceguide.views.BaseWebView
+            android:id="@+id/body_web_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="8dp"
-            android:paddingBottom="32dp">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingBottom="0dp"
+            android:scrollbars="vertical" />
 
-            <!-- Chapter Title -->
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/textview_sub_chapter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="36dp"
-                android:layout_marginEnd="0dp"
-                android:paddingEnd="90dp"
-                android:clickable="true"
-                android:drawableStart="@drawable/ic_baseline_chapter_2"
-                android:drawablePadding="6dp"
-                android:focusable="true"
-                android:gravity="center_vertical"
-                android:minHeight="17dp"
-                android:maxLines="6"
-                android:breakStrategy="high_quality"
-                android:hyphenationFrequency="normal"
-                android:textSize="17sp"
-                android:visibility="visible"
-                tools:ignore="HardcodedText"
-                tools:text="@string/app_name" />
-
-            <!-- Last Update Text -->
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/last_update_textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="36dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="0dp"
-                android:textStyle="italic"
-                android:visibility="visible"
-                tools:ignore="HardcodedText"
-                tools:text="Last updated 06/17/21" />
-
-            <!-- Separator -->
-            <View
-                android:id="@+id/separator"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/separator" />
-
-
-            <org.apphatchery.gatbreferenceguide.views.BaseWebView
-                android:id="@+id/body_web_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="0dp"
-                android:paddingBottom="16dp"
-                android:scrollbars="vertical" />
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-    </androidx.core.widget.NestedScrollView>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.constraintlayout.widget.ConstraintLayout
 
@@ -211,7 +108,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Chapter and Chart Bottom Toolbar -->
-    <androidx.appcompat.widget.LinearLayoutCompat
+  <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/bottom_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -227,155 +124,180 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="?attr/colorWhiteGray">
+
         <!--Home-->
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:gravity="center">
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/home_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_gravity="center"
                 android:background="@android:color/transparent"
                 android:foreground="?attr/actionBarItemBackground"
-                android:padding="8dp"
+                android:padding="4dp"
                 android:tint="?attr/colorGrayWhite"
                 android:src="@drawable/ic_home" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:textColor="?attr/colorGrayWhite"
-                android:textSize="12sp"
+                android:textSize="12dp"
+                android:maxLines="1"
+                android:includeFontPadding="false"
+                android:paddingTop="2dp"
                 android:text="@string/home" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <!--Share-->
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginEnd="14dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:orientation="vertical"
             android:layout_gravity="center"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:gravity="center">
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/share_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_gravity="center"
-                android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:foreground="?attr/actionBarItemBackground"
-                android:padding="8dp"
+                android:padding="4dp"
                 android:tint="?attr/colorGrayWhite"
                 android:src="@drawable/ic_baseline_share" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:textColor="?attr/colorGrayWhite"
-                android:textSize="12sp"
+                android:textSize="12dp"
+                android:maxLines="1"
+                android:includeFontPadding="false"
+                android:paddingTop="2dp"
                 android:text="@string/share" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <!--Bookmark-->
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginEnd="14dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="1.4"
+            android:gravity="center">
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/bookmarkImageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_gravity="center"
-                android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:foreground="?attr/actionBarItemBackground"
-                android:padding="8dp"
+                android:padding="4dp"
                 android:src="@drawable/ic_baseline_folder_outline" />
 
-            <TextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/isBookmarkedText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:includeFontPadding="false"
                 android:textColor="?attr/colorGrayWhite"
                 android:textSize="12sp"
-                android:text="@string/bookmark" />
+                android:paddingTop="2dp"
+                android:text="@string/bookmark"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="11sp"
+                app:autoSizeMaxTextSize="12sp"
+                app:autoSizeStepGranularity="1sp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <!--Note-->
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginEnd="14dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:gravity="center">
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/add_note"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_gravity="center"
-                android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:foreground="?attr/actionBarItemBackground"
-                android:padding="8dp"
+                android:padding="4dp"
                 android:tint="?attr/colorGrayWhite"
                 android:src="@drawable/ic_baseline_edit_note" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:textColor="?attr/colorGrayWhite"
-                android:textSize="12sp"
+                android:textSize="12dp"
+                android:maxLines="1"
+                android:includeFontPadding="false"
+                android:paddingTop="2dp"
                 android:text="@string/note" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <!-- Font -->
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:gravity="center">
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/change_font_size_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_gravity="center"
-                android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:foreground="?attr/actionBarItemBackground"
-                android:padding="8dp"
+                android:padding="4dp"
                 android:tint="?attr/colorGrayWhite"
                 android:src="@drawable/ic_baseline_increase_font_size" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:textColor="?attr/colorGrayWhite"
-                android:textSize="12sp"
+                android:textSize="12dp"
+                android:maxLines="1"
+                android:includeFontPadding="false"
+                android:paddingTop="2dp"
                 android:text="@string/font" />
         </androidx.appcompat.widget.LinearLayoutCompat>
-
     </androidx.appcompat.widget.LinearLayoutCompat>
-
     <!-- Floating Notes Button -->
     <LinearLayout
         android:id="@+id/floating_notes_button"

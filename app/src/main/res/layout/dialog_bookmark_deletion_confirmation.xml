@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_gravity="center">
 
     <RelativeLayout
         android:id="@+id/bookmark_confirmation_card"
         android:layout_width="281dp"
-        android:layout_height="131dp"
+        android:layout_height="140dp"
         android:layout_gravity="center"
         android:background="@drawable/note_deletion_popup_background">
 
-        <TextView
-            android:id="@+id/deletionMessage"
+        <ScrollView
             android:layout_width="243dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -21,9 +21,19 @@
             android:layout_marginEnd="2dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:gravity="center"
-            android:textAppearance="@style/StateGuideTextStyle"
-        android:textColor="?attr/colorTextBlackWhite" />
+            android:fillViewport="true"
+            android:scrollbars="vertical">
+
+            <TextView
+                android:id="@+id/deletionMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="80dp"
+                android:gravity="center"
+                android:textAppearance="@style/StateGuideTextStyle"
+                android:textColor="?attr/colorTextBlackWhite" />
+
+        </ScrollView>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/cancelButton"

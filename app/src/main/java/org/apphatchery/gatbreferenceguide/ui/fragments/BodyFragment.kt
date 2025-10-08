@@ -305,8 +305,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             // For regular content, use the subchapter title
             HtmlCompat.fromHtml(subChapterEntity.subChapterTitle, FROM_HTML_MODE_LEGACY).toString()
         }
-        setActionBarTitle(contentTitle)
-        bind.lastUpdateTextView.text = getString(R.string.last_updated, subChapterEntity.lastUpdated)
+    setActionBarTitle(contentTitle)
 
         // Setup search functionality only for subchapter content (not charts)
         if (chartAndSubChapter == null) {
@@ -345,57 +344,22 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             bookmarkImageButton.setOnClickListener { onBookmarkListener() }
 
             if (chartAndSubChapter != null) isChartView() else {
-                // For regular content, show the main chapter title and hide "View in Chapter" section
-                textviewSubChapter.visibility = View.VISIBLE
-                lastUpdateTextView.visibility = View.VISIBLE
-                separator.visibility = View.VISIBLE
-                viewInCha.visibility = View.GONE
-                chartLastUpdateTextView.visibility = View.GONE
-                chartSeparator.visibility = View.GONE
-
-                // Reset NestedScrollView to original position below search view
-                val nestedScrollView = root.findViewById<androidx.core.widget.NestedScrollView>(R.id.nestedScrollView)
-                val layoutParams = nestedScrollView?.layoutParams as? androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+                // Regular content: position content container and load the WebView
+                val contentContainer = root.findViewById<androidx.appcompat.widget.LinearLayoutCompat>(R.id.content_container)
+                val layoutParams = contentContainer?.layoutParams as? androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
                 layoutParams?.let {
                     it.topToBottom = R.id.search_view_include
-                    it.topMargin = (27.5 * resources.displayMetrics.density).toInt()
-                    nestedScrollView.layoutParams = it
+                    it.topMargin = 0
+                    contentContainer.layoutParams = it
                 }
 
-                val originalTitle = chapterEntity.chapterTitle
-                val searchedWordToColor = bodyUrl.searchQuery
-                val spannableString = SpannableString(originalTitle)
-                val startIndex = originalTitle.indexOf(searchedWordToColor)
-                if (startIndex != -1) {
-                    val endIndex = startIndex + searchedWordToColor.length
-                    val backgroundColorSpan = BackgroundColorSpan(Color.YELLOW)
-                    spannableString.setSpan(
-                        backgroundColorSpan,
-                        startIndex,
-                        endIndex,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-                    val foregroundColorSpan = ForegroundColorSpan(Color.BLACK)
-                    spannableString.setSpan(
-                        foregroundColorSpan,
-                        startIndex,
-                        endIndex,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-                }
-                textviewSubChapter.text = spannableString
                 val loadUrl = baseURL + PAGES_DIR + subChapterEntity.url + EXTENSION
                 val fileFromDir = filesURL + subChapterEntity.url + EXTENSION
-                val myURL = "file://${requireContext().filesDir.absolutePath}/${subChapterEntity.url}$EXTENSION"
-                if(subChapterEntity.url == "15_appendix_district_tb_coordinators_(by_district)"){
-                    textviewSubChapter.visibility = View.GONE
-                    lastUpdateTextView.visibility = View.GONE
+                if (subChapterEntity.url == "15_appendix_district_tb_coordinators_(by_district)") {
                     bodyWebView.loadUrl(fileFromDir)
-                }else{
+                } else {
                     bodyWebView.loadUrl(loadUrl)
                 }
-
-
             }
 
 
@@ -488,65 +452,18 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
 
     private fun isChartView() = bind.apply {
-        // Hide the main chapter title for charts and show the "View in Chapter" section instead
-        textviewSubChapter.visibility = View.GONE
-        lastUpdateTextView.visibility = View.GONE
-        separator.visibility = View.GONE
-        viewInCha.visibility = View.VISIBLE
-        chartLastUpdateTextView.visibility = View.VISIBLE
-        chartSeparator.visibility = View.VISIBLE
-
-        // Set the chart last update text
-        chartLastUpdateTextView.text = getString(R.string.last_updated, subChapterEntity.lastUpdated)
-
-        // Update NestedScrollView to position below chart separator
-        val nestedScrollView = root.findViewById<androidx.core.widget.NestedScrollView>(R.id.nestedScrollView)
-        val layoutParams = nestedScrollView?.layoutParams as? androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
+        // For chart content, position content container and load the chart URL
+        val contentContainer = root.findViewById<androidx.appcompat.widget.LinearLayoutCompat>(R.id.content_container)
+        val layoutParams = contentContainer?.layoutParams as? androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
         layoutParams?.let {
-            it.topToBottom = R.id.chart_separator
-            // add 12dp space between separator and content
-            it.topMargin = (12 * resources.displayMetrics.density).toInt()
-            nestedScrollView.layoutParams = it
+            it.topToBottom = R.id.search_view_include
+            it.topMargin = 0
+            contentContainer.layoutParams = it
         }
 
-        viewModel.getChapterById(chartAndSubChapter!!.subChapterEntity.chapterId)
-            .observeOnce(viewLifecycleOwner) { chapterEntity ->
-                viewInCha.apply {
-                    // Format the text with blue color for chapter title
-                    val fullText = getString(R.string.view_in_cha, chapterEntity.chapterTitle)
-                    val spannableString = SpannableString(fullText)
-                    
-                    // Find the chapter title part and color it blue
-                    val startIndex = fullText.indexOf(chapterEntity.chapterTitle)
-                    if (startIndex != -1) {
-                        val endIndex = startIndex + chapterEntity.chapterTitle.length
-                        val colorSpan = ForegroundColorSpan(ContextCompat.getColor(requireContext(), R.color.reddish))
-                        spannableString.setSpan(
-                            colorSpan,
-                            startIndex,
-                            endIndex,
-                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-                        )
-                    }
-                    
-                    text = spannableString
-                    setOnClickListener {
-                        val directions =
-                            BodyFragmentDirections.actionBodyFragmentSelf(
-                                bodyUrl.copy(
-                                    chapterEntity = ChapterEntity(chapterTitle = chapterEntity.chapterTitle)
-                                ), null
-                            )
-                        findNavController().navigate(directions)
-                    }
-                }
-            }
-
         bookmarkType = BookmarkType.CHART
-        // Load the chart content
         val loadUrl = baseURL + PAGES_DIR + chartAndSubChapter!!.chartEntity.id + EXTENSION
         bodyWebView.loadUrl(loadUrl)
-
     }
 
     private fun onNoteListenerEdit(note: NoteEntity) = Dialog(requireContext()).dialog().apply {
@@ -796,7 +713,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             val visitButton = findViewById<AppCompatButton>(R.id.visit_button)
             val dismissButton = findViewById<AppCompatButton>(R.id.dismiss_button)
             
-            // Set the text with HTML formatting to make "My Bookmarks" and "Home" blue
+            // Set the text with HTML formatting to make "My Bookmarks" and "Home" highlighted
             bookmarkedText.text = HtmlCompat.fromHtml(
                 getString(R.string.bookmarked_message), 
                 HtmlCompat.FROM_HTML_MODE_LEGACY
@@ -1594,12 +1511,6 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         
         // Setup RecyclerView
         notesRecyclerView.apply {
-            addItemDecoration(
-                DividerItemDecoration(
-                    requireContext(),
-                    DividerItemDecoration.VERTICAL
-                )
-            )
             layoutManager = LinearLayoutManager(requireContext())
             adapter = faNoteAdapter
         }

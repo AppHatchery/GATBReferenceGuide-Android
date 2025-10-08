@@ -11,20 +11,20 @@
     <!-- Content Container with Background -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="95dp"
+        android:layout_height="wrap_content"
+        android:minHeight="95dp"
         android:background="@drawable/note_item_background"
         android:elevation="32dp">
 
         <!-- Left colored bar -->
-            <View
+        <View
             android:id="@+id/note_left_bar"
             android:layout_width="6dp"
-                android:layout_height="0dp"
+            android:layout_height="0dp"
             android:background="@drawable/note_left_bar"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
         <!-- Note Title -->
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/textview_note_body"

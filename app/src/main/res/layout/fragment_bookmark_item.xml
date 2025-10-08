@@ -11,7 +11,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="112dp"
+        android:layout_height="wrap_content"
+        android:minHeight="112dp"
         android:background="@drawable/bookmark_item_background"
         android:elevation="32dp">
 
