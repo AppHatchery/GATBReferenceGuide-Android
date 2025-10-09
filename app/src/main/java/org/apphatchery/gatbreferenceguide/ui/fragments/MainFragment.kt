@@ -52,8 +52,8 @@ import javax.inject.Inject
 import kotlin.coroutines.resume
 
 
-private const val BUILD_VERSION = 11
-private const val PENDO_RELEASE_VERSION = "Sept-24-"
+private const val BUILD_VERSION = 12
+private const val PENDO_RELEASE_VERSION = "Oct-25-"
 
 @AndroidEntryPoint
 class MainFragment : BaseFragment(R.layout.fragment_main) {
