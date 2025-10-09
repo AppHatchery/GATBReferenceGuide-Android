@@ -437,7 +437,7 @@ hr {
   }
 
   .uk-tabs-container .tabs {
-    justify-content: start !important;
+    justify-content: center !important; /* Center tabs on small screens */
   }
 }
 .uk-table tbody tr {

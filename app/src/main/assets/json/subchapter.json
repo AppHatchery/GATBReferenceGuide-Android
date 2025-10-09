@@ -205,17 +205,11 @@
   {
     "subChapterId": 30,
     "chapterId": 5,
-    "subChapterTitle": "Treatment of Extrapulmonary TB (Table 19)",
+    "subChapterTitle": "Treatment of Extrapulmonary TB",
     "url": "5_treatment_of_current_(active)_disease_therapy__i__treatment_of_extrapulmonary_tb",
     "lastUpdated": "June 2024"
   },
-  {
-    "subChapterId": 31,
-    "chapterId": 5,
-    "subChapterTitle": "Adjunctive Use of Corticosteroid Therapy (Table 19)",
-    "url": "5_treatment_of_current_(active)_disease_therapy__j__adjunctive_use_of_corticosteroid_therapy",
-    "lastUpdated": "June 2024"
-  },
+  
   {
     "subChapterId": 32,
     "chapterId": 5,
