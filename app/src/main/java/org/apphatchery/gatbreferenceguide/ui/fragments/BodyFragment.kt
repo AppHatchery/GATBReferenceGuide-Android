@@ -713,11 +713,37 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             val visitButton = findViewById<AppCompatButton>(R.id.visit_button)
             val dismissButton = findViewById<AppCompatButton>(R.id.dismiss_button)
             
-            // Set the text with HTML formatting to make "My Bookmarks" and "Home" highlighted
-            bookmarkedText.text = HtmlCompat.fromHtml(
-                getString(R.string.bookmarked_message), 
-                HtmlCompat.FROM_HTML_MODE_LEGACY
-            )
+            // Create SpannableString to properly highlight "My Bookmarks" and "Home"
+            val messageText = getString(R.string.bookmarked_message)
+            val spannableString = SpannableString(messageText)
+            
+            // Find and highlight "My Bookmarks"
+            val myBookmarksStart = messageText.indexOf("My Bookmarks")
+            if (myBookmarksStart != -1) {
+                val myBookmarksEnd = myBookmarksStart + "My Bookmarks".length
+                val highlightColor = ContextCompat.getColor(requireContext(), R.color.reddish)
+                spannableString.setSpan(
+                    ForegroundColorSpan(highlightColor),
+                    myBookmarksStart,
+                    myBookmarksEnd,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+            
+            // Find and highlight "Home"
+            val homeStart = messageText.indexOf("Home")
+            if (homeStart != -1) {
+                val homeEnd = homeStart + "Home".length
+                val highlightColor = ContextCompat.getColor(requireContext(), R.color.reddish)
+                spannableString.setSpan(
+                    ForegroundColorSpan(highlightColor),
+                    homeStart,
+                    homeEnd,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+            
+            bookmarkedText.text = spannableString
             
             visitButton.setOnClickListener {
                 dismiss()

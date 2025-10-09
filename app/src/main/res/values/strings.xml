@@ -78,7 +78,7 @@
     <string name="new_content_available">New Content Available</string>
     <string name="download_now">Download Now</string>
     <string name="guide">Guide</string>
-    <string name="bookmarked_message">Bookmarked! Now you can quickly access this content through <font color="@color/reddish">My Bookmarks</font> on <font color="@color/reddish">Home</font> page</string>
+    <string name="bookmarked_message">Bookmarked! Now you can quickly access this content through My Bookmarks on Home page</string>
     <string name="thank_you_note">Thank you for your valuable feedback! If you want to get follow-ups on this feedback, Please go to <font color="#5182FF">Contact Us</font> on <font color="#5182FF">Settings</font> page</string>
     <string name="state_guide">State guidelines have changed for LTBI Treatment</string>
     <string name="note_last_e">Note - Last Edited 03/12/2024</string>
