@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/delete_card_container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:visibility="gone">
+
+    <RelativeLayout
+        android:id="@+id/confirmation_card"
+        android:layout_width="245dp"
+        android:layout_height="wrap_content"
+        android:minHeight="91dp"
+        android:clipToOutline="true"
+        android:background="@drawable/bg_confirmation_card">
+
+        <TextView
+            android:id="@+id/delete_card_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:textAppearance="@style/bookmark_tr"
+            android:textColor="?attr/colorTextBlackWhite" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -205,194 +205,210 @@
   {
     "subChapterId": 30,
     "chapterId": 5,
-    "subChapterTitle": "Treatment of Extrapulmonary TB (Table 19)",
+    "subChapterTitle": "Treatment of Extrapulmonary TB",
     "url": "5_treatment_of_current_(active)_disease_therapy__i__treatment_of_extrapulmonary_tb",
     "lastUpdated": "June 2024"
   },
+  
   {
-    "subChapterId": 31,
+    "subChapterId": 32,
     "chapterId": 5,
-    "subChapterTitle": "Adjunctive Use of Corticosteroid Therapy (Table 19)",
+    "subChapterTitle": "Adjunctive Use of Corticosteroid Therapy",
     "url": "5_treatment_of_current_(active)_disease_therapy__j__adjunctive_use_of_corticosteroid_therapy",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 31,
+    "subChapterId": 33,
     "chapterId": 6,
     "subChapterTitle": "Introduction",
     "url": "6_pregnancy_and_tb",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 32,
+    "subChapterId": 34,
     "chapterId": 6,
     "subChapterTitle": "Treatment for LTBI and Risk Factors",
     "url": "6_pregnancy_and_tb__a__treatment_for_ltbi_and_risk_factors",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 33,
+    "subChapterId": 35,
     "chapterId": 6,
     "subChapterTitle": "Treatment of Active TB in Pregnancy",
     "url": "6_pregnancy_and_tb__b__treatment_of_active_tb_in_pregnancy",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 34,
+    "subChapterId": 36,
     "chapterId": 7,
     "subChapterTitle": "Children Tuberculosis",
     "url": "7_childhood_tuberculosis",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 35,
+    "subChapterId": 37,
     "chapterId": 7,
     "subChapterTitle": "Management Considerations",
     "url": "7_childhood_tuberculosis__a__management_considerations",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 36,
+    "subChapterId": 38,
     "chapterId": 8,
     "subChapterTitle": "Tuberculosis and Long-Term Care Facilities",
     "url": "8_tuberculosis_and_long_term_care_facilities",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 37,
+    "subChapterId": 39,
     "chapterId": 9,
     "subChapterTitle": "BCG Vaccination",
     "url": "9_bcg_vaccination",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 38,
+    "subChapterId": 40,
     "chapterId": 10,
     "subChapterTitle": "Introduction",
     "url": "10_tb_infection_control_hospital_isolation_procedures",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 39,
+    "subChapterId": 41,
     "chapterId": 10,
     "subChapterTitle": "Administrative Controls",
     "url": "10_tb_infection_control_hospital_isolation_procedures__a__administrative_controls",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 40,
+    "subChapterId": 42,
     "chapterId": 10,
     "subChapterTitle": "Surveillance for Health Care Workers",
     "url": "10_tb_infection_control_hospital_isolation_procedures__b__surveillance_for_health_care_workers",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 41,
+    "subChapterId": 43,
     "chapterId": 10,
     "subChapterTitle": "Environmental Controls",
     "url": "10_tb_infection_control_hospital_isolation_procedures__c__environmental_controls",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 42,
+    "subChapterId": 44,
     "chapterId": 10,
     "subChapterTitle": "Personal Respiratory Protection",
     "url": "10_tb_infection_control_hospital_isolation_procedures__d__personal_respiratory_protection",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 43,
+    "subChapterId": 45,
     "chapterId": 11,
     "subChapterTitle": "Introduction",
     "url": "11_community_tuberculosis_control",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 44,
+    "subChapterId": 46,
     "chapterId": 11,
     "subChapterTitle": "TB Surveillance in Georgia",
     "url": "11_community_tuberculosis_control__a__tb_surveillance_in_georgia",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 45,
-    "chapterId": 11,
-    "subChapterTitle": "TB Case Definitions for Public Health Surveillance",
-    "url": "11_community_tuberculosis_control__b__tb_case_definitions_for_public_health_surveillance",
-    "lastUpdated": "June 2024"
-  },
-  {
-    "subChapterId": 46,
-    "chapterId": 11,
-    "subChapterTitle": "Role of the Health Department",
-    "url": "11_community_tuberculosis_control__c__role_of_the_health_department",
-    "lastUpdated": "June 2024"
-  },
-  {
     "subChapterId": 47,
     "chapterId": 11,
-    "subChapterTitle": "Hospital Discharge Planning for Patients with Suspected or Proven TB",
-    "url": "11_community_tuberculosis_control__d__hospital_discharge_planning_for_patients_with_suspected_or_proven_tb",
+    "subChapterTitle": "How to Report TB as a Notifiable Disease",
+    "url": "11_community_tuberculosis_control__b__how_to_report_tb_as_a_notifiable_disease",
     "lastUpdated": "June 2024"
   },
   {
     "subChapterId": 48,
     "chapterId": 11,
-    "subChapterTitle": "The U.S.-Mexico Binational Tuberculosis Referral Program (CureTB)",
-    "url": "11_community_tuberculosis_control__e__the_us_mexico_binational_tuberculosis_referral_program_(curetb)",
+    "subChapterTitle": "TB Case Definitions for Public Health Surveillance",
+    "url": "11_community_tuberculosis_control__c__tb_case_definitions_for_public_health_surveillance",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 48,
+    "subChapterId": 49,
+    "chapterId": 11,
+    "subChapterTitle": "Role of the Health Department",
+    "url": "11_community_tuberculosis_control__d__role_of_the_health_department",
+    "lastUpdated": "June 2024"
+  },
+  {
+    "subChapterId": 50,
+    "chapterId": 11,
+    "subChapterTitle": "Hospital Discharge Planning for Patients with Suspected or Proven TB",
+    "url": "11_community_tuberculosis_control__e__hospital_discharge_planning_for_patients_with_suspected_or_proven_tb",
+    "lastUpdated": "June 2024"
+  },
+  {
+    "subChapterId": 51,
+    "chapterId": 11,
+    "subChapterTitle": "Interjurisdictional TB Notification (IJN)",
+    "url": "11_community_tuberculosis_control__f__interjurisdictional_tb_notification(ijn)",
+    "lastUpdated": "June 2024"
+  },
+  
+  {
+    "subChapterId": 53,
+    "chapterId": 11,
+    "subChapterTitle": "CureTB Program (International Linkage to TB Care)",
+    "url": "11_community_tuberculosis_control__g__curetb_program_(internation_linkage_to_tb_care)",
+    "lastUpdated": "June 2024"
+  },
+  {
+    "subChapterId": 54,
     "chapterId": 12,
     "subChapterTitle": "Alternative Housing Program for Homeless TB Patients in Georgia",
     "url": "12_alternative_housing_program_for_homeless_tb_patients_in_georgia",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 50,
+    "subChapterId": 55,
     "chapterId": 13,
     "subChapterTitle": "Georgia Department of Public Health (DPH) Community Guidelines for Respiratory Isolation of Patients With Active TB in the Community",
     "url": "13_georgia_department_of_public_health_(dph)_community_guidelines_for_respiratory",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 51,
+    "subChapterId": 56,
     "chapterId": 14,
     "subChapterTitle": "References",
     "url": "14_references",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 52,
+    "subChapterId": 57,
     "chapterId": 15,
     "subChapterTitle": "Appendix: District TB Coordinators (by district)",
     "url": "15_appendix_district_tb_coordinators_(by_district)",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 53,
+    "subChapterId": 58,
     "chapterId": 16,
     "subChapterTitle": "Abbreviations",
     "url": "16_abbreviations",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 54,
+    "subChapterId": 59,
     "chapterId": 17,
     "subChapterTitle": "Acknowledgements",
     "url": "17_acknowledgements",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 55,
+    "subChapterId": 60,
     "chapterId": 18,
     "subChapterTitle": "Hello and welcome clinical statement",
     "url": "18_hello_and_welcome_clinical_statement",
     "lastUpdated": "June 2024"
   },
   {
-    "subChapterId": 56,
+    "subChapterId": 61,
     "chapterId": 19,
     "subChapterTitle": "For more information",
     "url": "19_for_more_information",

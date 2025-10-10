@@ -2,19 +2,27 @@
 <resources>
     <attr name="chapterBackgroundColor" format="reference|color" />
     <attr name="chapterBackgroundColorTop" format="reference|color" />
-
+    <attr name="chapterBackgroundColorGrey" format="reference|color" />
     <attr name="chartBackgroundColor" format="reference|color" />
     <attr name="chartBackgroundColorTop" format="reference|color" />
     <attr name="searchBackgroundColor" format="reference|color" />
+    <attr name="chapterBackgroundColorTopSeeAll" format="reference|color" />
     <attr name="colorBlackWhite" format="color" />
     <attr name="colorWhiteBlack" format="color" />
     <attr name="colorGrayWhite" format="color" />
     <attr name="colorWhiteGray" format="color" />
     <attr name="colorWhiteDarkBlack" format="color" />
-    <attr name="savedTopBar" format="color"/>[
+    <attr name="savedTopBar" format="color"/>
     <attr name="colorPrimary" format="reference|color"/>
     <attr name="toolbarColor" format="reference|color"/>
     <attr name="colorTextBlackWhite" format="reference|color"/>
     <attr name="colorTextBlackWhite2" format="reference|color"/>
+    <attr name="dialogBackgroundColor" format="reference|color"/>
+    <attr name="dialogEditTextBackgroundColor" format="reference|color"/>
+    <attr name="dialogButtonLeftColor" format="reference|color"/>
+    <attr name="iconTintColor" format="reference|color"/>
+    <attr name="dialogButtonTextColor" format="reference|color"/>
+    <attr name="chapterBackgroundColorWhite" format="reference|color"/>
+    <attr name="cardItemBackground" format="reference|color"/>
 
 </resources>

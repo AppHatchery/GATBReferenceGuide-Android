@@ -67,7 +67,7 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
 
         bind.apply {
 
-            getActionBar(requireActivity())?.title = chapterEntity.chapterTitle
+            setActionBarTitle(chapterEntity.chapterTitle)
 
             recyclerview.apply {
                 layoutManager = LinearLayoutManager(requireContext())
@@ -76,6 +76,8 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
         }
 
 
+        // Removed this entire search menu block:
+        /*
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -86,29 +88,9 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
                 return handleMenuItemSelection(menuItem)
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        */
 
         requireActivity().getBottomNavigationView()?.isChecked(R.id.mainFragment)
-    }
-
-    private fun handleMenuItemSelection(item: MenuItem): Boolean {
-                if(searchState.currentState.toString() == "IN_SEARCH"){
-            if (item.itemId == R.id.searchView) {
-                val comp =   findNavController().popBackStack(R.id.globalSearchFragment,false)
-                if(!comp){
-                    if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
-                        .also {
-                            findNavController().navigate(it)
-                        }
-                }
-            }
-        }else{
-            if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
-            .also {
-                findNavController().navigate(it)
-            }
-        }
-
-        return false
     }
 
 }

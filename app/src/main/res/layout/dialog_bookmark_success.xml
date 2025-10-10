@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="281dp"
+    android:layout_height="wrap_content"
+    android:minHeight="185dp"
+    android:layout_gravity="center"
+    android:background="@drawable/bookmark_popup_background">
+
+    <ScrollView
+        android:layout_width="219dp"
+        android:layout_height="82dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="44dp"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
+
+        <TextView
+            android:id="@+id/bookmarked_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="82dp"
+            android:text="@string/bookmarked_message"
+            android:textAppearance="@style/BookmarkedTextStyle"
+            android:textColor="?attr/colorTextBlackWhite" />
+
+    </ScrollView>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/visit_button"
+        android:layout_width="141dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="145dp"
+        android:background="@drawable/bookmark_popup_visit_button_bg"
+        android:backgroundTint="@null"
+        android:text="Visit"
+        android:textColor="?attr/dialogButtonTextColor"
+        android:textSize="14sp"
+        android:textAllCaps="false" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/dismiss_button"
+        android:layout_width="140dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="141dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="145dp"
+        android:background="@drawable/bookmark_popup_dismiss_button_bg"
+        android:backgroundTint="@null"
+        android:text="Dismiss"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:textAllCaps="false" />
+
+</RelativeLayout>

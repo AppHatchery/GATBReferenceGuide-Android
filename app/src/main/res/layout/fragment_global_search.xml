@@ -10,110 +10,123 @@
         android:id="@+id/linearLayoutCompat3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?searchBackgroundColor"
         android:orientation="vertical"
-        android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/search_view_background"
+            android:clipToOutline="true"
+            android:paddingStart="24dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="20dp">
 
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:backgroundTint="#85D1D1D1"
-                android:background="@drawable/shape_circle"
-                android:drawableStart="@drawable/ic_baseline_search_gray"
+            <EditText
+                android:id="@+id/searchKeyword"
                 android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/search_input_background"
+                android:drawableStart="@drawable/ic_baseline_search_24"
+                android:drawablePadding="10dp"
+                android:hint="Enter Keywords to Search"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingStart="9dp"
+                android:paddingEnd="40dp"
+                android:textColor="#000000"
+                android:textColorHint="#666666"
+                android:textSize="16sp" />
+
+            <FrameLayout
+                android:id="@+id/clearSearchHolder"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
-                android:gravity="center">
+                android:layout_alignTop="@id/searchKeyword"
+                android:layout_alignEnd="@id/searchKeyword"
+                android:layout_alignBottom="@id/searchKeyword"
+                android:layout_marginEnd="12dp">
 
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/searchKeyword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:drawableStart="@drawable/ic_baseline_search_gray"
-                    android:drawablePadding="8dp"
-                    android:gravity="center_vertical"
-                    android:hint="Enter keyword"
-                    android:textColorHint="@color/light_gray"
-                    android:inputType="text|textCapSentences|textAutoCorrect|textAutoComplete"
-                    android:maxLines="1"
-                    android:padding="8dp"
-                    android:textSize="17sp"
-                    tools:ignore="HardcodedText" />
-
-                <androidx.appcompat.widget.AppCompatImageButton
+                <ImageView
                     android:id="@+id/clearSearch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_round"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:paddingHorizontal="32dp"
-                    android:tint="@color/light_gray"
-                    android:src="@drawable/ic_baseline_clear_content" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_baseline_clear_content"
+                    android:tint="@color/reddish"
+                    android:visibility="gone" />
+            </FrameLayout>
 
 
-
+        </RelativeLayout>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <ProgressBar
+    <ImageView
         android:id="@+id/search_progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_baseline_loading"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/tabLayoutContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginEnd="0dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:clipToPadding="false"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat3"
-        android:visibility="gone"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="3dp"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat3">
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/search_item_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginBottom="0dp"
             android:layout_marginEnd="8dp"
-            android:visibility="gone"
-            android:textSize="12dp"
             android:paddingHorizontal="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/tabLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="Displaying 90 items" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:tag="?colorBlackWhite"
+            android:visibility="gone"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/search_item_count"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tabGravity="fill"
             app:tabIndicatorHeight="0dp"
             app:tabMaxWidth="0dp"
-            app:tabGravity="fill"
-            app:tabMode="fixed"
-            app:tabBackground="?colorBlackWhite"
-            app:layout_constraintStart_toEndOf="@id/search_item_count"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:tabMode="scrollable" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -123,18 +136,19 @@
         android:id="@+id/view2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="#4DC6C6C8"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="24dp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tabLayoutContainer" />
 
-    <ProgressBar
+    <ImageView
         android:id="@+id/loadingIndicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_baseline_loading"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -145,14 +159,14 @@
         android:id="@+id/recyclerview"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:scrollbars="vertical"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayoutContainer"
         tools:itemCount="5"
         tools:listitem="@layout/fragment_global_search_item" />
 
@@ -161,43 +175,42 @@
         android:id="@+id/suggested_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="20dp"
         android:orientation="vertical"
         android:visibility="visible"
-        android:layout_marginHorizontal="24dp"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat3">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/recent_title"
             style="@style/subtitle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="0dp"
             android:text="@string/recent"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recent_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:itemCount="3"
-            android:layout_marginBottom="35dp"
+            android:layout_marginBottom="0dp"
+            android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:spanCount="2"
-            tools:listitem="@layout/fragment_search_recent_item"
-            android:visibility="gone"
-            />
+            tools:itemCount="3"
+            tools:listitem="@layout/fragment_search_recent_item" />
 
         <androidx.appcompat.widget.AppCompatTextView
             style="@style/subtitle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:text="@string/you_may_want_to_search_for"
-            />
+            android:text="@string/you_may_want_to_search_for" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/regimens"
@@ -207,9 +220,9 @@
             android:layout_marginBottom="15dp"
             android:drawableStart="@drawable/ic_baseline_search_24"
             android:drawablePadding="5dp"
-            android:text="@string/regimens"
             android:gravity="center_vertical"
-            />
+            android:text="@string/regimens" />
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/pregnancy"
             style="@style/body2Regular"
@@ -218,9 +231,9 @@
             android:layout_marginBottom="15dp"
             android:drawableStart="@drawable/ic_baseline_search_24"
             android:drawablePadding="5dp"
-            android:text="@string/pregnancy"
             android:gravity="center_vertical"
-            />
+            android:text="@string/pregnancy" />
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/rifampin"
             style="@style/body2Regular"
@@ -229,9 +242,8 @@
             android:layout_marginBottom="15dp"
             android:drawableStart="@drawable/ic_baseline_search_24"
             android:drawablePadding="5dp"
-            android:text="@string/rifampin"
             android:gravity="center_vertical"
-            />
+            android:text="@string/rifampin" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -255,8 +267,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/view2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

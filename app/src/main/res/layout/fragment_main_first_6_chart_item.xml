@@ -9,23 +9,26 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         app:cardCornerRadius="10dp"
-        app:cardElevation="0dp">
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="?attr/chapterBackgroundColorGrey">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button"
             style="@style/body1Medium"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-             android:background="@drawable/ic_shape_chart_radius"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
+            android:background="@drawable/ic_shape_chart_radius"
+            android:drawablePadding="8dp"
             android:ellipsize="end"
             android:foreground="?attr/selectableItemBackground"
             android:gravity="start|center_vertical"
-            android:maxLines="4"
+            android:maxLines="10"
+            android:breakStrategy="high_quality"
             android:paddingHorizontal="10dp"
             android:text="@string/app_name"
             android:textAllCaps="false"
-            android:textColor="@color/white"/>
+            android:textColor="?attr/colorTextBlackWhite"/>
     </androidx.cardview.widget.CardView>
 
 </FrameLayout>
-

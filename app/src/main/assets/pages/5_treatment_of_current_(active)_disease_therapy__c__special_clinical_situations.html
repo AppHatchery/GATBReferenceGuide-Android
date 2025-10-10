@@ -14,6 +14,18 @@
 <body>
 
 <div class="uk-container">
+    <div>
+        <div class="chapter-header">
+            <div class="header-title">
+                <div>
+                    <img src="ic_chapter.svg" width="16" height="16" class="ic_chapter_icon">
+                </div>
+                <p class="chapter-title">V. Treatment of Current (Active) Disease Therapy</p>
+            </div>
+            <p class="last-updated"><i>Last Updated October 2025</i></p>
+        </div>
+        <hr>
+    </div>
     <ol>
         <li>
             <p>Dosing for TB medications in adults with renal impairment is shown in <a href="table_13_antituberculosis_antibiotics_in_adult_patients_with_renal_impairment.html">Table 13 </a>.</p>
@@ -21,10 +33,15 @@
 
         <li><p>Therapy for TB in clinical situations for which standard TB therapy may not be tolerated or may be
             ineffective is shown in <a href="table_14_antituberculosis_medications_which_may_be_used_for_patients_who_have_contraindications_to_or_intolerance.html">Table 14 </a> and <a href="table_15_clinical_situations_for_which_standard_therapy_cannot_be_given_or_is_not_well_tolerated.html"> Table 15 </a>.</p></li>
-        <li>There is a new regimen with a proof of concept that TB treatment can be completed in four months. At this time, Georgia Department of Public Health does not have the infrastructure for routine implementation of this treatment regimen. Current obstacles to implementation include: <ul>
-            <li>Supply of Rifepentine (cost and access) </li>
-            <li>Genotypic and phenotypic testing for FQ susceptibility (cost and access).</li></ul>
-        </li>
+        <li>There is a new 4-month TB treatment regimen for the treatment of drug-susceptible active TB disease as noted above. At this time, the Georgia Department of Public Health does not have the infrastructure for routine implementation of this 4-month treatment regimen.</li>
+        
+            <li><b class="toggle-title" onclick="toggleItem(this)"><span>Current obstacles to implementation include:</span><span class="chevron-up">⌃</span></b>
+            <div class="item">
+                <ul>
+                <li>Supply of Rifapentine (cost and access) </li>
+                <li>Genotypic and phenotypic testing for fluoroquinolone (FQ) susceptibility (cost and access).</li></ul>
+            </div>
+            </li>
 
 
     </ol>
@@ -42,54 +59,94 @@
         <li><a href="#table15">Table 15. Clinical Situations when standard therapy cannot be given or is not well-tolerated or may not be effective</a></li>
     </ul>
 
-    <h4 id="table7">Table 7: Recommended Regimens for Treatment of Adults and Children with Drug Susceptible TB Pulmonary TB</h4>
+    <h4 id="table7" class="custom-table-title">Table 7: Recommended Regimens for Treatment of Adults and Children with Drug Susceptible TB Pulmonary TB</h4>
         <div class="uk-overflow-auto"
             id="table_7_recommended_regimens_for_treatment_of_adults_and_children_with_drug_susceptible_tb_pulmonary_tb">
-            <table class="uk-table uk-table-small uk-table-divider">
-                <thead>
-                <tr>
-                    <th rowspan="2">Option</th>
-                    <th rowspan="2" class="uk-table-shrink">Total Duration (Months)</th>
-                    <th colspan="2">Initial Phase</th>
-                    <th colspan="2">Continuation Phase</th>
-                    <th rowspan="2" class="uk-table-expand">Comments</th>
-                    <tr>
-                        <td><b>Drugs</b></td>
-                        <td class="uk-table-expand"><b>Interval & Dose # (minimal duration)</b></td>
-                        <td><b>Drugs</b></td>
-                        <td class="uk-table-expand"><b>Interval & Dose # (minimal duration)</b></td>
-                    </tr>
-                    
-                </tr>
-                </thead>
-                <tr>
-                    <td rowspan="2">1</td>
-                    <td rowspan="2">6^</td>
-                    <td rowspan="2">Isoniazid Rifampin Pyrazinamide Ethambutol</td>
-                    <td rowspan="2">Daily DOT for 40 doses (8 weeks)</td>
-                    <td>Isoniazid Riampin Vitamin B6</td>
-                    <td>1a. Daily DOT for 90 doses (18 weeks)</td>
-                    <td>Regimen must given by DOT.</td>
-                </tr>
-                <tr>
-                    <td>Isoniazid Rifampin</td>
-                    <td>1b. Thrice weekly DOT for 54 doses (18 weeks)</td>
-                    <td>Continue ethambutol until suseptibility to isoniazid and rifampin is demonstrated/td>
-
-                </tr>
-                <tr>
-                    <td>2*</td>
-                    <td>6</td>
-                    <td>Isoniazid Rifampin Pyrazinamide Ethambutol Vitamin B6</td>
-                    <td>Daily DOT for 10 doses (2 weeks) then twise weekly DOT for 12 doses (6 weeks)</td>
-                    <td>Isoniazid Rifampin Vitamin B6</td>
-                    <td>2a. Twise weekly DOT for 36 doses (18 weeks)</td>
-                    <td>We do not recommend this regimen. If used, it must be given by DOT. Include ethambutol in the
-                        initial phase. After the initial phase, continue ethambutol until susceptibility to INH and rigampin
-                        is demonstrated
-                    </td>
-                </tr>
-            </table>
+            <div class="uk-tabs-container">
+                <ul class="tabs">
+                    <li><button class="tab-button active-option" onclick="switchTab(0, event)">Option 1</button></li>
+                    <li><button class="tab-button" onclick="switchTab(1, event)">Option 2</button></li>
+                </ul>
+            </div>
+    
+            <div id="content0" class="option-content active-option">
+                <span class="duration">Total Duration: 6^</span>
+    
+                <h3 class="highlight">Initial Phase</h3>
+    
+                <table class="uk-table uk-table-small">
+                    <tbody>
+                        <tr>
+                            <th colspan="2">Drug</th>
+                            <td colspan="2">Isoniazid Rifampin Pyrazinamide Ethambutol</td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">Interval & Dose # (minimal duration)</th>
+                            <td colspan="2">Daily DOT for 40 doses (8 weeks)</td>
+                        </tr>
+                    </tbody>
+                </table>
+    
+                <h3 class="highlight">Continuation Phase</h3>
+    
+                <table class="uk-table uk-table-small">
+                    <tbody>
+                        <tr>
+                            <th colspan="2">Drug</th>
+                            <td colspan="2">Isoniazid Rifampin Vitamin B6</td>
+                            <td colspan="2">Isoniazid Rifampin</td>
+                        </tr>
+                        <tr>
+                            <th colspan="2" class="uk-table-expand">Interval & Dose # (minimal duration)</th>
+                            <td colspan="2">1a. Daily DOT for 90 doses (18 weeks)</td>
+                            <td colspan="2">1b. Thrice weekly DOT for 54 doses (18 weeks)</td>
+                        </tr>
+                        <tr>
+                            <th rowspan="2" class="uk-table-expand">Comments</th>
+                            <td colspan="2">Regimen must given by DOT.</td>
+                            <td colspan="2">Continue ethambutol until susceptibility to isoniazid and rifampin is demonstrated</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+    
+            <div id="content1" class="option-content">
+                <span class="duration">Total Duration: 6^</span>
+    
+                <h3 class="highlight">Initial Phase</h3>
+    
+                <table class="uk-table uk-table-small">
+                    <tbody>
+                        <tr>
+                            <th colspan="2">Drug</th>
+                            <td colspan="2">Isoniazid Rifampin Pyrazinamide Ethambutol Vitamin B6</td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">Interval & Dose # (minimal duration)</th>
+                            <td colspan="2">Daily DOT for 10 doses (2 weeks) then twise weekly DOT for 12 doses (6 weeks)</td>
+                        </tr>
+                    </tbody>
+                </table>
+    
+                <h3 class="highlight">Continuation Phase</h3>
+    
+                <table class="uk-table uk-table-small">
+                    <tbody>
+                        <tr>
+                            <th class="uk-table-expand">Drug</th>
+                            <td>Isoniazid Rifampin Vitamin B6</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-table-expand">Interval & Dose # (minimal duration)</th>
+                            <td>2a. Twise weekly DOT for 36 doses (18 weeks)</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-table-expand">Comments</th>
+                            <td>We do not recommend this regimen. If used, it must be given by DOT. Include ethambutol in the initial phase. After the initial phase, continue ethambutol until susceptibility to INH and rigampin is demonstrated</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <p>Table 7 Notes</p>
             <p>NOTE: 1 Daily DOT = 5 days/week (Monday through Friday). Self administered doses (including those on
@@ -102,9 +159,7 @@
                 continuation phase, 39 weeks total) for patients who have cavitary pulmonary TB and remain sputum culture
                 positive after 2 months of therapy. Many experts would extend therapy to 9 months for all patients with
                 HIV/TB, especially those slow to convert to negative cultures or not on effective HIV treatment.</p>
-            <p>*NOTE: Option 2 should NOT be used for patients with HIV infection, cavitary pulmonary TB, disseminated TB,
-                vertebral TB or for patients who have co-morbid medical conditions such as diabetes mellitus, end- stage
-                renal disease or liver disease.</p>
+            <p>*NOTE: Option 2 should NOT be used for patients living with HIV, cavitary pulmonary TB, disseminated TB, vertebral TB or for patients who have co-morbid medical conditions such as diabetes mellitus, end- stage renal disease or liver disease.</p>
             <p>NOTE: Split dosing should be avoided.</p>
             <p>NOTE: Refer to current drug reference or drug package insert for a complete
                 list of adverse drug reactions and drug interaction.</p>
@@ -129,111 +184,185 @@
     </div>
 
 
-    <h4 id="table8">Table 8: First-Line TB Drugs: Dosing for Adults (ages 16 and over) Directly Observed Therapy (DOT) is mandatory</h4>
+    <h4 id="table8" class="custom-table-title">Table 8: First-Line TB Drugs: Fixed/ Weight Based Dose for Adults (ages 16 and over) Directly Observed Therapy (DOT) is mandatory</h4>
     <div class="uk-container">
         <div class="uk-overflow-auto"
                 id="table_8_first-line_tb_drugs_dosing_for_adults_(ages_16_and_over)_directly_observed_therapy_(dot)_is_mandatory">
-            <table class="uk-table uk-table-small uk-table-divider">
-                <thead>
-                <tr>
-                    <th rowspan="2">Drugs</th>
-                    <th colspan="3">Adult Dose based on body weight in kilograms (kg)*
-                    </th>
-                    <th rowspan="2" class="uk-table-expand">Adverse Reactions</th>
-                    <tr>
-                        <td class="uk-table-expand"><b>Daily</b></td>
-                        <td class="uk-text-nowrap"><b>Thrice-Weekly</b></td>
-                        <td class="uk-text-nowrap"><b>Twice-Weekly</b></td>
-                    </tr>
-                </tr>
-                </thead>
-                <tr>
-                    <td>Isoniazid</td>
-                    <td>300 mg</td>
-                    <td>900 mg</td>
-                    <td>900 mg</td>
-                    <td>
-                        <ul>
-                            <li>Gastrointestinal (GI) upset</li>
-                            <li>Liver enzyme elevation</li>
-                            <li>Hepatitis</li>
-                            <li>Mild effects on central nervous</li>
-                            <li>Drug interactions</li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Rifampin</td>
-                    <td>600 mg</td>
-                    <td>600 mg</td>
-                    <td>600 mg</td>
-                    <td rowspan="2">
-                        <ul>
-                            <li>Orange discoloration of body fluids and secretions</li>
-                            <li>Drug interactions</li>
-                            <li>GI upset</li>
-                            <li>Hepatitis</li>
-                            <li>Bleeding problems</li>
-                            <li>Influenze-like symptoms</li>
-                            <li>Rash</li>
-                            <li>Uveitis (rifabutin only)</li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Rifabutin</td>
-                    <td>300 mg</td>
-                    <td>Not recommended</td>
-                    <td>Not recommended</td>
-                </tr>
-                <tr>
-                    <td rowspan="3">Pyrazinamide**</td>
-                    <td>40-55 kg: 1000 mg</td>
-                    <td>40-55 kg: 1500 mg</td>
-                    <td>40-55 kg: 2000 mg</td>
-                    <td rowspan="3">
-                        <ul>
-                            <li>GI upset</li>
-                            <li>Joint aches</li>
-                            <li>Hepatitis</li>
-                            <li>Rash</li>
-                            <li>Hyperuricemia</li>
-                            <li>Gout (rare)</li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td>56-75 kg: 1500 mg</td>
-                    <td>56-75 kg: 2500 mg</td>
-                    <td>56-75 kg: 3000 mg</td>
-                </tr>
-                <tr>
-                    <td>76+ kg: 2000 mg</td>
-                    <td>76+ kg: 3000 mg</td>
-                    <td>76+ kg: 4000 mg</td>
-                </tr>
-                <tr>
-                    <td rowspan="3">Ethambutol**</td>
-                    <td>40-55 kg: 800 mg</td>
-                    <td>40-55 kg: 1200 mg</td>
-                    <td>40-55 kg: 1600 mg</td>
-                    <td rowspan="3">
-                        <ul>
-                            <li>Optic neuritis</li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td>56-75 kg: 1200 mg</td>
-                    <td>56-75 kg: 2000 mg</td>
-                    <td>56-75 kg: 2400 mg</td>
-                </tr>
-                <tr>
-                    <td>76+ kg: 2000 mg</td>
-                    <td>76+ kg: 2800 mg</td>
-                    <td>76+ kg: 4000 mg</td>
-                </tr>
-            </table>
+                <div class="uk-tabs-container">
+                    <ul class="tabs">
+                        <li><button class="tab-button active-option" onclick="switchTab(2, event)"> Isoniazid</button></li>
+                        <li><button class="tab-button" onclick="switchTab(3, event)"> Rifampin</button></li>
+                        <li><button class="tab-button" onclick="switchTab(4, event)"> Rifabutin</button></li>
+                        <li><button class="tab-button" onclick="switchTab(5, event)"> Pyrazinamide**</button></li>
+                        <li><button class="tab-button" onclick="switchTab(6, event)"> Ethambutol**</button></li>
+                    </ul>
+                </div>
+        
+                <div id="content2" class="option-content active-option">
+                    <table class="uk-table uk-table-small uk-table-divider">
+                        <tbody>
+                            <tr>
+                                <th class="uk-table-shrink">Frequency</th>
+                                <td>Daily</td>
+                                <td>Thrice-Weekly</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-table-shrink">Adult Dose based on body weight in kilograms (kg)*</th>
+                                <td>300 mg</td>
+                                <td>900 mg</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-table-shrink">Adverse Reactions</th>
+                                <td colspan="2">
+                                    <ul>
+                                        <li>Gastrointestinal (GI) upset</li>
+                                        <li>Liver enzyme elevation</li>
+                                        <li>Hepatitis</li>
+                                        <li>Mild effects on central nervous</li>
+                                        <li>Drug interactions</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        
+                <div id="content3" class="option-content">
+                    <table class="uk-table uk-table-small uk-table-divider">
+                        <tbody>
+                            <tr>
+                                <th class="uk-table-shrink">Frequency</th>
+                                <td>Daily</td>
+                                <td>Thrice-Weekly</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-table-shrink">Adult Dose based on body weight in kilograms (kg)*</th>
+                                <td>600 mg</td>
+                                <td>600 mg</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-table-shrink">Adverse Reactions</th>
+                                <td colspan="2">
+                                    <ul>
+                                        <li>Orange discoloration of body fluids and secretions</li>
+                                        <li>Drug interactions</li>
+                                        <li>GI upset</li>
+                                        <li>Hepatitis</li>
+                                        <li>Bleeding problems</li>
+                                        <li>Influenze-like symptoms</li>
+                                        <li>Rash</li>
+                                        <li>Uveitis (rifabutin only)</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        
+                <div id="content4" class="option-content">
+                    <table class="uk-table uk-table-small uk-table-divider">
+                        <tbody>
+                            <tr>
+                                <th class="uk-table-shrink">Frequency</th>
+                                <td>Daily</td>
+                                <td>Thrice-Weekly</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-table-shrink">Adult Dose based on body weight in kilograms (kg)*</th>
+                                <td>300 mg</td>
+                                <td>Not recommended</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-table-shrink">Adverse Reactions</th>
+                                <td colspan="2">
+                                    <ul>
+                                        <li>Orange discoloration of body fluids and secretions</li>
+                                        <li>Drug interactions</li>
+                                        <li>GI upset</li>
+                                        <li>Hepatitis</li>
+                                        <li>Bleeding problems</li>
+                                        <li>Influenze-like symptoms</li>
+                                        <li>Rash</li>
+                                        <li>Uveitis (rifabutin only)</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        
+                <div id="content5" class="option-content">
+                    <table class="uk-table uk-table-small uk-table-divider">
+                        <tbody>
+                            <tr>
+                                <th class="uk-table-shrink">Frequency</th>
+                                <td>Daily</td>
+                                <td>Thrice-Weekly</td>
+                            </tr>
+                            <tr>
+                                <th rowspan="3" class="uk-table-shrink">Adult Dose based on body weight in kilograms (kg)*</th>
+                                <td>40-55 kg: 1000 mg</td>
+                                <td>40-55 kg: 1500 mg</td>
+                                <tr>
+                                    <td>56-75 kg: 2500 mg</td>
+                                    <td>56-75 kg: 1500 mg</td>
+                                </tr>
+                                <tr>
+                                    <td>76+ kg: 3000 mg</td>
+                                    <td>76+ kg: 4000 mg</td>
+                                </tr>
+                            </tr>
+                            <tr>
+                                <th class="uk-table-shrink">Adverse Reactions</th>
+                                <td colspan="2">
+                                    <ul>
+                                        <li>Orange discoloration of body fluids and secretions</li>
+                                        <li>Drug interactions</li>
+                                        <li>GI upset</li>
+                                        <li>Hepatitis</li>
+                                        <li>Bleeding problems</li>
+                                        <li>Influenze-like symptoms</li>
+                                        <li>Rash</li>
+                                        <li>Uveitis (rifabutin only)</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        
+                <div id="content6" class="option-content">
+                    <table class="uk-table uk-table-small uk-table-divider">
+                        <tbody>
+                            <tr>
+                                <th class="uk-table-shrink">Frequency</th>
+                                <td>Daily</td>
+                                <td>Thrice-Weekly</td>
+                            </tr>
+                            <tr>
+                                <th rowspan="3" class="uk-table-shrink">Adult Dose based on body weight in kilograms (kg)*</th>
+                                <td>40-55 kg: 800 mg</td>
+                                <td>40-55 kg: 1200 mg</td>
+                                <tr>
+                                    <td>56-75 kg: 1200 mg</td>
+                                    <td>56-75 kg: 2000 mg</td>
+                                </tr>
+                                <tr>
+                                    <td>76+ kg: 1600 mg</td>
+                                    <td>76+ kg: 2400 mg</td>
+                                </tr>
+                            </tr>
+                            <tr>
+                                <th class="uk-table-shrink">Adverse Reactions</th>
+                                <td colspan="2">
+                                    <ul>
+                                        <li>Optic neuritis</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
             <p>*Formula used to convert pounds to kilograms: Divide pounds by 2.2 to get kilograms.</p>
             <p>Example: Patient weighs 154 pounds ÷ 2.2 = 70 kilograms.</p>
@@ -247,7 +376,7 @@
         </div>
     </div>
 
-    <h4 id="table9">Table 9: Pediatric Dosage - Isoniazid in Children (birth to 15 years)</h4>
+    <h4 id="table9" class="custom-table-title">Table 9: Pediatric Dosage - Isoniazid in Children (birth to 15 years)</h4>
 
     <div class="uk-container">
         
@@ -259,110 +388,110 @@
                     <th class="uk-table-expand">Child's Weight (lbs)</th>
                     <th class="uk-table-expand">Child's Weight (kg)</th>
                     <th class="uk-table-expand">Daily Dose (mg) 10-15 mg/kg PO</th>
-                    <th class="uk-table-expand">Twice-weekly Dose (mg) 20-30 mg/kg PO</th>
+                    <!-- <th class="uk-table-expand">Twice-weekly Dose (mg) 20-30 mg/kg PO</th> -->
                 </tr>
                 </thead>
                 <tr>
                     <td>6 - 10</td>
                     <td>3 - 4.5</td>
                     <td>50</td>
-                    <td>100mg PO</td>
+                    <!-- <td>100mg PO</td> -->
                 </tr>
                 <tr>
                     <td>11 - 14</td>
                     <td>5.0 - 6.0</td>
                     <td>50</td>
-                    <td>150mg PO</td>
+                    <!-- <td>150mg PO</td> -->
                 </tr>
                 <tr>
                     <td>14.5 - 18</td>
                     <td>6.5 – 8.0</td>
                     <td>100</td>
-                    <td>200mg PO</td>
+                    <!-- <td>200mg PO</td> -->
                 </tr>
                 <tr>
                     <td>18.5 - 21.5</td>
                     <td>8.5 – 9.5</td>
                     <td>100</td>
-                    <td>250mg PO</td>
+                    <!-- <td>250mg PO</td> -->
                 </tr>
                 <tr>
                     <td>22 – 24</td>
                     <td>10.0 – 11</td>
                     <td>150</td>
-                    <td>300mg PO</td>
+                    <!-- <td>300mg PO</td> -->
                 </tr>
                 <tr>
                     <td>25 - 29</td>
                     <td>11.5 - 13</td>
                     <td>150</td>
-                    <td>350 mg PO</td>
+                    <!-- <td>350 mg PO</td> -->
                 </tr>
                 <tr>
                     <td>29.5 - 32</td>
                     <td>13.5 - 14.5</td>
                     <td>200</td>
-                    <td>400 mg PO</td>
+                    <!-- <td>400 mg PO</td> -->
                 </tr>
                 <tr>
                     <td>33 - 35</td>
                     <td>15 - 16</td>
                     <td>200</td>
-                    <td>450 mg PO</td>
+                    <!-- <td>450 mg PO</td> -->
                 </tr>
                 <tr>
                     <td>36 - 40</td>
                     <td>16.5 - 18</td>
                     <td>250</td>
-                    <td>500 mg PO</td>
+                    <!-- <td>500 mg PO</td> -->
                 </tr>
                 <tr>
                     <td>40.5 - 43</td>
                     <td>18.5 - 19.5</td>
                     <td>250</td>
-                    <td>550 mg PO</td>
+                    <!-- <td>550 mg PO</td> -->
                 </tr>
                 <tr>
                     <td>44 - 48</td>
                     <td>20 - 21.5</td>
                     <td>300</td>
-                    <td>600 mg PO</td>
+                    <!-- <td>600 mg PO</td> -->
                 </tr>
                 <tr>
                     <td>48.5 - 51</td>
                     <td>22 - 23</td>
                     <td>300</td>
-                    <td>650 mg PO</td>
+                    <!-- <td>650 mg PO</td> -->
                 </tr>
                 <tr>
                     <td>52 - 54.5</td>
                     <td>23.5 - 24.5</td>
                     <td>300</td>
-                    <td>700 mg PO</td>
+                    <!-- <td>700 mg PO</td> -->
                 </tr>
                 <tr>
                     <td>55 - 57.5</td>
                     <td>25 - 26</td>
                     <td>300</td>
-                    <td>750 mg PO</td>
+                    <!-- <td>750 mg PO</td> -->
                 </tr>
                 <tr>
                     <td>58 - 62</td>
                     <td>26.5 - 28</td>
                     <td>300</td>
-                    <td>800 mg PO</td>
+                    <!-- <td>800 mg PO</td> -->
                 </tr>
                 <tr>
                     <td>62.5 - 65</td>
                     <td>28.5 - 29.5</td>
                     <td>300</td>
-                    <td>850 mg PO</td>
+                    <!-- <td>850 mg PO</td> -->
                 </tr>
                 <tr>
                     <td>66 +</td>
                     <td>30 +</td>
                     <td>300</td>
-                    <td>900 mg PO</td>
+                    <!-- <td>900 mg PO</td> -->
                 </tr>
             </table>
 
@@ -375,7 +504,7 @@
     </div>
 
 
-    <h4 id="table10">Table 10. Pediatric Dosages - Rifampin in Children (birth to 15 years)</h4>
+    <h4 id="table10" class="custom-table-title">Table 10. Pediatric Dosages - Rifampin in Children (birth to 15 years)</h4>
     <div class="uk-container">  
         <div class="uk-overflow-auto"
                 id="table_10_pediatric_dosages_rifampin_in_children_(birth_to_15_years)">
@@ -413,7 +542,7 @@
     </div>
 
 
-    <h4 id="table11">Table 11: Pediatric Dosages - Ethambutol in Children (birth to 15 years)</h4>
+    <h4 id="table11" class="custom-table-title">Table 11: Pediatric Dosages - Ethambutol in Children (birth to 15 years)</h4>
     <div class="uk-container">
         <div class="uk-overflow-auto"
                 id="table_11_pediatric_dosages_ethambutol_in_children_(birth_to_15_years)">
@@ -476,11 +605,14 @@
                     <td>1600 mg</td>
                 </tr>
             </table>
+            <p>
+                The maximum recommendation for ethambutol is 1 g daily.
+            </p>
         </div>
     </div>
 
 
-    <h4 id="table12">Table 12: Pediatric Dosages - Pyrazinamide in Children (birth to 15 years)</h4>
+    <h4 id="table12" class="custom-table-title">Table 12: Pediatric Dosages - Pyrazinamide in Children (birth to 15 years)</h4>
     <div class="uk-container">
         
         <div class="uk-overflow-auto"
@@ -491,87 +623,87 @@
                     <th class="uk-table-expand">Child's Weight (lbs)</th>
                     <th class="uk-table-expand">Child's Weight (kg)</th>
                     <th class="uk-table-expand">Daily Dose (mg) 30-40 mg/kg PO</th>
-                    <th class="uk-table-expand">Twice-weekly Dose (mg) 50-70 mg/kg PO</th>
+                 
                 </tr>
                 </thead>
                 <tr>
                     <td>13 - 23</td>
                     <td>6 - 10.5</td>
                     <td>250 mg</td>
-                    <td>500 mg</td>
+                  
                 </tr>
                 <tr>
                     <td>24 - 26</td>
                     <td>11 - 12</td>
                     <td>250 mg</td>
-                    <td>750 mg</td>
+                   
                 </tr>
                 <tr>
                     <td>27 - 31</td>
                     <td>12.5 - 14</td>
                     <td>500 mg</td>
-                    <td>1000 mg</td>
+                  
                 </tr>
                 <tr>
                     <td>32 - 41</td>
                     <td>14.5 - 18.5</td>
                     <td>500 mg</td>
-                    <td>1250 mg</td>
+                 
                 </tr>
                 <tr>
                     <td>42 - 47</td>
                     <td>19.0 - 21.5</td>
                     <td>750 mg</td>
-                    <td>1250 mg</td>
+                  
                 </tr>
                 <tr>
                     <td>48 - 54</td>
                     <td>22.0 - 24.5</td>
                     <td>750 mg</td>
-                    <td>1500 mg</td>
+                   
                 </tr>
                 <tr>
                     <td>55 – 63</td>
                     <td>25 – 28.5</td>
                     <td>1000 mg</td>
-                    <td>1750 mg</td>
+                 
                 </tr>
                 <tr>
                     <td>64 – 67</td>
                     <td>29 – 30.5</td>
                     <td>1000 mg</td>
-                    <td>2000 mg</td>
+                    
                 </tr>
                 <tr>
                     <td>68 – 80</td>
                     <td>31 – 36.5</td>
                     <td>1250 mg</td>
-                    <td>2000 mg</td>
+                    
                 </tr>
                 <tr>
                     <td>81 – 93</td>
                     <td>37 – 42.5</td>
                     <td>1500 mg</td>
-                    <td>2000 mg</td>
+                   
                 </tr>
                 <tr>
                     <td>94 – 106</td>
                     <td>43 – 48.5</td>
                     <td>1750 mg</td>
-                    <td>2000 mg</td>
+                 
                 </tr>
                 <tr>
                     <td>107 +</td>
                     <td>49 +</td>
                     <td>2000 mg</td>
-                    <td>2000 mg</td>
+                 
                 </tr>
             </table>
         </div>
     </div>
 
 
-    <h4 id="table13">Table 13: Antituberculosis Antibiotics in Adult Patients with Renal Impairment</h4>
+    <h4 id="table13" class="custom-table-title">Table 13: Antituberculosis Antibiotics in Adult Patients with Renal Impairment</h4>
     <div class="uk-container">
         <p>NOTE: Drug adjustments are based on the creatinine clearance (CrCl) which can be estimated as follows:</p>
         <p>[(140-age in yrs)(Ideal body weight in kg) for men (x 0l85 for women)] / [(72) (serum creatinine, mg/dL)]</p>
@@ -579,69 +711,234 @@
         <p>Ideal body weight for women: 45.5 kg + 2.3 kg per inch over 5 feet</p>
         <div class="uk-overflow-auto"
                 id="table_13_antituberculosis_antibiotics_in_adult_patients_with_renal_impairment">
+                         <div class="uk-tabs-container">
+            <ul class="tabs">
+                <li><button class="tab-button active-option" onclick="switchTab(7, event)"> INH</button></li>
+                <li><button class="tab-button" onclick="switchTab(8, event)"> Rifampin</button></li>
+                <li><button class="tab-button" onclick="switchTab(9, event)"> Ethambutol</button></li>
+                <li><button class="tab-button" onclick="switchTab(10, event)"> Pyrazinamide</button></li>
+                <li><button class="tab-button" onclick="switchTab(11, event)"> Levofloxacin</button></li>
+                <li><button class="tab-button" onclick="switchTab(12, event)"> Moxifloxacin</button></li>
+                <li><button class="tab-button" onclick="switchTab(13, event)"> Amikacin</button></li>
+                <li><button class="tab-button" onclick="switchTab(14, event)"> Linezolid</button></li>
+            </ul>
+        </div>
+
+        <p>
+            NOTE: Drug adjustments are based on the creatinine clearance (CrCl) which can be estimated as follows: <br>
+            [(140-age in yrs)(Ideal body weight in kg) for men (x 0l85 for women)] / [(72) (serum creatinine, mg/dL)]
+            Ideal body weight for men: 50 kg + 2.3 kg per inch over 5 feet
+            Ideal body weight for women: 45.5 kg + 2.3 kg per inch over 5 feet
+        </p>
+
+        <div id="content0" class="option-content active-option">
             <table class="uk-table uk-table-small uk-table-divider">
-                <thead>
-                <tr>
-                    <th>Drug</th>
-                    <th class="uk-table-expand">Usual Dose (UD) Normal Renal Function</th>
-                    <th class="uk-text-nowrap">CrCl 30-90</th>
-                    <th class="uk-table-expand">CrCL <30 or Hemodialysis</th>
-                    <th class="uk-table-expand">Peritoneal Dialysis</th>
-                </tr>
-                </thead>
-                <tr>
-                    <td>INH</td>
-                    <td>300 mg/day</td>
-                    <td>UD</td>
-                    <td>UD</td>
-                    <td rowspan="8">Data currently are not available for patients receiving peritoneal dialysis. Until data
-                        become available, begin with doses recommended for patients receiving hemodialysis and verify
-                        adequacy of dosing using serum concentration monitoring.
-                    </td>
-                </tr>
-                <tr>
-                    <td>Rifampin</td>
-                    <td>600 mg/day</td>
-                    <td>UD</td>
-                    <td>UD</td>
-                </tr>
-                <tr>
-                    <td>Ethambutol</td>
-                    <td>15-25 mg/kg/day</td>
-                    <td>UD</td>
-                    <td>20-25 mg/kg/dose thrice weekly</td>
-                </tr>
-                <tr>
-                    <td>Pyrazinamide</td>
-                    <td>25 mg/kg d (max 2 gm/day)</td>
-                    <td>UD</td>
-                    <td>25-35 mg/kg/dose thrice weekly</td>
-                </tr>
-                <tr>
-                    <td>Levofloxacin</td>
-                    <td>750 mg/day</td>
-                    <td>UD</td>
-                    <td>750-1000 mg/dose thrice weekly</td>
-                </tr>
-                <tr>
-                    <td>Moxifloxacin</td>
-                    <td>400 mg/day</td>
-                    <td>UD</td>
-                    <td>UD</td>
-                </tr>
-                <tr>
-                    <td>Amikacin</td>
-                    <td>15 mg/kg/daily or thrice weekly</td>
-                    <td>UD</td>
-                    <td>15 mg/kg/dose thrice weekly</td>
-                </tr>
-                <tr>
-                    <td>Linezolid</td>
-                    <td>600 mg/day</td>
-                    <td>UD</td>
-                    <td>UD</td>
-                </tr>
+                <tbody>
+                    <tr>
+                        <th>Usual Dose (UD) Normal Renal Function</th>
+                        <td>300 mg/day</td>
+                    </tr>
+                    <tr>
+                        <th>CrCl 30-90</th>
+                        <td>UD</td>
+                    </tr>
+                    <tr>
+                        <th>CrCL <30 or Hemodialysis</th>
+                        <td>UD</td>
+                    </tr>
+                    <tr>
+                        <th>Peritoneal Dialysis</th>
+                        <td rowspan="8" class="th-no-highlight">Data currently are not available for patients receiving peritoneal dialysis. Until data
+                            become available, begin with doses recommended for patients receiving hemodialysis and verify
+                            adequacy of dosing using serum concentration monitoring.
+                        </td>
+                    </tr>
+                </tbody>
             </table>
+        </div>
+
+        <div id="content1" class="option-content">
+            <table class="uk-table uk-table-small uk-table-divider">
+                <tbody>
+                    <tr>
+                        <th>Usual Dose (UD) Normal Renal Function</th>
+                        <td>600 mg/day</td>
+                    </tr>
+                    <tr>
+                        <th>CrCl 30-90</th>
+                        <td>UD</td>
+                    </tr>
+                    <tr>
+                        <th>CrCL <30 or Hemodialysis</th>
+                        <td>UD</td>
+                    </tr>
+                    <tr>
+                        <th>Peritoneal Dialysis</th>
+                        <td rowspan="8" class="th-no-highlight">Data currently are not available for patients receiving peritoneal dialysis. Until data
+                            become available, begin with doses recommended for patients receiving hemodialysis and verify
+                            adequacy of dosing using serum concentration monitoring.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="content2" class="option-content">
+            <table class="uk-table uk-table-small uk-table-divider">
+                <tbody>
+                    <tr>
+                        <th>Usual Dose (UD) Normal Renal Function</th>
+                        <td>15-25 mg/kg/day</td>
+                    </tr>
+                    <tr>
+                        <th>CrCl 30-90</th>
+                        <td>UD</td> 
+                    </tr>
+                    <tr>
+                        <th>CrCL <30 or Hemodialysis</th>
+                        <td>20-25 mg/kg/dose thrice weekly</td>
+                    </tr>
+                    <tr>
+                        <th>Peritoneal Dialysis</th>
+                        <td rowspan="8" class="th-no-highlight">Data currently are not available for patients receiving peritoneal dialysis. Until data
+                            become available, begin with doses recommended for patients receiving hemodialysis and verify
+                            adequacy of dosing using serum concentration monitoring.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="content3" class="option-content">
+            <table class="uk-table uk-table-small uk-table-divider">
+                <tbody>
+                    <tr>
+                        <th>Usual Dose (UD) Normal Renal Function</th>
+                        <td>25 mg/kg d (max 2 gm/day)</td>
+                    </tr>
+                    <tr>
+                        <th>CrCl 30-90</th>
+                        <td>UD</td> 
+                    </tr>
+                    <tr>
+                        <th>CrCL <30 or Hemodialysis</th>
+                        <td>25-35 mg/kg/dose thrice weekly</td>
+                    </tr>
+                    <tr>
+                        <th>Peritoneal Dialysis</th>
+                        <td rowspan="8" class="th-no-highlight">Data currently are not available for patients receiving peritoneal dialysis. Until data
+                            become available, begin with doses recommended for patients receiving hemodialysis and verify
+                            adequacy of dosing using serum concentration monitoring.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="content4" class="option-content">
+            <table class="uk-table uk-table-small uk-table-divider">
+                <tbody>
+                    <tr>
+                        <th>Usual Dose (UD) Normal Renal Function</th>
+                        <td>750 mg/day</td>
+                    </tr>
+                    <tr>
+                        <th>CrCl 30-90</th>
+                        <td>UD</td>
+                    </tr>
+                    <tr>
+                        <th>CrCL <30 or Hemodialysis</th>
+                        <td>750-1000 mg/dose thrice weekly</td>
+                    </tr>
+                    <tr>
+                        <th>Peritoneal Dialysis</th>
+                        <td rowspan="8" class="th-no-highlight">Data currently are not available for patients receiving peritoneal dialysis. Until data
+                            become available, begin with doses recommended for patients receiving hemodialysis and verify
+                            adequacy of dosing using serum concentration monitoring.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="content5" class="option-content">
+            <table class="uk-table uk-table-small uk-table-divider">
+                <tbody>
+                    <tr>
+                        <th>Usual Dose (UD) Normal Renal Function</th>
+                        <td>400 mg/day</td>
+                    </tr>
+                    <tr>
+                        <th>CrCl 30-90</th>
+                        <td>UD</td>
+                    </tr>
+                    <tr>
+                        <th>CrCL <30 or Hemodialysis</th>
+                        <td>UD</td>
+                    </tr>
+                    <tr>
+                        <th>Peritoneal Dialysis</th>
+                        <td rowspan="8" class="th-no-highlight">Data currently are not available for patients receiving peritoneal dialysis. Until data
+                            become available, begin with doses recommended for patients receiving hemodialysis and verify
+                            adequacy of dosing using serum concentration monitoring.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="content6" class="option-content">
+            <table class="uk-table uk-table-small uk-table-divider">
+                <tbody>
+                    <tr>
+                        <th>Usual Dose (UD) Normal Renal Function</th>
+                        <td>15 mg/kg/daily or thrice weekly</td>
+                    </tr>
+                    <tr>
+                        <th>CrCl 30-90</th>
+                        <td>UD</td>
+                    </tr>
+                    <tr>
+                        <th>CrCL <30 or Hemodialysis</th>
+                        <td>15 mg/kg/dose thrice weekly</td>
+                    </tr>
+                    <tr>
+                        <th>Peritoneal Dialysis</th>
+                        <td rowspan="8" class="th-no-highlight">Data currently are not available for patients receiving peritoneal dialysis. Until data
+                            become available, begin with doses recommended for patients receiving hemodialysis and verify
+                            adequacy of dosing using serum concentration monitoring.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="content7" class="option-content">
+            <table class="uk-table uk-table-small uk-table-divider">
+                <tbody>
+                    <tr>
+                        <th>Usual Dose (UD) Normal Renal Function</th>
+                        <td>600 mg/day</td>
+                    </tr>
+                    <tr>
+                        <th>CrCl 30-90</th>
+                        <td>UD</td>
+                    </tr>
+                    <tr>
+                        <th>CrCL <30 or Hemodialysis</th>
+                        <td>600 mg/dose thrice weekly</td>
+                    </tr>
+                    <tr>
+                        <th>Peritoneal Dialysis</th>
+                        <td rowspan="8" class="th-no-highlight">Data currently are not available for patients receiving peritoneal dialysis. Until data
+                            become available, begin with doses recommended for patients receiving hemodialysis and verify
+                            adequacy of dosing using serum concentration monitoring.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+            
             <ul class="uk-list uk-list-disc">
                 <li>Standard doses are given unless there is intolerance.</li>
                 <li>The medications should be given after hemodialysis on the day of hemodialysis.</li>
@@ -659,46 +956,132 @@
     </div>
 
 
-    <h4 id="table14">Table 14: Antituberculosis medications which may be used for patients who have contraindications to or intolerance of first line agents or who require IV therapy during acute or critical illness</h4>
+    <h4 id="table14" class="custom-table-title">Table 14: Antituberculosis medications which may be used for patients who have contraindications to or intolerance of first line agents or who require IV therapy during acute or critical illness</h4>
     <div class="uk-container">
         <div class="uk-overflow-auto"
                 id="table_14_antituberculosis_medications_which_may_be_used_for_patients_who_have_contraindications_to_or_intolerance">
-            <table class="uk-table uk-table-small uk-table-divider">
-                <thead>
-                <tr>
-                    <th>Medication: Route(s)</th>
-                    <th class="uk-text-nowrap">Dosing (A for adults, C for children)</th>
-                    <th class="uk-table-expand">Adverse Reactions</th>
-                </tr>
-                </thead>
-                <tr>
-                    <td>Levofloxacin: PO/IV</td>
-                    <td>A: 750 mg daily C: 15 – 20 mg/kg daily Max dose 750 mg</td>
-                    <td rowspan="2">GI upset, dizziness, hypersensitivity, Headaches, QT prolongation, tendon rupture
-                        (rare), arthralgia, increased risk for aortic dissection/rupture, hypo/hyperglycemia
-                    </td>
-                </tr>
-                <tr>
-                    <td>Moxifloxacin: PO/IV</td>
-                    <td>A: 400 mg daily C: no established dose</td>
-                </tr>
-                <tr>
-                    <td>Linezolid: PO/IV</td>
-                    <td>A: 600 mg (once daily) C: 10 mg/kg/dose every 12 hours (max dose 600 mg)</td>
-                    <td>Myelosuppression, GI upset, optic and peripheral neuropathy (may be irreversible)</td>
-                </tr>
-                <tr>
-                    <td>Amikacin: IV</td>
-                    <td>A: 10 to 15 mg/kg/day 5-7 days per week or 3 times per week
-                        C: 15 to 30 mg/kg/day (max dose 1 gram) 5-7 days per week or 3 times per week
-                    </td>
-                    <td>Auditory, vestibular and renal toxicity</td>
-                </tr>
+
+        <div class="uk-tabs-container">
+            <ul class="tabs">
+                <li><button class="tab-button active-option" onclick="switchTab(15, event)">Levofloxacin: PO/IV</button></li>
+
+                <li>
+                    <button class="tab-button" onclick="switchTab(16, event)">Moxifloxacin: PO/IV</button>
+                </li>
+
+                <li><button class="tab-button" onclick="switchTab(17, event)">Linezolid: PO/IV</button></li>
+
+                <li><button class="tab-button" onclick="switchTab(18, event)">Amikacin: IV</button></li>
+            </ul>
+        </div>
+
+        <div id="content2" class="option-content active-option">
+            <table class="uk-table uk-table-small">
+                <tbody>
+                    <tr>
+                        <th class="uk-table-expand">Dosing (A for adults, C for children)</th>
+                        <td>
+                            <strong>A:</strong> 750 mg daily <br>
+                            <strong>C:</strong> 15 – 20 mg/kg daily <br>
+                            <strong>Max dose:</strong> 750 mg
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="uk-table-expand">Adverse Reactions</th>
+                        <td>
+                            GI upset, dizziness, hypersensitivity, Headaches, QT prolongation, tendon rupture (rare), arthralgia, increased risk for aortic dissection/rupture, hypo/hyperglycemia
+                        </td>
+                    </tr>
+                </tbody>
             </table>
+
+            <p>
+                Expert consultation is advised before use; agent is not approved for children less than 18 years of age. 
+            </p>
+        </div>
+
+        <div id="content3" class="option-content">
+            <table class="uk-table uk-table-small">
+                <tbody>
+                    <tr>
+                        <th class="uk-table-expand">Dosing (A for adults, C for children)</th>
+                        <td>
+                            <strong>A:</strong> 10-15 mg/kg<br>
+                            <strong>C:</strong> No established dose<br>
+                            <strong>Max dose:</strong> 400 mg
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="uk-table-expand">Adverse Reactions</th>
+                        <td>
+                            GI upset, dizziness, hypersensitivity, Headaches, QT prolongation, tendon rupture (rare), arthralgia, increased risk for aortic dissection/rupture, hypo/hyperglycemia
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p>
+                Expert consultation is advised before use; agent is not approved for children less than 18 years of age. 
+            </p>
+        </div>
+
+        <div id="content4" class="option-content">
+            <table class="uk-table uk-table-small">
+                <tbody>
+                    <tr>
+                        <th>Dosing (A for adults, C for children)</th>
+                        <td>
+                            <strong>A:</strong> 600 mg (once daily) <br>
+                            <strong>C:</strong> 
+                            <strong>Children < 12 years:</strong>
+                            <ul>
+                                <li>5 – 10 kg: 15 mg/kg once daily</li>
+                                <li>10 – 23 kg: 12 mg/kg once daily</li>
+                                <li>>23 kg: 10 mg/kg once daily</li>
+                            </ul>
+                            <strong>Children ≥12 years:</strong>
+                            <ul>
+                                <li>10 mg/kg once daily</li>
+                            </ul>
+                            <strong>Max dose:</strong> 600 mg
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Adverse Reactions</th>
+                        <td>
+                            Myelosuppression, GI upset, optic and peripheral neuropathy (may be irreversible)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="content5" class="option-content">
+            <table class="uk-table uk-table-small">
+                <tbody>
+                    <tr>
+                        <th>Dosing (A for adults, C for children)</th>
+                        <td>
+                            <strong>A:</strong> 10 to 15 mg/kg/day <br>
+                            5-7 days per week or 3 times per week <br><br>
+                            
+                            <strong>C:</strong> 15 to 30 mg/kg/day (max dose 1 gram) <br>
+                            5-7 days per week or 3 times per week
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Adverse Reactions</th>
+                        <td>
+                            Auditory, vestibular and renal toxicity
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         </div>
     </div>
 
-    <h4 id="table15">Table 15: Clinical Situations for which standard therapy cannot be given or is not well- tolerated or may not be effective: Potential Alternative Regimens (Dosing and/or Drugs) </h4> 
+    <h4 id="table15" class="custom-table-title">Table 15: Clinical Situations for which standard therapy cannot be given or is not well- tolerated or may not be effective: Potential Alternative Regimens (Dosing and/or Drugs) </h4> 
     <div class="uk-container">
         <div class="uk-overflow-auto"
              id="table_15_clinical_situations_for_which_standard_therapy_cannot_be_given_or_is_not_well_tolerated">
@@ -816,4 +1199,5 @@
 </body>
 <script src="../assets/uikit.js" type="text/javascript"></script>
 <script src="../assets/uikit-icons.js" type="text/javascript"></script>
+<script src="../assets/main.js" type="text/javascript"></script>
 </html>

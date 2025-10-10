@@ -12,18 +12,28 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import org.apphatchery.gatbreferenceguide.R
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 
 abstract class BaseFragment(@LayoutRes layoutRes: Int) : Fragment(layoutRes) {
     abstract override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 
-//    override fun onAttach(context: Context) {
-//        try {
-//            requireActivity().getBottomNavigationView().toggleVisibility(false)
-//        } catch (e: Exception) {
-//        }
-//        super.onAttach(context)
-//    }
+    // Action bar control methods
+    protected fun setActionBarTitle(title: String) {
+        (requireActivity() as? ActionBarController)?.setActionBarTitle(title)
+    }
 
+    protected fun setActionBarConfig(title: String, showBackButton: Boolean = true) {
+        (requireActivity() as? ActionBarController)?.setActionBarConfig(title, showBackButton)
+    }
+
+    protected fun setActionBarSearchVisible(visible: Boolean) {
+        (requireActivity() as? ActionBarController)?.setActionBarSearchVisible(visible)
+    }
+
+    protected fun setupActionBarSearch(onSearchAction: (String) -> Unit, onSearchIconClick: (String) -> Unit) {
+        (requireActivity() as? ActionBarController)?.setupActionBarSearch(onSearchAction, onSearchIconClick)
+    }
 
     fun voiceSearchListener(resultLauncher: ActivityResultLauncher<Intent>) =
         resultLauncher.launch(
@@ -53,6 +63,4 @@ abstract class BaseFragment(@LayoutRes layoutRes: Int) : Fragment(layoutRes) {
         inflater.inflate(R.menu.fragment_global_search_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
-
-
 }

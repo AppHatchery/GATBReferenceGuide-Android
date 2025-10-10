@@ -1,6 +1,7 @@
 <!doctype html>
 
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
@@ -10,82 +11,825 @@
     <meta content="SitePoint" name="author">
     <link href="../assets/uikit.css" rel="stylesheet">
     <link href="../assets/style.css" rel="stylesheet">
+    <style>
+        /* Scoped styles for Table 19 */
+        .table-19-container .uk-table th,
+        .table-19-container .uk-table td {
+            width: 50% !important;
+        }
+
+        .table-19-container .tab-button {
+            width: 250px;
+            height: 100px;
+            white-space: normal;
+            text-align: center;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            flex: none;
+        }
+
+        .table-19-container .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 1rem;
+            justify-content: center;
+        }
+
+        /* Responsive adjustments for tabs */
+        @media (max-width: 959px) {
+            .table-19-container .tab-button {
+                width: 200px;
+                height: 70px;
+            }
+        }
+
+        /* Scoped styles for Table 18 */
+        .table-18-container .uk-table th,
+        .table-18-container .uk-table td {
+            width: 50% !important;
+        }
+
+        .table-18-container .tab-button {
+            width: 250px;
+            height: 100px;
+            white-space: normal;
+            text-align: center;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+            flex: none;
+        }
+
+        .table-18-container .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 1rem;
+            justify-content: center;
+        }
+
+        /* Responsive adjustments for tabs */
+        @media (max-width: 959px) {
+            .table-18-container .tab-button {
+                width: 200px;
+                height: 70px;
+            }
+        }
+    </style>
 </head>
+
 <body>
+    <div class="uk-container">
+        <div>
+            <div class="chapter-header">
+                <div class="header-title">
+                    <div>
+                        <img src="ic_chapter.svg" width="16" height="16" class="ic_chapter_icon">
+                    </div>
+                    <p class="chapter-title">V. Treatment of Current (Active) Disease Therapy</p>
+                </div>
+                <p class="last-updated"><i>Last Updated October 2025</i></p>
+            </div>
+            <hr>
+        </div>
+        <p class="uk-paragraph">
+            Treatment of persons living with HIV with active TB disease should be carried out in consultation with a
+            physician who has experience in the use of rifamycin drugs and antiretroviral agents.
+            Recommendations on the treatment of TB in combination with antiretroviral therapy continue to evolve, and it
+            is important to check for updated guidelines:
+            <a href="https://clinicalinfo.hiv.gov/en/guidelines"
+                target="_blank">https://clinicalinfo.hiv.gov/en/guidelines</a> and
+            <a href="https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/tuberculosishiv-coinfection?view=full"
+                target="_blank">
+                https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/tuberculosishiv-coinfection?view=full
+            </a>
+        </p>
+        <span class="toggle-title" onclick="toggleItem(this)">Antiretroviral therapy (ART)<span
+                class="chevron-up">⌃</span></span>
+        <div class="item">
+            <ul>
+                <li>
+                    Improves outcomes for persons living with HIV and decreases HIV-related mortality as well as risk of
+                    relapse. Persons living with HIV in the United States with active TB disease commonly have advanced
+                    HIV/AIDS with low CD4 counts and high plasma HIV RNA levels; all patients with TB who have HIV
+                    co-infection should receive treatment for HIV with ART.
+                </li>
+            </ul>
+        </div>
+        <span class="toggle-title" onclick="toggleItem(this)">Timing of ART<span class="chevron-up">⌃</span></span>
+        <div class="item">
+            <ul>
+                <li>
+                    Multiple studies have demonstrated the benefits of ART initiation among persons living with HIV
+                    during TB treatment, including a reduction in mortality.
+                </li>
+                <li>
+                    However, the use of ART among persons living with HIV with active TB disease is complicated by
+                    overlapping toxicity profiles of some antituberculosis and antiretroviral drugs; complex drug-drug
+                    interactions; and the occurrence of “paradoxical” reactions or immune reconstitution inflammatory
+                    syndrome (IRIS).
+                </li>
+            </ul>
+        </div>
+        <span class="toggle-title" onclick="toggleItem(this)">All persons living with HIV who are diagnosed with active
+            TB disease and not on ART should be started on ART as follows:<span class="chevron-up">⌃</span></span>
+        <div class="item">
+            <ul>
+                <li>
+                    <b>CD4 T lymphocyte (CD4) cell counts &lt;50 cells/mm<sup>3</sup>:</b> HHS guidelines recommend
+                    initiating ART as soon as possible, but within 2 weeks of starting TB treatment.
+                </li>
+                <li>
+                    <b> CD4 counts ≥50 cells/mm<sub>3</sub>:</b> Initiate ART within 2 to 8 weeks of starting TB
+                    treatment.
+                </li>
+                <li>
+                    <b>During pregnancy, regardless of CD4 count:</b> Initiate ART as early as feasible for treatment of
+                    the person with HIV and prevention of HIV transmission to the infant.
+                </li>
+                <li>
+                    <b>With TB meningitis:</b> Initiate ART after TB meningitis is under control and after at least 2
+                    weeks of anti-TB treatment to reduce the risk of life-threatening inflammation in a closed space
+                    (i.e., brain) as a result of immune reconstitution. Generally, initiation of ART in this setting is
+                    recommended 4 to 8 weeks after initiation of therapy for TB meningitis.
+                </li>
+            </ul>
+        </div>
 
 
-<div class="uk-container">
+        <p class="uk-paragraph">
+            As noted above, there are certain situations where ART therapy should be delayed when treating persons with
+            active TB disease who have HIV co-infection. A study of people living with HIV with TB meningitis found that
+            early ART was associated with an increase in severe adverse events and no mortality benefit. Thus, timing of
+            ART initiation in persons with active TB disease who have HIV co-infection should take into account both the
+            degree of immune suppression and site of disease (see Table 16 and recommendations above).
+        </p>
+        <h4 id="table16" class="custom-table-title">Table 16. Antiretroviral Therapy (ART) and Treatment of Persons
+            Living with HIV and Active TB </h4>
+        <div class="uk-overflow-auto" id="table_16_when_to_start_hiv_therapy">
+            <table class="uk-table uk-table-small uk-table-divider">
+                <thead>
+                    <tr>
+                        <th colspan="2">HHS Panel Recommendations on treatment of Tuberculosis Disease with HIV
+                            co-infection: Timing of Antiretroviral Therapy (ART) Initiation relative to TB treatment
+                        </th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>CD4 count and/or clinical status at time of TB diagnosis</td>
+                    <td>ART Initiation</td>
+                </tr>
+                <tr>
+                    <td>
+                        < 50 cells/mm³</td>
+                    <td>within 2 weeks of starting TB therapy.</td>
+                </tr>
+                <tr>
+                    <td>> 50 cells/mm³</td>
+                    <td>within 2-8 weeks of starting TB therapy</td>
+                </tr>
+                <tr>
+                    <td>Pregnant, any CD4 count</td>
+                    <td>As early as feasible</td>
+                </tr>
+            </table>
+            <p>** EXCEPTION: tuberculous meningitis. To avoid life-threatening CNS immune reconstitution inflammatory
+                syndrome (IRIS), persons living with HIV and tuberculous meningitis should not
 
-    <p>HIV is the most important risk factor for active TB disease and TB-related mortality. TB is one of the few
-        co-infections occurring in HIV-infected persons which is transmissible, curable and preventable. Importantly,
-        HIV is
-        a risk factor for active TB across all CD4 count levels.</p>
+                be started on ART until AFTER the TB meningitis is under control and at least two weeks anti-TB treatment
+            </p>
+            <p>
+                <b>PREVENTING IRIS (Immune Reconstitution Inflammatory Syndrome)</b>: prednisone 40 mg/day for 2 weeks followed by 20 mg/day for 2 weeks is recommended for people with CD4 100 cells/mm3 who start ART within 30 days of TB treatment, are responding well to treatment, do not have known or suspected rifampin resistance, Kaposi sarcoma, or active hepatitis B. This recommendation does not apply to people with CNS TB for whom steroids are recommended from the time TB treatment is started.
+             </p>
+            <p>
+                Above based on guidelines developed by the Department of Health and Human Services (DHHS) Panel on Guidelines for Use of Antiretroviral Agents for Adults and Adolescents and Use of Antiretroviral Drugs in Pregnant Women living with HIV and Interventions to Reduce Perinatal Transmission in the United States, last reviewed and updated October 29, 2024 <a href="https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-opportunistic-infections/mycobacterium?view=full">(https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-opportunistic-infections/mycobacterium?view=full)</a>
+            </p>
 
-    <p>Persons with HIV infection may have diminished (or absent) tuberculin skin test reaction and/or negative IGRA
-        because of immunosuppression. Therefore, tuberculin reactions of > 5 mm of induration are considered indicative
-        of
-        TB infection in an HIV- infected individual (see <a href="2_diagnostic_tests_for_latent_tb_infection_(ltbi)__b__criteria_for_a_positive_tuberculin_test_by_risk_group.html"> B. Criteria for a Positive Tuberculin Test, by Risk Group</a>). Standard IGRA cut-offs apply for patients
-        with
-        HIV despite reduced sensitivity of IGRA test among patients with HIV.</p>
+        </div>
 
-    <p>Because HIV status is a critical factor in the treatment of TB, HIV counseling and testing should be offered to
-        all
-        patients with proven or suspected active TB disease.</p>
+        <h4 id="table17" class="custom-table-title">Table 17. Antiretroviral Therapy (ART) and Treatment of Persons
+            Living with HIV and Active TB </h4>
+        <div class="uk-overflow-auto"
+            id="table_17_what_to_start_choice_of_tb_therapy_and_antiretroviral_therapy_(art)_when)treating_co-infected_patients">
+            <table class="uk-table uk-table-small uk-table-divider">
+                <thead>
+                    <tr>
+                        <th>Principle: Despite Drug Interactions, a Rifamycin (Rifampin or Rifabutin) Should Be Included
+                            in TB Regimens for Patients
+                            Receiving ART, with Dosage Adjustment if Necessary (see Table SMR11 for dosage
+                            adjustments).
+                        </th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td><b>Option 1: Integrase-based ART regimens. Dolutegravir is the preferred integrase for TB/HIV co-infection treatment.</b><br><br>
+                         <b>Option 1a</b>: Patients receiving rifampin-based TB treatment.<br><br>
+                            Preferred: DTG (Tivicay) BID + TDF/FTC (Truvada) daily<br>
+                            Alternative choices:<br>
 
-    <P>The clinical presentation of TB in a person living with HIV may differ from that in persons without HIV. Apical
-        pulmonary disease with cavitation, a classic finding in immunologically competent persons, is less common among
-        persons living with HIV, especially among those with low CD4 counts. HIV-infected patients may present with
-        infiltrates in any lung zone and/or with mediastinal or hilar lymphadenopathy. Extrapulmonary and disseminated
-        TB
-        are common among HIV-infected TB patients.
-    </P>
+                            (1) DTG (Tivicay) BID + TAF/FTC (Descovy) daily<br>
 
-    <h4>Treatment for Individuals with TB & HIV</h4>
-    <ol>
-        <li>The treatment of TB in persons living with HIV is similar to that for patients without HIV infection.
-            However,
-            intermittent therapy should be avoided, and twice-weekly regimens are contraindicated.
-        </li>
+                            (2) DTG (Tivivay) BID + ABC/3TC daily (note: Triumeq is a combination of
 
-        <li>Persons living with HIV with active TB disease should be initiated on a 4-drug treatment regimen (INH, RIF
-            (or
-            Rifabutin), PZA and EMB) and pyridoxine as outlined in <a href="table_7_recommended_regimens_for_treatment_of_adults_and_children_with_drug_susceptible_tb_pulmonary_tb.html">Table 7</a>, unless contraindications to
-            medication exist. The use of antiretroviral therapy and TB medications is discussed on <a href="5_treatment_of_current_(active)_disease_therapy__g__antiretroviral_therapy_(art)_and_treatment_of_persons.html">Antiretroviral Therapy During the Course of TB Therapy</a>.
-            Persons living with HIV with drug-susceptible TB disease generally respond well to standard anti-TB drugs.
-        </li>
+                        DTG/ABC/3tc)<br><br>
+                        <b>Option 1b</b>: Patients receiving rifabutin-based TB treatment<br><br>
+                        Preferred: DTG (Tivicay) daily + TDF/FTC (Truvada) daily<br>
 
-        <li>Patients with HIV co-infection who have drug-susceptible TB disease should be treated for a minimum of 6 months with antituberculosis therapy. Duration of therapy should be prolonged for patients with delayed or slow
-            response to therapy. Persons living with HIV with TB disease should be monitored closely for clinical and
-            bacteriological response. Many experts extend treatment duration to 9 months for all patients with HIV, but
-            prolonged treatment beyond 6 months is especially recommended for patients who do not achieve HIV viral
-            suppression during TB treatment and/or are slow to respond to therapy, including patients who remain culture
-            positive after two months of therapy. Because patient adherence to therapy is critical for good outcomes,
-            DOT is
-            the standard of care and is strongly recommended for all patients with active TB including persons living
-            with
-            HIV.
-        </li>
+                        Alternative choices:<br>
 
-        <li>Persons living with HIV with TB disease should be monitored very closely during therapy as they appear to
-            have a
-            greater frequency of adverse reactions to anti-TB drugs.
-        </li>
+                        (1) DTG (Tivicay) daily + TAF/FTC (Descovy) daily<br>
 
-        <li>HIV viral load should be monitored very closely during TB therapy given drug-drug interactions. Viral load
-            should be measured prior to antiretroviral therapy (ART) initiation and within 2—4 weeks but no later than 8
-            weeks after ART initiation. An HIV viral load should be measured every 3 months among patients with stable
-            ART
-            regimen and suppressed viral load.
-        </li>
+                        (2) DTG/ABC/3TC (Triumeq) daily<br><br>
 
-        <li>After treatment for TB disease is completed, patients should be reminded that if symptoms reappear, they
-            should
-            seek prompt medical evaluation.
-        </li>
-    </ol>
 
-</div>
+                        <b>Note</b>: The FDA does not recommend using TAF with rifampin or rifabutin
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Option 2: PI-based ART regimens (cannot be used with rifampin, must use with dose-adjusted rifabutin)<br><br>
+                        <b>Option 2a</b><br><br>
+                        ATV/r daily + TDF/FTC (Truvada) daily<br>
+                        Alternative choices:<br><br>
+
+                        (1) ATV/r daily + TAF/FTC (Descovy) daily<br>
+
+                        (2) ATV/r daily + ABC/3TC daily<br><br>
+                        
+                        <b>Option 2b</b><br><br>
+                        DRV/r daily + TDF/FTC (Truvada) daily<br><br>
+
+                        (1) DRV/r daily + TAF/FTC (Descovy) daily<br>
+                        (2) DRV/r daily + ABC/3TC daily
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        1- PI’s have high barrier to resistance. However, given rifabutin is given at half-dose when used with PI’s adherence to ART should be closely monitored. Poor adherence to PI’s while on rifabutin increases risk for rifampin resistance.<br>
+
+                        2- The FDA does not recommend using TAF with rifampin or rifabutin.<br>
+
+                        3- Cobicistat cannot be used with rifabutin
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Choice for Pregnant Women living with HIV and with Active TB : Expert consultation advised. Options 1a and 1b are currently preferred in pregnancy.
+                    </td>
+                </tr>
+                
+            </table>
+
+            <ul style="font-size:75%">
+                <li>NRTIs: nucleoside/-tide reverse transcriptase inhibitors</li>
+                <li>NNRTIs: non-nucleoside reverse transcriptase inhibitors</li>
+                <li>PIs: protease inhibitors</li>
+                <li>/r: boosted with ritonavir</li>
+                <li>TDF: Tenofovir disoproxil fumarate</li>
+                <li>TAF: Tenofovir alafenamide</li>
+                <li>FTC: Emtricitabine</li>
+                <li>3TC: Lamivudine</li>
+                <li>ABC: Abacavir</li>
+                <li>ATV/r: Atazanavir/ritonavir</li>
+                <li>DRV/r: Daraunavir/ritonavir</li>
+                <li>DTG: Dolutegravir</li>
+            </ul>
+            <p>
+                Above based on guidelines developed by the Department of Health and Human Services (DHHS) Panel on Guidelines for Use of Antiretroviral Agents for Adults and Adolescents and Use of Antiretroviral Drugs in Pregnant Women living with HIV and Interventions to Reduce Perinatal Transmission in the United States, last reviewed and updated October 29, 2024 <a href="http://aidsinfo.nih.gov/guidelines">(http://aidsinfo.nih.gov/guidelines)</a>.
+            </p>
+
+        </div>
+
+        <p class="uk-paragraph">
+            Persons who are already on ART at the time of TB diagnosis, generally should be continued on the ART
+            treatment (though ART regimen may need to be adjusted).
+        </p>
+        <p class="toggle-title" onclick="toggleItem(this)">Choice of ART<span class="chevron-up">⌃</span></p>
+        <div class="item">
+            <ul>
+                <li>
+                    Because of the potential for significant drug interactions and overlapping toxicities, the choice of
+                    ART among persons living with HIV who have active TB disease should be made only after direct
+                    communication between HIV and tuberculosis care providers.
+                </li>
+                <li>
+                    Any change in either the TB medications or the ART regimen should be immediately shared between the
+                    two providers.
+                </li>
+            </ul>
+        </div>
+
+        <p class="toggle-title" onclick="toggleItem(this)">There are clinically important drug-drug interactions between
+            the rifamycins (e.g., rifampin, rifabutin, rifapentene) and some of the antiretroviral drugs, especially
+            integrase and protease inhibitors.<span class="chevron-up">⌃</span></p>
+        <div class="item">
+            <ul>
+                <li>
+                    The rifamycins are inducers of the cytochrome P450-3A (CYP3A) system in the liver and thereby
+                    decrease serum concentrations of drugs metabolized by this system including integrase and protease
+                    inhibitors.
+                </li>
+                <li>
+                    Rifampin is a potent inducer of the CYP3A, while rifabutin is a less potent inducer. Rifampin cannot
+                    be given with most protease inhibitors because it results in low serum levels of these drugs.
+                </li>
+                <li>
+                    Rifabutin has less of an effect and therefore can be used with certain protease inhibitors as
+                    described below.
+                </li>
+                <li>
+                    Rifampin and rifabutin can be given with certain integrase inhibitors (<a
+                        href="https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-insti)">https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-insti)</a>.
+                </li>
+            </ul>
+        </div>
+        <p class="uk-paragraph">
+            The protease inhibitors also affect rifamycin metabolism and because the rifamycin metabolism is retarded by
+            these drugs, the dose of rifabutin needs to be reduced in order to avoid rifabutin related toxicity.
+        </p>
+        <p class="uk-paragraph">
+            Despite these drug-drug interactions, a rifamycin (rifampin or rifabutin) should ALWAYS be included in the
+            treatment regimen for drug-susceptible TB among persons living with HIV.
+        </p>
+
+        <p class="toggle-title" onclick="toggleItem(this)">Rifampin can be given with the following
+            antiretrovirals:<span class="chevron-up">⌃</span></p>
+        <div class="item">
+            <ul>
+                <li>
+                    MOST Nucleoside/nucleotide reverse transcriptase inhibitors (NRTIs) (e.g., zidovudine, lamivudine,
+                    emtricitabine, tenofovir disoproxil fumarate (TDF),
+
+                    abacavir). Tenofovir alafenamide (TAF) is not currently recommended for use in combination with
+                    rifamycins.
+                </li>
+                <li>
+                    SELECTED Non-nucleoside reverse transcriptase inhibitors (NNRTIs): efavirenz only (all others are
+                    contraindicated for coadministration with rifampin).
+                </li>
+                <li>
+                    Selected Integrase inhibitors: raltegravir and dolutegravir. The dose of raltegravir must be
+                    increased to 800 mg twice daily (BID) and the dose of dolutegravir must be increased to 50 mg BID
+                    for patients on rifampin. Neither raltegravir or dolutegravir require a dosing change when used with
+                    rifabutin. Bictegravir (a component of Biktarvy) should NOT be given in combination with any
+                    rifamycin drugs (rifampin, rifabutin, rifapentine).
+                </li>
+            </ul>
+        </div>
+
+        <p class="toggle-title" onclick="toggleItem(this)">Rifampin should NOT be used with the following:<span
+                class="chevron-up">⌃</span></p>
+        <div class="item">
+            <ul>
+                <li>
+                    Tenofoviral afenamide (TAF)
+                </li>
+                <li>
+                    Protease inhibitors
+                </li>
+                <li>
+                    Nevirapine, etravirine, rilpivarine (NNRTIs)
+                </li>
+                <li>
+                    Bictegravir (including Biktarvy), elvitegravir
+                </li>
+            </ul>
+        </div>
+
+        <p class="uk-paragraph">
+            A summary of preferred treatment options for patients with tuberculosis disease who are HIV co-infected is
+            shown in
+            <a href="table_18_dosage_adjustments_for_art_and_rifamycins_when_used_in_combination.html">Table 18</a> and
+            <a href="table_19_guidelines_for_treatment_of_extrapulmonary_tuberculosis.html">Table 19</a>. For additional
+            information refer to updated HHS guidelines, visit <a
+                href="https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/tuberculosishiv-coinfection?view=full">https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/tuberculosishiv-coinfection?view=full</a>
+        </p>
+        <h4 class="custom-table-title" id="table18">Table 18. Dosage Adjustments for ART and Rifamycins when used in
+            Combination</h4>
+        <div class="uk-overflow-auto table-18-container">
+            <div class="tabs">
+                <button class="tab-button"
+                    onclick="switchTabInContainer('.table-18-container', 0, event)">Integrase<br>Inhibitor</button>
+                <button class="tab-button" onclick="switchTabInContainer('.table-18-container', 1, event)">Boosted
+                    PI</button>
+                <button class="tab-button"
+                    onclick="switchTabInContainer('.table-18-container', 2, event)">NNRTI</button>
+            </div>
+
+            <div class="tab-content">
+                <p>Dolutegravir (DTG)</p>
+                <table class="uk-table uk-table-small uk-table-divider">
+                    <tbody>
+                        <tr>
+                            <th>Drug</th>
+                            <th>Dosing</th>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Rifampin (RIF)</th>
+                            <td>RIF: No change (600 mg)<br>DTG: Increase to 50 mg BID</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Rifabutin (RBT)</th>
+                            <td>RBT: No change (300 mg)<br>DTG: No change (50 mg)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-content">
+                <p>ATV/r, DRV/r </p>
+                <table class="uk-table uk-table-small uk-table-divider">
+                    <tbody>
+                        <tr>
+                            <th>Drug</th>
+                            <th>Dosing</th>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Rifampin (RIF)</th>
+                            <td>DO NOT USE</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Rifabutin (RBT)</th>
+                            <td>RBT: decrease to 150 mg/d<br>PIs: no change</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-content">
+                <p>Efavirenz (EFV) <br> (Note: No longer a first line ART)</p>
+                <table class="uk-table uk-table-small uk-table-divider">
+                    <tbody>
+                        <tr>
+                            <th>Drug</th>
+                            <th>Dosing</th>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Rifampin (RIF)</th>
+                            <td>RIF no change (600 mg)<br>EFV: no change (600 mg qhs)</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Rifabutin (RBT)</th>
+                            <td>DO NOT USE</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>
+                Department of Human Health Services links for ART drug-drug interactions – these are updated frequently
+            </p>
+            <p>Protease inhibitors: <a
+                    href="https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-protease-inhibitors?view=full">https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-protease-inhibitors?view=full</a>
+            </p>
+
+            <p>NNRTIs: <a
+                    href="https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-nnrti?view=full">https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-nnrti?view=full</a>
+            </p>
+
+            <p>NRTIs: <a
+                    href="https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-nrti?view=full">https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-nrti?view=full</a>
+            </p>
+
+            <p>Integrase inhibitors: <a
+                    href="https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-insti?view=full">https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-insti?view=full</a>
+            </p>
+
+            <p>*Preliminary data suggest that there is an increased risk of neural tube defects in infants born to women
+                who were receiving DTG at the time of conception. DTG is contraindicated for pregnant women during first
+                trimester and for women who are planning to become pregnant or are not using effective contraception.
+                DTG is the preferred integrase inhibitor after first trimester.</p>
+
+            <ul>
+                <li>NNRTIs: non-nucleoside reverse transcriptase inhibitors</li>
+                <li>PIs: protease inhibitors</li>
+                <li>ATV/r: Atazanavir/ritonavir</li>
+                <li>DRV/r: Daraunavir/ritonavir</li>
+                <li>LPV/r: Lopinavir/ritonavir</li>
+                <li>RAL: Raltegravir</li>
+                <li>DTG: Dolutegravir</li>
+                <li>/c : boosted with cobicistat</li>
+            </ul>
+
+            <p>Table 18 is based on guidelines developed by the Department of Health and Human Services (DHHS) Panel on
+                Guidelines for Use of Antiretroviral Agents for Adults and Adolescents and Use of Antiretroviral Drugs
+                in Pregnant Women with HIV Infection and Interventions to Reduce Perinatal Transmission in the United
+                States, last reviewed and updated April 15, 2019
+                <a href="http://aidsinfo.nih.gov/guidelines">(aidsinfo.nih.gov/guidelines)</a>
+            </p>
+
+            <p>1-Data on integrase inhibitors and pregnancy outcomes is rapidly evolving and DHHS
+                guidelines are frequently updated.</p>
+
+            <p>2-Cobicistat is currently not recommended for pregnant women.</p>
+
+            <h4 class="custom-table-title" id="table19">Table 19. Adjunctive Use of Corticosteroid Therapy</h4>
+            <div class="uk-overflow-auto table-19-container"
+                id="table_19_guidelines_for_treatment_of_extrapulmonary_tuberculosis">
+                <div class="tabs">
+                    <button class="tab-button" onclick="switchTabInContainer('.table-19-container', 0, event)">Lymph
+                        node</button>
+                    <button class="tab-button" onclick="switchTabInContainer('.table-19-container', 1, event)">Bone
+                        (non-vertebral) and joint</button>
+                    <button class="tab-button" onclick="switchTabInContainer('.table-19-container', 2, event)">Spine
+                        without meningitis</button>
+                    <button class="tab-button" onclick="switchTabInContainer('.table-19-container', 3, event)">Spine
+                        with meningitis</button>
+                    <button class="tab-button" onclick="switchTabInContainer('.table-19-container', 4, event)">CNS
+                        tuberculosis including meningitis</button>
+                    <button class="tab-button" onclick="switchTabInContainer('.table-19-container', 5, event)">Pleural
+                        disease</button>
+                    <button class="tab-button"
+                        onclick="switchTabInContainer('.table-19-container', 6, event)">Pericarditis</button>
+                    <button class="tab-button"
+                        onclick="switchTabInContainer('.table-19-container', 7, event)">Disseminated disease</button>
+                    <button class="tab-button"
+                        onclick="switchTabInContainer('.table-19-container', 8, event)">Genitourinary</button>
+                    <button class="tab-button"
+                        onclick="switchTabInContainer('.table-19-container', 9, event)">Peritoneal</button>
+                </div>
+
+                <div class="tab-content">
+                    <table class="uk-table uk-table-small uk-table-divider">
+                        <tbody>
+                            <tr>
+                                <th class="uk-text-nowrap">Length of therapy</th>
+                                <td>6 months</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Corticosteroids</th>
+                                <td>Not recommended</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Additional management considerations</th>
+                                <td>Pursue microbiologic proof of diagnosis prior to starting Rx</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-content">
+                    <table class="uk-table uk-table-small uk-table-divider">
+                        <tbody>
+                            <tr>
+                                <th class="uk-text-nowrap">Length of therapy</th>
+                                <td>6 to 9 months</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Corticosteroids</th>
+                                <td>Not recommended</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Additional management considerations</th>
+                                <td>Extend to 12 months if hardware is present</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-content">
+                    <table class="uk-table uk-table-small uk-table-divider">
+                        <tbody>
+                            <tr>
+                                <th class="uk-text-nowrap">Length of therapy</th>
+                                <td>6 to 9 months</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Corticosteroids</th>
+                                <td>Not recommended for TB rx but may be indicated for cord compression</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Additional management considerations</th>
+                                <td>Most spine infection can be cured with medical Rx. Surgery indicated for relief of
+                                    cord
+                                    compression, progressive disease despite medical therapy, instability of the spine.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-content">
+                    <table class="uk-table uk-table-small uk-table-divider">
+                        <tbody>
+                            <tr>
+                                <th class="uk-text-nowrap">Length of therapy</th>
+                                <td>9 to 12 months</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Corticosteroids</th>
+                                <td>Strongly recommended</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Steroid dosing</th>
+                                <td>A and C ≥ 25kg: 12 mg/day of dexamethasone x 3 weeks followed by 3-week taper
+                                    <p>C < 25kg: 8 mg/day of dexamethasone for 3 weeks followed by 3-week taper</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Additional management considerations</th>
+                                <td>Most spine infection can be cured with medical Rx. Surgery indicated for relief of
+                                    cord
+                                    compression, progressive disease despite medical therapy, instability of the spine.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-content">
+                    <table class="uk-table uk-table-small uk-table-divider">
+                        <tbody>
+                            <tr>
+                                <th class="uk-text-nowrap">Length of therapy</th>
+                                <td>9-12 months</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Corticosteroids</th>
+                                <td>Strongly recommended</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Additional management considerations</th>
+                                <td>Negative CSF culture or PCR test does NOT exclude this diagnosis
+                                    <p>Follow CSF profile for response to therapy</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-content">
+                    <table class="uk-table uk-table-small uk-table-divider">
+                        <tbody>
+                            <tr>
+                                <th class="uk-text-nowrap">Length of therapy</th>
+                                <td>6 months</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Corticosteroids</th>
+                                <td>Not recommended</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Additional management considerations</th>
+                                <td>Empyema may require decortication</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-content">
+                    <table class="uk-table uk-table-small uk-table-divider">
+                        <tbody>
+                            <tr>
+                                <th class="uk-text-nowrap">Length of therapy</th>
+                                <td>6 months</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Corticosteroids</th>
+                                <td>NO LONGER routinely RECOMMENDED</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Additional management considerations</th>
+                                <td>Consider steroids for patients at highest risk of later constriction:
+                                    large pericardial effusions high levels of inflammatory cells or markers in
+                                    pericardial fluid those
+                                    with early signs of constriction</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-content">
+                    <table class="uk-table uk-table-small uk-table-divider">
+                        <tbody>
+                            <tr>
+                                <th class="uk-text-nowrap">Length of therapy</th>
+                                <td>6 months</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Corticosteroids</th>
+                                <td>Not recommended</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Additional management considerations</th>
+                                <td>Obtain cultures from blood, urine and sputum in addition to clinically apparent
+                                    sites of disease.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-content">
+                    <table class="uk-table uk-table-small uk-table-divider">
+                        <tbody>
+                            <tr>
+                                <th class="uk-text-nowrap">Length of therapy</th>
+                                <td>6 months</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Corticosteroids</th>
+                                <td>Not recommended</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Additional management considerations</th>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-content">
+                    <table class="uk-table uk-table-small uk-table-divider">
+                        <tbody>
+                            <tr>
+                                <th class="uk-text-nowrap">Length of therapy</th>
+                                <td>6 months</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Corticosteroids</th>
+                                <td>Not recommended</td>
+                            </tr>
+                            <tr>
+                                <th class="uk-text-nowrap">Additional management considerations</th>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p>
+                    2 mg/kg prednisone daily over three weeks, followed by taper Maximum dose 60 mg <br>OR<br>
+                    Dexamethasone 0.3-0.6 mg/kg daily over three weeks, followed by taper Round to nearest tablet size
+                    (2, 4, 6 mg) Maximum dose 12 mg
+                </p>
+            </div>
+        </div>
 </body>
 <script src="../assets/uikit.js" type="text/javascript"></script>
-<script src="../assets/uikit-icons.js" type="text/javascript"></script>
+<script src="../assets/script.js" type="text/javascript"></script>
+<script src="../assets/main.js" type="text/javascript"></script>
+<script>
+    function switchTabInContainer(containerSelector, tabIndex, event) {
+        // Get the specific container where the click happened
+        const container = event ?
+            event.currentTarget.closest(containerSelector) :
+            document.querySelector(containerSelector);
+
+        if (!container) return;
+
+        const tabs = container.querySelectorAll('.tab-button');
+        const contents = container.querySelectorAll('.tab-content');
+
+        const previousActiveTab = container.querySelector('.tab-button.active-option');
+        const previousActiveContent = container.querySelector('.tab-content.active-tab');
+
+        if (previousActiveTab) {
+            previousActiveTab.classList.remove('active-option');
+        }
+
+        if (previousActiveContent) {
+            previousActiveContent.style.display = 'none';
+            previousActiveContent.classList.remove('active-tab', 'active-option');
+        }
+
+        if (tabs[tabIndex]) {
+            tabs[tabIndex].classList.add('active-option');
+        }
+        if (contents[tabIndex]) {
+            contents[tabIndex].style.display = '';
+            contents[tabIndex].classList.add('active-tab', 'active-option');
+        }
+
+        if (event) event.preventDefault();
+    }
+
+    // Initialize each table independently
+    document.addEventListener('DOMContentLoaded', function () {
+        const containers = [
+            { selector: '.table-18-container', initialTab: 0 },
+            { selector: '.table-19-container', initialTab: 0 }
+        ];
+
+        containers.forEach(({ selector, initialTab }) => {
+            const container = document.querySelector(selector);
+            if (container) {
+                // Hide all contents except initial
+                const contents = container.querySelectorAll('.tab-content');
+                contents.forEach((content, i) => {
+                    if (i === initialTab) {
+                        content.style.display = '';
+                        content.classList.add('active-tab', 'active-option');
+                    } else {
+                        content.style.display = 'none';
+                        content.classList.remove('active-tab', 'active-option');
+                    }
+                });
+
+                // Set initial active tab
+                const firstTab = container.querySelector('.tab-button');
+                if (firstTab) firstTab.classList.add('active-option');
+            }
+        });
+    });
+</script>
+
 </html>

@@ -43,6 +43,10 @@ class FASavedViewModel @Inject constructor(
         db.bookmarkDao().insert(data)
     }
 
+    fun updateBookmark(data: BookmarkEntity) = viewModelScope.launch {
+        db.bookmarkDao().update(data)
+    }
+
 
     fun deleteNote(data: NoteEntity) = viewModelScope.launch {
         db.noteDao().delete(data)
