@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="281dp"
     android:layout_height="wrap_content"
-    android:minHeight="185dp"
+
     android:layout_gravity="center"
     android:background="@drawable/bookmark_popup_background">
 
@@ -11,7 +11,7 @@
         android:layout_height="82dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="35dp"
         android:fillViewport="true"
         android:scrollbars="vertical">
 
@@ -32,7 +32,7 @@
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="145dp"
+        android:layout_marginTop="150dp"
         android:background="@drawable/bookmark_popup_visit_button_bg"
         android:backgroundTint="@null"
         android:text="Visit"
@@ -47,7 +47,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="141dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="145dp"
+        android:layout_marginTop="150dp"
         android:background="@drawable/bookmark_popup_dismiss_button_bg"
         android:backgroundTint="@null"
         android:text="Dismiss"

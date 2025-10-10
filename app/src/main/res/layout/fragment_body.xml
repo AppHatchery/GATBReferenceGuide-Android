@@ -151,10 +151,15 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="?attr/colorGrayWhite"
-                android:textSize="12dp"
+                android:textSize="12sp"
                 android:maxLines="1"
+                android:ellipsize="end"
                 android:includeFontPadding="false"
                 android:paddingTop="2dp"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="11sp"
+                app:autoSizeMaxTextSize="12sp"
+                app:autoSizeStepGranularity="1sp"
                 android:text="@string/home" />
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -186,11 +191,16 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="?attr/colorGrayWhite"
-                android:textSize="12dp"
+                android:textSize="12sp"
+                android:ellipsize="end"
                 android:maxLines="1"
                 android:includeFontPadding="false"
                 android:paddingTop="2dp"
-                android:text="@string/share" />
+                android:text="@string/share"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="11sp"
+                app:autoSizeMaxTextSize="12sp"
+                app:autoSizeStepGranularity="1sp"/>
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <!--Bookmark-->
@@ -259,11 +269,16 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="?attr/colorGrayWhite"
-                android:textSize="12dp"
+                android:textSize="12sp"
+                android:ellipsize="end"
                 android:maxLines="1"
                 android:includeFontPadding="false"
                 android:paddingTop="2dp"
-                android:text="@string/note" />
+                android:text="@string/note"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="11sp"
+                app:autoSizeMaxTextSize="12sp"
+                app:autoSizeStepGranularity="1sp"/>
         </androidx.appcompat.widget.LinearLayoutCompat>
 
         <!-- Font -->
@@ -291,11 +306,16 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:textColor="?attr/colorGrayWhite"
-                android:textSize="12dp"
+                android:textSize="12sp"
+                android:ellipsize="end"
                 android:maxLines="1"
                 android:includeFontPadding="false"
                 android:paddingTop="2dp"
-                android:text="@string/font" />
+                android:text="@string/font"
+                app:autoSizeTextType="uniform"
+                app:autoSizeMinTextSize="11sp"
+                app:autoSizeMaxTextSize="12sp"
+                app:autoSizeStepGranularity="1sp"/>
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.appcompat.widget.LinearLayoutCompat>
     <!-- Floating Notes Button -->
