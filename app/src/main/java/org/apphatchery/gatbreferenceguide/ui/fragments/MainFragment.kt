@@ -3,9 +3,7 @@ package org.apphatchery.gatbreferenceguide.ui.fragments
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
-import android.webkit.JavascriptInterface
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -16,24 +14,20 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.Visibility
-import com.google.firebase.dynamiclinks.ktx.dynamicLinks
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.Firebase
+import com.google.firebase.dynamiclinks.dynamicLinks
 import com.google.firebase.remoteconfig.ConfigUpdate
 import com.google.firebase.remoteconfig.ConfigUpdateListener
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
-import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentMainBinding
@@ -49,7 +43,6 @@ import org.apphatchery.gatbreferenceguide.utils.*
 import sdk.pendo.io.Pendo
 import java.util.UUID
 import javax.inject.Inject
-import kotlin.coroutines.resume
 
 
 private const val BUILD_VERSION = 12

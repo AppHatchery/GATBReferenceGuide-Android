@@ -34,6 +34,11 @@ import org.apphatchery.gatbreferenceguide.utils.*
 import javax.inject.Inject
 import android.widget.EditText
 import android.view.inputmethod.EditorInfo
+import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 
 
 @AndroidEntryPoint
@@ -56,16 +61,34 @@ class MainActivity : AppCompatActivity(), ActionBarController {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
         setupActionBar()
         setupNavigation()
         setupRemoteConfig()
-        
+
         preferenceManager = PreferenceManager.getDefaultSharedPreferences(this)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         searchState.exitSearchMode()
+        window.statusBarColor = ContextCompat.getColor(this, R.color.reddish)
+        enableEdgeToEdge()
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            binding.statusBarBackground.updateLayoutParams {
+                height = insets.top
+            }
+
+            view.updatePadding(
+                left = insets.left,
+                right = insets.right,
+                bottom = insets.bottom
+            )
+
+            WindowInsetsCompat.CONSUMED
+        }
     }
-    
+
     private fun setupActionBar() {
         supportActionBar?.elevation = 0f
         supportActionBar?.let { actionBar ->
