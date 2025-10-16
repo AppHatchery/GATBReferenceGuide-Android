@@ -10,39 +10,6 @@
     <meta content="SitePoint" name="author">
     <link href="../assets/uikit.css" rel="stylesheet">
     <link href="../assets/style.css" rel="stylesheet">
-    <style>
-        /* Scoped styles for Table 20 */
-        .table-20-container .uk-table th,
-        .table-20-container .uk-table td {
-            width: 50% !important;
-        }
-
-        .table-20-container .tab-button {
-            width: 250px;
-            height: 100px;
-            white-space: normal;
-            text-align: center;
-            padding: 0.5rem;
-            font-size: 0.9rem;
-            flex: none;
-        }
-
-        .table-20-container .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 1rem;
-            justify-content: center;
-        }
-
-        /* Responsive adjustments for tabs */
-        @media (max-width: 959px) {
-            .table-20-container .tab-button {
-                width: 200px;
-                height: 70px;
-            }
-        }
-    </style>
 </head>
 <body>
 
@@ -50,8 +17,9 @@
     <p> <span class="view-in-chapter-highlight"> View in chapter → <span> <a href="6_pregnancy_and_tb__b__treatment_of_active_tb_in_pregnancy.html#table20"> Treatment of Active TB in Pregnancy </a></p>
     <p class="last-updated"><i>Last Updated October 2025</i></p>
     <hr>
-    <div class="uk-overflow-auto table-20-container" id="table_20_use_of_anti-tb_medications_in_special_situations_pregnancy_tuberculosis_meningitis_and_renal_failure">
-        <div class="tabs">
+    <div class="uk-overflow-auto" id="table_20_use_of_anti-tb_medications_in_special_situations_pregnancy_tuberculosis_meningitis_and_renal_failure">
+        <div class="uk-tabs-container">
+            <div class="tabs">
             <button class="tab-button" onclick="switchTab(0, event)">Isoniazid</button>
             <button class="tab-button" onclick="switchTab(1, event)">Rifampin</button>
             <button class="tab-button" onclick="switchTab(2, event)">Pyrazinamide</button>
@@ -297,6 +265,7 @@
         <p>(6) Avoid aminoglycosides and capreomycin in patients with reversible renal damage, if possible.</p>
         <p>(7) Fluoroquinolones may accumulate in renal failure and are poorly removed by dialysis. Dose adjustment
             indicated.</p>
+        </div>
     </div>
 </div>
 </body>

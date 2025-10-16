@@ -10,39 +10,6 @@
     <meta content="SitePoint" name="author">
     <link href="../assets/uikit.css" rel="stylesheet">
     <link href="../assets/style.css" rel="stylesheet">
-    <style>
-        /* Scoped styles for Table 18 */
-        .table-18-container .uk-table th,
-        .table-18-container .uk-table td {
-            width: 50% !important;
-        }
-
-        .table-18-container .tab-button {
-            width: 250px;
-            height: 100px;
-            white-space: normal;
-            text-align: center;
-            padding: 0.5rem;
-            font-size: 0.9rem;
-            flex: none;
-        }
-
-        .table-18-container .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 1rem;
-            justify-content: center;
-        }
-
-        /* Responsive adjustments for tabs */
-        @media (max-width: 959px) {
-            .table-18-container .tab-button {
-                width: 200px;
-                height: 70px;
-            }
-        }
-    </style>
 </head>
 
 
@@ -51,8 +18,9 @@
     <h4 id="table18">Table 18. Dosage Adjustments for ART and Rifamycins when used in Combination</h4>
     <p class="last-updated"><i>Last Updated October 2025</i></p>
     <hr>
-    <div class="uk-overflow-auto table-18-container">
-        <div class="tabs">
+    <div class="uk-overflow-auto">
+        <div class="uk-tabs-container">
+            <div class="tabs">
             <button class="tab-button" onclick="switchTab(0, event)">Integrase<br>Inhibitor</button>
             <button class="tab-button" onclick="switchTab(1, event)">Boosted PI</button>
             <button class="tab-button" onclick="switchTab(2, event)">NNRTI</button>
@@ -154,6 +122,7 @@
             guidelines are frequently updated.</p>
 
         <p>2-Cobicistat is currently not recommended for pregnant women.</p>
+        </div>
     </div>
 </div>
 </body>
@@ -164,7 +133,7 @@
 <script>
     // Initialize the first tab as active
     document.addEventListener('DOMContentLoaded', function() {
-        const tableContainer = document.querySelector('.table-18-container');
+        const tableContainer = document.querySelector('.uk-tabs-container');
         const firstTab = tableContainer.querySelector('.tab-button');
         firstTab.classList.add('active-option');
         const firstContent = tableContainer.querySelector('.tab-content');
