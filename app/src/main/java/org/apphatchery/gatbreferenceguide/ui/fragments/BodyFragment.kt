@@ -838,6 +838,10 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
                 val searchInput = bodyUrl.searchQuery
                 if (searchInput.isNotEmpty() && !isOnlyWhitespace(searchInput)) {
+                    // expand any collapsed sections containing the search term
+                    expandSectionsWithSearchResults(searchInput)
+                    
+                    // then perform the search with a delay to allow time for expansion
                     Handler(Looper.getMainLooper()).postDelayed({
                         view?.findAllAsync(searchInput)
                     }, 300)
@@ -1251,6 +1255,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
     private fun performInPageSearch(searchQuery: String) {
         if (searchQuery.isNotEmpty()) {
+            // expand any collapsed sections containing the search term
+            expandSectionsWithSearchResults(searchQuery)
+            
             // Set up the search result listener
             bind.bodyWebView.setOnSearchResultListener { totalMatches, currentMatch ->
                 this.totalMatches = totalMatches
@@ -1258,12 +1265,145 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 updateSearchUI()
             }
             
-            // Perform WebView search
-            bind.bodyWebView.findAllAsync(searchQuery)
-            bind.searchClearContainer.visibility = View.GONE
+            // Perform WebView search after a short delay to allow expansion
+            Handler(Looper.getMainLooper()).postDelayed({
+                bind.bodyWebView.findAllAsync(searchQuery)
+                bind.searchClearContainer.visibility = View.GONE
+            }, 300) // Increased delay to ensure dropdowns are expanded
             
             Log.d("BodyFragment", "Performing search for: $searchQuery")
         }
+    }
+
+    private fun expandSectionsWithSearchResults(searchQuery: String) {
+        // Escape special characters in the search query for regex
+        val escapedQuery = searchQuery.replace(Regex("[.\\\\+*?\\[\\]^$(){}|]"), "\\\\$0")
+        
+        val jsCode = """
+            javascript:(function() {
+                var searchText = '$escapedQuery';
+                var searchRegex = new RegExp(searchText.replace(/[\s.,]+/g, '\\s*'), 'gi');
+                var expandedCount = 0;
+                
+                // Find all dropdown items (divs with class 'item')
+                var allItems = document.querySelectorAll('.item');
+                
+                allItems.forEach(function(item) {
+                    var textContent = item.textContent || item.innerText;
+                    
+                    // If this item contains the search term and is not already active
+                    if (searchRegex.test(textContent) && !item.classList.contains('active')) {
+                        // Find the title element (previous sibling with toggle-title class)
+                        var title = item.previousElementSibling;
+                        
+                        if (title && title.classList.contains('toggle-title')) {
+                            // Add active class to item
+                            item.classList.add('active');
+                            
+                            // Add active class to chevron if it exists
+                            var chevron = title.querySelector('.chevron-up');
+                            if (chevron) {
+                                chevron.classList.add('active');
+                            }
+                            
+                            expandedCount++;
+                            console.log('Expanded dropdown containing search result');
+                        }
+                    }
+                });
+                
+                // Also check for HTML5 <details> elements
+                var details = document.querySelectorAll('details');
+                details.forEach(function(detail) {
+                    var textContent = detail.textContent || detail.innerText;
+                    if (searchRegex.test(textContent) && !detail.open) {
+                        detail.open = true;
+                        expandedCount++;
+                    }
+                });
+                
+                // Handle tab content that might be hidden
+                var tabContents = document.querySelectorAll('.tab-content, .option-content');
+                tabContents.forEach(function(tabContent) {
+                    var textContent = tabContent.textContent || tabContent.innerText;
+                    
+                    if (searchRegex.test(textContent) && !tabContent.classList.contains('active-tab') && !tabContent.classList.contains('active-option')) {
+                        // Find the parent table container
+                        var tableContainer = tabContent.closest('.uk-overflow-auto');
+                        if (tableContainer) {
+                            // Find all tab contents in this container
+                            var allTabContents = tableContainer.querySelectorAll('.tab-content, .option-content');
+                            var tabIndex = Array.from(allTabContents).indexOf(tabContent);
+                            
+                            if (tabIndex >= 0) {
+                                // Get all tab buttons
+                                var tabButtons = tableContainer.querySelectorAll('.tab-button, .tab');
+                                
+                                // Remove active classes from all tabs
+                                tabButtons.forEach(function(btn) {
+                                    btn.classList.remove('active-option', 'active-tab');
+                                });
+                                allTabContents.forEach(function(content) {
+                                    content.classList.remove('active-option', 'active-tab');
+                                });
+                                
+                                // Add active class to the tab with search result
+                                var targetButton = tabButtons[tabIndex];
+                                if (targetButton) {
+                                    if (targetButton.classList.contains('tab')) {
+                                        targetButton.classList.add('active-tab');
+                                        tabContent.classList.add('active-tab');
+                                    } else if (targetButton.classList.contains('tab-button')) {
+                                        targetButton.classList.add('active-option');
+                                        tabContent.classList.add('active-option');
+                                    }
+                                    expandedCount++;
+                                    console.log('Switched to tab containing search result');
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                console.log('Expanded ' + expandedCount + ' sections containing search results');
+            })();
+        """.trimIndent()
+        
+        bind.bodyWebView.evaluateJavascript(jsCode) { result ->
+            Log.d("BodyFragment", "Expanded dropdowns for search: $searchQuery")
+        }
+    }
+
+    private fun collapseExpandedSections() {
+        val jsCode = """
+            javascript:(function() {
+                // Collapse HTML5 details elements
+                var details = document.querySelectorAll('details[open]');
+                details.forEach(function(detail) {
+                    detail.open = false;
+                });
+                
+                // Collapse custom dropdown items (remove 'active' class from .item divs)
+                var activeItems = document.querySelectorAll('.item.active');
+                activeItems.forEach(function(item) {
+                    item.classList.remove('active');
+                    
+                    // remove active from chevron in the previous sibling (toggle-title)
+                    var title = item.previousElementSibling;
+                    if (title && title.classList.contains('toggle-title')) {
+                        var chevron = title.querySelector('.chevron-up.active');
+                        if (chevron) {
+                            chevron.classList.remove('active');
+                        }
+                    }
+                });
+                
+               
+                console.log('Collapsed expanded sections');
+            })();
+        """.trimIndent()
+        
+        bind.bodyWebView.evaluateJavascript(jsCode, null)
     }
 
     private fun updateSearchCount(query: String) {
@@ -1371,6 +1511,10 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private fun clearWebViewSearch() {
         bind.bodyWebView.clearMatches()
         bind.searchClearContainer.visibility = View.GONE
+        
+        // Optionally collapse expanded sections when clearing search
+        collapseExpandedSections()
+        
         Log.d("BodyFragment", "Cleared WebView search")
     }
 

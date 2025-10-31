@@ -10,39 +10,6 @@
     <meta content="SitePoint" name="author">
     <link href="../assets/uikit.css" rel="stylesheet">
     <link href="../assets/style.css" rel="stylesheet">
-    <style>
-        /* Scoped styles for Table 19 */
-        .table-19-container .uk-table th,
-        .table-19-container .uk-table td {
-            width: 50% !important;
-        }
-
-        .table-19-container .tab-button {
-            width: 250px;
-            height: 100px;
-            white-space: normal;
-            text-align: center;
-            padding: 0.5rem;
-            font-size: 0.9rem;
-            flex: none;
-        }
-
-        .table-19-container .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 1rem;
-            justify-content: center;
-        }
-
-        /* Responsive adjustments for tabs */
-        @media (max-width: 959px) {
-            .table-19-container .tab-button {
-                width: 200px;
-                height: 70px;
-            }
-        }
-    </style>
 </head>
 
 
@@ -51,8 +18,9 @@
     <p> <span class="view-in-chapter-highlight"> View in chapter → <span> <a href="5_treatment_of_current_(active)_disease_therapy__j__adjunctive_use_of_corticosteroid_therapy.html#table19"> Adjunctive Use of Corticosteroid Therapy</a></p>
     <p class="last-updated"><i>Last Updated October 2025</i></p>
     <hr>
-    <div class="uk-overflow-auto table-19-container" id="table_19_guidelines_for_treatment_of_extrapulmonary_tuberculosis">
-        <div class="tabs">
+    <div class="uk-overflow-auto" id="table_19_guidelines_for_treatment_of_extrapulmonary_tuberculosis">
+        <div class="uk-tabs-container">
+            <div class="tabs">
             <button class="tab-button" onclick="switchTab(0, event)">Lymph node</button>
             <button class="tab-button" onclick="switchTab(1, event)">Bone (non-vertebral) and joint</button>
             <button class="tab-button" onclick="switchTab(2, event)">Spine without meningitis</button>
@@ -269,6 +237,7 @@
             2 mg/kg prednisone daily over three weeks, followed by taper Maximum dose 60 mg <br>OR<br>
             Dexamethasone 0.3-0.6 mg/kg daily over three weeks, followed by taper Round to nearest tablet size (2, 4, 6 mg) Maximum dose 12 mg
         </p>
+        </div>
     </div>
 </div>
 </body>

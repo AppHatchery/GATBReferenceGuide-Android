@@ -10,39 +10,6 @@
     <meta content="SitePoint" name="author">
     <link href="../assets/uikit.css" rel="stylesheet">
     <link href="../assets/style.css" rel="stylesheet">
-    <style>
-        /* Scoped styles for Table 15 */
-        .table-15-container .uk-table th,
-        .table-15-container .uk-table td {
-            width: 50% !important;
-        }
-
-        .table-15-container .tab-button {
-            width: 250px;
-            height: 100px;
-            white-space: normal;
-            text-align: center;
-            padding: 0.5rem;
-            font-size: 0.9rem;
-            flex: none;
-        }
-
-        .table-15-container .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 1rem;
-            justify-content: center;
-        }
-
-        /* Responsive adjustments for tabs */
-        @media (max-width: 959px) {
-            .table-15-container .tab-button {
-                width: 200px;
-                height: 70px;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -50,8 +17,9 @@
     <p> <span class="view-in-chapter-highlight"> View in chapter → <span> <a href="5_treatment_of_current_(active)_disease_therapy__c__special_clinical_situations.html/#table15"> Special Clinical Situations </a></p>
     <p class="last-updated"><i>Last Updated October 2025</i></p>
     <hr>
-    <div class="uk-overflow-auto table-15-container" id="table_15_clinical_situations_for_which_standard_therapy_cannot_be_given_or_is_not_well_tolerated">
-        <div class="tabs">
+    <div class="uk-overflow-auto" id="table_15_clinical_situations_for_which_standard_therapy_cannot_be_given_or_is_not_well_tolerated">
+        <div class="uk-tabs-container">
+            <div class="tabs">
             <button class="tab-button" onclick="switchTab(0, event)">Critical illness requiring vasopressors</button>
             <button class="tab-button" onclick="switchTab(1, event)">Proven or suspected meningeal TB</button>
             <button class="tab-button" onclick="switchTab(2, event)">Patient age 75 years or greater</button>
@@ -235,6 +203,7 @@
         <p>5-Associated with otovestibular toxicity</p>
         <p>6-These recommendations are meant for patients with known drug-susceptible TB or at low risk for drug-
             resistant TB</p>
+        </div>
     </div>
 </div>
 </body>
