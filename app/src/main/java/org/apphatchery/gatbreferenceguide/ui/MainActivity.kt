@@ -130,6 +130,43 @@ class MainActivity : AppCompatActivity(), ActionBarController {
         }
 
         binding.bottomNavigationView.setupWithNavController(navController)
+
+        // Intercept bottom navigation selections so that selecting any bottom-nav
+        // item always navigates to that destination (popping back to it if it's
+        // already in the back stack). This guarantees the Home button always
+        // leads to the mainFragment regardless of intermediate navigation.
+        binding.bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.mainFragment -> {
+                    // If mainFragment is already in the back stack, pop back to it.
+                    // Otherwise navigate to it.
+                    val popped = navController.popBackStack(R.id.mainFragment, false)
+                    if (!popped) navController.navigate(R.id.mainFragment)
+                    true
+                }
+                R.id.globalSearchFragment -> {
+                    val popped = navController.popBackStack(R.id.globalSearchFragment, false)
+                    if (!popped) navController.navigate(R.id.globalSearchFragment)
+                    true
+                }
+                R.id.settingsFragment -> {
+                    val popped = navController.popBackStack(R.id.settingsFragment, false)
+                    if (!popped) navController.navigate(R.id.settingsFragment)
+                    true
+                }
+                else -> false
+            }
+        }
+
+        // Keep a reselection handler for when the user taps the already-selected
+        // item (e.g., scroll-to-top or ensure we are on the root of that tab).
+        binding.bottomNavigationView.setOnItemReselectedListener { item ->
+            when (item.itemId) {
+                R.id.mainFragment -> navController.popBackStack(R.id.mainFragment, false)
+                R.id.globalSearchFragment -> navController.popBackStack(R.id.globalSearchFragment, false)
+                R.id.settingsFragment -> navController.popBackStack(R.id.settingsFragment, false)
+            }
+        }
         // Removed this line to the prevent default back arrow:
         // setupActionBarWithNavController(navController, AppBarConfiguration(navController.graph))
     }
