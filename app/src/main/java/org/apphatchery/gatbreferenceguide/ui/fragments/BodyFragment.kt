@@ -814,7 +814,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     var urlGlobal: String? = null
 
     private fun setupWebView() = bind.bodyWebView.apply {
-        onZoomOut()
+        // onZoomOut()
         
         // JavaScript interface for search results
         addJavascriptInterface(object {
