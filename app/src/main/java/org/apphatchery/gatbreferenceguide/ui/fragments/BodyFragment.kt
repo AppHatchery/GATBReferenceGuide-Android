@@ -185,6 +185,17 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 val iconPx = 16.0 * scaleFactor
                 val iconPxStr = String.format("%.2f", iconPx)
 
+            // Compute scaled metrics for the decorative line used by `.uk-paragraph`
+            val remBasePx = 16.0 // 1rem baseline
+            val ukHeightPx = 2.0 * remBasePx * scaleFactor      // was 2rem
+            val ukWidthPx = 0.5 * remBasePx * scaleFactor       // was 0.5rem
+            val ukTopPx = -0.25 * remBasePx * scaleFactor       // was -0.25rem
+            val ukRadiusPx = 0.25 * remBasePx * scaleFactor     // was 0.25rem
+            val ukHeightPxStr = String.format("%.2f", ukHeightPx)
+            val ukWidthPxStr = String.format("%.2f", ukWidthPx)
+            val ukTopPxStr = String.format("%.2f", ukTopPx)
+            val ukRadiusPxStr = String.format("%.2f", ukRadiusPx)
+
                 // 1) Set CSS variable consumed by .ic_chapter_icon in style.css (which uses !important)
                 val setVar = """
                         (function(){
@@ -223,7 +234,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                         })();
                 """.trimIndent()
 
-                // 4) Also apply inline size and attributes so pages missing style.css still resize correctly
+                // 4) also apply inline size and attributes so pages missing style.css still resize correctly
                 val sizeIcons = """
                         (function(){
                              try {
@@ -253,12 +264,41 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                         })();
                 """.trimIndent()
 
+                // 5) Scale the decorative line for paragraphs `.uk-paragraph::before` to match text zoom
+                val paragraphOverride = """
+                        (function(){
+                             try {
+                                 var style = document.getElementById('uk-paragraph-override');
+                                 if(!style){
+                                     style = document.createElement('style');
+                                     style.id = 'uk-paragraph-override';
+                                     document.head.appendChild(style);
+                                 }
+                                 var h='${ukHeightPxStr}px';
+                                 var w='${ukWidthPxStr}px';
+                                 var t='${ukTopPxStr}px';
+                                 var r='${ukRadiusPxStr}px';
+                                 style.textContent = ''+
+                                   '.uk-paragraph{position: relative;}'+
+                                   '.uk-paragraph::before{'+
+                                     'content:""; position:absolute; left:0; '+
+                                     'top:'+t+' !important; '+
+                                     'height:'+h+' !important; '+
+                                     'width:'+w+' !important; '+
+                                     'background-color: var(--primary-color); '+
+                                     'border-radius:'+r+' !important;'+
+                                   '}';
+                             } catch(e) {}
+                        })();
+                """.trimIndent()
+
                 // Execute after WebView layout pass
                 webViewFont.post {
                         webViewFont.evaluateJavascript(setVar, null)
                         webViewFont.evaluateJavascript(tagIcons, null)
                         webViewFont.evaluateJavascript(injectOverride, null)
             webViewFont.evaluateJavascript(sizeIcons, null)
+            webViewFont.evaluateJavascript(paragraphOverride, null)
                 }
     }
 
