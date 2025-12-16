@@ -1,6 +1,8 @@
 package org.apphatchery.gatbreferenceguide.app
 
 import android.app.Application
+import android.content.Context
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
 import com.google.firebase.FirebaseApp
@@ -10,6 +12,12 @@ import sdk.pendo.io.Pendo
 
 @HiltAndroidApp
 class App : Application() {
+
+    override fun attachBaseContext(base: Context) {
+        val configuration = Configuration(base.resources.configuration)
+        configuration.fontScale = 1.0f
+        super.attachBaseContext(base.createConfigurationContext(configuration))
+    }
 
     override fun onCreate() {
         super.onCreate()

@@ -1,7 +1,9 @@
 package org.apphatchery.gatbreferenceguide.ui
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -56,6 +58,12 @@ class MainActivity : AppCompatActivity(), ActionBarController {
 
     // Search view properties - will be initialized when needed
     private var searchViewContainer: View? = null
+
+    override fun attachBaseContext(newBase: Context) {
+        val configuration = Configuration(newBase.resources.configuration)
+        configuration.fontScale = 1.0f
+        super.attachBaseContext(newBase.createConfigurationContext(configuration))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
