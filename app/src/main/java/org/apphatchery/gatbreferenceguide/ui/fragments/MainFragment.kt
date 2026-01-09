@@ -137,8 +137,8 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                         add(data[13].copy(chartEntity = data[13].chartEntity.copy(chartTitle = "IV Therapy Drugs")))
                         add(data[14].copy(chartEntity = data[14].chartEntity.copy(chartTitle = "Alternative Regimens")))
                         add(data[4].copy(chartEntity = data[4].chartEntity.copy(chartTitle = "Dosages for LTBI Regimens")))
-                        add(data[18].copy(chartEntity = data[18].chartEntity.copy(chartTitle = "Treatment of Extra- pulmonary TB")))
-                        add(data[19].copy(chartEntity = data[19].chartEntity.copy(chartTitle = "TB drugs in Special Situations")))
+                        add(data[15].copy(chartEntity = data[15].chartEntity.copy(chartTitle = "Treatment of Extra- pulmonary TB")))
+                        add(data[17].copy(chartEntity = data[17].chartEntity.copy(chartTitle = "TB drugs in Special Situations")))
                         adapter.submitList(this)
                     }
                 }

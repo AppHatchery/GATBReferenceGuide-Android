@@ -96,6 +96,7 @@ import androidx.activity.OnBackPressedCallback
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import org.apphatchery.gatbreferenceguide.utils.toShortTableTitle
 
 @AndroidEntryPoint
 class BodyFragment : BaseFragment(R.layout.fragment_body) {
@@ -184,6 +185,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 val scaleFactor = fontSize / 125.0
                 val iconPx = 16.0 * scaleFactor
                 val iconPxStr = String.format("%.2f", iconPx)
+                // Make table icons slightly larger at Normal (125%)
+                val tableIconPx = 24.0 * scaleFactor
+                val tableIconPxStr = String.format("%.2f", tableIconPx)
 
             // Compute scaled metrics for the decorative line used by `.uk-paragraph`
             val remBasePx = 16.0 // 1rem baseline
@@ -218,6 +222,18 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                         })();
                 """.trimIndent()
 
+                // Tag table icons (ic_table.svg) similarly
+                val tagTableIcons = """
+                        (function(){
+                            try {
+                                var nodes = document.querySelectorAll('img[src$="ic_chart.svg"], img[src*="/ic_chart.svg"], img[src*="ic_chart.svg"]');
+                                nodes.forEach(function(n){
+                                    if(n.classList && !n.classList.contains('ic_chart_icon')) n.classList.add('ic_chart_icon');
+                                });
+                            } catch(e) {}
+                        })();
+                """.trimIndent()
+
                 // 3) Inject an explicit override rule with !important placed after external CSS
                 val injectOverride = """
                         (function(){
@@ -230,6 +246,22 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                                  }
                                  var size='${iconPxStr}px';
                                  style.textContent = '.ic_chapter_icon{width:'+size+' !important;height:'+size+' !important;}';
+                             } catch(e) {}
+                        })();
+                """.trimIndent()
+
+                // Inject explicit override for table icons after external CSS
+                val injectTableOverride = """
+                        (function(){
+                             try {
+                                 var style = document.getElementById('table-icon-override');
+                                 if(!style){
+                                     style = document.createElement('style');
+                                     style.id = 'table-icon-override';
+                                     document.head.appendChild(style);
+                                 }
+                                 var size='${tableIconPxStr}px';
+                                 style.textContent = '.ic_chart_icon{width:'+size+' !important;height:'+size+' !important;display:inline-block !important;vertical-align:middle !important;object-fit:contain !important;}';
                              } catch(e) {}
                         })();
                 """.trimIndent()
@@ -255,6 +287,35 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                                      n.style.height = cssSize;
                                      n.style.maxWidth = cssSize;
                                      n.style.maxHeight = cssSize;
+                                     if (n.setAttribute) {
+                                         n.setAttribute('width', attrSize);
+                                         n.setAttribute('height', attrSize);
+                                     }
+                                 });
+                             } catch(e) {}
+                        })();
+                """.trimIndent()
+
+                // Apply inline size fallback for table icons (resists layout squeeze)
+                val sizeTableIcons = """
+                        (function(){
+                             try {
+                                 var cssSize='${tableIconPxStr}px';
+                                 var attrSize='${tableIconPxStr}';
+                                 var nodes = document.querySelectorAll('img[src$=\"ic_chart.svg\"], img[src*=\"/ic_chart.svg\"], img[src*=\"ic_chart.svg\"]');
+                                 nodes.forEach(function(n){
+                                     var p = n.parentElement;
+                                     if (p) {
+                                         p.style.width = cssSize;
+                                         p.style.height = cssSize;
+                                     }
+                                     n.style.display = 'inline-block';
+                                     n.style.width = cssSize;
+                                     n.style.height = cssSize;
+                                     n.style.maxWidth = cssSize;
+                                     n.style.maxHeight = cssSize;
+                                     n.style.objectFit = 'contain';
+                                     n.style.verticalAlign = 'middle';
                                      if (n.setAttribute) {
                                          n.setAttribute('width', attrSize);
                                          n.setAttribute('height', attrSize);
@@ -296,8 +357,11 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 webViewFont.post {
                         webViewFont.evaluateJavascript(setVar, null)
                         webViewFont.evaluateJavascript(tagIcons, null)
+                    webViewFont.evaluateJavascript(tagTableIcons, null)
                         webViewFont.evaluateJavascript(injectOverride, null)
+                    webViewFont.evaluateJavascript(injectTableOverride, null)
             webViewFont.evaluateJavascript(sizeIcons, null)
+                    webViewFont.evaluateJavascript(sizeTableIcons, null)
             webViewFont.evaluateJavascript(paragraphOverride, null)
                 }
     }
@@ -426,7 +490,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             // For regular content, use the subchapter title
             HtmlCompat.fromHtml(subChapterEntity.subChapterTitle, FROM_HTML_MODE_LEGACY).toString()
         }
-    setActionBarTitle(contentTitle)
+    setActionBarTitle(contentTitle.toShortTableTitle())
 
         // Setup search functionality only for subchapter content (not charts)
         if (chartAndSubChapter == null) {

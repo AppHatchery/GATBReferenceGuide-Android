@@ -11,71 +11,6 @@
     <meta content="SitePoint" name="author">
     <link href="../assets/uikit.css" rel="stylesheet">
     <link href="../assets/style.css" rel="stylesheet">
-    <style>
-        /* Scoped styles for Table 19 */
-        .table-19-container .uk-table th,
-        .table-19-container .uk-table td {
-            width: 50% !important;
-        }
-
-        .table-19-container .tab-button {
-            width: 250px;
-            height: 100px;
-            white-space: normal;
-            text-align: center;
-            padding: 0.5rem;
-            font-size: 0.9rem;
-            flex: none;
-        }
-
-        .table-19-container .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 1rem;
-            justify-content: center;
-        }
-
-        /* Responsive adjustments for tabs */
-        @media (max-width: 959px) {
-            .table-19-container .tab-button {
-                width: 200px;
-                height: 70px;
-            }
-        }
-
-        /* Scoped styles for Table 18 */
-        .table-18-container .uk-table th,
-        .table-18-container .uk-table td {
-            width: 50% !important;
-        }
-
-        .table-18-container .tab-button {
-            width: 250px;
-            height: 100px;
-            white-space: normal;
-            text-align: center;
-            padding: 0.5rem;
-            font-size: 0.9rem;
-            flex: none;
-        }
-
-        .table-18-container .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 1rem;
-            justify-content: center;
-        }
-
-        /* Responsive adjustments for tabs */
-        @media (max-width: 959px) {
-            .table-18-container .tab-button {
-                width: 200px;
-                height: 70px;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -84,7 +19,7 @@
             <div class="chapter-header">
                 <div class="header-title">
                     <div>
-                        <img src="ic_chapter.svg" width="16" height="16" class="ic_chapter_icon">
+                        <img src="../assets/ic_chapter.svg" width="16" height="16" class="ic_chapter_icon">
                     </div>
                     <p class="chapter-title">V. Treatment of Current (Active) Disease Therapy</p>
                 </div>
@@ -164,15 +99,12 @@
             ART initiation in persons with active TB disease who have HIV co-infection should take into account both the
             degree of immune suppression and site of disease (see Table 16 and recommendations above).
         </p>
-        <h4 id="table16" class="custom-table-title">Table 16. Antiretroviral Therapy (ART) and Treatment of Persons
-            Living with HIV and Active TB </h4>
-        <div class="uk-overflow-auto" id="table_16_when_to_start_hiv_therapy">
+        <h4 id="table13" class="custom-table-title">Table 13. Antiretroviral Therapy (ART) and Treatment of Persons Living with HIV and Active TB </h4>
+        <div class="uk-overflow-auto" id="table_13_when_to_start_hiv_therapy">
             <table class="uk-table uk-table-small uk-table-divider">
                 <thead>
                     <tr>
-                        <th colspan="2">HHS Panel Recommendations on treatment of Tuberculosis Disease with HIV
-                            co-infection: Timing of Antiretroviral Therapy (ART) Initiation relative to TB treatment
-                        </th>
+                        <th colspan="2">HHS Panel Recommendations on treatment of Tuberculosis Disease with HIV co-infection: Timing of Antiretroviral Therapy (ART) Initiation relative to TB treatment</th>
                     </tr>
                 </thead>
                 <tr>
@@ -180,12 +112,11 @@
                     <td>ART Initiation</td>
                 </tr>
                 <tr>
-                    <td>
-                        < 50 cells/mm³</td>
+                    <td>< 50 cells/mm³ <span class="info-icon" data-tooltip="EXCEPTION: tuberculous meningitis. To avoid life-threatening CNS immune reconstitution inflammatory syndrome (IRIS), persons living with HIV and tuberculous meningitis should not be started on ART until AFTER 8 weeks of TB therapy" data-tooltip-position="tooltip-right">i</span></td>
                     <td>within 2 weeks of starting TB therapy.</td>
                 </tr>
                 <tr>
-                    <td>> 50 cells/mm³</td>
+                    <td>> 50 cells/mm³ <span class="info-icon" data-tooltip="EXCEPTION: tuberculous meningitis. To avoid life-threatening CNS immune reconstitution inflammatory syndrome (IRIS), persons living with HIV and tuberculous meningitis should not be started on ART until AFTER 8 weeks of TB therapy" data-tooltip-position="tooltip-right">i</span></td>
                     <td>within 2-8 weeks of starting TB therapy</td>
                 </tr>
                 <tr>
@@ -193,94 +124,91 @@
                     <td>As early as feasible</td>
                 </tr>
             </table>
-            <p>** EXCEPTION: tuberculous meningitis. To avoid life-threatening CNS immune reconstitution inflammatory
-                syndrome (IRIS), persons living with HIV and tuberculous meningitis should not
 
-                be started on ART until AFTER the TB meningitis is under control and at least two weeks anti-TB treatment
-            </p>
-            <p>
-                <b>PREVENTING IRIS (Immune Reconstitution Inflammatory Syndrome)</b>: prednisone 40 mg/day for 2 weeks followed by 20 mg/day for 2 weeks is recommended for people with CD4 100 cells/mm3 who start ART within 30 days of TB treatment, are responding well to treatment, do not have known or suspected rifampin resistance, Kaposi sarcoma, or active hepatitis B. This recommendation does not apply to people with CNS TB for whom steroids are recommended from the time TB treatment is started.
-             </p>
-            <p>
-                Above based on guidelines developed by the Department of Health and Human Services (DHHS) Panel on Guidelines for Use of Antiretroviral Agents for Adults and Adolescents and Use of Antiretroviral Drugs in Pregnant Women living with HIV and Interventions to Reduce Perinatal Transmission in the United States, last reviewed and updated October 29, 2024 <a href="https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-opportunistic-infections/mycobacterium?view=full">(https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-opportunistic-infections/mycobacterium?view=full)</a>
-            </p>
-
+            <p>Above based on guidelines developed by the Department of Health and Human Services (DHHS) Panel on Guidelines for Use of Antiretroviral Agents for Adults and Adolescents and Use of Antiretroviral Drugs in Pregnant Women with HIV Infection and Interventions to Reduce Perinatal Transmission in the United States, last reviewed and updated April 15, 2019 <br>(<a href="https://aidsinfo.nih.gov/guidelines">https://aidsinfo.nih.gov/guidelines</a>).</p>
         </div>
 
-        <h4 id="table17" class="custom-table-title">Table 17. Antiretroviral Therapy (ART) and Treatment of Persons
+        <h4 id="table14" class="custom-table-title">Table 14. Antiretroviral Therapy (ART) and Treatment of Persons
             Living with HIV and Active TB </h4>
-        <div class="uk-overflow-auto"
-            id="table_17_what_to_start_choice_of_tb_therapy_and_antiretroviral_therapy_(art)_when)treating_co-infected_patients">
-            <table class="uk-table uk-table-small uk-table-divider">
-                <thead>
+        <div class="uk-overflow-auto" id="table_14_what_to_start_choice_of_tb_therapy_and_antiretroviral_therapy_(art)_when)treating_co-infected_patients">
+         <p class="highlight">
+            <strong>
+                Principle: Despite Drug Interactions, a Rifamycin (Rifampin or Rifabutin) Should Be Included in TB Regimens for Patients Receiving ART, with Dosage Adjustment if Necessary
+            </strong>
+         </p>
+
+         <div class="uk-tabs-container">
+            <ul class="tabs">
+                <li ><button class="tab active-tab" onclick="switchTab(0, event)">Option 1</button></li>
+                <li ><button class="tab" onclick="switchTab(1, event)">Option 2</button></li>
+                <li ><button class="tab" onclick="switchTab(2, event)">Pregnant Women</button></li>
+            </ul>
+         </div>
+
+         <div id="option-content0" class="tab-content option-content active-option">
+            <p>
+                <strong>
+                    Integrase-based ART regimens. Dolutegravir is the preferred integrase for TB/HIV co-infection treatment.
+                </strong>
+            </p>
+
+            <p>1a. Patients receiving rifampin-based TB treatment.</p>
+            <table class="uk-table">
+                <tbody>
                     <tr>
-                        <th>Principle: Despite Drug Interactions, a Rifamycin (Rifampin or Rifabutin) Should Be Included
-                            in TB Regimens for Patients
-                            Receiving ART, with Dosage Adjustment if Necessary (see Table SMR11 for dosage
-                            adjustments).
-                        </th>
+                        <th>Preferred</th>
+                        <td>DTG (Tivicay) BID + TDF/FTC (Truvada)</td>
                     </tr>
-                </thead>
-                <tr>
-                    <td><b>Option 1: Integrase-based ART regimens. Dolutegravir is the preferred integrase for TB/HIV co-infection treatment.</b><br><br>
-                         <b>Option 1a</b>: Patients receiving rifampin-based TB treatment.<br><br>
-                            Preferred: DTG (Tivicay) BID + TDF/FTC (Truvada) daily<br>
-                            Alternative choices:<br>
-
-                            (1) DTG (Tivicay) BID + TAF/FTC (Descovy) daily<br>
-
-                            (2) DTG (Tivivay) BID + ABC/3TC daily (note: Triumeq is a combination of
-
-                        DTG/ABC/3tc)<br><br>
-                        <b>Option 1b</b>: Patients receiving rifabutin-based TB treatment<br><br>
-                        Preferred: DTG (Tivicay) daily + TDF/FTC (Truvada) daily<br>
-
-                        Alternative choices:<br>
-
-                        (1) DTG (Tivicay) daily + TAF/FTC (Descovy) daily<br>
-
-                        (2) DTG/ABC/3TC (Triumeq) daily<br><br>
-
-
-                        <b>Note</b>: The FDA does not recommend using TAF with rifampin or rifabutin
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Option 2: PI-based ART regimens (cannot be used with rifampin, must use with dose-adjusted rifabutin)<br><br>
-                        <b>Option 2a</b><br><br>
-                        ATV/r daily + TDF/FTC (Truvada) daily<br>
-                        Alternative choices:<br><br>
-
-                        (1) ATV/r daily + TAF/FTC (Descovy) daily<br>
-
-                        (2) ATV/r daily + ABC/3TC daily<br><br>
-                        
-                        <b>Option 2b</b><br><br>
-                        DRV/r daily + TDF/FTC (Truvada) daily<br><br>
-
-                        (1) DRV/r daily + TAF/FTC (Descovy) daily<br>
-                        (2) DRV/r daily + ABC/3TC daily
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        1- PI’s have high barrier to resistance. However, given rifabutin is given at half-dose when used with PI’s adherence to ART should be closely monitored. Poor adherence to PI’s while on rifabutin increases risk for rifampin resistance.<br>
-
-                        2- The FDA does not recommend using TAF with rifampin or rifabutin.<br>
-
-                        3- Cobicistat cannot be used with rifabutin
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Choice for Pregnant Women living with HIV and with Active TB : Expert consultation advised. Options 1a and 1b are currently preferred in pregnancy.
-                    </td>
-                </tr>
-                
+                    <tr>
+                        <th>Alternative</th>
+                        <td>
+                            <ul>
+                                <li>DTG (Tivicay) BID + TAF/FTC (Descovy)</li>
+                                <li>DTG (Tivicay) BID + ABC/3TC (Truvada)</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Frequency</th>
+                        <td>Daily for both preferred and alternative</td>
+                    </tr>
+                    <tr>
+                        <th>Note</th>
+                        <td>Triumeq is a combination of DTG/ABC/3tc</td>
+                    </tr>
+                </tbody>
             </table>
 
-            <ul style="font-size:75%">
+
+            <p>1b. Patients receiving rifabutin-based TB treatment</p>
+            <table class="uk-table">
+                <tbody>
+                    <tr>
+                        <th>Preferred</th>
+                        <td>DTG (Tivicay) BID + TDF/FTC (Truvada)</td>
+                    </tr>
+                    <tr>
+                        <th>Alternative</th>
+                        <td>
+                            <ul>
+                                <li>DTG (Tivicay) BID + TAF/FTC (Descovy)</li>
+                                <li>DTG (Tivicay) BID + ABC/3TC (Truvada)</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Frequency</th>
+                        <td>Daily for both preferred and alternative</td>
+                    </tr>
+                    <tr>
+                        <th>Note</th>
+                        <td>Triumeq is a combination of DTG/ABC/3tc</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>Abbreviations:</p>
+            <ul>
                 <li>NRTIs: nucleoside/-tide reverse transcriptase inhibitors</li>
                 <li>NNRTIs: non-nucleoside reverse transcriptase inhibitors</li>
                 <li>PIs: protease inhibitors</li>
@@ -291,14 +219,132 @@
                 <li>3TC: Lamivudine</li>
                 <li>ABC: Abacavir</li>
                 <li>ATV/r: Atazanavir/ritonavir</li>
-                <li>DRV/r: Daraunavir/ritonavir</li>
+                <li>DRV/r: Darunavir/ritonavir</li>
                 <li>DTG: Dolutegravir</li>
             </ul>
+
+            <p>Source:</p>
+            <ul>
+                <li>Above based on guidelines developed by the Department of Health and Human Services (DHHS) Panel on Guidelines for Use of Antiretroviral Agents for Adults and Adolescents and Use of Antiretroviral Drugs in Pregnant Women living with HIV and Interventions to Reduce</li>
+                <li>Perinatal Transmission in the United States, last reviewed and updated October 29, 2024 (<a href="https://aidsinfo.nih.gov/guidelines">https://aidsinfo.nih.gov/guidelines</a>).</li>
+            </ul>
+         </div>
+
+         <div id="option-content2" class="tab-content option-content">
             <p>
-                Above based on guidelines developed by the Department of Health and Human Services (DHHS) Panel on Guidelines for Use of Antiretroviral Agents for Adults and Adolescents and Use of Antiretroviral Drugs in Pregnant Women living with HIV and Interventions to Reduce Perinatal Transmission in the United States, last reviewed and updated October 29, 2024 <a href="http://aidsinfo.nih.gov/guidelines">(http://aidsinfo.nih.gov/guidelines)</a>.
+                <strong>
+                    PI-based ART regimens
+                </strong>
+                (cannot be used with rifampin, must use with dose-adjusted rifabutin)
+                
             </p>
 
-        </div>
+            <p>2a</p>
+            <table class="uk-table">
+                <tbody>
+                    <tr>
+                        <th>Preferred</th>
+                        <td>ATV/r + TDF/FTC (Truvada) </td>
+                    </tr>
+                    <tr>
+                        <th>Alternative</th>
+                        <td>
+                            <ul>
+                                <li>ATV/r + TAF/FTC (Descovy)</li>
+                                <li>ATV/r + ABC/3TC</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Frequency</th>
+                        <td>Daily for both preferred and alternative</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <p>2b</p>
+            <table class="uk-table">
+                <tbody>
+                    <tr>
+                        <th>Preferred</th>
+                        <td>DRV/r + TDF/FTC (Truvada) </td>
+                    </tr>
+                    <tr>
+                        <th>Alternative</th>
+                        <td>
+                            <ul>
+                                <li>DRV/r + TAF/FTC (Descovy)</li>
+                                <li>DRV/r + ABC/3TC</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Frequency</th>
+                        <td>Daily for both preferred and alternative</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>Additional Notes:</p>
+            <ul>
+                <li>PI’s have high barrier to resistance. However, given rifabutin is given at half-dose when used with PI’s adherence to ART should be closely monitored. Poor adherence to PI’s while on rifabutin increases risk for rifampin resistance.</li>
+                <li>The FDA does not recommend using TAF with rifampin or rifabutin.</li>
+                <li>Cobicistat cannot be used with rifabutin.</li>
+            </ul>
+
+            <p>Abbreviations:</p>
+            <ul>
+                <li>NRTIs: nucleoside/-tide reverse transcriptase inhibitors</li>
+                <li>NNRTIs: non-nucleoside reverse transcriptase inhibitors</li>
+                <li>PIs: protease inhibitors</li>
+                <li>/r: boosted with ritonavir</li>
+                <li>TDF: Tenofovir disoproxil fumarate</li>
+                <li>TAF: Tenofovir alafenamide</li>
+                <li>FTC: Emtricitabine</li>
+                <li>3TC: Lamivudine</li>
+                <li>ABC: Abacavir</li>
+                <li>ATV/r: Atazanavir/ritonavir</li>
+                <li>DRV/r: Darunavir/ritonavir</li>
+                <li>DTG: Dolutegravir</li>
+            </ul>
+
+            <p>Source:</p>
+            <ul>
+                <li>Above based on guidelines developed by the Department of Health and Human Services (DHHS) Panel on Guidelines for Use of Antiretroviral Agents for Adults and Adolescents and Use of Antiretroviral Drugs in Pregnant Women living with HIV and Interventions to Reduce</li>
+                <li>Perinatal Transmission in the United States, last reviewed and updated October 29, 2024 (<a href="https://aidsinfo.nih.gov/guidelines">https://aidsinfo.nih.gov/guidelines</a>).</li>
+            </ul>
+         </div>
+
+         <div id="option-content3" class="tab-content option-content">
+            <p>
+                <strong>
+                    Choice for Pregnant Women living with HIV and with Active TB
+                </strong>                
+            </p>
+
+            <p>2a</p>
+            <table class="uk-table">
+                <tbody>
+                    <tr>
+                        <th>Notes</th>
+                        <td>
+                            <ul>
+                                <li>Expert consultation advised.</li>
+                                <li><strong>Options 1a</strong> and <strong>1b</strong> are currently preferred in pregnancy.</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>Source:</p>
+            <ul>
+                <li>Above based on guidelines developed by the Department of Health and Human Services (DHHS) Panel on Guidelines for Use of Antiretroviral Agents for Adults and Adolescents and Use of Antiretroviral Drugs in Pregnant Women living with HIV and Interventions to Reduce</li>
+                <li>Perinatal Transmission in the United States, last reviewed and updated October 29, 2024 (<a href="https://aidsinfo.nih.gov/guidelines">https://aidsinfo.nih.gov/guidelines</a>).</li>
+            </ul>
+         </div>
+    </div>
 
         <p class="uk-paragraph">
             Persons who are already on ART at the time of TB diagnosis, generally should be continued on the ART
@@ -339,7 +385,7 @@
                 </li>
                 <li>
                     Rifampin and rifabutin can be given with certain integrase inhibitors (<a
-                        href="https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/coinfections-tuberculosis-hiv">https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/coinfections-tuberculosis-hiv</a>.
+                        href="https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/coinfections-tuberculosis-hiv">https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/coinfections-tuberculosis-hiv</a>).
                 </li>
             </ul>
         </div>
@@ -398,22 +444,21 @@
 
         <p class="uk-paragraph">
             A summary of preferred treatment options for patients with tuberculosis disease who are HIV co-infected is
-            shown in
-            <a href="table_18_dosage_adjustments_for_art_and_rifamycins_when_used_in_combination.html">Table 18</a> and
-            <a href="table_19_guidelines_for_treatment_of_extrapulmonary_tuberculosis.html">Table 19</a>. For additional
+            shown in <a href="table_16_guidelines_for_treatment_of_extrapulmonary_tuberculosis.html">Table 16</a> and 
+            <a href="table_18_dosage_adjustments_for_art_and_rifamycins_when_used_in_combination.html">Table 18</a>. For additional
             information refer to updated HHS guidelines, visit <a
                 href="https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/tuberculosishiv-coinfection?view=full">https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/tuberculosishiv-coinfection?view=full</a>
         </p>
-        <h4 class="custom-table-title" id="table18">Table 18. Dosage Adjustments for ART and Rifamycins when used in
-            Combination</h4>
+        <h4 class="custom-table-title" id="table18">Table 18. Dosage Adjustments for ART and Rifamycins when used in Combination</h4>
+
+        
         <div class="uk-overflow-auto table-18-container">
-            <div class="tabs">
-                <button class="tab-button"
-                    onclick="switchTabInContainer('.table-18-container', 0, event)">Integrase<br>Inhibitor</button>
-                <button class="tab-button" onclick="switchTabInContainer('.table-18-container', 1, event)">Boosted
-                    PI</button>
-                <button class="tab-button"
-                    onclick="switchTabInContainer('.table-18-container', 2, event)">NNRTI</button>
+            <div class="uk-tabs-container">
+                <ul class="tabs">
+                    <li><button class="tab-button" onclick="switchTabInContainer('.table-18-container', 0, event)">Integrase<br>Inhibitor</button></li>
+                    <li><button class="tab-button" onclick="switchTabInContainer('.table-18-container', 1, event)">Boosted PI</button></li>
+                    <li><button class="tab-button" onclick="switchTabInContainer('.table-18-container', 2, event)">NNRTI</button></li>
+                </ul>
             </div>
 
             <div class="tab-content">
@@ -491,7 +536,7 @@
             </p>
 
             <p>Integrase inhibitors: <a
-                    href="https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-insti?view=full">https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/drug-interactions-insti?view=full</a>
+                    href="https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/coinfections-tuberculosis-hiv">https://clinicalinfo.hiv.gov/en/guidelines/hiv-clinical-guidelines-adult-and-adolescent-arv/coinfections-tuberculosis-hiv</a>
             </p>
 
             <p>*Preliminary data suggest that there is an increased risk of neural tube defects in infants born to women
@@ -521,247 +566,240 @@
                 guidelines are frequently updated.</p>
 
             <p>2-Cobicistat is currently not recommended for pregnant women.</p>
+        </div>
 
-            <h4 class="custom-table-title" id="table19">Table 19. Adjunctive Use of Corticosteroid Therapy</h4>
-            <div class="uk-overflow-auto table-19-container"
-                id="table_19_guidelines_for_treatment_of_extrapulmonary_tuberculosis">
-                <div class="tabs">
-                    <button class="tab-button" onclick="switchTabInContainer('.table-19-container', 0, event)">Lymph
-                        node</button>
-                    <button class="tab-button" onclick="switchTabInContainer('.table-19-container', 1, event)">Bone
-                        (non-vertebral) and joint</button>
-                    <button class="tab-button" onclick="switchTabInContainer('.table-19-container', 2, event)">Spine
-                        without meningitis</button>
-                    <button class="tab-button" onclick="switchTabInContainer('.table-19-container', 3, event)">Spine
-                        with meningitis</button>
-                    <button class="tab-button" onclick="switchTabInContainer('.table-19-container', 4, event)">CNS
-                        tuberculosis including meningitis</button>
-                    <button class="tab-button" onclick="switchTabInContainer('.table-19-container', 5, event)">Pleural
-                        disease</button>
-                    <button class="tab-button"
-                        onclick="switchTabInContainer('.table-19-container', 6, event)">Pericarditis</button>
-                    <button class="tab-button"
-                        onclick="switchTabInContainer('.table-19-container', 7, event)">Disseminated disease</button>
-                    <button class="tab-button"
-                        onclick="switchTabInContainer('.table-19-container', 8, event)">Genitourinary</button>
-                    <button class="tab-button"
-                        onclick="switchTabInContainer('.table-19-container', 9, event)">Peritoneal</button>
-                </div>
+        <h4 class="custom-table-title" id="table16">Table 16. Guidelines for Treatment of Extrapulmonary Tuberculosis</h4>
+        <div class="uk-overflow-auto table-19-container"
+            id="table_16_guidelines_for_treatment_of_extrapulmonary_tuberculosis">
 
-                <div class="tab-content">
-                    <table class="uk-table uk-table-small uk-table-divider">
-                        <tbody>
-                            <tr>
-                                <th class="uk-text-nowrap">Length of therapy</th>
-                                <td>6 months</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Corticosteroids</th>
-                                <td>Not recommended</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Additional management considerations</th>
-                                <td>Pursue microbiologic proof of diagnosis prior to starting Rx</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="tab-content">
-                    <table class="uk-table uk-table-small uk-table-divider">
-                        <tbody>
-                            <tr>
-                                <th class="uk-text-nowrap">Length of therapy</th>
-                                <td>6 to 9 months</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Corticosteroids</th>
-                                <td>Not recommended</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Additional management considerations</th>
-                                <td>Extend to 12 months if hardware is present</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="tab-content">
-                    <table class="uk-table uk-table-small uk-table-divider">
-                        <tbody>
-                            <tr>
-                                <th class="uk-text-nowrap">Length of therapy</th>
-                                <td>6 to 9 months</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Corticosteroids</th>
-                                <td>Not recommended for TB rx but may be indicated for cord compression</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Additional management considerations</th>
-                                <td>Most spine infection can be cured with medical Rx. Surgery indicated for relief of
-                                    cord
-                                    compression, progressive disease despite medical therapy, instability of the spine.
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="tab-content">
-                    <table class="uk-table uk-table-small uk-table-divider">
-                        <tbody>
-                            <tr>
-                                <th class="uk-text-nowrap">Length of therapy</th>
-                                <td>9 to 12 months</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Corticosteroids</th>
-                                <td>Strongly recommended</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Steroid dosing</th>
-                                <td>A and C ≥ 25kg: 12 mg/day of dexamethasone x 3 weeks followed by 3-week taper
-                                    <p>C < 25kg: 8 mg/day of dexamethasone for 3 weeks followed by 3-week taper</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Additional management considerations</th>
-                                <td>Most spine infection can be cured with medical Rx. Surgery indicated for relief of
-                                    cord
-                                    compression, progressive disease despite medical therapy, instability of the spine.
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="tab-content">
-                    <table class="uk-table uk-table-small uk-table-divider">
-                        <tbody>
-                            <tr>
-                                <th class="uk-text-nowrap">Length of therapy</th>
-                                <td>9-12 months</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Corticosteroids</th>
-                                <td>Strongly recommended</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Additional management considerations</th>
-                                <td>Negative CSF culture or PCR test does NOT exclude this diagnosis
-                                    <p>Follow CSF profile for response to therapy</p>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="tab-content">
-                    <table class="uk-table uk-table-small uk-table-divider">
-                        <tbody>
-                            <tr>
-                                <th class="uk-text-nowrap">Length of therapy</th>
-                                <td>6 months</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Corticosteroids</th>
-                                <td>Not recommended</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Additional management considerations</th>
-                                <td>Empyema may require decortication</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="tab-content">
-                    <table class="uk-table uk-table-small uk-table-divider">
-                        <tbody>
-                            <tr>
-                                <th class="uk-text-nowrap">Length of therapy</th>
-                                <td>6 months</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Corticosteroids</th>
-                                <td>NO LONGER routinely RECOMMENDED</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Additional management considerations</th>
-                                <td>Consider steroids for patients at highest risk of later constriction:
-                                    large pericardial effusions high levels of inflammatory cells or markers in
-                                    pericardial fluid those
-                                    with early signs of constriction</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="tab-content">
-                    <table class="uk-table uk-table-small uk-table-divider">
-                        <tbody>
-                            <tr>
-                                <th class="uk-text-nowrap">Length of therapy</th>
-                                <td>6 months</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Corticosteroids</th>
-                                <td>Not recommended</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Additional management considerations</th>
-                                <td>Obtain cultures from blood, urine and sputum in addition to clinically apparent
-                                    sites of disease.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="tab-content">
-                    <table class="uk-table uk-table-small uk-table-divider">
-                        <tbody>
-                            <tr>
-                                <th class="uk-text-nowrap">Length of therapy</th>
-                                <td>6 months</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Corticosteroids</th>
-                                <td>Not recommended</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Additional management considerations</th>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="tab-content">
-                    <table class="uk-table uk-table-small uk-table-divider">
-                        <tbody>
-                            <tr>
-                                <th class="uk-text-nowrap">Length of therapy</th>
-                                <td>6 months</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Corticosteroids</th>
-                                <td>Not recommended</td>
-                            </tr>
-                            <tr>
-                                <th class="uk-text-nowrap">Additional management considerations</th>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <p>
-                    2 mg/kg prednisone daily over three weeks, followed by taper Maximum dose 60 mg <br>OR<br>
-                    Dexamethasone 0.3-0.6 mg/kg daily over three weeks, followed by taper Round to nearest tablet size
-                    (2, 4, 6 mg) Maximum dose 12 mg
-                </p>
+            <div class="uk-tabs-container">
+                <ul class="tabs">
+                    <li><button class="tab-button" onclick="switchTabInContainer('.table-19-container', 0, event)">Lymph node</button></li>
+                    <li><button class="tab-button" onclick="switchTabInContainer('.table-19-container', 1, event)">Bone (non-vertebral) and joint</button></li>
+                    <li><button class="tab-button" onclick="switchTabInContainer('.table-19-container', 2, event)">Spine without meningitis</button></li>
+                    <li><button class="tab-button" onclick="switchTabInContainer('.table-19-container', 3, event)">Spine with meningitis</button></li>
+                    <li><button class="tab-button" onclick="switchTabInContainer('.table-19-container', 4, event)">CNS tuberculosis including meningitis</button></li>
+                    <li><button class="tab-button" onclick="switchTabInContainer('.table-19-container', 5, event)">Pleural disease</button></li>
+                    <li><button class="tab-button" onclick="switchTabInContainer('.table-19-container', 6, event)">Pericarditis</button></li>
+                    <li><button class="tab-button" onclick="switchTabInContainer('.table-19-container', 7, event)">Disseminated disease</button></li>
+                    <li><button class="tab-button" onclick="switchTabInContainer('.table-19-container', 8, event)">Genitourinary</button></li>
+                    <li><button class="tab-button" onclick="switchTabInContainer('.table-19-container', 9, event)">Peritoneal</button></li>
+                </ul>
             </div>
+
+            <div class="tab-content">
+                <table class="uk-table uk-table-small uk-table-divider">
+                    <tbody>
+                        <tr>
+                            <th class="uk-text-nowrap">Length of therapy</th>
+                            <td>6 months</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Corticosteroids</th>
+                            <td>Not recommended</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Additional management considerations</th>
+                            <td>Pursue microbiologic proof of diagnosis prior to starting Rx</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-content">
+                <table class="uk-table uk-table-small uk-table-divider">
+                    <tbody>
+                        <tr>
+                            <th class="uk-text-nowrap">Length of therapy</th>
+                            <td>6 to 9 months</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Corticosteroids</th>
+                            <td>Not recommended</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Additional management considerations</th>
+                            <td>Extend to 12 months if hardware is present</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-content">
+                <table class="uk-table uk-table-small uk-table-divider">
+                    <tbody>
+                        <tr>
+                            <th class="uk-text-nowrap">Length of therapy</th>
+                            <td>6 to 9 months</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Corticosteroids</th>
+                            <td>Not recommended for TB rx but may be indicated for cord compression</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Additional management considerations</th>
+                            <td>Most spine infection can be cured with medical Rx. Surgery indicated for relief of
+                                cord
+                                compression, progressive disease despite medical therapy, instability of the spine.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-content">
+                <table class="uk-table uk-table-small uk-table-divider">
+                    <tbody>
+                        <tr>
+                            <th class="uk-text-nowrap">Length of therapy</th>
+                            <td>9 to 12 months</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Corticosteroids</th>
+                            <td>Strongly recommended</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Steroid dosing</th>
+                            <td>A and C ≥ 25kg: 12 mg/day of dexamethasone x 3 weeks followed by 3-week taper
+                                <p>C < 25kg: 8 mg/day of dexamethasone for 3 weeks followed by 3-week taper</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Additional management considerations</th>
+                            <td>Most spine infection can be cured with medical Rx. Surgery indicated for relief of
+                                cord
+                                compression, progressive disease despite medical therapy, instability of the spine.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-content">
+                <table class="uk-table uk-table-small uk-table-divider">
+                    <tbody>
+                        <tr>
+                            <th class="uk-text-nowrap">Length of therapy</th>
+                            <td>9-12 months</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Corticosteroids</th>
+                            <td>Strongly recommended</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Additional management considerations</th>
+                            <td>Negative CSF culture or PCR test does NOT exclude this diagnosis
+                                <p>Follow CSF profile for response to therapy</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-content">
+                <table class="uk-table uk-table-small uk-table-divider">
+                    <tbody>
+                        <tr>
+                            <th class="uk-text-nowrap">Length of therapy</th>
+                            <td>6 months</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Corticosteroids</th>
+                            <td>Not recommended</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Additional management considerations</th>
+                            <td>Empyema may require decortication</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-content">
+                <table class="uk-table uk-table-small uk-table-divider">
+                    <tbody>
+                        <tr>
+                            <th class="uk-text-nowrap">Length of therapy</th>
+                            <td>6 months</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Corticosteroids</th>
+                            <td>NO LONGER routinely RECOMMENDED</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Additional management considerations</th>
+                            <td>Consider steroids for patients at highest risk of later constriction:
+                                large pericardial effusions high levels of inflammatory cells or markers in
+                                pericardial fluid those
+                                with early signs of constriction</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-content">
+                <table class="uk-table uk-table-small uk-table-divider">
+                    <tbody>
+                        <tr>
+                            <th class="uk-text-nowrap">Length of therapy</th>
+                            <td>6 months</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Corticosteroids</th>
+                            <td>Not recommended</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Additional management considerations</th>
+                            <td>Obtain cultures from blood, urine and sputum in addition to clinically apparent
+                                sites of disease.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-content">
+                <table class="uk-table uk-table-small uk-table-divider">
+                    <tbody>
+                        <tr>
+                            <th class="uk-text-nowrap">Length of therapy</th>
+                            <td>6 months</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Corticosteroids</th>
+                            <td>Not recommended</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Additional management considerations</th>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tab-content">
+                <table class="uk-table uk-table-small uk-table-divider">
+                    <tbody>
+                        <tr>
+                            <th class="uk-text-nowrap">Length of therapy</th>
+                            <td>6 months</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Corticosteroids</th>
+                            <td>Not recommended</td>
+                        </tr>
+                        <tr>
+                            <th class="uk-text-nowrap">Additional management considerations</th>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>
+                2 mg/kg prednisone daily over three weeks, followed by taper Maximum dose 60 mg <br>OR<br>
+                Dexamethasone 0.3-0.6 mg/kg daily over three weeks, followed by taper Round to nearest tablet size
+                (2, 4, 6 mg) Maximum dose 12 mg
+            </p>
         </div>
 </body>
 <script src="../assets/uikit.js" type="text/javascript"></script>

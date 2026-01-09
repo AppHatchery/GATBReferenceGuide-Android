@@ -89,4 +89,16 @@ fun EditText.toggleSoftKeyboard(context: Context, showSoftKeyboard: Boolean = tr
 
 fun getActionBar(context: Context) = (context as AppCompatActivity).supportActionBar
 
+// Extract compact table title from a full title like
+// "Table 3: High Prevalence and High-Risk Groups" -> "Table 3"
+private val TABLE_SHORT_TITLE_REGEX =
+    Regex("""\b(?:Table)\s*\d+[A-Za-z]?""", RegexOption.IGNORE_CASE)
+
+fun String.toShortTableTitle(): String {
+    val match = TABLE_SHORT_TITLE_REGEX.find(this) ?: return this
+    val token = match.value
+    // Ensure leading word has proper case
+    return if (token.first().isLowerCase()) token.replaceFirstChar { it.titlecase() } else token
+}
+
 
