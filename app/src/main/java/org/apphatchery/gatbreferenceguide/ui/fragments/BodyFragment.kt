@@ -179,6 +179,127 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         }
 
         webViewFont.settings.textZoom = fontSize
+
+        // Compute target pixel size for chapter icon relative to 16px @ 125% baseline
+                val scaleFactor = fontSize / 125.0
+                val iconPx = 16.0 * scaleFactor
+                val iconPxStr = String.format("%.2f", iconPx)
+
+            // Compute scaled metrics for the decorative line used by `.uk-paragraph`
+            val remBasePx = 16.0 // 1rem baseline
+            val ukHeightPx = 2.0 * remBasePx * scaleFactor      // was 2rem
+            val ukWidthPx = 0.5 * remBasePx * scaleFactor       // was 0.5rem
+            val ukTopPx = -0.25 * remBasePx * scaleFactor       // was -0.25rem
+            val ukRadiusPx = 0.25 * remBasePx * scaleFactor     // was 0.25rem
+            val ukHeightPxStr = String.format("%.2f", ukHeightPx)
+            val ukWidthPxStr = String.format("%.2f", ukWidthPx)
+            val ukTopPxStr = String.format("%.2f", ukTopPx)
+            val ukRadiusPxStr = String.format("%.2f", ukRadiusPx)
+
+                // 1) Set CSS variable consumed by .ic_chapter_icon in style.css (which uses !important)
+                val setVar = """
+                        (function(){
+                            try {
+                                var size='${iconPxStr}px';
+                                document.documentElement.style.setProperty('--chapter-icon-size', size);
+                            } catch(e) {}
+                        })();
+                """.trimIndent()
+
+                // 2) Ensure chapter icon image gets the class so the CSS rule applies, without touching other content images
+                val tagIcons = """
+                        (function(){
+                            try {
+                                var nodes = document.querySelectorAll('img[src$="ic_chapter.svg"], img[src*="/ic_chapter.svg"], img[src*="ic_chapter.svg"]');
+                                nodes.forEach(function(n){
+                                    if(n.classList && !n.classList.contains('ic_chapter_icon')) n.classList.add('ic_chapter_icon');
+                                });
+                            } catch(e) {}
+                        })();
+                """.trimIndent()
+
+                // 3) Inject an explicit override rule with !important placed after external CSS
+                val injectOverride = """
+                        (function(){
+                             try {
+                                 var style = document.getElementById('chapter-icon-override');
+                                 if(!style){
+                                     style = document.createElement('style');
+                                     style.id = 'chapter-icon-override';
+                                     document.head.appendChild(style);
+                                 }
+                                 var size='${iconPxStr}px';
+                                 style.textContent = '.ic_chapter_icon{width:'+size+' !important;height:'+size+' !important;}';
+                             } catch(e) {}
+                        })();
+                """.trimIndent()
+
+                // 4) also apply inline size and attributes so pages missing style.css still resize correctly
+                val sizeIcons = """
+                        (function(){
+                             try {
+                                 var cssSize='${iconPxStr}px';
+                                 var attrSize='${iconPxStr}';
+                                 var nodes = document.querySelectorAll('img[src$=\"ic_chapter.svg\"], img[src*=\"/ic_chapter.svg\"], img[src*=\"ic_chapter.svg\"]');
+                                 nodes.forEach(function(n){
+                                     // Ensure the parent wrapper also reserves space for the icon
+                                     var p = n.parentElement;
+                                     if (p) {
+                                         p.style.width = cssSize;
+                                         p.style.height = cssSize;
+                                         p.style.flex = '0 0 auto';
+                                     }
+                                     // Apply explicit sizing on the image
+                                     n.style.display = 'inline-block';
+                                     n.style.width = cssSize;
+                                     n.style.height = cssSize;
+                                     n.style.maxWidth = cssSize;
+                                     n.style.maxHeight = cssSize;
+                                     if (n.setAttribute) {
+                                         n.setAttribute('width', attrSize);
+                                         n.setAttribute('height', attrSize);
+                                     }
+                                 });
+                             } catch(e) {}
+                        })();
+                """.trimIndent()
+
+                // 5) Scale the decorative line for paragraphs `.uk-paragraph::before` to match text zoom
+                val paragraphOverride = """
+                        (function(){
+                             try {
+                                 var style = document.getElementById('uk-paragraph-override');
+                                 if(!style){
+                                     style = document.createElement('style');
+                                     style.id = 'uk-paragraph-override';
+                                     document.head.appendChild(style);
+                                 }
+                                 var h='${ukHeightPxStr}px';
+                                 var w='${ukWidthPxStr}px';
+                                 var t='${ukTopPxStr}px';
+                                 var r='${ukRadiusPxStr}px';
+                                 style.textContent = ''+
+                                   '.uk-paragraph{position: relative;}'+
+                                   '.uk-paragraph::before{'+
+                                     'content:""; position:absolute; left:0; '+
+                                     'top:'+t+' !important; '+
+                                     'height:'+h+' !important; '+
+                                     'width:'+w+' !important; '+
+                                     'background-color: var(--primary-color); '+
+                                     'border-radius:'+r+' !important;'+
+                                   '}';
+                             } catch(e) {}
+                        })();
+                """.trimIndent()
+
+                // Execute after WebView layout pass
+                webViewFont.post {
+                        webViewFont.evaluateJavascript(setVar, null)
+                        webViewFont.evaluateJavascript(tagIcons, null)
+                        webViewFont.evaluateJavascript(injectOverride, null)
+            webViewFont.evaluateJavascript(sizeIcons, null)
+            webViewFont.evaluateJavascript(paragraphOverride, null)
+                }
     }
 
     private fun showFontDialog() {
@@ -814,7 +935,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     var urlGlobal: String? = null
 
     private fun setupWebView() = bind.bodyWebView.apply {
-        onZoomOut()
+        // onZoomOut()
         
         // JavaScript interface for search results
         addJavascriptInterface(object {
@@ -834,6 +955,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
                 urlGlobal = url
+
+                // Re-apply font and icon scaling on every page load
+                updateFont()
 
 
                 val searchInput = bodyUrl.searchQuery
