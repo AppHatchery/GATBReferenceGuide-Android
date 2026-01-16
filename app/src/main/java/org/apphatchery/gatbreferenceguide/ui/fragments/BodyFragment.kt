@@ -1026,6 +1026,23 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
                 val searchInput = bodyUrl.searchQuery
                 if (searchInput.isNotEmpty() && !isOnlyWhitespace(searchInput)) {
+                    // Prefill the inline search input so the user sees the query and counter
+                    try {
+                        searchEditText.setText(searchInput)
+                        showSearchView()
+                    } catch (e: Exception) {
+                        // ignore if views not yet initialized
+                    }
+                    // Ensure the WebView search listener is installed so the counter updates
+                    try {
+                        bind.bodyWebView.setOnSearchResultListener { totalMatchesParam, currentMatchParam ->
+                            this@BodyFragment.totalMatches = totalMatchesParam
+                            this@BodyFragment.currentMatch = currentMatchParam
+                            updateSearchUI()
+                        }
+                    } catch (e: Exception) {
+                        // ignore if WebView not ready
+                    }
                     // expand any collapsed sections containing the search term
                     expandSectionsWithSearchResults(searchInput)
                     
@@ -1040,6 +1057,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 val allowedString = normalizeString(searchInput)
                 val searchBody = allowedString.split(" ")
 
+                val highlightColorInt = ContextCompat.getColor(requireContext(), R.color.reddish)
+                val highlightHex = String.format("#%06X", 0xFFFFFF and highlightColorInt)
+
                 for (eachWord in searchBody) {
                     val jsCode = "javascript:(function() { " +
                             "var count = 0;" +
@@ -1048,12 +1068,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                             "  var html = obj.innerHTML;" +
                             "  var regex = new RegExp('(?<!<[^>]*>)' + str + '(?![^<]*?>)', 'gi');" +
                             "  var allOccurrences = html.match(regex);" +
-                            "  count = allOccurrences.length;" +
+                            "  count = allOccurrences ? allOccurrences.length : 0;" +
                             "  for (var i = 0; i < count; i++) {" +
                             "    var occurrence = allOccurrences[i];" +
                             "    var span = document.createElement('span');" +
-                            "    span.style.backgroundColor = 'yellow';" +
-                            "    span.style.color = 'black';" +
+                            "    span.style.backgroundColor = '" + highlightHex + "';" +
+                            "    span.style.color = '#000000';" +
                             "    span.style.fontWeight = 'normal';" +
                             "    span.innerHTML = occurrence;" +
                             "    html = html.replace(new RegExp('(?<!<[^>]*>)' + occurrence + '(?![^<]*?>)', 'gi'), span.outerHTML);" +

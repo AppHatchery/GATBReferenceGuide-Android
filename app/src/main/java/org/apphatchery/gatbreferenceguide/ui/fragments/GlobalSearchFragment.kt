@@ -478,8 +478,10 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                 val pattern = word.replace(Regex("[\\s.,]+"), "")
                 if (pattern.isNotEmpty()) {
                     val regex = Regex("(?i)($pattern)")
+                    val highlightColor = ContextCompat.getColor(requireContext(), R.color.primary_300)
+                    val hex = String.format("#%06X", 0xFFFFFF and highlightColor)
                     result = result.replace(regex) {
-                        "<span style='background-color: yellow; color: black; font-weight: bold;'>${it.value}</span>"
+                        "<span style='background-color: $hex; color: #000000; font-weight: bold;'>${it.value}</span>"
                     }
                 }
             }

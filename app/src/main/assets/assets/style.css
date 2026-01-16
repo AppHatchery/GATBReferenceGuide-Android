@@ -215,13 +215,7 @@ img {
   width: 50px !important;
   object-fit: fill !important;
 }
-.ic_table_icon {
-  height: 1.5em !important;
-  width: 1.5em !important;
-  object-fit: fill !important;
-  vertical-align: middle;
-  display: inline-block;
-}
+
 .chapter-header {
   display: inline-flex;
   flex-direction: column;
@@ -872,4 +866,16 @@ h3.highlight {
   .uk-tabs-container .tabs {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+/* Shift the long AAP isoniazid tooltip in the LTBI table slightly right
+  so its content is not clipped. Targets only this tooltip on table_5
+  and does not affect other tooltips.
+  This was done to solve the problem on the tooltip that was causing the text to be blurred by the background.
+   so the possitioning of the tooltip was changed to the left and the css below was added so that the pop up doesnt get clipped by the margin
+  */
+#table_5_dosages_for_recommended_lbti_treatment_regimens
+  .info-icon[data-tooltip*="American Academy of Pediatrics recommends an isoniazid dosage of 10 - 15 mg/kg"]
+  .tooltip {
+  right: -30px; /* move popup 30px to the right */
 }
