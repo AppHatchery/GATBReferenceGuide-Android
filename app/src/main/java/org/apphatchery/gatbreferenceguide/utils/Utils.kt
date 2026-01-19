@@ -8,12 +8,13 @@ val CSS_JS_FILES = arrayOf("assets/uikit.css", "assets/uikit.js", "assets/uikit-
 val NOTE_COLOR = arrayListOf(
     NoteColor("#000000"),
     NoteColor("#FF2D55"),
-    NoteColor("#AF52DE"),
+    NoteColor("#ff9500"),
     NoteColor("#FFCC00"),
     NoteColor("#34C759"),
     NoteColor("#5AC8FA"),
     NoteColor("#007AFF"),
     NoteColor("#5856D6"),
+    NoteColor("#af52de")
 )
 
 const val ANALYTICS_PAGE_EVENT = "page"

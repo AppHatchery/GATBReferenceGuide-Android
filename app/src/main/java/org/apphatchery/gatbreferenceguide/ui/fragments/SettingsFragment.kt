@@ -9,9 +9,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreference
 import dagger.hilt.android.AndroidEntryPoint
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FASettingsViewModel
@@ -26,7 +26,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private val viewModel by viewModels<FASettingsViewModel>()
 
     companion object {
-        const val CONTACT_EMAIL = "morgan.greenleaf@emory.edu"
+        const val CONTACT_EMAIL = "support@apphatchery.org"
     }
 
     private fun composeEmail() = Intent(Intent.ACTION_VIEW).apply {
@@ -34,44 +34,47 @@ class SettingsFragment : PreferenceFragmentCompat() {
         startActivity(this)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setDivider(null)
+        setDividerHeight(0)
+    }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
-        val themeValue: Array<String> =
-            requireActivity().resources.getStringArray(R.array.theme_values)
-        val fontValue: Array<String> =
-            requireActivity().resources.getStringArray(R.array.font_entries)
 
-        findPreference<ListPreference>(getString(R.string.theme_key))?.let {
-            it.summary =
-                if (it.value.toString() == themeValue[0]) "System default" else it.value.toString()
-                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+        // Font Size preference -> opens font settings page
+        findPreference<Preference>(getString(R.string.font_key))?.setOnPreferenceClickListener {
+            findNavController().navigate(
+                SettingsFragmentDirections
+                    .actionSettingsFragmentToFontSizeFragment()
+            )
+            true
+        }
 
+        // Dark Mode switch
+        findPreference<SwitchPreference>("dark_mode_key")?.let {
+            // Set initial state based on current theme
+            val currentNightMode = AppCompatDelegate.getDefaultNightMode()
+            it.isChecked = currentNightMode == AppCompatDelegate.MODE_NIGHT_YES
+            
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                when {
-                    newValue.toString() == themeValue[1] -> {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    }
-                    newValue.toString() == themeValue[2] -> {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    }
-                    else -> {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                    }
+                val nightMode = if (newValue as Boolean) {
+                    AppCompatDelegate.MODE_NIGHT_YES
+                } else {
+                    AppCompatDelegate.MODE_NIGHT_NO
                 }
-                requireActivity().recreate()
+                
+                // Apply theme change with animation
+                view?.postDelayed({
+                    AppCompatDelegate.setDefaultNightMode(nightMode)
+                }, 200)
+                
                 true
             }
         }
 
-        findPreference<ListPreference>(getString(R.string.font_key))?.let {
-            it.summary = fontValue[it.value.toString().toInt()]
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                it.summary = fontValue[newValue.toString().toInt()]
-                true
-            }
-        }
-
-
+        // Contact Us
         findPreference<Preference>(getString(R.string.contact_us_key))?.let {
             it.setOnPreferenceClickListener {
                 composeEmail()
@@ -79,8 +82,16 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
         }
 
+        // Give Feedback
+        findPreference<Preference>("give_feedback_key")?.let {
+            it.setOnPreferenceClickListener {
+                // Navigate to feedback or open email
+                composeEmail()
+                true
+            }
+        }
 
-        /*Privacy Policy OnPreferenceClickListener*/
+        // Legal (Privacy Policy)
         findPreference<Preference>(getString(R.string.privacy_policy_key)).also {
             it?.setOnPreferenceClickListener {
                 findNavController().navigate(
@@ -91,8 +102,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
         }
 
-
-        /*About Us OnPreferenceClickListener*/
+        // About
         findPreference<Preference>(getString(R.string.about_us_key)).also {
             it?.setOnPreferenceClickListener {
                 findNavController().navigate(
@@ -103,7 +113,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
         }
 
-        /*Reset App OnPreferenceClickListener*/
+        // Clear App Content (Reset)
         findPreference<Preference>(getString(R.string.reset_key)).also {
             it?.setOnPreferenceClickListener {
                 with(Dialog(requireContext()).dialog()) {
@@ -111,19 +121,17 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     val message = findViewById<TextView>(R.id.message)
                     val yesButton = findViewById<View>(R.id.yesButton)
                     val noButton = findViewById<View>(R.id.noButton)
-                    "Are you sure you want to reset all data ?".also { message.text = it }
+                    "Are you sure you want to clear all app content?".also { message.text = it }
                     noButton.setOnClickListener { dismiss() }
                     yesButton.setOnClickListener {
                         dismiss()
                         viewModel.resetInfo(requireContext())
-                        requireContext().toast("App data has been reset.")
+                        requireContext().toast("App content has been cleared.")
                     }
                     safeDialogShow()
                 }
                 true
             }
         }
-
-
     }
 }

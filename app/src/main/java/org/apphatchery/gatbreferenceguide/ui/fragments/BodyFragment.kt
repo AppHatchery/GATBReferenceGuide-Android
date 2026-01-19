@@ -726,6 +726,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         val checkBox = findViewById<CheckBox>(R.id.select)
         findViewById<View>(R.id.closeDialog).setOnClickListener { dismiss() }
         noteColorRecyclerView.apply {
+            // Reset selection to default (first color) for new notes
+            faNoteColorAdapter.selectedColor = NOTE_COLOR[0].color
             adapter = faNoteColorAdapter
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -932,9 +934,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             
             visitButton.setOnClickListener {
                 dismiss()
-                hideKeyboard() // Dismiss keyboard before navigating to home
-                // Navigate to bookmarks/home page
-                findNavController().popBackStack(R.id.mainFragment, false)
+                hideKeyboard() // Dismiss keyboard before navigating
+                // Navigate to bookmarks screen
+                findNavController().navigate(R.id.savedFragment)
             }
             
             dismissButton.setOnClickListener {
