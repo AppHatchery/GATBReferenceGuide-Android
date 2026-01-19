@@ -137,6 +137,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
     private lateinit var id: String
     private lateinit var title: String
 
+    private var subChapterByUrl: Map<String, SubChapterEntity> = emptyMap()
+
     private lateinit var webViewFont: WebView
     private lateinit var sharedPreferences: SharedPreferences
     private var fontValue: Array<String> = arrayOf("Small", "Normal", "Large", "Larger")
@@ -509,6 +511,11 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 //                    return handleMenuItemSelection(menuItem)
 //                }
 //            }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+        // Cache subchapters for quick toolbar-title updates when navigating via in-page links
+        viewModel.getSubChapter.observeOnce(viewLifecycleOwner) { data ->
+            subChapterByUrl = data.associateBy { it.url }
+        }
 
         faNoteColorAdapter = FANoteColorAdapter(requireContext()).also {
             it.submitList(NOTE_COLOR)
@@ -1022,6 +1029,47 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 super.onPageFinished(view, url)
                 urlGlobal = url
 
+                // Keep the toolbar in sync when a user navigates to a different subchapter
+                // using an in-page "View in chapter" link.
+                updateToolbarTitleForLoadedUrl(url)
+
+                // If the loaded url contains an anchor (fragment), attempt to scroll
+                // to the element with that id. This helps when WebView doesn't
+                // automatically jump to the fragment target on some devices.
+                try {
+                    url?.let {
+                        val hashIndex = it.indexOf('#')
+                        if (hashIndex != -1 && hashIndex < it.length - 1) {
+                            val anchor = it.substring(hashIndex + 1)
+                            val density = resources.displayMetrics.density
+                            // Offset so the table title isn't clipped under the toolbar/header.
+                            val topOffsetPx = (50f * density).toInt()
+                            val safeAnchor = anchor.replace("'", "\\'")
+                            val jsScroll = "javascript:(function(){" +
+                                "var anchor='$safeAnchor';" +
+                                "var offset=$topOffsetPx;" +
+                                "function findTarget(){" +
+                                "  return document.getElementById(anchor) || " +
+                                "    document.querySelector('[name=\\\"' + anchor + '\\\"]') || " +
+                                "    document.querySelector('a[name=\\\"' + anchor + '\\\"]');" +
+                                "}" +
+                                "function scrollToTarget(tries){" +
+                                "  var el=findTarget();" +
+                                "  if(!el){ if(tries>0){ setTimeout(function(){scrollToTarget(tries-1);}, 100);} return; }" +
+                                "  var rect=el.getBoundingClientRect();" +
+                                "  var y=rect.top + window.pageYOffset - offset;" +
+                                "  if(y<0) y=0;" +
+                                "  window.scrollTo({top:y, behavior:'smooth'});" +
+                                "}" +
+                                "scrollToTarget(10);" +
+                                "})()"
+                            view?.evaluateJavascript(jsScroll, null)
+                        }
+                    }
+                } catch (e: Exception) {
+                    // ignore
+                }
+
                 // Re-apply font and icon scaling on every page load
                 updateFont()
 
@@ -1131,12 +1179,20 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     }
 
                     link.contains("#") -> {
+                        // Ensure we mark this as a subchapter link so state-dependent
+                        // logic elsewhere uses the correct type (e.g., bookmarks).
                         bookmarkType = BookmarkType.SUBCHAPTER
-                        BodyFragmentDirections.actionBodyFragmentSelf(
-                            bodyUrl.copy(
-                                chapterEntity = ChapterEntity(chapterTitle = chapterEntity.chapterTitle)
-                            ), null
-                        ).also { findNavController().navigate(it) }
+                        // Let the WebView load fragment/anchor links directly so the browser
+                        // will jump to the anchor. Also ensure we attempt a JS scroll after
+                        // the page finishes loading in case the fragment navigation didn't
+                        // move the viewport.
+                        try {
+                            view?.loadUrl(link)
+                        } catch (e: Exception) {
+                            // Fallback: navigate via nav controller to the target page (without anchor)
+                            val stripLink = link.substring(link.lastIndexOf("/") + 1, link.length)
+                            gotoNavController(stripLink.replace(EXTENSION, ""))
+                        }
                         true
                     }
 
@@ -1150,6 +1206,20 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
             }
         }
+    }
+
+    private fun updateToolbarTitleForLoadedUrl(url: String?) {
+        if (url.isNullOrBlank()) return
+
+        // Example: file:///.../pages/some_subchapter.html#table1
+        val fileName = url.substringAfterLast('/').substringBefore('#')
+        if (!fileName.endsWith(EXTENSION)) return
+
+        val slug = fileName.removeSuffix(EXTENSION)
+        val subChapter = subChapterByUrl[slug] ?: return
+
+        val titleText = HtmlCompat.fromHtml(subChapter.subChapterTitle, FROM_HTML_MODE_LEGACY).toString()
+        setActionBarTitle(titleText.toShortTableTitle())
     }
 
     fun isOnlyWhitespace(str: String): Boolean {
