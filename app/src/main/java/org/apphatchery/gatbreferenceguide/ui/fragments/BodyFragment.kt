@@ -364,6 +364,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     webViewFont.evaluateJavascript(injectTableOverride, null)
             webViewFont.evaluateJavascript(sizeIcons, null)
                     webViewFont.evaluateJavascript(sizeTableIcons, null)
+                        webViewFont.evaluateJavascript(injectOverride, null)
+            webViewFont.evaluateJavascript(sizeIcons, null)
             webViewFont.evaluateJavascript(paragraphOverride, null)
                 }
     }
