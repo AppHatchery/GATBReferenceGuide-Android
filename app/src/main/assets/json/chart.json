@@ -119,17 +119,10 @@
     "chartHomePosition": 0
   },
   {
-    "id": "table_18_dosage_adjustments_for_art_and_rifamycins_when_used_in_combination",
-    "subChapterTitle": "Antiretroviral Therapy (ART) and Treatment of HIV Seropositive Patients with Active Tuberculosis Disease",
-    "subChapterId": 28,
-    "chartTitle": "Table 18: Dosage Adjustments for ART and Rifamycins when used in Combination",
-    "chartHomePosition": 0
-  },
-  {
-    "id": "table_19_grady_hospital_tb_isolation_policy",
-    "subChapterTitle": "Adjunctive Use of Corticosteroid Therapy (Table 19)",
-    "subChapterId": 31,
-    "chartTitle": "Table 19: Grady Hospital TB Isolation Policy",
+    "id": "table_18_grady_hospital_tb_isolation_policy",
+    "subChapterTitle": "Adjunctive Use of Corticosteroid Therapy",
+    "subChapterId": 32,
+    "chartTitle": "Table 18: Grady Hospital TB Isolation Policy",
     "chartHomePosition": 0
   }
 ]
