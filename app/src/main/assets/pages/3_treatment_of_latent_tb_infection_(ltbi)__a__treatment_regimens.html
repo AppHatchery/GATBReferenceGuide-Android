@@ -10,6 +10,29 @@
     <meta content="SitePoint" name="author" />
     <link href="../assets/uikit.css" rel="stylesheet" />
     <link href="../assets/style.css" rel="stylesheet" />
+
+    <style>
+/* Page-scoped: force opaque, bottom tooltip for Table 6 only */
+#table_6_ltbi_treatment_drug_adverse_reactions .info-icon .tooltip,
+#table_6_ltbi_treatment_drug_adverse_reactions .info-icon.active .tooltip {
+  /* solid, opaque background (override any translucent CSS var) */
+
+  mix-blend-mode: normal !important;
+  isolation: isolate !important;
+  pointer-events: auto !important;
+  z-index: 2147483647 !important;
+  /* ensure it's positioned below the icon */
+  top: auto !important;
+  bottom: -10px !important;
+  margin-top: 8px !important;
+  margin-bottom: 0 !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  position: absolute !important;
+  max-width: 320px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+}
+</style>
   </head>
 
   <body>
@@ -418,7 +441,7 @@
                 <span
                   class="info-icon"
                   data-tooltip="NOTE: The American Academy of Pediatrics acknowledges that some experts use rifampin at 20 - 30 mg/kg for the daily regimen when prescribing for infants and toddlers. (Source: American Academy of Pediatrics. Tuberculosis. In: Kimberlin DW, Brady MT, Jackson MA, Long SS, eds. Red Book: 2018 Report of the Committee on Infectious Diseases. 31st ed. Itasca, IL: American Academy of Pediatrics; 2018:829-53)."
-                  data-tooltip-position="tooltip-left"
+                  data-tooltip-position="tooltip-right"
                   >i</span
                 ><br />
                 <strong>Maximum dose</strong>: 600 mg<br />
@@ -521,9 +544,7 @@
                 10 - 20 mg/kg
                 <span
                   class="info-icon"
-                  data-tooltip="NOTE: The American Academy of Pediatrics recommends an isoniazid dosage of 10 - 15 mg/kg for the daily regimen.  Adapted from MMWR Recomm Rep 2020; 69(1):1-11."
-                  >i</span
-                >
+                  data-tooltip="NOTE: The American Academy of Pediatrics recommends an isoniazid dosage of 10 - 15 mg/kg for the daily regimen.  Adapted from MMWR Recomm Rep 2020; 69(1):1-11." data-tooltip-position="tooltip-left">i</span>
                 <br />
                 <strong>Maximum dose</strong>: <br />
                 300 mg <br />
@@ -614,44 +635,8 @@
                 regular alcohol use, injection drug use, or use of medications
                 with known possible interactions. [Some clinicians prefer to
                 obtain baseline tests on all adults]. Repeat measurements if:
-                <span
-                  class="info-icon"
-                  data-tooltip="NOTE: 
-
-Hypersensitivity reaction to rifamycins (rifampin, rifabutin, or rifapentine): reactions may include a flu-like syndrome (e.g. fever, chills, headaches, dizziness, musculoskeletal pain), thrombocytopenia, shortness of breath or other signs and symptoms including wheezing, acute bronchospasm, urticaria, petechiae, purpura, pruritus, conjunctivitis, angioedema, hypotension or shock.
-If moderate to severe reaction (e.g. thrombocytopenia, hypotension), hospitalization or life-threatening event: Discontinue treatment.
-If mild reaction (e.g. rash, dizziness, fever): Continue to monitor patient closely with a low threshold for discontinuing treatment.
-A flu-like syndrome appears to be the most common side effect profile leading to discontinuation of the 3HP regimen.
-Rifabutin can rarely cause uveitis."
-                  data-tooltip-position="tooltip-center"
-                  >i</span
-                >
                 baseline results are abnormal
-                <span
-                  class="info-icon"
-                  data-tooltip="NOTE:
-
-Hypersensitivity reaction to rifamycins (rifampin, rifabutin, or rifapentine): reactions may include a flu-like syndrome (e.g. fever, chills, headaches, dizziness, musculoskeletal pain), thrombocytopenia, shortness of breath or other signs and symptoms including wheezing, acute bronchospasm, urticaria, petechiae, purpura, pruritus, conjunctivitis, angioedema, hypotension or shock.
-If moderate to severe reaction (e.g. thrombocytopenia, hypotension), hospitalization or life-threatening event: Discontinue treatment.
-If mild reaction (e.g. rash, dizziness, fever): Continue to monitor patient closely with a low threshold for discontinuing treatment.
-A flu-like syndrome appears to be the most common side effect profile leading to discontinuation of the 3HP regimen.
-Rifabutin can rarely cause uveitis."
-                  data-tooltip-position="tooltip-center"
-                  >i</span
-                >
                 client is at high-risk for adverse reactions
-                <span
-                  class="info-icon"
-                  data-tooltip="NOTE:
-
-Hypersensitivity reaction to rifamycins (rifampin, rifabutin, or rifapentine): reactions may include a flu-like syndrome (e.g. fever, chills, headaches, dizziness, musculoskeletal pain), thrombocytopenia, shortness of breath or other signs and symptoms including wheezing, acute bronchospasm, urticaria, petechiae, purpura, pruritus, conjunctivitis, angioedema, hypotension or shock.
-If moderate to severe reaction (e.g. thrombocytopenia, hypotension), hospitalization or life-threatening event: Discontinue treatment.
-If mild reaction (e.g. rash, dizziness, fever): Continue to monitor patient closely with a low threshold for discontinuing treatment.
-A flu-like syndrome appears to be the most common side effect profile leading to discontinuation of the 3HP regimen.
-Rifabutin can rarely cause uveitis."
-                  data-tooltip-position="tooltip-center"
-                  >i</span
-                >
                 client has symptoms of adverse reactions
               </td>
             </tr>
@@ -682,7 +667,7 @@ If moderate to severe reaction (e.g. thrombocytopenia, hypotension), hospitaliza
 If mild reaction (e.g. rash, dizziness, fever): Continue to monitor patient closely with a low threshold for discontinuing treatment.
 A flu-like syndrome appears to be the most common side effect profile leading to discontinuation of the 3HP regimen.
 Rifabutin can rarely cause uveitis."
-                  data-tooltip-position="tooltip-left"
+                  data-tooltip-position="tooltip-top-left"
                   >i</span
                 >
                 Many drug-drug interactions
@@ -693,32 +678,7 @@ Rifabutin can rarely cause uveitis."
               <td>
                 Complete blood count (CBC), platelets and liver function tests.
                 Repeat measurements if:
-                <span
-                  class="info-icon"
-                  data-tooltip="NOTE:
-
-Hypersensitivity reaction to rifamycins (rifampin, rifabutin, or rifapentine): reactions may include a flu-like syndrome (e.g. fever, chills, headaches, dizziness, musculoskeletal pain), thrombocytopenia, shortness of breath or other signs and symptoms including wheezing, acute bronchospasm, urticaria, petechiae, purpura, pruritus, conjunctivitis, angioedema, hypotension or shock.
-If moderate to severe reaction (e.g. thrombocytopenia, hypotension), hospitalization or life-threatening event: Discontinue treatment.
-If mild reaction (e.g. rash, dizziness, fever): Continue to monitor patient closely with a low threshold for discontinuing treatment.
-A flu-like syndrome appears to be the most common side effect profile leading to discontinuation of the 3HP regimen.
-Rifabutin can rarely cause uveitis.
-Content
-"
-                  >i</span
-                >
                 baseline results are abnormal
-                <span
-                  class="info-icon"
-                  data-tooltip="NOTE:
-
-Hypersensitivity reaction to rifamycins (rifampin, rifabutin, or rifapentine): reactions may include a flu-like syndrome (e.g. fever, chills, headaches, dizziness, musculoskeletal pain), thrombocytopenia, shortness of breath or other signs and symptoms including wheezing, acute bronchospasm, urticaria, petechiae, purpura, pruritus, conjunctivitis, angioedema, hypotension or shock.
-If moderate to severe reaction (e.g. thrombocytopenia, hypotension), hospitalization or life-threatening event: Discontinue treatment.
-If mild reaction (e.g. rash, dizziness, fever): Continue to monitor patient closely with a low threshold for discontinuing treatment.
-A flu-like syndrome appears to be the most common side effect profile leading to discontinuation of the 3HP regimen.
-Rifabutin can rarely cause uveitis."
-                  data-tooltip-position="tooltip-right"
-                  >i</span
-                >
                 client has symptoms of adverse reactions  Prior to starting RIF
                 or RPT: need to carefully review all medications being taken by
                 the patient with LTBI and ensure there is no contraindication to
@@ -754,31 +714,7 @@ Rifabutin can rarely cause uveitis."
               <td>
                 Complete blood count (CBC), platelets and liver function tests.
                 Repeat measurements if:
-                <span
-                  class="info-icon"
-                  data-tooltip="NOTE: 
-
-Hypersensitivity reaction to rifamycins (rifampin, rifabutin, or rifapentine): reactions may include a flu-like syndrome (e.g. fever, chills, headaches, dizziness, musculoskeletal pain), thrombocytopenia, shortness of breath or other signs and symptoms including wheezing, acute bronchospasm, urticaria, petechiae, purpura, pruritus, conjunctivitis, angioedema, hypotension or shock.
-If moderate to severe reaction (e.g. thrombocytopenia, hypotension), hospitalization or life-threatening event: Discontinue treatment.
-If mild reaction (e.g. rash, dizziness, fever): Continue to monitor patient closely with a low threshold for discontinuing treatment.
-A flu-like syndrome appears to be the most common side effect profile leading to discontinuation of the 3HP regimen.
-Rifabutin can rarely cause uveitis."
-                  data-tooltip-position="tooltip-center-center"
-                  >i</span
-                >
                 baseline results are abnormal
-                <span
-                  class="info-icon"
-                  data-tooltip="NOTE: 
-
-Hypersensitivity reaction to rifamycins (rifampin, rifabutin, or rifapentine): reactions may include a flu-like syndrome (e.g. fever, chills, headaches, dizziness, musculoskeletal pain), thrombocytopenia, shortness of breath or other signs and symptoms including wheezing, acute bronchospasm, urticaria, petechiae, purpura, pruritus, conjunctivitis, angioedema, hypotension or shock.
-If moderate to severe reaction (e.g. thrombocytopenia, hypotension), hospitalization or life-threatening event: Discontinue treatment.
-If mild reaction (e.g. rash, dizziness, fever): Continue to monitor patient closely with a low threshold for discontinuing treatment.
-A flu-like syndrome appears to be the most common side effect profile leading to discontinuation of the 3HP regimen.
-Rifabutin can rarely cause uveitis."
-                  data-tooltip-position="tooltip-bottom-center"
-                  >i</span
-                >
                 client has symptoms of adverse reactions  Prior to starting RIF
                 or RPT: need to carefully review all medications being taken by
                 the patient with LTBI and ensure there is no contraindication to

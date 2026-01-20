@@ -10,6 +10,28 @@
     <meta content="SitePoint" name="author" />
     <link href="../assets/uikit.css" rel="stylesheet" />
     <link href="../assets/style.css" rel="stylesheet" />
+       <style>
+/* Page-scoped: force opaque, bottom tooltip for Table 6 only */
+#table_6_ltbi_treatment_drug_adverse_reactions .info-icon .tooltip,
+#table_6_ltbi_treatment_drug_adverse_reactions .info-icon.active .tooltip {
+  /* solid, opaque background (override any translucent CSS var) */
+
+  mix-blend-mode: normal !important;
+  isolation: isolate !important;
+  pointer-events: auto !important;
+  z-index: 2147483647 !important;
+  /* ensure it's positioned below the icon */
+  top: auto !important;
+  bottom: -10px !important;
+  margin-top: 8px !important;
+  margin-bottom: 0 !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  position: absolute !important;
+  max-width: 320px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+}
+</style>
 </head>
 
 <body>
