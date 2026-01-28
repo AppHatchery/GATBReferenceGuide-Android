@@ -716,13 +716,13 @@ h3.highlight {
   justify-content: center;
   align-items: center;
   font-family: serif;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   background-color: var(--primary-color);
   color: white;
   border-radius: 50%;
   cursor: pointer;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   line-height: 16px;
   margin: 0 0rem;
   position: relative;
