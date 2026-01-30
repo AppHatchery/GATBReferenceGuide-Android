@@ -401,6 +401,13 @@ class MainActivity : AppCompatActivity(), ActionBarController {
     }
     
     override fun onSupportNavigateUp(): Boolean {
+        // Let the current fragment handle the toolbar back first (e.g., WebView history)
+        val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container)
+        val current = navHost?.childFragmentManager?.primaryNavigationFragment
+        if (current is org.apphatchery.gatbreferenceguide.ui.OnToolbarBackPressed) {
+            val consumed = try { current.onToolbarBackPressed() } catch (e: Exception) { false }
+            if (consumed) return true
+        }
         return navController.navigateUp() || super.onSupportNavigateUp()
     }
 

@@ -99,7 +99,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.apphatchery.gatbreferenceguide.utils.toShortTableTitle
 
 @AndroidEntryPoint
-class BodyFragment : BaseFragment(R.layout.fragment_body) {
+class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbreferenceguide.ui.OnToolbarBackPressed {
 
     private val TAG = "MyFragmentLifecycle"
 
@@ -162,6 +162,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
             }
         }
     }
+
+    
 
     private fun onDeleteNoteSnackbar(note: NoteEntity) {
         showNoteDeletedCard("Note Deleted")
@@ -527,6 +529,29 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
 
         setupWebView()
+        // Let the WebView consume Back presses first; if it has history goBack(),
+        // otherwise delegate to NavController/activity.
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    try {
+                        Log.d(TAG, "Back pressed: bindInitialized=${::bind.isInitialized}, webViewCanGoBack=${if (::bind.isInitialized) bind.bodyWebView.canGoBack() else "N/A"}")
+                        if (::bind.isInitialized && bind.bodyWebView.canGoBack()) {
+                            Log.d(TAG, "Back pressed: WebView canGoBack -> goBack()")
+                            bind.bodyWebView.goBack()
+                        } else {
+                            Log.d(TAG, "Back pressed: WebView cannot go back -> delegating to activity")
+                            isEnabled = false
+                            requireActivity().onBackPressed()
+                        }
+                    } catch (e: Exception) {
+                        Log.d(TAG, "Back pressed: exception in handler, delegating to activity", e)
+                        isEnabled = false
+                        requireActivity().onBackPressed()
+                    }
+                }
+            }
+        )
 //search query
         if (bodyUrl.searchQuery.isNotEmpty() && !isOnlyWhitespace(bodyUrl.searchQuery)) {
             // Do not display the bottom search-clear container anymore
@@ -1031,6 +1056,18 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 super.onPageFinished(view, url)
                 urlGlobal = url
 
+                Log.d(TAG, "onPageFinished url=$urlGlobal, bookmarkType=$bookmarkType")
+
+                // If this BodyFragment was opened for a chart/table, prefer showing
+                // the chart title when the WebView loads the chart file again
+                // (for example when the user navigates back from a chapter).
+                try {
+                    if (chartAndSubChapter != null && url != null && url.contains(chartAndSubChapter!!.chartEntity.id)) {
+                        setActionBarTitle(chartAndSubChapter!!.chartEntity.chartTitle.toShortTableTitle())
+                    }
+                } catch (e: Exception) {
+                    // ignore
+                }
                 // Keep the toolbar in sync when a user navigates to a different subchapter
                 // using an in-page "View in chapter" link.
                 updateToolbarTitleForLoadedUrl(url)
@@ -1040,6 +1077,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 // automatically jump to the fragment target on some devices.
                 try {
                     url?.let {
+                        Log.d(TAG, "onPageFinished handling anchor check for url=$it")
                         val hashIndex = it.indexOf('#')
                         if (hashIndex != -1 && hashIndex < it.length - 1) {
                             val anchor = it.substring(hashIndex + 1)
@@ -1155,6 +1193,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                 request: WebResourceRequest?,
             ): Boolean {
                 val link = request?.url.toString()
+                Log.d(TAG, "shouldOverrideUrlLoading: link=$link")
                 return when {
                     link.subSequence(0, 4).toString().lowercase() == "http".lowercase() -> {
                         requireActivity().apply {
@@ -1181,6 +1220,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     }
 
                     link.contains("#") -> {
+                        Log.d(TAG, "shouldOverrideUrlLoading: contains '#' - loading into WebView and marking SUBCHAPTER")
                         // Ensure we mark this as a subchapter link so state-dependent
                         // logic elsewhere uses the correct type (e.g., bookmarks).
                         bookmarkType = BookmarkType.SUBCHAPTER
@@ -1190,7 +1230,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                         // move the viewport.
                         try {
                             view?.loadUrl(link)
+                            Log.d(TAG, "shouldOverrideUrlLoading: view.loadUrl succeeded for $link")
                         } catch (e: Exception) {
+                            Log.d(TAG, "shouldOverrideUrlLoading: view.loadUrl failed for $link -> fallback to gotoNavController", e)
                             // Fallback: navigate via nav controller to the target page (without anchor)
                             val stripLink = link.substring(link.lastIndexOf("/") + 1, link.length)
                             gotoNavController(stripLink.replace(EXTENSION, ""))
@@ -1201,6 +1243,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
                     else -> {
                         val stripLink = link.substring(link.lastIndexOf("/") + 1, link.length)
                         stripLink.replace(EXTENSION, "")
+                        Log.d(TAG, "shouldOverrideUrlLoading: non-anchor link, calling gotoNavController with ${stripLink.replace(EXTENSION, "")} ")
                         gotoNavController(stripLink.replace(EXTENSION, ""))
                         super.shouldOverrideUrlLoading(view, request)
                     }
@@ -1224,6 +1267,19 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
         setActionBarTitle(titleText.toShortTableTitle())
     }
 
+    override fun onToolbarBackPressed(): Boolean {
+        return try {
+            if (::bind.isInitialized && bind.bodyWebView.canGoBack()) {
+                bind.bodyWebView.goBack()
+                true
+            } else {
+                false
+            }
+        } catch (e: Exception) {
+            false
+        }
+    }
+
     fun isOnlyWhitespace(str: String): Boolean {
         val trimmedStr = str.trim()
         return trimmedStr.isEmpty()
@@ -1245,10 +1301,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body) {
 
 
     private fun gotoNavController(url: String) {
+        Log.d(TAG, "gotoNavController called with url=$url")
         if (url.isEmpty().not()) {
             viewModel.getSubChapter.observe(viewLifecycleOwner) { data ->
                 for (subChapter in data) {
                     if (subChapter.url == url) {
+                        Log.d(TAG, "gotoNavController: navigating to subChapter ${subChapter.url}")
                         val subChapterFragmentDirections =
                             BodyFragmentDirections.actionBodyFragmentSelf(
                                 BodyUrl(bodyFragmentArgs.bodyUrl.chapterEntity, subChapter, ""),
