@@ -149,7 +149,7 @@
     <fragment
         android:id="@+id/chartFragment"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.ChartFragment"
-        android:label="All Charts"
+        android:label="All Tables"
         tools:layout="@layout/fragment_with_recyclerview">
         <action
             android:id="@+id/action_chartFragment_to_bodyFragment"

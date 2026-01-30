@@ -132,7 +132,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                 viewModel.getChart.observe(viewLifecycleOwner) { data ->
                     with(predefinedChartList) {
                         clear()
-                        add(data[0].copy(chartEntity = data[0].chartEntity.copy(chartTitle = "All Charts>")))
+                        add(data[0].copy(chartEntity = data[0].chartEntity.copy(chartTitle = "All Tables>")))
                         add(data[7].copy(chartEntity = data[7].chartEntity.copy(chartTitle = "First Line TB Drugs for Adults")))
                         add(data[13].copy(chartEntity = data[13].chartEntity.copy(chartTitle = "IV Therapy Drugs")))
                         add(data[14].copy(chartEntity = data[14].chartEntity.copy(chartTitle = "Alternative Regimens")))
@@ -144,7 +144,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                 }
 
                 adapter.itemClickCallback { chartAndSubChapter ->
-                    if (chartAndSubChapter.chartEntity.chartTitle == "All Charts>") {
+                    if (chartAndSubChapter.chartEntity.chartTitle == "All Tables>") {
                         findNavController().navigate(R.id.action_mainFragment_to_chartFragment)
                     } else {
                         viewModel.getChapterInfo(chartAndSubChapter.subChapterEntity.chapterId)

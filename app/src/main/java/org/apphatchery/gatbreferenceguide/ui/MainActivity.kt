@@ -225,7 +225,8 @@ class MainActivity : AppCompatActivity(), ActionBarController {
             }
             R.id.chartFragment -> {
                 setActionBarConfig(
-                    title = "All Charts", 
+                    // prefer the nav destination label (from nav_graph). fallback to "All Tables"
+                    title = destinationLabel ?: "All Tables",
                     showBackButton = true
                 )
                 setActionBarSearchVisible(false)
