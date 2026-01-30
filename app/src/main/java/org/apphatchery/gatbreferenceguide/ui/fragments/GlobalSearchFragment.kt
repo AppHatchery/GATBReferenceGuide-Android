@@ -80,6 +80,15 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
     private var searchJob: Job? = null
 
+    // Sanitize user input for SQLite FTS MATCH queries to avoid malformed expressions and crashes when user enters " in the search query
+    private fun sanitizeForFTS(input: String): String {
+        // Keep only letters, numbers and whitespace; replace other chars with spaces
+        val cleaned = input.replace(Regex("[^\\p{L}\\p{N}\\s]"), " ")
+            .replace(Regex("\\s+"), " ")
+            .trim()
+        return cleaned
+    }
+
 
 
     @SuppressLint("NotifyDataSetChanged")
@@ -432,7 +441,7 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
     private fun handleSearchTextChange(text: String) {
         searchJob?.cancel()
         val trimmedText = text.trim()
-        viewModel.searchQuery.value = text
+        viewModel.searchQuery.value = sanitizeForFTS(trimmedText)
         with(bind.searchItemCount) {
             visibility = if (trimmedText.isBlank()) View.GONE else View.VISIBLE
         }
@@ -556,7 +565,8 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
     }
 
     private fun performSearch() {
-        val query = bind.searchKeyword.text.toString().trim()
+        val rawQuery = bind.searchKeyword.text.toString()
+        val query = sanitizeForFTS(rawQuery)
         if (query.isNotEmpty()) {
             showLoading()
             bind.searchProgressBar.visibility = View.GONE
