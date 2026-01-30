@@ -1849,13 +1849,32 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
     }
 
     private fun clearWebViewSearch() {
+        // Remove highlight spans that were injected into the DOM by our search JS
+        val removeHighlightsJs = """
+            javascript:(function(){
+                try{
+                    var spans = document.querySelectorAll('span[style*="background-color"]');
+                    for(var i=0;i<spans.length;i++){
+                        var s = spans[i];
+                        var parent = s.parentNode;
+                        if(!parent) continue;
+                        // Replace the span with its text content to preserve surrounding markup
+                        var textNode = document.createTextNode(s.textContent || '');
+                        parent.replaceChild(textNode, s);
+                    }
+                }catch(e){}
+            })();
+        """.trimIndent()
+
+        bind.bodyWebView.evaluateJavascript(removeHighlightsJs, null)
+        // Clear WebView's internal find highlights
         bind.bodyWebView.clearMatches()
         bind.searchClearContainer.visibility = View.GONE
-        
-        // Optionally collapse expanded sections when clearing search
+
+        // Collapse any sections that were expanded for the search
         collapseExpandedSections()
-        
-        Log.d("BodyFragment", "Cleared WebView search")
+
+        Log.d("BodyFragment", "Cleared WebView search and removed injected highlights")
     }
 
     private fun hideKeyboard() {
