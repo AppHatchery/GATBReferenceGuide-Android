@@ -1144,36 +1144,11 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
                     return
                 }
 
-                val allowedString = normalizeString(searchInput)
-                val searchBody = allowedString.split(" ")
-
-                val highlightColorInt = ContextCompat.getColor(requireContext(), R.color.reddish)
-                val highlightHex = String.format("#%06X", 0xFFFFFF and highlightColorInt)
-
-                for (eachWord in searchBody) {
-                    val jsCode = "javascript:(function() { " +
-                            "var count = 0;" +
-                            "function highlightAllOccurencesOfString(str) {" +
-                            "  var obj = window.document.getElementsByTagName('body')[0];" +
-                            "  var html = obj.innerHTML;" +
-                            "  var regex = new RegExp('(?<!<[^>]*>)' + str + '(?![^<]*?>)', 'gi');" +
-                            "  var allOccurrences = html.match(regex);" +
-                            "  count = allOccurrences ? allOccurrences.length : 0;" +
-                            "  for (var i = 0; i < count; i++) {" +
-                            "    var occurrence = allOccurrences[i];" +
-                            "    var span = document.createElement('span');" +
-                            "    span.style.backgroundColor = '" + highlightHex + "';" +
-                            "    span.style.color = '#000000';" +
-                            "    span.style.fontWeight = 'normal';" +
-                            "    span.innerHTML = occurrence;" +
-                            "    html = html.replace(new RegExp('(?<!<[^>]*>)' + occurrence + '(?![^<]*?>)', 'gi'), span.outerHTML);" +
-                            "  }" +
-                            "  obj.innerHTML = html;" +
-                            "}" +
-                            "highlightAllOccurencesOfString('$eachWord');" +
-                            "})()"
-                    view?.loadUrl(jsCode)
-                }
+                // NOTE: Removed DOM-injection highlighting here to avoid double-highlighting
+                // (injected <span> highlights) which caused a visual flicker when
+                // combined with the WebView's own `findAllAsync` highlights.
+                // relying on `findAllAsync` + `expandSectionsWithSearchResults` for
+                // consistent highlighting and match counts.
             }
 
 
@@ -1561,7 +1536,21 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
     }
 
     private fun collapseSearchView() {
-        if (!isExpanded) return
+        // Always ensure controls are hidden when collapsing/clearing search.
+        // If not expanded, still hide controls and clear search state.
+        if (!isExpanded) {
+            val searchControlsContainer = searchContainer.findViewById<LinearLayout>(R.id.search_controls_container)
+            searchControlsContainer.visibility = View.GONE
+            searchClear.visibility = View.GONE
+            searchPrevious.visibility = View.GONE
+            searchNext.visibility = View.GONE
+            searchCounter.visibility = View.GONE
+            searchEditText.clearFocus()
+            clearWebViewSearch()
+            isExpanded = false
+            return
+        }
+
         isExpanded = false
 
         // Hide controls
