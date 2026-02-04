@@ -1138,7 +1138,16 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
                     
                     // then perform the search with a delay to allow time for expansion
                     Handler(Looper.getMainLooper()).postDelayed({
-                        view?.findAllAsync(searchInput)
+                        try {
+                            // Guard: verify WebView is in valid state before searching
+                            if (view != null && view.progress == 100 && !searchInput.isBlank()) {
+                                view.findAllAsync(searchInput)
+                            } else {
+                                Log.d(TAG, "WebView not ready for search in onPageFinished - skipping")
+                            }
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Error calling findAllAsync in onPageFinished", e)
+                        }
                     }, 300)
                 } else {
                     return
@@ -1430,22 +1439,22 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
             override fun afterTextChanged(s: Editable?) {
                 val query = s?.toString()?.trim() ?: ""
                 
-                // Show/hide search counter based on text
-                searchCounter.visibility = if (query.isBlank()) View.GONE else View.VISIBLE
-                
                 if (query.isNotEmpty()) {
+                    // Show clear button when there's text
                     searchClear.visibility = View.VISIBLE
+                    // Perform search if controls are visible
                     if (isExpanded) {
                         performInPageSearch(query)
                     }
                 } else {
                     // Clear WebView search highlights when search text is cleared
                     clearWebViewSearch()
-                    collapseSearchView()
+                    // Hide clear button when no text
                     searchClear.visibility = View.GONE
-                    if (isExpanded) {
-                        showEmptySearchState()
-                    }
+                    // Reset counter to 0/0
+                    totalMatches = 0
+                    currentMatch = 0
+                    searchCounter.text = "0/0"
                 }
             }
         })
@@ -1467,12 +1476,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
         searchClear.setOnClickListener {
             // Clear the search text
             searchEditText.text.clear()
-            // Clear WebView search
-            clearWebViewSearch()
-            // Collapse the search view
+            // Collapse the search view to hide controls
             collapseSearchView()
-            // Dismiss keyboard when clearing search
-            hideKeyboard()
         }
 
         searchPrevious.setOnClickListener {
@@ -1503,16 +1508,25 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
                 searchEditText.layoutParams = layoutParams
             }
             doOnEnd {
-                // Change background and show controls
+                // Change background and always show controls
                 searchEditText.background = ContextCompat.getDrawable(requireContext(), R.drawable.search_input_background)
-                showSearchControls()
+                
+                // Always show controls container and counter when expanded
+                val searchControlsContainer = searchContainer.findViewById<LinearLayout>(R.id.search_controls_container)
+                searchControlsContainer.visibility = View.VISIBLE
+                searchCounter.visibility = View.VISIBLE
                 
                 val query = searchEditText.text.toString().trim()
                 if (query.isNotEmpty()) {
+                    // Show clear button and perform search if there's text
                     searchClear.visibility = View.VISIBLE
                     performInPageSearch(query)
                 } else {
-                    showEmptySearchState()
+                    // No text, show 0/0 counter
+                    searchClear.visibility = View.GONE
+                    totalMatches = 0
+                    currentMatch = 0
+                    searchCounter.text = "0/0"
                 }
             }
         }.start()
@@ -1522,17 +1536,6 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
         searchClear.visibility = View.VISIBLE
         val searchControlsContainer = searchContainer.findViewById<LinearLayout>(R.id.search_controls_container)
         searchControlsContainer.visibility = View.VISIBLE
-    }
-
-    private fun showEmptySearchState() {
-        totalMatches = 0
-        currentMatch = 0
-        searchCounter.text = "0/0"
-       
-        val searchControlsContainer = searchContainer.findViewById<LinearLayout>(R.id.search_controls_container)
-        searchControlsContainer.visibility = View.VISIBLE
-        searchClear.visibility = View.VISIBLE
-        Log.d("BodyFragment", "Showing empty search state")
     }
 
     private fun collapseSearchView() {
@@ -1584,23 +1587,40 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
 
     private fun performInPageSearch(searchQuery: String) {
         if (searchQuery.isNotEmpty()) {
-            // expand any collapsed sections containing the search term
-            expandSectionsWithSearchResults(searchQuery)
-            
-            // Set up the search result listener
-            bind.bodyWebView.setOnSearchResultListener { totalMatches, currentMatch ->
-                this.totalMatches = totalMatches
-                this.currentMatch = currentMatch
-                updateSearchUI()
+            try {
+                // expand any collapsed sections containing the search term
+                expandSectionsWithSearchResults(searchQuery)
+                
+                // Set up the search result listener
+                bind.bodyWebView.setOnSearchResultListener { totalMatches, currentMatch ->
+                    this.totalMatches = totalMatches
+                    this.currentMatch = currentMatch
+                    updateSearchUI()
+                }
+                
+                // Perform WebView search after a short delay to allow expansion
+                Handler(Looper.getMainLooper()).postDelayed({
+                    try {
+                        // Guard: only search if WebView is ready and has loaded content
+                        if (bind.bodyWebView.progress == 100 && bind.bodyWebView.url != null) {
+                            bind.bodyWebView.findAllAsync(searchQuery)
+                            bind.searchClearContainer.visibility = View.GONE
+                        } else {
+                            Log.d("BodyFragment", "WebView not ready for search - skipping")
+                        }
+                    } catch (e: Exception) {
+                        Log.e("BodyFragment", "Error during WebView search", e)
+                        // Reset search UI on error
+                        totalMatches = 0
+                        currentMatch = 0
+                        updateSearchUI()
+                    }
+                }, 300) // Increased delay to ensure dropdowns are expanded
+                
+                Log.d("BodyFragment", "Performing search for: $searchQuery")
+            } catch (e: Exception) {
+                Log.e("BodyFragment", "Error setting up search", e)
             }
-            
-            // Perform WebView search after a short delay to allow expansion
-            Handler(Looper.getMainLooper()).postDelayed({
-                bind.bodyWebView.findAllAsync(searchQuery)
-                bind.searchClearContainer.visibility = View.GONE
-            }, 300) // Increased delay to ensure dropdowns are expanded
-            
-            Log.d("BodyFragment", "Performing search for: $searchQuery")
         }
     }
 
@@ -1766,6 +1786,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
     }
 
     private fun updateSearchUI() {
+        // Guard against uninitialized search views (e.g., when viewing charts)
+        if (!::searchCounter.isInitialized) {
+            Log.d("BodyFragment", "Search UI not initialized - skipping update")
+            return
+        }
+        
         val count = totalMatches
         searchCounter.text = "${currentMatch}/${count}"
         
@@ -1838,32 +1864,36 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
     }
 
     private fun clearWebViewSearch() {
-        // Remove highlight spans that were injected into the DOM by our search JS
-        val removeHighlightsJs = """
-            javascript:(function(){
-                try{
-                    var spans = document.querySelectorAll('span[style*="background-color"]');
-                    for(var i=0;i<spans.length;i++){
-                        var s = spans[i];
-                        var parent = s.parentNode;
-                        if(!parent) continue;
-                        // Replace the span with its text content to preserve surrounding markup
-                        var textNode = document.createTextNode(s.textContent || '');
-                        parent.replaceChild(textNode, s);
-                    }
-                }catch(e){}
-            })();
-        """.trimIndent()
+        try {
+            // Remove highlight spans that were injected into the DOM by our search JS
+            val removeHighlightsJs = """
+                javascript:(function(){
+                    try{
+                        var spans = document.querySelectorAll('span[style*="background-color"]');
+                        for(var i=0;i<spans.length;i++){
+                            var s = spans[i];
+                            var parent = s.parentNode;
+                            if(!parent) continue;
+                            // Replace the span with its text content to preserve surrounding markup
+                            var textNode = document.createTextNode(s.textContent || '');
+                            parent.replaceChild(textNode, s);
+                        }
+                    }catch(e){}
+                })();
+            """.trimIndent()
 
-        bind.bodyWebView.evaluateJavascript(removeHighlightsJs, null)
-        // Clear WebView's internal find highlights
-        bind.bodyWebView.clearMatches()
-        bind.searchClearContainer.visibility = View.GONE
+            bind.bodyWebView.evaluateJavascript(removeHighlightsJs, null)
+            // Clear WebView's internal find highlights
+            bind.bodyWebView.clearMatches()
+            bind.searchClearContainer.visibility = View.GONE
 
-        // Collapse any sections that were expanded for the search
-        collapseExpandedSections()
+            // Collapse any sections that were expanded for the search
+            collapseExpandedSections()
 
-        Log.d("BodyFragment", "Cleared WebView search and removed injected highlights")
+            Log.d("BodyFragment", "Cleared WebView search and removed injected highlights")
+        } catch (e: Exception) {
+            Log.e("BodyFragment", "Error clearing WebView search", e)
+        }
     }
 
     private fun hideKeyboard() {
