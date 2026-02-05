@@ -45,7 +45,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 
-private const val BUILD_VERSION = 12
+private const val BUILD_VERSION = 13
 private const val PENDO_RELEASE_VERSION = "Oct-25-"
 
 @AndroidEntryPoint
