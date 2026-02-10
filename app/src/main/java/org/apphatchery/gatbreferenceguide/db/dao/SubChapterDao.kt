@@ -40,6 +40,12 @@ interface SubChapterDao {
     @Query("SELECT  * FROM  SubChapterEntity WHERE subChapterId=:id OR subChapterTitle=:id LIMIT 1")
     fun getSubChapterByIdOrNull(id: String): Flow<SubChapterEntity?>
 
+    @Query(
+        "SELECT * FROM SubChapterEntity " +
+            "WHERE subChapterId=:key OR subChapterTitle=:key OR url=:key LIMIT 1"
+    )
+    suspend fun findSubChapterByKeyOnceOrNull(key: String): SubChapterEntity?
+
 
     fun getSubChapterEntity(
         keyword: String = "",

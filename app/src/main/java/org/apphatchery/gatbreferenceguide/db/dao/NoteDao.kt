@@ -2,6 +2,7 @@ package org.apphatchery.gatbreferenceguide.db.dao
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import org.apphatchery.gatbreferenceguide.db.data.NoteTargetRow
 import org.apphatchery.gatbreferenceguide.db.entities.NoteEntity
 
 @Dao
@@ -23,6 +24,15 @@ interface NoteDao {
 
     @Update
     suspend fun update(data: NoteEntity)
+
+    @Query("SELECT noteIdPrimaryKey, noteId, subChapterId FROM NoteEntity")
+    suspend fun getAllNoteTargets(): List<NoteTargetRow>
+
+    @Query("UPDATE NoteEntity SET noteId = :newNoteId WHERE noteIdPrimaryKey = :pk")
+    suspend fun updateNoteTargetByPk(pk: Int, newNoteId: String): Int
+
+    @Query("UPDATE NoteEntity SET noteId = :newNoteId, subChapterId = :newSubChapterId WHERE noteIdPrimaryKey = :pk")
+    suspend fun updateNoteTargetAndSubChapterByPk(pk: Int, newNoteId: String, newSubChapterId: Int): Int
 
     @Query("DELETE FROM NoteEntity")
     suspend fun clearNotes()

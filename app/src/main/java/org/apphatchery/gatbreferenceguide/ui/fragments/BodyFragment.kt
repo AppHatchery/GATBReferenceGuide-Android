@@ -137,6 +137,10 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
     private lateinit var id: String
     private lateinit var title: String
 
+    // Analytics context for WebView-driven interactions (e.g., info icons inside HTML).
+    private var analyticsPageUrl: String = ""
+    private var analyticsPageTitle: String = ""
+
     private var subChapterByUrl: Map<String, SubChapterEntity> = emptyMap()
 
     private lateinit var webViewFont: WebView
@@ -496,7 +500,15 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
             // For regular content, use the subchapter title
             HtmlCompat.fromHtml(subChapterEntity.subChapterTitle, FROM_HTML_MODE_LEGACY).toString()
         }
-    setActionBarTitle(contentTitle.toShortTableTitle())
+
+        analyticsPageTitle = contentTitle.toShortTableTitle()
+        analyticsPageUrl = if (chartAndSubChapter != null) {
+            chartAndSubChapter!!.chartEntity.id
+        } else {
+            subChapterEntity.url
+        }
+
+        setActionBarTitle(analyticsPageTitle)
 
         // Setup search functionality only for subchapter content (not charts)
         if (chartAndSubChapter == null) {
@@ -1049,6 +1061,22 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
                 }
             }
         }, "AndroidInterface")
+
+        // JavaScript interface for info icon taps inside HTML pages/tables.
+        addJavascriptInterface(object {
+            @android.webkit.JavascriptInterface
+            fun infoIconTapped(tooltip: String) {
+                try {
+                    val properties = hashMapOf<String, Any>()
+                    properties["page_url"] = analyticsPageUrl
+                    properties["page_title"] = analyticsPageTitle
+                    properties["tooltip"] = tooltip
+                    Pendo.track("infoIconTapped", properties)
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to track infoIconTapped", e)
+                }
+            }
+        }, "AndroidInfoIcon")
         
         webViewClient = object : WebViewClient() {
 
@@ -1063,7 +1091,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
                 // (for example when the user navigates back from a chapter).
                 try {
                     if (chartAndSubChapter != null && url != null && url.contains(chartAndSubChapter!!.chartEntity.id)) {
-                        setActionBarTitle(chartAndSubChapter!!.chartEntity.chartTitle.toShortTableTitle())
+                        analyticsPageTitle = chartAndSubChapter!!.chartEntity.chartTitle.toShortTableTitle()
+                        analyticsPageUrl = chartAndSubChapter!!.chartEntity.id
+                        setActionBarTitle(analyticsPageTitle)
                     }
                 } catch (e: Exception) {
                     // ignore
@@ -1071,6 +1101,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
                 // Keep the toolbar in sync when a user navigates to a different subchapter
                 // using an in-page "View in chapter" link.
                 updateToolbarTitleForLoadedUrl(url)
+
+                // Install click handler for info icons on every page load.
+                installInfoIconClickHandler()
 
                 // If the loaded url contains an anchor (fragment), attempt to scroll
                 // to the element with that id. This helps when WebView doesn't
@@ -1248,7 +1281,36 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
         val subChapter = subChapterByUrl[slug] ?: return
 
         val titleText = HtmlCompat.fromHtml(subChapter.subChapterTitle, FROM_HTML_MODE_LEGACY).toString()
-        setActionBarTitle(titleText.toShortTableTitle())
+        analyticsPageTitle = titleText.toShortTableTitle()
+        analyticsPageUrl = subChapter.url
+        setActionBarTitle(analyticsPageTitle)
+    }
+
+    private fun installInfoIconClickHandler() {
+        val infoIconScript = """
+            (function() {
+                if (window.__infoIconHandlerInstalled) { return; }
+                window.__infoIconHandlerInstalled = true;
+                document.addEventListener('click', function(event) {
+                    var el = event.target;
+                    if (!el) { return; }
+                    var info = el.closest ? el.closest('.info-icon') : null;
+                    if (!info) { return; }
+                    var tooltip = info.getAttribute('data-tooltip') || '';
+                    try {
+                        if (window.AndroidInfoIcon && window.AndroidInfoIcon.infoIconTapped) {
+                            window.AndroidInfoIcon.infoIconTapped(tooltip);
+                        }
+                    } catch (e) {}
+                }, true);
+            })();
+        """.trimIndent()
+
+        try {
+            bind.bodyWebView.evaluateJavascript(infoIconScript, null)
+        } catch (e: Exception) {
+            // ignore
+        }
     }
 
     override fun onToolbarBackPressed(): Boolean {
@@ -2013,13 +2075,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
         floatingButton.visibility = View.GONE
         notesCountText.visibility = View.GONE
 
-        if (isChart) {
-            val layoutParams = floatingButton.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
-            layoutParams.topToTop = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.PARENT_ID
-            layoutParams.topToBottom = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.UNSET
-            layoutParams.topMargin = (24 * resources.displayMetrics.density).toInt()
-            floatingButton.layoutParams = layoutParams
-        }
+        (floatingButton.layoutParams as? androidx.constraintlayout.widget.ConstraintLayout.LayoutParams)
+            ?.also { layoutParams ->
+                layoutParams.topToTop = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.UNSET
+                layoutParams.topToBottom = androidx.constraintlayout.widget.ConstraintLayout.LayoutParams.UNSET
+                floatingButton.layoutParams = layoutParams
+            }
 
         // Observe note count and update floating button display
         viewModel.getNote(id).observe(viewLifecycleOwner) { notes ->

@@ -44,6 +44,8 @@ import sdk.pendo.io.Pendo
 import java.util.UUID
 import javax.inject.Inject
 
+import org.apphatchery.gatbreferenceguide.db.Database
+
 
 private const val BUILD_VERSION = 13
 private const val PENDO_RELEASE_VERSION = "Oct-25-"
@@ -68,6 +70,9 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
     @Inject
     lateinit var userPrefs: UserPrefs
+
+    @Inject
+    lateinit var db: Database
 
     companion object {
         //const val VISITOR_ID = ""
@@ -398,6 +403,10 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             // Fully replace cached HTML/CSS/JS/images so app updates never show mixed old/new content.
             applicationContext.replaceBundledGuideWebContent()
+
+            // One-time background migration: update saved notes to point to renamed/merged targets.
+            // Example: notes on old tables 10/11/12 -> new table 9.
+            LegacyNotesMigrator.migrateNoteTargets(db)
             
             // Switch back to main thread for ui operations
             withContext(Dispatchers.Main) {
