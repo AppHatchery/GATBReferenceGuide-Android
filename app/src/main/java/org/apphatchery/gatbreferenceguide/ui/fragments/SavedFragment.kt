@@ -21,6 +21,7 @@ import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.*
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FASavedViewModel
+import org.apphatchery.gatbreferenceguide.utils.LegacyRedirects
 import org.apphatchery.gatbreferenceguide.utils.snackBar
 
 @AndroidEntryPoint
@@ -66,17 +67,48 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
             }
 
             itemClickCallback {
-                if (it.bookmarkId.contains("table_")) it.bookmarkId.navigateToChart()
-                else {
-                    viewModel.getSubChapterInfo(it.bookmarkId)
+                val redirectedBookmarkId = LegacyRedirects.redirectBookmarkId(it.bookmarkId)
+                val redirectedSubChapter = LegacyRedirects.redirectSubChapterKey(it.subChapter)
+
+                val didRedirectBookmarkId = redirectedBookmarkId != it.bookmarkId
+                val didRedirectSubChapter = redirectedSubChapter != it.subChapter
+                if (didRedirectBookmarkId || didRedirectSubChapter) {
+                    val message = if (it.bookmarkId.contains("table_")) {
+                        "This table has changed in the latest update. Redirecting to the updated table…"
+                    } else {
+                        "This bookmark has changed in the latest update. Redirecting to the updated section…"
+                    }
+                    bind.root.snackBar(message)
+                }
+
+                val resolvedBookmark = if (redirectedBookmarkId != it.bookmarkId || redirectedSubChapter != it.subChapter) {
+                    val updated = it.copy(bookmarkId = redirectedBookmarkId, subChapter = redirectedSubChapter)
+                    viewModel.updateBookmark(updated)
+                    updated
+                } else {
+                    it
+                }
+
+                if (resolvedBookmark.bookmarkId.contains("table_")) {
+                    navigateToChart(resolvedBookmark)
+                } else {
+                    // Use nullable-safe lookups so missing legacy targets don't crash.
+                    viewModel.getSubChapterInfoOrNull(resolvedBookmark.bookmarkId)
                         .observe(viewLifecycleOwner) { subChapterEntity ->
-                            if (subChapterEntity == null) {
-                                viewModel.getSubChapterInfo(it.subChapter)
-                                    .observe(viewLifecycleOwner) {
-                                        actionSavedFragmentToBodyFragment(it)
-                                    }
-                            } else
+                            if (subChapterEntity != null) {
                                 actionSavedFragmentToBodyFragment(subChapterEntity)
+                                return@observe
+                            }
+
+                            // Fallback: older bookmarks sometimes store title in subChapter field.
+                            viewModel.getSubChapterInfoOrNull(resolvedBookmark.subChapter)
+                                .observe(viewLifecycleOwner) { fallback ->
+                                    if (fallback != null) {
+                                        actionSavedFragmentToBodyFragment(fallback)
+                                    } else {
+                                        bind.root.snackBar("This bookmark points to content that was removed or renamed.")
+                                    }
+                                }
                         }
                 }
             }
@@ -117,8 +149,13 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
     }
 
     private fun actionSavedFragmentToBodyFragment(subChapterEntity: SubChapterEntity) {
-        viewModel.getChapterInfo(subChapterEntity.chapterId)
+        viewModel.getChapterInfoOrNull(subChapterEntity.chapterId)
             .observe(viewLifecycleOwner) { chapterEntity ->
+                if (chapterEntity == null) {
+                    bind.root.snackBar("This bookmark points to content that was removed or renamed.")
+                    return@observe
+                }
+
                 SavedFragmentDirections.actionSavedFragmentToBodyFragment(
                     BodyUrl(
                         chapterEntity,
@@ -135,18 +172,40 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
         viewModel.setSavedItemCount(SavedTypeData(savedType, itemCount))
 
 
-    private fun String.navigateToChart() = viewModel.getChartAndSubChapterById(this)
-        .observe(viewLifecycleOwner) {
-            viewModel.getChapterInfo(it.subChapterEntity.chapterId)
-                .observe(viewLifecycleOwner) { chapterEntity ->
-                    SavedFragmentDirections.actionSavedFragmentToBodyFragment(
-                        BodyUrl(chapterEntity, it.subChapterEntity, ""),
-                        it
-                    ).apply {
-                        findNavController().navigate(this)
-                    }
+    private fun navigateToChart(bookmark: BookmarkEntity) {
+        val redirectedId = LegacyRedirects.redirectBookmarkId(bookmark.bookmarkId)
+        viewModel.getChartAndSubChapterByIdOrNull(redirectedId)
+            .observe(viewLifecycleOwner) { chartAndSubChapter ->
+                if (chartAndSubChapter == null) {
+                    // Chart/table no longer exists. Fall back to opening the bookmarked subchapter.
+                    viewModel.getSubChapterInfoOrNull(bookmark.subChapter)
+                        .observe(viewLifecycleOwner) { fallbackSubChapter ->
+                            if (fallbackSubChapter != null) {
+                                bind.root.snackBar("This table was removed or merged in the latest update. Opening the related section instead.")
+                                actionSavedFragmentToBodyFragment(fallbackSubChapter)
+                            } else {
+                                bind.root.snackBar("This table bookmark points to content that was removed or renamed.")
+                            }
+                        }
+                    return@observe
                 }
-        }
+
+                viewModel.getChapterInfoOrNull(chartAndSubChapter.subChapterEntity.chapterId)
+                    .observe(viewLifecycleOwner) { chapterEntity ->
+                        if (chapterEntity == null) {
+                            bind.root.snackBar("This table bookmark points to content that was removed or renamed.")
+                            return@observe
+                        }
+
+                        SavedFragmentDirections.actionSavedFragmentToBodyFragment(
+                            BodyUrl(chapterEntity, chartAndSubChapter.subChapterEntity, ""),
+                            chartAndSubChapter
+                        ).apply {
+                            findNavController().navigate(this)
+                        }
+                    }
+            }
+    }
         
     private fun showEditBookmarkDialog(bookmark: BookmarkEntity) {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_edit_bookmark, null)

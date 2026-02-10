@@ -84,6 +84,15 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private fun init() {
 
         lifecycleScope.launch {
+            // Web content is stored under cacheDir; if user cleared cache it may be missing.
+            // Rebuild it even when BUILD_VERSION has not changed.
+            withContext(Dispatchers.IO) {
+                val ctx = requireContext().applicationContext
+                if (!ctx.isGuideWebContentPresent()) {
+                    ctx.replaceBundledGuideWebContent()
+                }
+            }
+
             visitor_id = getVisitorId()
 
             with(fragmentMainBinding) {
@@ -387,8 +396,8 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         
         // moved the heavy I/O operations to a background thread to prevent WebView renderer crashes
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-            createHtmlAndAssetsDirectoryIfNotExists()
-            prepHtmlPlusAssets()
+            // Fully replace cached HTML/CSS/JS/images so app updates never show mixed old/new content.
+            applicationContext.replaceBundledGuideWebContent()
             
             // Switch back to main thread for ui operations
             withContext(Dispatchers.Main) {

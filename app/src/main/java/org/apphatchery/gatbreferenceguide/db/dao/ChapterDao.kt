@@ -25,6 +25,9 @@ interface ChapterDao {
     @Query("SELECT  * FROM  ChapterEntity WHERE chapterId =:id")
     fun getChapterById(id: Int): Flow<ChapterEntity>
 
+    @Query("SELECT  * FROM  ChapterEntity WHERE chapterId =:id LIMIT 1")
+    fun getChapterByIdOrNull(id: Int): Flow<ChapterEntity?>
+
     @Query("DELETE FROM ChapterEntity")
     suspend fun deleteAll()
 }
