@@ -67,6 +67,10 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private var i = 0
     private val handler = Handler()
     private var initUpdateValue = 0
+    
+    // Flags to track initialization state and prevent navigation during seeding
+    private var isInitializing = false
+    private var initializationComplete = false
 
     @Inject
     lateinit var userPrefs: UserPrefs
@@ -396,8 +400,16 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
    private fun firstLaunch() {
     requireActivity().apply {
+        // Mark initialization as started
+        isInitializing = true
+        initializationComplete = false
+        
         viewModel.purgeData()
         getBottomNavigationView()?.toggleVisibility(false)
+        
+        // Keep progress bar visible and hide content during initialization
+        fragmentMainBinding.progressBar.isVisible = true
+        fragmentMainBinding.group.isVisible = false
         
         // moved the heavy I/O operations to a background thread to prevent WebView renderer crashes
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
@@ -425,6 +437,14 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                         userPrefs.setBuildVersion(BUILD_VERSION)
                         userPrefs.setPendoVisitorId(getVisitorId())
                     }
+                    
+                    // Mark initialization as complete
+                    isInitializing = false
+                    initializationComplete = true
+                    
+                    // Now safe to show content and enable navigation
+                    requireActivity().getBottomNavigationView()?.isEnabled = true
+                    
                     init()
                 }
             }
@@ -439,6 +459,16 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             val id = generatePendoVisitorId()
             userPrefs.setPendoVisitorId(id)
             id
+        }
+    }
+    
+    override fun onResume() {
+        super.onResume()
+        // Prevent navigation during initialization by disabling bottom navigation
+        if (isInitializing) {
+            requireActivity().getBottomNavigationView()?.isEnabled = false
+        } else if (initializationComplete) {
+            requireActivity().getBottomNavigationView()?.isEnabled = true
         }
     }
 }
