@@ -67,13 +67,16 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
             }
 
             itemClickCallback {
-                val redirectedBookmarkId = LegacyRedirects.redirectBookmarkId(it.bookmarkId)
-                val redirectedSubChapter = LegacyRedirects.redirectSubChapterKey(it.subChapter)
+                val original = it
+                val redirectedBookmarkId = LegacyRedirects.redirectBookmarkId(original.bookmarkId)
+                val redirectedSubChapter = LegacyRedirects.redirectSubChapterKey(original.subChapter)
 
-                val didRedirectBookmarkId = redirectedBookmarkId != it.bookmarkId
-                val didRedirectSubChapter = redirectedSubChapter != it.subChapter
-                if (didRedirectBookmarkId || didRedirectSubChapter) {
-                    val message = if (it.bookmarkId.contains("table_")) {
+                val didRedirectBookmarkId = redirectedBookmarkId != original.bookmarkId
+                val didRedirectSubChapter = redirectedSubChapter != original.subChapter
+                val didRedirect = didRedirectBookmarkId || didRedirectSubChapter
+
+                if (didRedirect) {
+                    val message = if (isTableId(original.bookmarkId) || isTableId(redirectedBookmarkId)) {
                         "This table has changed in the latest update. Redirecting to the updated table…"
                     } else {
                         "This bookmark has changed in the latest update. Redirecting to the updated section…"
@@ -81,35 +84,20 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
                     bind.root.snackBar(message)
                 }
 
-                val resolvedBookmark = if (redirectedBookmarkId != it.bookmarkId || redirectedSubChapter != it.subChapter) {
-                    val updated = it.copy(bookmarkId = redirectedBookmarkId, subChapter = redirectedSubChapter)
-                    viewModel.updateBookmark(updated)
-                    updated
+                if (isTableId(original.bookmarkId) || isTableId(redirectedBookmarkId)) {
+                    openChartBookmark(
+                        original = original,
+                        redirectedBookmarkId = redirectedBookmarkId,
+                        redirectedSubChapter = redirectedSubChapter,
+                        didRedirect = didRedirect,
+                    )
                 } else {
-                    it
-                }
-
-                if (resolvedBookmark.bookmarkId.contains("table_")) {
-                    navigateToChart(resolvedBookmark)
-                } else {
-                    // Use nullable-safe lookups so missing legacy targets don't crash.
-                    viewModel.getSubChapterInfoOrNull(resolvedBookmark.bookmarkId)
-                        .observe(viewLifecycleOwner) { subChapterEntity ->
-                            if (subChapterEntity != null) {
-                                actionSavedFragmentToBodyFragment(subChapterEntity)
-                                return@observe
-                            }
-
-                            // Fallback: older bookmarks sometimes store title in subChapter field.
-                            viewModel.getSubChapterInfoOrNull(resolvedBookmark.subChapter)
-                                .observe(viewLifecycleOwner) { fallback ->
-                                    if (fallback != null) {
-                                        actionSavedFragmentToBodyFragment(fallback)
-                                    } else {
-                                        bind.root.snackBar("This bookmark points to content that was removed or renamed.")
-                                    }
-                                }
-                        }
+                    openSubChapterBookmark(
+                        original = original,
+                        redirectedBookmarkId = redirectedBookmarkId,
+                        redirectedSubChapter = redirectedSubChapter,
+                        didRedirect = didRedirect,
+                    )
                 }
             }
 
@@ -172,22 +160,119 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
         viewModel.setSavedItemCount(SavedTypeData(savedType, itemCount))
 
 
-    private fun navigateToChart(bookmark: BookmarkEntity) {
-        val redirectedId = LegacyRedirects.redirectBookmarkId(bookmark.bookmarkId)
-        viewModel.getChartAndSubChapterByIdOrNull(redirectedId)
+    private fun isTableId(id: String): Boolean = id.startsWith("table_")
+
+    private fun shouldOverwriteTitleOnRedirect(bookmark: BookmarkEntity): Boolean {
+        // Default titles are saved as subchapter title (same as subChapter field).
+        // Preserve user-custom titles during redirects.
+        return bookmark.bookmarkTitle.isBlank() || bookmark.bookmarkTitle == bookmark.subChapter
+    }
+
+
+    private fun openSubChapterBookmark(
+        original: BookmarkEntity,
+        redirectedBookmarkId: String,
+        redirectedSubChapter: String,
+        didRedirect: Boolean,
+    ) {
+        var handled = false
+        viewModel.getSubChapterInfoOrNull(redirectedBookmarkId)
+            .observe(viewLifecycleOwner) { subChapterEntity ->
+                if (handled) return@observe
+
+                if (subChapterEntity != null) {
+                    handled = true
+                    if (didRedirect) {
+                        val newTitle = if (shouldOverwriteTitleOnRedirect(original)) {
+                            subChapterEntity.subChapterTitle
+                        } else {
+                            original.bookmarkTitle
+                        }
+                        val newSubChapter = subChapterEntity.subChapterTitle
+                        viewModel.repairRedirectedBookmark(
+                            oldId = original.bookmarkId,
+                            newId = redirectedBookmarkId,
+                            newTitle = newTitle,
+                            newSubChapter = newSubChapter,
+                        )
+                    }
+                    actionSavedFragmentToBodyFragment(subChapterEntity)
+                    return@observe
+                }
+
+                // Fallback: older bookmarks sometimes store title in subChapter field.
+                viewModel.getSubChapterInfoOrNull(redirectedSubChapter)
+                    .observe(viewLifecycleOwner) { fallback ->
+                        if (handled) return@observe
+                        handled = true
+                        if (fallback != null) {
+                            if (didRedirect) {
+                                val newTitle = if (shouldOverwriteTitleOnRedirect(original)) {
+                                    fallback.subChapterTitle
+                                } else {
+                                    original.bookmarkTitle
+                                }
+                                viewModel.repairRedirectedBookmark(
+                                    oldId = original.bookmarkId,
+                                    newId = redirectedBookmarkId,
+                                    newTitle = newTitle,
+                                    newSubChapter = fallback.subChapterTitle,
+                                )
+                            }
+                            actionSavedFragmentToBodyFragment(fallback)
+                        } else {
+                            bind.root.snackBar("This bookmark points to content that was removed or renamed.")
+                        }
+                    }
+            }
+    }
+
+
+    private fun openChartBookmark(
+        original: BookmarkEntity,
+        redirectedBookmarkId: String,
+        redirectedSubChapter: String,
+        didRedirect: Boolean,
+    ) {
+        var handled = false
+        viewModel.getChartAndSubChapterByIdOrNull(redirectedBookmarkId)
             .observe(viewLifecycleOwner) { chartAndSubChapter ->
+                if (handled) return@observe
+
                 if (chartAndSubChapter == null) {
                     // Chart/table no longer exists. Fall back to opening the bookmarked subchapter.
-                    viewModel.getSubChapterInfoOrNull(bookmark.subChapter)
+                    viewModel.getSubChapterInfoOrNull(redirectedSubChapter)
                         .observe(viewLifecycleOwner) { fallbackSubChapter ->
+                            if (handled) return@observe
+                            handled = true
+
                             if (fallbackSubChapter != null) {
-                                bind.root.snackBar("This table was removed or merged in the latest update. Opening the related section instead.")
+                                bind.root.snackBar(
+                                    "This table was removed or merged in the latest update. Opening the related section instead."
+                                )
                                 actionSavedFragmentToBodyFragment(fallbackSubChapter)
                             } else {
                                 bind.root.snackBar("This table bookmark points to content that was removed or renamed.")
                             }
                         }
                     return@observe
+                }
+
+                handled = true
+
+                if (didRedirect) {
+                    val newTitle = if (shouldOverwriteTitleOnRedirect(original)) {
+                        chartAndSubChapter.chartEntity.chartTitle
+                    } else {
+                        original.bookmarkTitle
+                    }
+                    val newSubChapter = chartAndSubChapter.subChapterEntity.subChapterTitle
+                    viewModel.repairRedirectedBookmark(
+                        oldId = original.bookmarkId,
+                        newId = redirectedBookmarkId,
+                        newTitle = newTitle,
+                        newSubChapter = newSubChapter,
+                    )
                 }
 
                 viewModel.getChapterInfoOrNull(chartAndSubChapter.subChapterEntity.chapterId)
@@ -206,6 +291,9 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
                     }
             }
     }
+
+
+    // navigateToChart() replaced by openChartBookmark(), which also repairs redirected rows.
         
     private fun showEditBookmarkDialog(bookmark: BookmarkEntity) {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_edit_bookmark, null)

@@ -61,7 +61,7 @@ object LegacyRedirects {
     )
 
     fun redirectBookmarkId(bookmarkId: String): String {
-        return if (bookmarkId.contains("table_")) {
+        return if (bookmarkId.startsWith("table_")) {
             CHART_REDIRECTS[bookmarkId] ?: bookmarkId
         } else {
             SUBCHAPTER_REDIRECTS[bookmarkId] ?: bookmarkId

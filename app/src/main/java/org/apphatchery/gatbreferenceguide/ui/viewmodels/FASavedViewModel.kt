@@ -50,6 +50,20 @@ class FASavedViewModel @Inject constructor(
         db.bookmarkDao().update(data)
     }
 
+    fun repairRedirectedBookmark(
+        oldId: String,
+        newId: String,
+        newTitle: String,
+        newSubChapter: String,
+    ) = viewModelScope.launch {
+        db.bookmarkDao().repairRedirect(
+            oldId = oldId,
+            newId = newId,
+            newTitle = newTitle,
+            newSubChapter = newSubChapter,
+        )
+    }
+
 
     fun deleteNote(data: NoteEntity) = viewModelScope.launch {
         db.noteDao().delete(data)

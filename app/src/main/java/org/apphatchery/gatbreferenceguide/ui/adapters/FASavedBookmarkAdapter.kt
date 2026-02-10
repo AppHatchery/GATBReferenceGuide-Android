@@ -37,7 +37,7 @@ class FASavedBookmarkAdapter :
     private var onItemEditListAdapter: ((BookmarkEntity) -> Unit)? = null
 
     override fun getItemViewType(position: Int): Int {
-        return if (getItem(position).bookmarkId.contains("table_")) {
+        return if (getItem(position).bookmarkId.startsWith("table_")) {
             TYPE_CHART
         } else {
             TYPE_CHAPTER
