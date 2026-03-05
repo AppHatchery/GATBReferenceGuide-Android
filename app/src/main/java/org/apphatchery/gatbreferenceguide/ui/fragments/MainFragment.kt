@@ -120,11 +120,11 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                     with(predefinedChapterList) {
                         clear()
                         add(it[0].copy(chapterTitle = "All Chapters>"))
-                        add(it[3].copy(chapterTitle = "Diagnosis of Active TB"))
-                        add(it[4].copy(chapterTitle = "Treatment of Active TB"))
-                        add(it[1].copy(chapterTitle = "Diagnosis of LTBI"))
-                        add(it[2].copy(chapterTitle = "Treatment of LTBI"))
-                        add(it[14].copy(chapterTitle = "District TB Coordinators"))
+                        add(it[4].copy(chapterTitle = "Diagnosis of Active TB"))
+                        add(it[5].copy(chapterTitle = "Treatment of Active TB"))
+                        add(it[2].copy(chapterTitle = "Diagnosis of LTBI"))
+                        add(it[3].copy(chapterTitle = "Treatment of LTBI"))
+                        add(it[15].copy(chapterTitle = "District TB Coordinators"))
                         adapter.submitList(this)
                     }
                 }
@@ -152,11 +152,11 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                         clear()
                         add(data[0].copy(chartEntity = data[0].chartEntity.copy(chartTitle = "All Tables>")))
                         add(data[7].copy(chartEntity = data[7].chartEntity.copy(chartTitle = "First Line TB Drugs for Adults")))
-                        add(data[13].copy(chartEntity = data[13].chartEntity.copy(chartTitle = "IV Therapy Drugs")))
-                        add(data[14].copy(chartEntity = data[14].chartEntity.copy(chartTitle = "Alternative Regimens")))
+                        add(data[10].copy(chartEntity = data[10].chartEntity.copy(chartTitle = "IV Therapy Drugs")))
+                        add(data[11].copy(chartEntity = data[11].chartEntity.copy(chartTitle = "Alternative Regimens")))
                         add(data[4].copy(chartEntity = data[4].chartEntity.copy(chartTitle = "Dosages for LTBI Regimens")))
-                        add(data[15].copy(chartEntity = data[15].chartEntity.copy(chartTitle = "Treatment of Extra- pulmonary TB")))
-                        add(data[17].copy(chartEntity = data[17].chartEntity.copy(chartTitle = "TB drugs in Special Situations")))
+                        add(data[16].copy(chartEntity = data[16].chartEntity.copy(chartTitle = "Treatment of Extra- pulmonary TB")))
+                        add(data[15].copy(chartEntity = data[15].chartEntity.copy(chartTitle = "TB drugs in Special Situations")))
                         adapter.submitList(this)
                     }
                 }
