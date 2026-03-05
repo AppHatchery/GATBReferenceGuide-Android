@@ -34,4 +34,7 @@ interface ChartDao {
     @Query("DELETE FROM ChartEntity")
     suspend fun deleteAll()
 
+    @Query("SELECT COUNT(*) FROM ChartEntity")
+    suspend fun count(): Int
+
 }

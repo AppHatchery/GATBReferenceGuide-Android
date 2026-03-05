@@ -8,7 +8,6 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -28,6 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentMainBinding
@@ -96,9 +96,11 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             // Web content is stored under cacheDir; if user cleared cache it may be missing.
             // Rebuild it even when BUILD_VERSION has not changed.
             withContext(Dispatchers.IO) {
-                val ctx = requireContext().applicationContext
-                if (!ctx.isGuideWebContentPresent()) {
-                    ctx.replaceBundledGuideWebContent()
+                AppInitLock.mutex.withLock {
+                    val ctx = requireContext().applicationContext
+                    if (!ctx.isGuideWebContentPresent()) {
+                        ctx.replaceBundledGuideWebContent()
+                    }
                 }
             }
 
@@ -117,6 +119,12 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
             first6ChapterAdapter = FAMainFirst6ChapterAdapter().also { adapter ->
                 viewModel.getChapter.observe(viewLifecycleOwner) {
+                    if (it.size < 15) {
+                        // Data not ready yet; keep loading state.
+                        fragmentMainBinding.progressBar.isVisible = true
+                        fragmentMainBinding.group.isVisible = false
+                        return@observe
+                    }
                     with(predefinedChapterList) {
                         clear()
                         add(it[0].copy(chapterTitle = "All Chapters>"))
@@ -148,6 +156,12 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
             first6ChartAdapter = FAMainFirst6ChartAdapter().also { adapter ->
                 viewModel.getChart.observe(viewLifecycleOwner) { data ->
+                    if (data.size < 18) {
+                        // Data not ready yet; keep loading state.
+                        fragmentMainBinding.progressBar.isVisible = true
+                        fragmentMainBinding.group.isVisible = false
+                        return@observe
+                    }
                     with(predefinedChartList) {
                         clear()
                         add(data[0].copy(chartEntity = data[0].chartEntity.copy(chartTitle = "All Tables>")))
@@ -194,12 +208,11 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         fragmentMainBinding = FragmentMainBinding.bind(view)
-        userPrefs.getBuildVersion.asLiveData().observe(viewLifecycleOwner) {
-            if (it != BUILD_VERSION)
-            {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val version = userPrefs.getBuildVersion.first()
+            if (version != BUILD_VERSION) {
                 firstLaunch()
-            }
-            else {
+            } else {
                 init()
             }
         }
@@ -254,7 +267,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         })
 
     }
-
 
 
     private fun RecyclerView.setupAdapter(
@@ -403,50 +415,40 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         // Mark initialization as started
         isInitializing = true
         initializationComplete = false
-        
-        viewModel.purgeData()
+
         getBottomNavigationView()?.toggleVisibility(false)
         
         // Keep progress bar visible and hide content during initialization
         fragmentMainBinding.progressBar.isVisible = true
         fragmentMainBinding.group.isVisible = false
-        
-        // moved the heavy I/O operations to a background thread to prevent WebView renderer crashes
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-            // Fully replace cached HTML/CSS/JS/images so app updates never show mixed old/new content.
-            applicationContext.replaceBundledGuideWebContent()
 
-            // One-time background migration: update saved notes to point to renamed/merged targets.
-            // Example: notes on old tables 10/11/12 -> new table 9.
-            LegacyNotesMigrator.migrateNoteTargets(db)
-            
-            // Switch back to main thread for ui operations
-            withContext(Dispatchers.Main) {
-                dumpChartData()
+        // moved the heavy I/O operations to a background thread to prevent WebView renderer crashes
+        // Use Fragment lifecycleScope so this work isn't cancelled on navigation.
+        lifecycleScope.launch(Dispatchers.IO) {
+            AppInitLock.mutex.withLock {
+                // Fully replace cached HTML/CSS/JS/images so app updates never show mixed old/new content.
+                applicationContext.replaceBundledGuideWebContent()
+
+                // One-time background migration: update saved notes to point to renamed/merged targets.
+                // Example: notes on old tables 10/11/12 -> new table 9.
+                LegacyNotesMigrator.migrateNoteTargets(db)
+
+                // Seed DB from bundled assets (purge+insert+global search in one transaction).
+                viewModel.purgeAndSeedFromAssets(applicationContext)
+
+                // Persist version only after seeding completes.
+                userPrefs.setBuildVersion(BUILD_VERSION)
+                userPrefs.setPendoVisitorId(getVisitorId())
             }
-        }
-    }
-    viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-        viewModel.taskFlowEvent.collect {
-            when (it) {
-                FAMainViewModel.Callback.InsertHTMLInfoComplete -> {
-                    viewModel.bindHtmlWithChapter()
-                }
-                FAMainViewModel.Callback.InsertGlobalSearchInfoComplete -> {
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        userPrefs.setBuildVersion(BUILD_VERSION)
-                        userPrefs.setPendoVisitorId(getVisitorId())
-                    }
-                    
-                    // Mark initialization as complete
-                    isInitializing = false
-                    initializationComplete = true
-                    
-                    // Now safe to show content and enable navigation
-                    requireActivity().getBottomNavigationView()?.isEnabled = true
-                    
-                    init()
-                }
+
+            withContext(Dispatchers.Main) {
+                // If user navigated away mid-seed, skip touching UI.
+                if (view == null) return@withContext
+
+                isInitializing = false
+                initializationComplete = true
+                requireActivity().getBottomNavigationView()?.isEnabled = true
+                init()
             }
         }
     }

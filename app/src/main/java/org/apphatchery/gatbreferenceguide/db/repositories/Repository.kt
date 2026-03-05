@@ -17,7 +17,7 @@ class Repository @Inject constructor(
     private val subChapterDao = db.subChapterDao()
     private val chartDao = db.chartDao()
 
-    fun purgeData(){
+    suspend fun purgeData() {
         db.purgeData()
     }
 

@@ -31,6 +31,7 @@ class ChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
     private lateinit var bind: FragmentWithRecyclerviewBinding
     private lateinit var faChapterAdapter: FAChapterAdapter
     private val viewModel: FAChapterViewModel by viewModels()
+    private var hadData = false
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -39,6 +40,10 @@ class ChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
 
         faChapterAdapter = FAChapterAdapter().also {
             viewModel.getChapterEntity.observe(viewLifecycleOwner) { data ->
+                if (data.isNotEmpty()) hadData = true
+                if (hadData && data.isEmpty()) {
+                    Log.w("ChapterFragment", "Chapter list became empty after having data")
+                }
                 bind.apply {
 //                    data.size.searchNotFound(recyclerview, searchNotFound)
                     it.submitList(data)

@@ -33,4 +33,7 @@ interface GlobalSearchDao {
     @Query("DELETE FROM GlobalSearchEntity")
     suspend fun deleteAll()
 
+    @Query("SELECT COUNT(*) FROM GlobalSearchEntity")
+    suspend fun count(): Int
+
 }

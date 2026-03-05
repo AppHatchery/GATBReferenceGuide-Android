@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.room.withTransaction
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +21,11 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.apphatchery.gatbreferenceguide.db.entities.*
 import org.apphatchery.gatbreferenceguide.db.repositories.Repository
+import org.apphatchery.gatbreferenceguide.utils.EXTENSION
+import org.apphatchery.gatbreferenceguide.utils.PAGES_DIR
+import org.apphatchery.gatbreferenceguide.utils.html2text
+import org.apphatchery.gatbreferenceguide.utils.readJsonFromAssetToString
+import org.apphatchery.gatbreferenceguide.utils.removeSlash
 import org.jsoup.Jsoup
 import java.io.File
 import java.io.FileOutputStream
@@ -45,8 +52,131 @@ class FAMainViewModel @Inject constructor(
     private val taskFlowChannel = Channel<Callback>()
     val taskFlowEvent = taskFlowChannel.receiveAsFlow()
 
-    fun purgeData(){
+    suspend fun purgeData() {
         repo.purgeData()
+    }
+
+    /**
+     * One-shot initialization for first install / app update.
+     *
+     * This avoids fragment-lifecycle-dependent seeding chains (LiveData observers) that can be
+     * interrupted when users navigate quickly.
+     */
+    suspend fun purgeAndSeedFromAssets(context: Context) {
+        val initId = System.currentTimeMillis()
+        val t0 = System.nanoTime()
+        Log.i("INIT_SEED", "[$initId] start purge+seed from assets")
+        val charts: List<ChartEntity> = parseAssetJson(context, "chart.json")
+        val chapters: List<ChapterEntity> = parseAssetJson(context, "chapter.json")
+        val subChapters: List<SubChapterEntity> = parseAssetJson(context, "subchapter.json")
+        val htmlInfo: List<HtmlInfoEntity> = extractHtmlInfoFromAssets(context)
+
+        repo.db.withTransaction {
+            // Purge + seed must be a single atomic transaction.
+            // Database.purgeData() not called here because it starts its own transaction.
+            repo.db.chapterDao().deleteAll()
+            repo.db.chartDao().deleteAll()
+            repo.db.subChapterDao().deleteAll()
+            repo.db.htmlInfoDao().deleteAll()
+            repo.db.globalSearchDao().deleteAll()
+
+            repo.db.chapterDao().insert(chapters)
+            repo.db.subChapterDao().insert(subChapters)
+            repo.db.chartDao().insert(charts)
+            repo.db.htmlInfoDao().insert(htmlInfo)
+
+            rebuildGlobalSearchLocked()
+        }
+
+        val chapterCount = repo.db.chapterDao().count()
+        val subChapterCount = repo.db.subChapterDao().count()
+        val chartCount = repo.db.chartDao().count()
+        val htmlCount = repo.db.htmlInfoDao().count()
+        val globalSearchCount = repo.db.globalSearchDao().count()
+        val ms = (System.nanoTime() - t0) / 1_000_000
+        Log.i(
+            "INIT_SEED",
+            "[$initId] done in ${ms}ms counts: chapters=$chapterCount subChapters=$subChapterCount charts=$chartCount html=$htmlCount globalSearch=$globalSearchCount"
+        )
+    }
+
+    private inline fun <reified T> parseAssetJson(context: Context, fileName: String): List<T> {
+        val json = context.readJsonFromAssetToString(fileName)
+            ?: throw IllegalStateException("Missing asset json: $fileName")
+        val type = object : TypeToken<List<T>>() {}.type
+        return Gson().fromJson<List<T>>(json, type)
+            ?: throw IllegalStateException("Failed to parse asset json: $fileName")
+    }
+
+    private fun extractHtmlInfoFromAssets(context: Context): List<HtmlInfoEntity> {
+        val results = ArrayList<HtmlInfoEntity>()
+        context.assets.list(PAGES_DIR.removeSlash())?.forEach { entry ->
+            val file = PAGES_DIR + entry
+            var fileName = file.replace(EXTENSION, "")
+            fileName = fileName.replace(PAGES_DIR, "")
+            results.add(
+                HtmlInfoEntity(
+                    fileName,
+                    context.html2text(file).replace("GA TB Reference Guide", "")
+                )
+            )
+        }
+        return results
+    }
+
+    /** Must be called inside a DB transaction. */
+    private suspend fun rebuildGlobalSearchLocked() {
+        val globalSearch = ArrayList<GlobalSearchEntity>()
+
+        repo.db.subChapterDao().getSubChapterBindChapterSuspended().forEach { data ->
+            data.subChapterEntity.forEach { sub ->
+                globalSearch.add(
+                    GlobalSearchEntity(
+                        data.chapterEntity.chapterTitle,
+                        sub.subChapterTitle,
+                        javaClass.name,
+                        sub.url,
+                        sub.chapterId,
+                        sub.subChapterId,
+                    )
+                )
+            }
+        }
+
+        repo.db.chartDao().getChartAndSubChapterSuspend().forEach { row ->
+            globalSearch.add(
+                GlobalSearchEntity(
+                    row.chartEntity.chartTitle,
+                    row.subChapterEntity.subChapterTitle,
+                    javaClass.name,
+                    row.chartEntity.id,
+                    row.subChapterEntity.chapterId,
+                    row.subChapterEntity.subChapterId,
+                    true,
+                    row.chartEntity.id
+                )
+            )
+        }
+
+        val htmlByFileName = repo.db.htmlInfoDao()
+            .getHtmlInfoEntitySuspended()
+            .associate { it.fileName to it.htmlText }
+
+        val complete = globalSearch.mapNotNull { entry ->
+            val html = htmlByFileName[entry.fileName] ?: return@mapNotNull null
+            GlobalSearchEntity(
+                entry.searchTitle,
+                entry.subChapter,
+                html,
+                entry.fileName,
+                entry.chapterId,
+                entry.subChapterId,
+                entry.isChart,
+                entry.chartId
+            )
+        }
+
+        repo.db.globalSearchDao().insert(complete)
     }
 
 
@@ -210,7 +340,6 @@ class FAMainViewModel @Inject constructor(
             checkTriggerValue(FirebaseRemoteConfig.getInstance(), context)
 
             dumpUpdatedHTMLInfo(context)
-            bindHtmlWithChapter()
 
             // Notify success on the main thread
             withContext(Dispatchers.Main) {

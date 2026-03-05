@@ -1,10 +1,9 @@
 package org.apphatchery.gatbreferenceguide.db
 
+import android.util.Log
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import androidx.room.withTransaction
 import org.apphatchery.gatbreferenceguide.db.dao.*
 import org.apphatchery.gatbreferenceguide.db.entities.*
 
@@ -32,16 +31,14 @@ abstract class Database : RoomDatabase() {
     abstract fun recentDao(): RecentDao
     abstract fun contactDao(): ContactDao
 
-  @OptIn(DelicateCoroutinesApi::class)
-  fun purgeData(){
-      GlobalScope.launch {
+  suspend fun purgeData() {
+      Log.w("DB_PURGE", "purgeData() called", Throwable("purgeData stack"))
+      withTransaction {
           chapterDao().deleteAll()
           chartDao().deleteAll()
           subChapterDao().deleteAll()
           htmlInfoDao().deleteAll()
           globalSearchDao().deleteAll()
       }
-
-
-    }
+  }
 }
