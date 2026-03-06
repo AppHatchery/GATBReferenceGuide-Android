@@ -30,4 +30,7 @@ interface ChapterDao {
 
     @Query("DELETE FROM ChapterEntity")
     suspend fun deleteAll()
+
+    @Query("SELECT COUNT(*) FROM ChapterEntity")
+    suspend fun count(): Int
 }

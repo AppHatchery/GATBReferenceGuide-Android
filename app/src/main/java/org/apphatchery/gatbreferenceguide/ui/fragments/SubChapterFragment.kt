@@ -40,6 +40,7 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
     private var resolvedChapterEntity: ChapterEntity? = null
     private val viewModel: FASubChapterViewModel by viewModels()
     private val mainViewModel: MainActivityViewModel by activityViewModels()
+    private var hadData = false
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,6 +57,10 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
 
         faSubChapterAdapter = FASubChapterAdapter()
         viewModel.getSubChapterEntity.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) hadData = true
+            if (hadData && it.isEmpty()) {
+                Log.w("SubChapterFragment", "SubChapter list became empty after having data")
+            }
             bind.apply {
                 faSubChapterAdapter.submitList(it)
             }

@@ -23,12 +23,17 @@ class ChartFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
     private lateinit var bind: FragmentWithRecyclerviewBinding
     private lateinit var faChartAdapter: FAChartAdapter
     private val viewModel: FAChartViewModel by viewModels()
+    private var hadData = false
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         bind = FragmentWithRecyclerviewBinding.bind(view)
         faChartAdapter = FAChartAdapter().also { faChartAdapter ->
             viewModel.getChart.observe(viewLifecycleOwner) {
+                if (it.isNotEmpty()) hadData = true
+                if (hadData && it.isEmpty()) {
+                    Log.w("ChartFragment", "Chart list became empty after having data")
+                }
                 faChartAdapter.submitList(it)
             }
 

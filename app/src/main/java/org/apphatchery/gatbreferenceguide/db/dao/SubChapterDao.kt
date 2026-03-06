@@ -56,4 +56,7 @@ interface SubChapterDao {
             keyword
         )
     }
+
+    @Query("SELECT COUNT(*) FROM SubChapterEntity")
+    suspend fun count(): Int
 }
