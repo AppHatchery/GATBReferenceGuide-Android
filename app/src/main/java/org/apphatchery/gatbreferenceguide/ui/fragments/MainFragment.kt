@@ -56,8 +56,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private lateinit var fragmentMainBinding: FragmentMainBinding
     private lateinit var first6ChapterAdapter: FAMainFirst6ChapterAdapter
     private lateinit var first6ChartAdapter: FAMainFirst6ChartAdapter
-    private lateinit var predefinedChapterList: ArrayList<ChapterEntity>
-    private lateinit var predefinedChartList: ArrayList<ChartAndSubChapter>
     private val htmlInfoEntity = ArrayList<HtmlInfoEntity>()
     private val viewModel: FAMainViewModel by viewModels()
     private var visitor_id: String? = null
@@ -114,29 +112,29 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             }
             searchState.exitSearchMode()
             requireActivity().getBottomNavigationView()?.toggleVisibility(true)
-
-            predefinedChapterList = ArrayList()
-            predefinedChartList = ArrayList()
             setupPendo()
 
             first6ChapterAdapter = FAMainFirst6ChapterAdapter().also { adapter ->
                 viewModel.getChapter.observe(viewLifecycleOwner) {
-                    if (it.size < 15) {
+                    if (it.size < 16) {
                         // Data not ready yet; keep loading state.
                         fragmentMainBinding.progressBar.isVisible = true
                         fragmentMainBinding.group.isVisible = false
                         return@observe
                     }
-                    with(predefinedChapterList) {
-                        clear()
-                        add(it[0].copy(chapterTitle = "All Chapters>"))
-                        add(it[4].copy(chapterTitle = "Diagnosis of Active TB"))
-                        add(it[5].copy(chapterTitle = "Treatment of Active TB"))
-                        add(it[2].copy(chapterTitle = "Diagnosis of LTBI"))
-                        add(it[3].copy(chapterTitle = "Treatment of LTBI"))
-                        add(it[15].copy(chapterTitle = "District TB Coordinators"))
-                        adapter.submitList(this)
-                    }
+
+                    // IMPORTANT: never submit a mutable list that will be reused/mutated later.
+                    // DiffUtil runs asynchronously; if the same list instance is cleared/changed,
+                    // AsyncListDiffer can crash with IndexOutOfBoundsException.
+                    val predefinedChapterList = arrayListOf(
+                        it[0].copy(chapterTitle = "All Chapters>"),
+                        it[4].copy(chapterTitle = "Diagnosis of Active TB"),
+                        it[5].copy(chapterTitle = "Treatment of Active TB"),
+                        it[2].copy(chapterTitle = "Diagnosis of LTBI"),
+                        it[3].copy(chapterTitle = "Treatment of LTBI"),
+                        it[15].copy(chapterTitle = "District TB Coordinators"),
+                    )
+                    adapter.submitList(predefinedChapterList)
                 }
 
                 adapter.itemClickCallback { chapterEntity ->
@@ -164,28 +162,29 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                         fragmentMainBinding.group.isVisible = false
                         return@observe
                     }
-                    with(predefinedChartList) {
-                        clear()
-                        chartTitleOverrides = mapOf(
-                            data[0].chartEntity.id to "All Tables>",
-                            data[7].chartEntity.id to "First Line TB Drugs for Adults",
-                            data[10].chartEntity.id to "IV Therapy Drugs",
-                            data[11].chartEntity.id to "Alternative Regimens",
-                            data[4].chartEntity.id to "Dosages for LTBI Regimens",
-                            data[16].chartEntity.id to "Treatment of Extra- pulmonary TB",
-                            data[15].chartEntity.id to "TB drugs in Special Situations"
-                        )
-                        adapter.setTitleOverrides(chartTitleOverrides)
 
-                        add(data[0])
-                        add(data[7])
-                        add(data[10])
-                        add(data[11])
-                        add(data[4])
-                        add(data[16])
-                        add(data[15])
-                        adapter.submitList(this)
-                    }
+                    chartTitleOverrides = mapOf(
+                        data[0].chartEntity.id to "All Tables>",
+                        data[7].chartEntity.id to "First Line TB Drugs for Adults",
+                        data[10].chartEntity.id to "IV Therapy Drugs",
+                        data[11].chartEntity.id to "Alternative Regimens",
+                        data[4].chartEntity.id to "Dosages for LTBI Regimens",
+                        data[16].chartEntity.id to "Treatment of Extra- pulmonary TB",
+                        data[15].chartEntity.id to "TB drugs in Special Situations"
+                    )
+                    adapter.setTitleOverrides(chartTitleOverrides)
+
+                    // Submit a fresh list instance each time (avoid mutable reuse).
+                    val predefinedChartList = listOf(
+                        data[0],
+                        data[7],
+                        data[10],
+                        data[11],
+                        data[4],
+                        data[16],
+                        data[15],
+                    )
+                    adapter.submitList(predefinedChartList)
                 }
 
                 adapter.itemClickCallback { chartAndSubChapter ->
