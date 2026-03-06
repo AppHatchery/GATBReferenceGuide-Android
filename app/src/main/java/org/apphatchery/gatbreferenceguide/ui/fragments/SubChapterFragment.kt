@@ -37,6 +37,7 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
     private val subChapterFragmentArgs: SubChapterFragmentArgs by navArgs()
     private lateinit var faSubChapterAdapter: FASubChapterAdapter
     private lateinit var chapterEntity: ChapterEntity
+    private var resolvedChapterEntity: ChapterEntity? = null
     private val viewModel: FASubChapterViewModel by viewModels()
     private val mainViewModel: MainActivityViewModel by activityViewModels()
 
@@ -45,6 +46,12 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
         bind = FragmentWithRecyclerviewBinding.bind(view)
         chapterEntity = subChapterFragmentArgs.chapterEntity
         viewModel.chapterId = chapterEntity.chapterId
+
+        // Always set toolbar title from the DB-backed chapter name (not the Home shortcut label).
+        viewModel.getChapterInfo(chapterEntity.chapterId).observe(viewLifecycleOwner) { dbChapter ->
+            resolvedChapterEntity = dbChapter
+            setActionBarTitle(dbChapter.chapterTitle)
+        }
 
 
         faSubChapterAdapter = FASubChapterAdapter()
@@ -56,9 +63,10 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
 
 
         faSubChapterAdapter.itemClickCallback {
+            val chapterForNav = resolvedChapterEntity ?: chapterEntity
             val subChapterFragmentDirections =
                 SubChapterFragmentDirections.actionSubChapterFragmentToBodyFragment(
-                    BodyUrl(chapterEntity, it, ""), null
+                    BodyUrl(chapterForNav, it, ""), null
                 )
 
             findNavController().navigate(subChapterFragmentDirections)
@@ -67,7 +75,7 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
 
         bind.apply {
 
-            setActionBarTitle(chapterEntity.chapterTitle)
+            // Title is set via DB observation above.
 
             recyclerview.apply {
                 layoutManager = LinearLayoutManager(requireContext())
