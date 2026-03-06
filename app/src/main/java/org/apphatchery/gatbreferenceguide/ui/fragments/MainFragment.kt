@@ -67,6 +67,8 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private var i = 0
     private val handler = Handler()
     private var initUpdateValue = 0
+
+    private var chartTitleOverrides: Map<String, String> = emptyMap()
     
     // Flags to track initialization state and prevent navigation during seeding
     private var isInitializing = false
@@ -120,11 +122,11 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                     with(predefinedChapterList) {
                         clear()
                         add(it[0].copy(chapterTitle = "All Chapters>"))
-                        add(it[3].copy(chapterTitle = "Diagnosis of Active TB"))
-                        add(it[4].copy(chapterTitle = "Treatment of Active TB"))
-                        add(it[1].copy(chapterTitle = "Diagnosis of LTBI"))
-                        add(it[2].copy(chapterTitle = "Treatment of LTBI"))
-                        add(it[14].copy(chapterTitle = "District TB Coordinators"))
+                        add(it[4].copy(chapterTitle = "Diagnosis of Active TB"))
+                        add(it[5].copy(chapterTitle = "Treatment of Active TB"))
+                        add(it[2].copy(chapterTitle = "Diagnosis of LTBI"))
+                        add(it[3].copy(chapterTitle = "Treatment of LTBI"))
+                        add(it[15].copy(chapterTitle = "District TB Coordinators"))
                         adapter.submitList(this)
                     }
                 }
@@ -150,19 +152,34 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                 viewModel.getChart.observe(viewLifecycleOwner) { data ->
                     with(predefinedChartList) {
                         clear()
-                        add(data[0].copy(chartEntity = data[0].chartEntity.copy(chartTitle = "All Tables>")))
-                        add(data[7].copy(chartEntity = data[7].chartEntity.copy(chartTitle = "First Line TB Drugs for Adults")))
-                        add(data[13].copy(chartEntity = data[13].chartEntity.copy(chartTitle = "IV Therapy Drugs")))
-                        add(data[14].copy(chartEntity = data[14].chartEntity.copy(chartTitle = "Alternative Regimens")))
-                        add(data[4].copy(chartEntity = data[4].chartEntity.copy(chartTitle = "Dosages for LTBI Regimens")))
-                        add(data[15].copy(chartEntity = data[15].chartEntity.copy(chartTitle = "Treatment of Extra- pulmonary TB")))
-                        add(data[17].copy(chartEntity = data[17].chartEntity.copy(chartTitle = "TB drugs in Special Situations")))
+                        chartTitleOverrides = mapOf(
+                            data[0].chartEntity.id to "All Tables>",
+                            data[7].chartEntity.id to "First Line TB Drugs for Adults",
+                            data[10].chartEntity.id to "IV Therapy Drugs",
+                            data[11].chartEntity.id to "Alternative Regimens",
+                            data[4].chartEntity.id to "Dosages for LTBI Regimens",
+                            data[16].chartEntity.id to "Treatment of Extra- pulmonary TB",
+                            data[15].chartEntity.id to "TB drugs in Special Situations"
+                        )
+                        adapter.setTitleOverrides(chartTitleOverrides)
+
+                        add(data[0])
+                        add(data[7])
+                        add(data[10])
+                        add(data[11])
+                        add(data[4])
+                        add(data[16])
+                        add(data[15])
                         adapter.submitList(this)
                     }
                 }
 
                 adapter.itemClickCallback { chartAndSubChapter ->
-                    if (chartAndSubChapter.chartEntity.chartTitle == "All Tables>") {
+                    val displayTitle =
+                        chartTitleOverrides[chartAndSubChapter.chartEntity.id]
+                            ?: chartAndSubChapter.chartEntity.chartTitle
+
+                    if (displayTitle == "All Tables>" || displayTitle == "All Charts>") {
                         findNavController().navigate(R.id.action_mainFragment_to_chartFragment)
                     } else {
                         viewModel.getChapterInfo(chartAndSubChapter.subChapterEntity.chapterId)

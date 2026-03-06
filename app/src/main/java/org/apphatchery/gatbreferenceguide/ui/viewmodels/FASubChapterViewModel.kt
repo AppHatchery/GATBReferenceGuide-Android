@@ -35,6 +35,8 @@ class FASubChapterViewModel @Inject constructor(
         .map { list -> list.filterNot { it.subChapterId in hiddenSubChapterIds } }
         .asLiveData()
 
+    fun getChapterInfo(chapterId: Int) = db.chapterDao().getChapterById(chapterId).asLiveData()
+
     fun recentOpen(data: RecentEntity) = viewModelScope.launch {
         db.recentDao().delete(data)
         db.recentDao().insert(data)
