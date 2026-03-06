@@ -13,6 +13,16 @@ import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 class FAMainFirst6ChartAdapter :
     ListAdapter<ChartAndSubChapter, FAMainFirst6ChartAdapter.ViewHolder>(DiffUtilCallBack()) {
 
+    private var titleOverrides: Map<String, String> = emptyMap()
+
+    fun setTitleOverrides(overrides: Map<String, String>) {
+        titleOverrides = overrides
+        notifyDataSetChanged()
+    }
+
+    private fun displayTitle(item: ChartAndSubChapter): String =
+        titleOverrides[item.chartEntity.id] ?: item.chartEntity.chartTitle
+
 
     class DiffUtilCallBack : DiffUtil.ItemCallback<ChartAndSubChapter>() {
         override fun areItemsTheSame(oldItem: ChartAndSubChapter, newItem: ChartAndSubChapter) =
@@ -36,9 +46,10 @@ class FAMainFirst6ChartAdapter :
         RecyclerView.ViewHolder(first6ChartItemBinding.root) {
 
         fun onBinding(chapterEntity: ChartAndSubChapter) = first6ChartItemBinding.apply {
-            button.text = chapterEntity.chartEntity.chartTitle
+            val title = displayTitle(chapterEntity)
+            button.text = title
 
-            if (chapterEntity.chartEntity.chartTitle == "All Charts>") {
+            if (title == "All Tables>" || title == "All Charts>") {
                 button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_see_all_content, 0, 0, 0)
             } else {
                 button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_charts_1, 0, 0, 0)
