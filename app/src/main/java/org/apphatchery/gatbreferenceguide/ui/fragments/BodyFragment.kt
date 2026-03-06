@@ -1577,6 +1577,8 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
                 val searchControlsContainer = searchContainer.findViewById<LinearLayout>(R.id.search_controls_container)
                 searchControlsContainer.visibility = View.VISIBLE
                 searchCounter.visibility = View.VISIBLE
+                searchPrevious.visibility = View.VISIBLE
+                searchNext.visibility = View.VISIBLE
                 
                 val query = searchEditText.text.toString().trim()
                 if (query.isNotEmpty()) {
@@ -1598,6 +1600,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
         searchClear.visibility = View.VISIBLE
         val searchControlsContainer = searchContainer.findViewById<LinearLayout>(R.id.search_controls_container)
         searchControlsContainer.visibility = View.VISIBLE
+        searchCounter.visibility = View.VISIBLE
+        searchPrevious.visibility = View.VISIBLE
+        searchNext.visibility = View.VISIBLE
     }
 
     private fun collapseSearchView() {
@@ -1622,6 +1627,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
         val searchControlsContainer = searchContainer.findViewById<LinearLayout>(R.id.search_controls_container)
         searchControlsContainer.visibility = View.GONE
         searchClear.visibility = View.GONE
+        searchPrevious.visibility = View.GONE
+        searchNext.visibility = View.GONE
+        searchCounter.visibility = View.GONE
 
         // Animate back to full width
         val targetWidth = ViewGroup.LayoutParams.MATCH_PARENT
@@ -1859,6 +1867,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
         
         val searchControlsContainer = searchContainer.findViewById<LinearLayout>(R.id.search_controls_container)
         searchControlsContainer.visibility = View.VISIBLE
+        searchCounter.visibility = View.VISIBLE
+        searchPrevious.visibility = View.VISIBLE
+        searchNext.visibility = View.VISIBLE
         searchClear.visibility = View.VISIBLE
         
         Log.d("BodyFragment", "Updated search UI: ${currentMatch}/${count}")
