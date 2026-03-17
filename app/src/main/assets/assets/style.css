@@ -239,6 +239,10 @@ img {
   margin-bottom: 16px;
 }
 
+.header-title > div {
+  flex: 0 0 auto;
+}
+
 .last-updated {
   color: var(--last-updated-color);
   font-size: 15px;
@@ -437,7 +441,7 @@ td.uk-text-truncate {
   max-width: 0;
 }
 .uk-text-wrap {
-  white-space: wrap;
+  white-space: wrap !important;
 }
 
 /* End of import from UIkit.css file */
@@ -498,6 +502,15 @@ a {
 .uk-table td {
   color: var(--body-color-secondary);
 }
+
+.tab-content .uk-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+/* .tab-content .uk-table th.uk-text-wrap {
+  width: 32%;
+} */
 
 /* Tabs */
 
@@ -581,7 +594,7 @@ td {
 }
 
 td {
-  animation: slideInBottom var(--transition-duration) ease-in-out forwards;
+  animation: slideInBottom var(--transition-duration) ease-in-out;
 }
 
 td ul {
@@ -716,13 +729,13 @@ h3.highlight {
   justify-content: center;
   align-items: center;
   font-family: serif;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   background-color: var(--primary-color);
   color: white;
   border-radius: 50%;
   cursor: pointer;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   line-height: 16px;
   margin: 0 0rem;
   position: relative;
@@ -757,16 +770,19 @@ h3.highlight {
 /* Tooltip positioning variants */
 .tooltip-right {
   left: 0px;
+  z-index: 5000 !important;
 }
 
 .tooltip-center {
   left: 50%;
   transform: translateX(-50%);
+  z-index: 5000 !important;
 }
 
 .tooltip-left {
   right: 0px;
   left: auto;
+  z-index: 5000 !important;
 }
 
 .tooltip-bottom-center {
@@ -776,6 +792,7 @@ h3.highlight {
   transform: translateX(-50%);
   margin-bottom: 0;
   margin-top: 10px;
+  z-index: 5000 !important;
 }
 
 .tooltip-center-center {
@@ -783,6 +800,7 @@ h3.highlight {
   left: 30%;
   margin-bottom: 0;
   margin-top: 10px;
+  z-index: 5000 !important;
 }
 
 /* Tooltip arrow */
@@ -802,6 +820,7 @@ h3.highlight {
   visibility: visible;
   opacity: 1;
   overflow: scroll;
+  z-index: 5000 !important;
 }
 
 /* Responsive table
@@ -866,16 +885,4 @@ h3.highlight {
   .uk-tabs-container .tabs {
     grid-template-columns: repeat(2, 1fr);
   }
-}
-
-/* Shift the long AAP isoniazid tooltip in the LTBI table slightly right
-  so its content is not clipped. Targets only this tooltip on table_5
-  and does not affect other tooltips.
-  This was done to solve the problem on the tooltip that was causing the text to be blurred by the background.
-   so the possitioning of the tooltip was changed to the left and the css below was added so that the pop up doesnt get clipped by the margin
-  */
-#table_5_dosages_for_recommended_lbti_treatment_regimens
-  .info-icon[data-tooltip*="American Academy of Pediatrics recommends an isoniazid dosage of 10 - 15 mg/kg"]
-  .tooltip {
-  right: -30px; /* move popup 30px to the right */
 }
