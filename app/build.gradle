@@ -33,8 +33,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField "String", "DYNAMIC_LINK_DOMAIN", '"https://gatbreferenceguide.page.link"'
+        }
+
         release {
             minifyEnabled false
+            buildConfigField "String", "DYNAMIC_LINK_DOMAIN", '"https://apphatcherygatbreferenceguide.page.link"'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
             ndk {
