@@ -482,15 +482,17 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
     private fun highlightText(original: String, wordsToHighlight: List<String>): String {
         if (wordsToHighlight.isEmpty() || original.isEmpty()) return original
         var result = original
+        val highlightColor = ContextCompat.getColor(requireContext(), R.color.primary_300)
+        val hex = String.format("#%06X", 0xFFFFFF and highlightColor)
         for (word in wordsToHighlight) {
             if (word.isNotEmpty()) {
                 val pattern = word.replace(Regex("[\\s.,]+"), "")
                 if (pattern.isNotEmpty()) {
-                    val regex = Regex("(?i)($pattern)")
-                    val highlightColor = ContextCompat.getColor(requireContext(), R.color.primary_300)
-                    val hex = String.format("#%06X", 0xFFFFFF and highlightColor)
-                    result = result.replace(regex) {
-                        "<span style='background-color: $hex; color: #000000; font-weight: bold;'>${it.value}</span>"
+                    // Alternate: skip over existing HTML tags (<...>), only highlight outside them
+                    val regex = Regex("(?i)(<[^>]*>)|($pattern)")
+                    result = regex.replace(result) { match ->
+                        if (match.groupValues[1].isNotEmpty()) match.value
+                        else "<span style='background-color: $hex; color: #000000; font-weight: bold;'>${match.value}</span>"
                     }
                 }
             }
