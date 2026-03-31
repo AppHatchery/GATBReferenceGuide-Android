@@ -61,6 +61,16 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
         footer.layoutParams = params
         wrapper.addView(footer)
+
+        val versionName = try {
+            requireContext().packageManager
+                .getPackageInfo(requireContext().packageName, 0)
+                .versionName
+        } catch (e: Exception) { "" }
+        val year = Calendar.getInstance().get(Calendar.YEAR)
+        footer.findViewById<TextView>(R.id.version).text = "Version $versionName"
+        footer.findViewById<TextView>(R.id.powered_by).text = "Powered by AppHatchery $year"
+
         return wrapper
     }
 
