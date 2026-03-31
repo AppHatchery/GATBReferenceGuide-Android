@@ -4,7 +4,10 @@ import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.viewModels
@@ -32,6 +35,33 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private fun composeEmail() = Intent(Intent.ACTION_VIEW).apply {
         data = Uri.parse("mailto:?to=$CONTACT_EMAIL")
         startActivity(this)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val prefView = super.onCreateView(inflater, container, savedInstanceState)
+        val wrapper = FrameLayout(requireContext()).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        }
+        wrapper.addView(prefView)
+        val footer = inflater.inflate(R.layout.settings_footer, wrapper, false)
+        val density = resources.displayMetrics.density
+        val params = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            gravity = android.view.Gravity.BOTTOM
+            bottomMargin = (25 * density).toInt()
+        }
+        footer.layoutParams = params
+        wrapper.addView(footer)
+        return wrapper
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
