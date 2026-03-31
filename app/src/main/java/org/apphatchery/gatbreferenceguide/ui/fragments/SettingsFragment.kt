@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.pm.PackageInfoCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
@@ -63,10 +64,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
         wrapper.addView(footer)
 
         val versionName = try {
-            requireContext().packageManager
-                .getPackageInfo(requireContext().packageName, 0)
-                .versionName
-        } catch (e: Exception) { "" }
+            val info = context?.packageManager?.getPackageInfo(context?.packageName ?: "", 0)
+            val name = info?.versionName ?: "0"
+            val code = info?.let { PackageInfoCompat.getLongVersionCode(it) } ?: 0L
+            "$name.$code"
+        } catch (e: Exception) { "0.0" }
         val year = Calendar.getInstance().get(Calendar.YEAR)
         footer.findViewById<TextView>(R.id.version).text = "Version $versionName"
         footer.findViewById<TextView>(R.id.powered_by).text = "Powered by AppHatchery $year"
