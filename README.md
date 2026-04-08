@@ -240,16 +240,3 @@ Room validates the database schema on every open by comparing a stored hash agai
 
 ---
 
-### G. Firebase Remote Config (`update_value` key)
-
-The district TB coordinator directory is the only content that can be updated without shipping a new APK. The app checks the `update_value` integer in Firebase Remote Config on every launch and downloads a refreshed coordinator page when the value changes.
-
-**What can break:**
-
-- **Changing the remote page URL** without updating the hardcoded URL in `FAMainViewModel` — downloads silently fail; users see outdated or missing coordinator information with no error message.
-- **Incrementing `update_value` before the new page is live** — all users are prompted to download content that does not yet exist.
-
-**How to handle safely:**
-
-- Deploy the updated HTML page first, then increment `update_value` in Firebase Remote Config only after the new page is confirmed live and accessible.
-- If the page URL itself changes, update both the hardcoded fallback URL in `FAMainViewModel` and the Remote Config value in the same deployment.
