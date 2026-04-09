@@ -1,3 +1,17 @@
+// Kotlin extension functions and helpers that reduce boilerplate in UI fragments.
+//
+// SearchView.onQueryTextChange   — wraps the verbose OnQueryTextListener; used in search screens.
+// OnTouchHelper (abstract class) — left-swipe-to-delete helper for RecyclerViews; used in
+//                                  SavedFragment (bookmarks) and NotesFragment.
+// EditText.setOnTextWatcher      — fires only on non-blank changes; skips before/after callbacks.
+// LiveData.observeOnce           — observes a single emission then auto-removes; avoids leaks when
+//                                  a one-shot DB lookup is needed inside a fragment.
+// EditText.onSearchKeyword       — pre-fills a search EditText and positions the cursor at the end.
+// EditText.toggleSoftKeyboard    — shows/hides the IME; works around the Android quirk where
+//                                  requestFocus() alone does not always raise the keyboard.
+// String.toShortTableTitle       — extracts "Table 3" from a full chart title for compact display
+//                                  in the bookmarks/saved list (e.g. "Table 3: High Prevalence…").
+// Related: SavedFragment, GlobalSearchFragment, NotesFragment, BodyFragment.
 package org.apphatchery.gatbreferenceguide.utils
 
 import android.content.Context
@@ -14,6 +28,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
 
+/**
+ * Registers a text-change callback on this [SearchView], ignoring submit events.
+ * Normalises null to empty string so callers always receive a non-null value.
+ */
 fun SearchView.onQueryTextChange(onQueryTextChange: (String) -> Unit) {
     this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?) = true
@@ -25,6 +43,11 @@ fun SearchView.onQueryTextChange(onQueryTextChange: (String) -> Unit) {
     })
 }
 
+/**
+ * Provides left-swipe-to-delete for any RecyclerView.
+ * [onTouchHelperCallback] receives the swiped adapter position; the caller is responsible
+ * for removing the item from its data source and notifying the adapter.
+ */
 abstract class OnTouchHelper(val onTouchHelperCallback: (Int) -> Int) :
     ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
     override fun onMove(
@@ -61,6 +84,12 @@ fun EditText.setOnTextWatcher(
 }
 
 
+/**
+ * Observes this [LiveData] for exactly one emission, then removes the observer.
+ * Use this instead of a regular observe() when only the first DB result matters —
+ * e.g. resolving a chapter entity to build a navigation argument without keeping
+ * a permanent subscription that would re-trigger on unrelated DB writes.
+ */
 fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
     observe(lifecycleOwner, object : Observer<T> {
         override fun onChanged(value: T) {

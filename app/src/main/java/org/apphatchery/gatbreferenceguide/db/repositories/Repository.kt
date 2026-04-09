@@ -1,3 +1,20 @@
+// Domain-layer service that coordinates database seeding and querying for the guide's core content.
+// ViewModels receive this via Hilt @Inject constructor injection and call it to load chapters,
+// subchapters, and charts into the local Room database from bundled JSON asset files.
+//
+// dumpChapterInfo / dumpSubChapterInfo / dumpChartInfo: each wraps a networkBoundResource() call.
+// networkBoundResource() (see utils/NetworkBoundResource.kt) emits the current DB state as a Flow
+// immediately, then writes the provided data into the DB inside a transaction. Despite the name,
+// no network call is made — "network" here means "external data source" (bundled JSON assets).
+// The query() lambda provides the reactive Flow that UI observers receive; saveToDb() does the write.
+//
+// purgeData(): delegates straight to Database.purgeData(), which clears only seeded-content tables
+// atomically. Called by GuideContentUpdater before any of the dump*() methods on content update.
+//
+// Note: this Repository only covers seeded guide content. User data (bookmarks, notes, contacts)
+// is accessed directly through the Database instance in each ViewModel (e.g. FABodyViewModel),
+// keeping this class focused on content lifecycle rather than user-state management.
+// Related: Database, NetworkBoundResource, GuideContentUpdater, FAMainViewModel, FAChapterViewModel.
 package org.apphatchery.gatbreferenceguide.db.repositories
 
 import androidx.room.withTransaction

@@ -1,3 +1,21 @@
+// ListAdapter rendering the "quick-access" chart/table shortcut buttons on the app's MainFragment
+// home screen. Only the first 6 charts (plus a synthetic "All Tables>" / "All Charts>" sentinel)
+// are shown; the full list lives in FAChartAdapter.
+//
+// Title override support: the host fragment can call setTitleOverrides(map) to substitute display
+// titles without altering the underlying ChartAndSubChapter data (e.g. to rename a chart whose
+// DB title is too long for the button). displayTitle() resolves the override by chartEntity.id;
+// if no override exists it falls back to chartEntity.chartTitle.
+//
+// Each row uses FragmentMainFirst6ChartItemBinding (a Button layout). Binding logic:
+//   - Normal charts get the chart icon (ic_baseline_charts_1) as a compound drawable.
+//   - The sentinel item ("All Tables>" or "All Charts>") gets the "see all" icon
+//     (ic_baseline_see_all_content), matching the visual style of FAMainFirst6ChapterAdapter.
+//
+// Related files:
+//   - ChartAndSubChapter (db/data) — joined ChartEntity + SubChapterEntity
+//   - MainFragment — builds the list and registers itemClickCallback; also calls setTitleOverrides
+//   - FAChartAdapter — full-list sibling adapter used in ChartFragment
 package org.apphatchery.gatbreferenceguide.ui.adapters
 
 import android.view.LayoutInflater
@@ -49,6 +67,7 @@ class FAMainFirst6ChartAdapter :
             val title = displayTitle(chapterEntity)
             button.text = title
 
+            // "All Tables>" / "All Charts>" sentinel: distinct icon signals it opens the full list
             if (title == "All Tables>" || title == "All Charts>") {
                 button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_see_all_content, 0, 0, 0)
             } else {

@@ -1,3 +1,20 @@
+// One-time migration that repairs NoteEntity.noteId values that became stale after a
+// guide content update renamed, renumbered, or merged chapters/tables.
+//
+// Startup position: called inside MainFragment.firstLaunch() → AppInitLock.mutex, on the
+// IO dispatcher, BEFORE purgeAndSeedFromAssets(). This order matters: the sub-chapter rows
+// it queries must still exist from the previous DB version during the lookup phase.
+//
+// What is protected: user-authored note TEXT and metadata (color, timestamp) are never
+// touched — only the foreign-key IDs (noteId, subChapterId) are rewritten.
+//
+// Two ID types are handled differently:
+//   • table_* IDs   — resolved purely via LegacyRedirects.CHART_REDIRECTS map.
+//   • sub-chapter IDs — first redirected via LegacyRedirects, then looked up in the DB
+//                       by title/key to obtain the current numeric subChapterId.
+//
+// Related: LegacyRedirects.kt (the redirect maps), NoteDao.kt (updateNoteTargetByPk /
+//          updateNoteTargetAndSubChapterByPk), MainFragment.firstLaunch().
 package org.apphatchery.gatbreferenceguide.utils
 
 import android.util.Log

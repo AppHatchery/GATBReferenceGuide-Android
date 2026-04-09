@@ -1,3 +1,22 @@
+// General-purpose Context/View/Dialog extension functions used throughout the app.
+//
+// Content I/O helpers (used in the startup content-copy pipeline):
+//   toInternalStorage()                  — streams an InputStream to a file under cacheDir;
+//                                          the `override` flag controls whether to skip existing files.
+//   prepHtmlPlusAssets()                 — iterates bundled assets/pages/images directories and
+//                                          copies each file to cacheDir; called by GuideContentUpdater.
+//   createHtmlAndAssetsDirectoryIfNotExists() — creates the three cacheDir sub-directories.
+//   readJsonFromAssetToString()          — reads a JSON seed file from assets/json/; returns null
+//                                          on failure so callers can handle missing bundled data.
+//   html2text()                          — strips HTML tags via Jsoup; used to build plain-text
+//                                          search index rows in MainFragment.dumpHTMLInfo().
+//
+// UI helpers: Dialog.dialog(), Dialog.safeDialogShow(), Context.toast(), View.snackBar(),
+//   View.toggleVisibility(), Int.noItemFound(), Activity.getBottomNavigationView(),
+//   BottomNavigationView.isChecked(), Context.alertDialog().
+//
+// Related: GuideContentUpdater.kt (calls prepHtmlPlusAssets), Constant.kt (path constants),
+//          MainFragment (calls readJsonFromAssetToString, html2text, noItemFound).
 package org.apphatchery.gatbreferenceguide.utils
 
 import android.app.Activity
@@ -52,6 +71,12 @@ private fun InputStream.writeToDisk(file: File) {
 
 }
 
+/**
+ * Writes [inputStream] to [filename] under [cacheDir].
+ * If [override] is false the write is skipped when the file already exists —
+ * used during the initial content copy to avoid re-copying unchanged assets.
+ * Set [override] to true (default) when the file must always be refreshed.
+ */
 fun Context.toInternalStorage(
     inputStream: InputStream,
     filename: String,
@@ -84,6 +109,11 @@ fun Context.readJsonFromAssetToString(file: String): String? {
 
 fun String.removeSlash() = replace("/", "")
 
+/**
+ * Copies all files from the bundled assets/, pages/, and images/ directories into cacheDir.
+ * Uses override=false so files that already exist are skipped (idempotent on re-entry).
+ * Called by [replaceBundledGuideWebContent] after clearing the target directories.
+ */
 fun Context.prepHtmlPlusAssets(): AssetManager = assets.apply {
     list(ASSETS_DIR.removeSlash())?.forEach {
         val file = ASSETS_DIR + it
@@ -102,6 +132,12 @@ fun Context.prepHtmlPlusAssets(): AssetManager = assets.apply {
 
 }
 
+/**
+ * Toggles a RecyclerView and an "empty state" placeholder view based on item count.
+ * Receiver is the list size: 0 hides the RecyclerView and shows [searchView] (the empty
+ * state placeholder), non-zero does the reverse.  Despite the parameter name [searchView]
+ * it is used for any empty-state view, not necessarily a search widget.
+ */
 fun Int.noItemFound(recyclerview: View, searchView: View) {
     if (this == 0) {
         searchView.visibility = View.VISIBLE

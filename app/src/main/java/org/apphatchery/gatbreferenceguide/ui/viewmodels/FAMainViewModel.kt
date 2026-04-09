@@ -1,3 +1,24 @@
+// ViewModel backing MainFragment — the guide's primary navigation hub (chapter/chart lists).
+// Also owns all guide seeding and content-update logic, making it the central coordinator for
+// the guide's data lifecycle.
+//
+// Reactive state: getChapter / getChart (LiveData) expose the full chapter and chart lists.
+// title (MutableLiveData<String>): drives the toolbar title from any fragment.
+// taskFlowEvent (Flow<Callback>): one-shot events signalling seeding milestones
+//   (InsertHTMLInfoComplete, InsertGlobalSearchInfoComplete) consumed by MainFragment.
+//
+// Guide seeding: purgeAndSeedFromAssets() is the authoritative first-install / content-update
+//   entry point. It runs a single atomic Room transaction: purge all content tables, then insert
+//   chapters, subchapters, charts, and HTML info from bundled JSON/asset files, then rebuild the
+//   global search FTS table via rebuildGlobalSearchLocked(). Prefer this over the legacy
+//   dumpChapterData / dumpChartData / dumpSubChapterData / bindHtmlWithChapter pipeline.
+//
+// Content update: downloadAndSavePage() / checkAndUpdatePage() download the live district-
+//   coordinator appendix page from the web and save it to filesDir, replacing the bundled copy.
+//   MD5 hashing guards against redundant re-downloads. checkTriggerValue() reads a Firebase
+//   Remote Config integer to coordinate update triggers across app versions.
+//
+// Related files: MainFragment, Repository, Database, GlobalSearchDao, HtmlInfoDao, PAGES_DIR.
 package org.apphatchery.gatbreferenceguide.ui.viewmodels
 
 import android.content.Context
@@ -100,6 +121,11 @@ class FAMainViewModel @Inject constructor(
         )
     }
 
+    /**
+     * Reads a bundled JSON asset file and deserialises it into a typed list using Gson.
+     * Throws [IllegalStateException] if the asset is missing or fails to parse, so callers
+     * fail loudly on first install rather than silently seeding an empty database.
+     */
     private inline fun <reified T> parseAssetJson(context: Context, fileName: String): List<T> {
         val json = context.readJsonFromAssetToString(fileName)
             ?: throw IllegalStateException("Missing asset json: $fileName")
@@ -108,6 +134,12 @@ class FAMainViewModel @Inject constructor(
             ?: throw IllegalStateException("Failed to parse asset json: $fileName")
     }
 
+    /**
+     * Walks the assets/pages directory, strips HTML tags via html2text(), and builds
+     * [HtmlInfoEntity] records that power global search full-text indexing.
+     * The "GA TB Reference Guide" boilerplate is stripped from each page's text so
+     * search results are not polluted by the repeated app title string.
+     */
     private fun extractHtmlInfoFromAssets(context: Context): List<HtmlInfoEntity> {
         val results = ArrayList<HtmlInfoEntity>()
         context.assets.list(PAGES_DIR.removeSlash())?.forEach { entry ->
@@ -194,6 +226,13 @@ class FAMainViewModel @Inject constructor(
     }
 
 
+    /**
+     * Legacy global search seeding pipeline (used before purgeAndSeedFromAssets was introduced).
+     * Joins subchapter+chapter rows with their corresponding HtmlInfoEntity plain-text bodies,
+     * then inserts the combined GlobalSearchEntity records inside a transaction.
+     * Emits [Callback.InsertGlobalSearchInfoComplete] on completion.
+     * Prefer [purgeAndSeedFromAssets] for new installs and content updates.
+     */
     fun bindHtmlWithChapter() = viewModelScope.launch {
 
         val globalSearch = ArrayList<GlobalSearchEntity>()
@@ -261,6 +300,11 @@ class FAMainViewModel @Inject constructor(
 
     }
 
+    /**
+     * Reads the "update_value" integer from Firebase Remote Config and persists it locally.
+     * Used to coordinate content-update triggers: the app compares the remote value to a locally
+     * stored value to decide whether a fresh content download is required on next launch.
+     */
     private fun checkTriggerValue(remoteConfig: FirebaseRemoteConfig, context: Context){
         val sharedPrefs = context.getSharedPreferences("KEY_UPDATE_VALUE", Context.MODE_PRIVATE)
         remoteConfig.fetchAndActivate()
@@ -270,7 +314,15 @@ class FAMainViewModel @Inject constructor(
             }
     }
 
-    // Download and save framer page
+    /**
+     * First-time download of the live district TB coordinators appendix page from the web.
+     * Guards against re-download with a SharedPreferences boolean flag ("isDownloaded").
+     * Downloads the HTML, all CSS/JS dependencies, and the title SVG icon, rewrites all
+     * resource URLs to local file paths, then saves everything to filesDir.
+     * After saving, re-indexes the page in the HtmlInfo table and triggers checkTriggerValue().
+     * Runs on [Dispatchers.IO]; swallows exceptions silently to avoid crashing the app on
+     * network failure (falls back to the bundled asset copy).
+     */
     fun downloadAndSavePage(
         url: String,
         context: Context
@@ -397,6 +449,13 @@ class FAMainViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Checks whether the remote version of [htmlFilename] differs from the locally saved copy
+     * by comparing MD5 hashes. If the content has changed, downloads the updated page and
+     * all its assets via [downloadAndModifyHtml], then overwrites the local file in filesDir.
+     * This is the ongoing update check (post-first-download); [downloadAndSavePage] handles
+     * the initial download.
+     */
     fun checkAndUpdatePage(url: String, context: Context, htmlFilename: String) =
         viewModelScope.launch(Dispatchers.IO) {
             try {

@@ -1,3 +1,18 @@
+// ListAdapter rendering the sub-chapter list for a selected chapter in SubChapterFragment's
+// RecyclerView. Each row uses the shared FragmentWithRecyclerviewItemBinding layout and displays
+// an alphabetic prefix followed by the sub-chapter title, e.g. "A. Overview of TB Treatment".
+//
+// Alphabetic prefixing: the adapter position is used as a direct index into the ALPHABET constant
+// array (["a","b","c",...]), converted to uppercase. This assumes sub-chapters arrive in the
+// correct display order from SubChapterDao (ordered by subChapterId within the parent chapter).
+// If the number of sub-chapters ever exceeds the length of ALPHABET an IndexOutOfBoundsException
+// would occur — in practice TB guide chapters have far fewer sub-chapters than 26.
+//
+// Related files:
+//   - SubChapterEntity (db/entities) — holds subChapterId, subChapterTitle, and parent chapterId
+//   - ALPHABET (utils) — lowercase letter array used for the A/B/C prefix
+//   - SubChapterFragment — attaches this adapter and handles itemClickCallback to open BodyFragment
+//   - FAChapterAdapter — the parent-level adapter; selecting a chapter leads to this sub-chapter list
 package org.apphatchery.gatbreferenceguide.ui.adapters
 
 import android.view.LayoutInflater
@@ -33,6 +48,7 @@ class FASubChapterAdapter :
 
         fun onBinding(chapterEntity: SubChapterEntity, index: Int) =
             bind.apply {
+                // Prefix each sub-chapter with its alphabetic letter: "A. ", "B. ", etc.
                 (ALPHABET[index].uppercase() + ". " + chapterEntity.subChapterTitle).also {
                     textView.text = it
                 }

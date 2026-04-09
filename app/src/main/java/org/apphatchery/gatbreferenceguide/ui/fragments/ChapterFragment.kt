@@ -1,3 +1,15 @@
+// Fragment displaying the full list of TB guide chapters in a RecyclerView.
+// The user sees all top-level chapters (e.g., Diagnosis of Active TB, Treatment of LTBI) and
+// can tap any row to drill into its subchapters.
+//
+// Data flow: FAChapterViewModel.getChapterEntity (LiveData<List<ChapterEntity>>) is observed
+// and submitted to FAChapterAdapter via submitList(). A guard flag (hadData) logs a warning
+// if the list becomes empty after having previously loaded data, which can indicate a DB issue.
+//
+// Item click: navigates to SubChapterFragment via
+// ChapterFragmentDirections.actionChapterFragmentToSubChapterFragment(chapterEntity).
+// Bottom navigation is synced to highlight the Home (mainFragment) tab on entry.
+// Related: FAChapterViewModel, FAChapterAdapter, SubChapterFragment, ChapterEntity.
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.os.Bundle

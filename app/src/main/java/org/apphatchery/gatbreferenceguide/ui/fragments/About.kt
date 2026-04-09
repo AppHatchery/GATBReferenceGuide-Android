@@ -1,3 +1,13 @@
+// Fragment displaying the "About Us" informational page for the GA-TB Reference Guide app.
+// The user sees a static HTML page rendered in a WebView describing the app's background,
+// purpose, and the organizations involved in its development.
+//
+// Data flow: no ViewModel is used. The HTML file is loaded directly from the app's cache
+// directory using a file:// URL constructed from cacheDir + PAGES_DIR + "about_us" + EXTENSION.
+// The cache content is seeded on first launch (and on updates) by MainFragment/firstLaunch().
+//
+// Navigation: reached from SettingsFragment via actionSettingsFragmentToAbout (SafeArgs).
+// Related: PrivacyPolicy (same WebView pattern), BaseFragment, PAGES_DIR, EXTENSION.
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.os.Bundle

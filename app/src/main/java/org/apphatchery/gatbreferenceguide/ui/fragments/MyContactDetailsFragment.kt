@@ -1,3 +1,13 @@
+// Fragment for viewing and editing a user's private (personal) TB contact entry.
+// The user sees all contact fields pre-populated from their saved PrivateContact and can
+// update the record or permanently delete it. Both actions return to ContactFragment.
+//
+// Data flow: receives a PrivateContact via SafeArgs (MyContactDetailsFragmentArgs.contact).
+// "Update" validates that name and cell are non-empty, then calls viewModel.update(PrivateContact).
+// "Delete" shows an AlertDialog confirmation before calling viewModel.deleteContact(contact).
+// After either action, navigates back via action_myContactDetailsFragment_to_contactFragment.
+//
+// Related: FAContactViewModel, ContactFragment, ContactDetailsFragment, PrivateContact.
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.app.AlertDialog
@@ -79,6 +89,11 @@ class MyContactDetailsFragment : Fragment(R.layout.fragment_my_contact_details){
 
     }
 
+    /**
+     * Shows a confirmation AlertDialog before permanently removing the given [contact]
+     * from the local database. On confirmation, calls viewModel.deleteContact() and
+     * navigates back to ContactFragment.
+     */
     private fun deleteContact(contact:PrivateContact) {
         AlertDialog.Builder(activity).apply {
             setTitle("Delete Contact")

@@ -1,3 +1,17 @@
+// ViewModel backing ContactFragment — shows the TB programme's public contact directory.
+// Contacts are seeded from ContactFragment.fakeContact (a hardcoded list) and replaced on
+// every ViewModel init, so the list always reflects the bundled data rather than stale DB rows.
+//
+// getContacts (LiveData<List<Contact>>): the full public contact list, observed by ContactFragment.
+// contactItemCount (StateFlow<ContactTypeData>): tracks tab/badge counts (e.g. public vs saved
+//   contacts) for the ContactFragment tab UI; updated by setSavedItemCount().
+//
+// insert(): clears the contacts table and re-inserts fakeContact on every init — this is
+//   intentional "refresh from bundled data" behavior, not a bug. Runs on viewModelScope.
+// deleteContact / update / copyPublicToPrivateContact: private-contact operations are currently
+//   commented out (PrivateContact feature not yet shipped).
+//
+// Related files: ContactFragment, SavedFragment, ContactDao, Contact, Database.
 package org.apphatchery.gatbreferenceguide.ui.viewmodels
 
 import androidx.lifecycle.ViewModel

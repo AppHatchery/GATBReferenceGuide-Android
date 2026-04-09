@@ -1,3 +1,17 @@
+// ViewModel backing SubChapterFragment — displays the list of sections within a single chapter.
+// The user arrives here after tapping a chapter in ChapterFragment.
+//
+// chapterId: set by SubChapterFragment before observing; controls which chapter's sections load.
+// searchQuery (MutableStateFlow<String>): drives live search filtering within the subchapter list.
+// getSubChapterEntity (LiveData<List<SubChapterEntity>>): filtered subchapter list, re-emitted on
+//   each searchQuery change via flatMapLatest. Subchapter ID 28 is filtered out in this ViewModel
+//   (its content page was removed from the guide but kept in the DB for referential integrity).
+//
+// recentOpen(data): records a subchapter as recently visited using DELETE then INSERT rather than
+//   upsert. This "bump to top" pattern ensures the entry sorts to the top of the recent list
+//   (ordered by rowid/insertion order). See also FABodyViewModel for the same pattern.
+//
+// Related files: SubChapterFragment, Database, SubChapterDao, RecentDao, RecentEntity.
 package org.apphatchery.gatbreferenceguide.ui.viewmodels
 
 import androidx.lifecycle.ViewModel

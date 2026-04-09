@@ -1,3 +1,16 @@
+// ViewModel backing SettingsFragment — manages the user-data reset flow.
+//
+// resetInfo(context): the single meaningful operation in this ViewModel. It performs a full
+//   wipe of all user-generated data in the following order:
+//     1. Clears all bookmarks (BookmarkDao.clearBookmarks).
+//     2. Clears all notes (NoteDao.clearNotes).
+//     3. Clears recent navigation history (RecentDao.clearRecent).
+//     4. Removes the "RECENT_SEARCHES_LIST" key from the RECENT_SEARCHES SharedPreferences,
+//        which holds the user's recent global search terms (stored as a serialised list,
+//        separate from the Room recent-open history).
+//   Guide content tables (chapters, subchapters, charts) are NOT touched — only user data.
+//
+// Related files: SettingsFragment, BookmarkDao, NoteDao, RecentDao, Database.
 package org.apphatchery.gatbreferenceguide.ui.viewmodels
 
 import android.content.Context

@@ -1,3 +1,12 @@
+// Fragment displaying the Georgia TB Privacy Policy as a static HTML page in a WebView.
+// The user sees the privacy policy content loaded directly from the app's cache directory
+// using a file:// URL: cacheDir + PAGES_DIR + "georgia_tb_privacy_policy" + EXTENSION.
+//
+// Data flow: no ViewModel. HTML is sourced from cached assets seeded by MainFragment on
+// first launch (replaceBundledGuideWebContent). No user interaction beyond scrolling.
+//
+// Navigation: reached from SettingsFragment via actionSettingsFragmentToPrivacyPolicy (SafeArgs).
+// Related: About (same WebView pattern), BaseFragment, PAGES_DIR, EXTENSION.
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.os.Bundle

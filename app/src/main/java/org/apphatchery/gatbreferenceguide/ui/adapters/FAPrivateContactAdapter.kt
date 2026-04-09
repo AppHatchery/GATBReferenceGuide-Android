@@ -1,3 +1,21 @@
+// ListAdapter rendering the private/personal TB-contact list in ContactFragment's second ViewPager
+// tab. Structurally mirrors FAContactAdapter but operates on PrivateContact entities instead of
+// the shared Contact entities, keeping personal contacts separate from the read-only public list.
+//
+// Section-label logic is identical to FAContactAdapter: the adapter tracks currentLabel (the
+// last-seen first letter) and shows textViewLabel only when the initial changes between
+// consecutive items, producing alphabetic group headers. Contacts must be pre-sorted
+// alphabetically by the caller (PrivateContactDao or the host fragment) for headers to be correct.
+//
+// Reuses FragmentContactItemBinding — the same row layout as FAContactAdapter — so both tabs
+// look visually consistent.
+//
+// Related files:
+//   - PrivateContact (db/entities) — data class with id, fullName, phone, and other private fields
+//   - FAContactAdapter — the public-contacts counterpart; shares the same layout and label logic
+//   - ContactFragment — attaches both adapters via FAContactViewPagerAdapter
+//   - SwipeToDeleteCallback / SwipeDecoratorCallback — wired to this adapter's RecyclerView in
+//     ContactFragment to allow left-swipe deletion of private contacts
 package org.apphatchery.gatbreferenceguide.ui.adapters
 
 import android.view.LayoutInflater
@@ -43,6 +61,7 @@ class FAPrivateContactAdapter : ListAdapter<PrivateContact, FAPrivateContactAdap
         getItem(position)?.let { holder.bind(it) }
     }
 
+    // Tracks the last-seen first letter so consecutive contacts with the same initial share one label
     private var currentLabel = ""
     private var labelFlag = true
     private var firstLetter = ""
@@ -54,6 +73,7 @@ class FAPrivateContactAdapter : ListAdapter<PrivateContact, FAPrivateContactAdap
             fullNameTextView.text = contact.fullName
             firstLetter = contact.fullName.substring(0, 1).uppercase()
 
+            // Show the letter header only when the initial changes from the previous contact
             labelFlag = if (firstLetter != currentLabel) {
                 currentLabel = firstLetter
                 true

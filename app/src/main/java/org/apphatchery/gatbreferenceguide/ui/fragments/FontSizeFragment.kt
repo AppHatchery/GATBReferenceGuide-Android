@@ -1,3 +1,13 @@
+// Fragment providing a font-size picker for the TB guide content (Small/Normal/Large/Larger).
+// The user moves a slider to preview how quote text scales, and the selection is persisted to
+// SharedPreferences under the key R.string.font_key as a 0–3 index string.
+//
+// Data flow: no ViewModel. Reads/writes via PreferenceManager.getDefaultSharedPreferences().
+// The stored index (0=100%, 1=125%, 2=150%, 3=175%) is consumed by BodyFragment.updateFont()
+// to set WebView.textZoom and scale inline SVG icons to match the chosen font size.
+//
+// Navigation: reached from SettingsFragment via actionSettingsFragmentToFontSizeFragment.
+// Related: SettingsFragment, BodyFragment.updateFont(), R.string.font_key.
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.content.SharedPreferences
@@ -27,6 +37,10 @@ class FontSizeFragment : Fragment(R.layout.fragment_font_size) {
         updateFontPreview()
     }
 
+    /**
+     * Reads the current font index from SharedPreferences and scales the preview
+     * quote text proportionally so the user sees a live sample before leaving the screen.
+     */
     private fun updateFontPreview() {
         val fontIndex =
             sharedPreferences.getString(getString(R.string.font_key), "1")?.toInt() ?: 1
@@ -47,6 +61,11 @@ class FontSizeFragment : Fragment(R.layout.fragment_font_size) {
         bind.authorText.textSize = baseAuthorSize * scaleFactor
     }
 
+    /**
+     * Configures the font size slider: positions it at the currently saved index and
+     * writes the newly chosen index to SharedPreferences on every change, then refreshes
+     * the live preview via [updateFontPreview].
+     */
     private fun setupFontSlider() {
         val fontSettingsSlider: Slider = bind.fontSizeSlider
         val currentFontSizeIndex =

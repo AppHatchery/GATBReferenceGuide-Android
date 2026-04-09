@@ -1,3 +1,16 @@
+// Fragment displaying the TB Contacts directory in a two-tab ViewPager2 layout.
+// Tab 0 "My Contacts" shows the user's private/personal contacts (FAPrivateContactAdapter).
+// Tab 1 "All Contacts" shows the full guide-seeded public contact list (FAContactAdapter).
+//
+// Data flow: FAContactViewPagerAdapter wraps both adapters and observes FAContactViewModel for
+// live contact lists. Page selection updates ContactTypeData (ContactType + itemCount) via
+// viewModel.setSavedItemCount() so the parent UI can reflect count changes.
+// Note: direct LiveData observation for contacts is currently commented out and delegated to
+// FAContactViewPagerAdapter instead.
+//
+// Item clicks: "My Contacts" row -> MyContactDetailsFragment; "All Contacts" row ->
+// ContactDetailsFragment. Both navigate using bundled Parcelable args.
+// Related: FAContactViewModel, FAContactAdapter, FAPrivateContactAdapter, FAContactViewPagerAdapter.
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.os.Bundle
@@ -133,6 +146,10 @@ class ContactFragment : BaseFragment(R.layout.fragment_contact) {
 
 
 
+    /**
+     * Pushes the active contact tab type and current list size to the ViewModel so any
+     * observers (e.g., count badges) stay in sync with the visible page.
+     */
     private fun setContactData(contactType: ContactType, itemCount: Int) =
         viewModel.setSavedItemCount(ContactTypeData(contactType, itemCount))
 }

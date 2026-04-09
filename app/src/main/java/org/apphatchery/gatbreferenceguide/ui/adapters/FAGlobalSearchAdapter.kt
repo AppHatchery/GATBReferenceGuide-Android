@@ -1,3 +1,24 @@
+// ListAdapter rendering full-text search results in the GlobalSearch screen's RecyclerView.
+// Items are GlobalSearchEntity records (each representing a matching HTML content block). Two
+// view types are handled within a single ViewHolder by checking globalSearchEntity.isChart:
+//
+//   - Chapter result: displays "VII. Chapter Title" (Roman numeral from ROMAN_NUMERALS array,
+//     chapterId is 1-based so index = chapterId-1) with a chapter icon as a compound drawable.
+//   - Chart result:   displays the chart title with a chart icon as a compound drawable.
+//
+// In both cases textInBody shows the matched body text with single-line START ellipsis so the
+// visible text always ends with the matched phrase rather than leading context.
+//
+// Filtering: the adapter holds the full allItems list and re-submits a filtered subset when
+// filter(SearchResultType) is called (ALL / CHARTS / CHAPTERS). updateData() replaces allItems
+// and re-applies the current filter, so the UI stays consistent across data refreshes.
+//
+// Related files:
+//   - GlobalSearchEntity (db/entities) — holds fileName, chapterId, isChart, searchTitle, subChapter, textInBody
+//   - ROMAN_NUMERALS (utils) — array mapping 0-based chapter index to Roman numeral string
+//   - FAGlobalSearchViewModel — queries the DB and exposes results as a Flow
+//   - searchState (utils) — global singleton; enterSearchMode() is called on item tap to signal the
+//     host activity/fragment that navigation should open the content viewer
 package org.apphatchery.gatbreferenceguide.ui.adapters
 
 import android.content.Context

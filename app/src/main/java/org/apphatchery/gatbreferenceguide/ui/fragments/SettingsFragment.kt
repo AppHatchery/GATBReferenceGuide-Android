@@ -1,3 +1,15 @@
+// Settings screen for the GA-TB Reference Guide, built on PreferenceFragmentCompat.
+// Preferences are defined in res/xml/root_preferences.xml. Available options:
+//   - Font Size: navigates to FontSizeFragment (actionSettingsFragmentToFontSizeFragment)
+//   - Dark Mode toggle: applies MODE_NIGHT_YES/NO via AppCompatDelegate with a short delay
+//   - Contact Us / Give Feedback: opens a mailto: Intent to support@apphatchery.org
+//   - Privacy Policy: navigates to PrivacyPolicy fragment
+//   - About: navigates to About fragment
+//   - Clear App Content (reset_key): shows a confirmation dialog then calls
+//     viewModel.resetInfo(context) to wipe seeded DB content and cached assets
+//
+// Data flow: FASettingsViewModel handles the reset operation.
+// Related: FASettingsViewModel, FontSizeFragment, PrivacyPolicy, About, root_preferences.xml.
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.app.Dialog
@@ -29,6 +41,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
         const val CONTACT_EMAIL = "support@apphatchery.org"
     }
 
+    /**
+     * Opens the device's default email client pre-addressed to [CONTACT_EMAIL]
+     * (support@apphatchery.org) using an ACTION_VIEW mailto: Intent.
+     */
     private fun composeEmail() = Intent(Intent.ACTION_VIEW).apply {
         data = Uri.parse("mailto:?to=$CONTACT_EMAIL")
         startActivity(this)

@@ -1,3 +1,16 @@
+// Fragment displaying the list of subchapters belonging to a single TB guide chapter.
+// Receives a ChapterEntity via SafeArgs (SubChapterFragmentArgs) from ChapterFragment or
+// MainFragment (home shortcut). The user sees all subchapters (e.g., individual treatment
+// protocol pages) for the selected chapter and taps one to read its HTML content.
+//
+// Data flow: FASubChapterViewModel.getSubChapterEntity (LiveData) is observed and submitted
+// to FASubChapterAdapter. The toolbar title is resolved from the DB via
+// viewModel.getChapterInfo() rather than the SafeArgs label, so Home shortcut display names
+// do not bleed into deeper navigation.
+//
+// Item click: navigates to BodyFragment via
+// SubChapterFragmentDirections.actionSubChapterFragmentToBodyFragment(BodyUrl, null).
+// Related: FASubChapterViewModel, FASubChapterAdapter, BodyFragment, BodyUrl, ChapterEntity.
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.os.Bundle

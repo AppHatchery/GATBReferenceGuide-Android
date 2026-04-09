@@ -1,3 +1,16 @@
+// Fragment displaying the user's saved bookmarks ("My Bookmarks") for the TB guide.
+// Shows a RecyclerView of BookmarkEntity rows via FASavedBookmarkAdapter; swipe-to-delete
+// is supported via ItemTouchHelper/SwipeDecoratorCallback. An empty state view is shown when
+// there are no bookmarks.
+//
+// Bookmark click flow: LegacyRedirects checks if the stored bookmarkId/subChapter key has
+// been renamed across app updates. If redirected, a Snackbar notifies the user and the DB
+// row is repaired (viewModel.repairRedirectedBookmark). Then:
+//   - isTableId() bookmarks -> openChartBookmark() -> BodyFragment with ChartAndSubChapter
+//   - other bookmarks -> openSubChapterBookmark() -> BodyFragment with SubChapterEntity
+// Both navigate via SavedFragmentDirections.actionSavedFragmentToBodyFragment().
+// Edit icon opens a custom dialog to rename or delete the bookmark.
+// Related: FASavedViewModel, BookmarkEntity, LegacyRedirects, BodyFragment, BodyUrl.
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.os.Bundle
@@ -136,6 +149,11 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
 
     }
 
+    /**
+     * Resolves the ChapterEntity for the given [subChapterEntity] from the DB and navigates
+     * to BodyFragment. Shows a Snackbar error if the parent chapter no longer exists
+     * (e.g., removed in a guide update).
+     */
     private fun actionSavedFragmentToBodyFragment(subChapterEntity: SubChapterEntity) {
         viewModel.getChapterInfoOrNull(subChapterEntity.chapterId)
             .observe(viewLifecycleOwner) { chapterEntity ->
@@ -156,6 +174,7 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
             }
     }
 
+    /** Reports the current bookmark count and list type to the ViewModel for any listening UI. */
     private fun setSavedData(savedType: SavedType, itemCount: Int) =
         viewModel.setSavedItemCount(SavedTypeData(savedType, itemCount))
 
@@ -169,6 +188,11 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
     }
 
 
+    /**
+     * Resolves a subchapter bookmark, applying any LegacyRedirects mapping and repairing
+     * the DB row if the stored key has changed. Falls back to looking up by the subChapter
+     * title field for older bookmark formats. Shows a Snackbar if content no longer exists.
+     */
     private fun openSubChapterBookmark(
         original: BookmarkEntity,
         redirectedBookmarkId: String,
@@ -228,6 +252,11 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
     }
 
 
+    /**
+     * Resolves a chart/table bookmark, applying LegacyRedirects and repairing the DB row.
+     * If the chart no longer exists, falls back to opening the parent subchapter page instead,
+     * with a Snackbar explaining the redirect.
+     */
     private fun openChartBookmark(
         original: BookmarkEntity,
         redirectedBookmarkId: String,

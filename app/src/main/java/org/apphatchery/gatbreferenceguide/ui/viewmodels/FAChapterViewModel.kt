@@ -1,3 +1,15 @@
+// ViewModel backing ChapterFragment — the top-level chapter list screen of the TB guide.
+// Exposes a searchable list of chapters so the user can navigate to a specific guide chapter.
+//
+// getChapterEntity (LiveData<List<ChapterEntity>>): reactive chapter list, re-emitted whenever
+//   searchQuery changes. Uses flatMapLatest so rapid typing cancels in-flight DB queries.
+// searchQuery (MutableStateFlow<String>): updated by ChapterFragment's search bar; empty string
+//   returns all chapters.
+//
+// getCountByChapterId(chapterId): returns the subchapter count for a chapter, used to show
+//   item counts in the chapter list UI (e.g., "5 topics").
+//
+// Related files: ChapterFragment, Database, ChapterDao, SubChapterDao.
 package org.apphatchery.gatbreferenceguide.ui.viewmodels
 
 import androidx.lifecycle.ViewModel

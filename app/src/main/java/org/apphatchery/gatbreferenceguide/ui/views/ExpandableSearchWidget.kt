@@ -1,3 +1,21 @@
+// Compound view that provides in-page search for the TB guide's article WebView.
+// Inflates R.layout.search_view and manages its own expand/collapse animation, match
+// navigation, and content highlighting.
+//
+// Usage in BodyFragment:
+//   1. Call setContentToSearch(htmlString) after the WebView page finishes loading.
+//   2. Attach onMatchNavigated to receive (currentMatch, totalMatches) for the counter label.
+//   3. Call getHighlightedContent() to get the HTML with <span> highlights injected, then
+//      load it back into the WebView.
+//   4. Call hideSearchView() / showSearchView() to toggle visibility from the toolbar.
+//
+// Expand animation: the EditText animates from 0 width to 213 dp over 250 ms. The 213 dp
+// value is a fixed design constant leaving room for the prev/next/clear icons on the right.
+//
+// Highlight injection: uses Jsoup to strip tags for match-counting, then wraps matched words
+// in <span style='background-color:yellow'> in the original HTML for re-loading.
+// Related: BaseWebView.kt (hosts the loaded content), R.layout.search_view,
+//          R.string.search_counter_placeholder, BodyFragment.
 package org.apphatchery.gatbreferenceguide.ui.views
 
 import android.animation.ValueAnimator
@@ -133,6 +151,11 @@ class ExpandableSearchWidget @JvmOverloads constructor(
         }.start()
     }
 
+    /**
+     * Shrinks the EditText back to full width, hides counter/nav controls, and clears results.
+     * Called by BodyFragment when the user closes the search toolbar or navigates away.
+     * Safe to call even when the widget is already collapsed (returns early).
+     */
     fun collapseSearchView() {
         if (!isExpanded) return
         isExpanded = false
@@ -167,6 +190,11 @@ class ExpandableSearchWidget @JvmOverloads constructor(
         clearSearch()
     }
 
+    /**
+     * Counts case-insensitive matches of [query] in the plain text extracted from
+     * [originalContent] via Jsoup, updates the counter, and triggers highlight injection.
+     * Must be called after [setContentToSearch] has supplied the HTML source.
+     */
     private fun performSearch(query: String) {
         if (query.isEmpty() || originalContent.isEmpty()) {
             clearSearchResults()

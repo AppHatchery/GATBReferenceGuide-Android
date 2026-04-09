@@ -1,3 +1,18 @@
+// Single-Activity host for the entire GA-TB Reference Guide navigation graph.
+// Owns the custom action bar (custom_action_bar_title layout), bottom navigation tabs
+// (Home/Search/Settings), and the NavHostFragment that drives all fragment transitions.
+//
+// Key responsibilities:
+//   - setupActionBar(): inflates the custom action bar with title TextView and back-button ImageView;
+//     back button delegates to onSupportNavigateUp() for NavController/OnToolbarBackPressed support.
+//   - setupNavigation(): wires the NavController to the bottom nav; custom setOnItemSelectedListener
+//     pops to an existing back-stack entry rather than creating duplicates on tab re-tap.
+//   - updateActionBar(): switches title and back-button visibility per destination ID so every
+//     screen in the nav graph has the correct toolbar state without per-fragment boilerplate.
+//   - Implements ActionBarController so BaseFragment helpers can update the toolbar safely,
+//     including deferring updates if views are not yet initialized after a config change.
+//   - attachBaseContext overrides fontScale to 1.0 so system font size does not break layouts.
+// Related: ActionBarController, OnToolbarBackPressed, BaseFragment, MainFragment, BodyFragment.
 package org.apphatchery.gatbreferenceguide.ui
 
 import android.content.Context
@@ -97,6 +112,11 @@ class MainActivity : AppCompatActivity(), ActionBarController {
         }
     }
 
+    /**
+     * Replaces the default action bar content with the custom layout (custom_action_bar_title).
+     * Captures references to the title TextView, back-button ImageView, and spacer View,
+     * then wires the back button to call onSupportNavigateUp().
+     */
     private fun setupActionBar() {
         supportActionBar?.elevation = 0f
         supportActionBar?.let { actionBar ->
@@ -116,6 +136,13 @@ class MainActivity : AppCompatActivity(), ActionBarController {
         }
     }
     
+    /**
+     * Wires the NavController to the BottomNavigationView. Bottom-nav tab taps pop to an
+     * existing back-stack entry for that destination (avoiding duplicate stack frames); re-taps
+     * on the already-selected tab pop back to the root of that tab. Also hides the bottom nav
+     * on deeper destination screens (BodyFragment, SubChapterFragment, etc.) and calls
+     * updateBottomNavIcons() to swap active/inactive icon drawables.
+     */
     private fun setupNavigation() {
         navController = findNavController(R.id.nav_host_fragment_container)
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
@@ -187,6 +214,11 @@ class MainActivity : AppCompatActivity(), ActionBarController {
         remoteConfig.setConfigSettingsAsync(configSettings)
     }
     
+    /**
+     * Sets the toolbar title and back-button visibility for every destination in the nav graph.
+     * Called on every NavController destination change so each screen has the correct
+     * toolbar state without per-fragment boilerplate.
+     */
     private fun updateActionBar(destinationId: Int, destinationLabel: String?) {
         when (destinationId) {
             R.id.mainFragment -> {

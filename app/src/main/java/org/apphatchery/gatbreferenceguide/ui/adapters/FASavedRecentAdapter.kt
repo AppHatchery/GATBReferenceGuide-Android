@@ -1,3 +1,18 @@
+// ListAdapter rendering the Recent tab in SavedFragment's RecyclerView.
+// Each row displays the title of a RecentEntity (the title of the sub-chapter or chart page
+// the user last visited) using the shared FragmentWithRecyclerviewItemBinding single-text layout.
+//
+// Entries are recorded by RecentDao whenever the user opens a content page in BodyFragment;
+// the DAO enforces a cap on total entries so this list stays manageable.
+//
+// Left-swipe deletion is handled externally: FASavedViewPagerAdapter attaches a SwipeDecorator
+// ItemTouchHelper to this tab's RecyclerView via the swipeToDeleteCallback field of ViewPagerData.
+//
+// Related files:
+//   - RecentEntity (db/entities) — holds id, title, and navigation metadata (subChapterId, etc.)
+//   - RecentDao — inserts/deletes recents; enforces list size cap
+//   - SavedFragment / FASavedViewPagerAdapter — host and wire up this adapter
+//   - FASavedBookmarkAdapter — sibling adapter for the Bookmarks tab in the same ViewPager
 package org.apphatchery.gatbreferenceguide.ui.adapters
 
 import android.view.LayoutInflater

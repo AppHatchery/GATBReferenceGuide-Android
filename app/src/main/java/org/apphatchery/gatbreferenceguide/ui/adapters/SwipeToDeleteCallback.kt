@@ -1,3 +1,24 @@
+// Abstract ItemTouchHelper callback that manually draws a delete affordance on LEFT swipe using
+// the Canvas API directly — no third-party decorator library required. This is an alternative
+// to SwipeDecoratorCallback for RecyclerViews where the decorator library is not wired up.
+//
+// Visual rendering in onChildDraw:
+//   - Cancellation guard: when dX == 0 and the gesture is no longer active (isCanceled), the
+//     previously drawn background is erased via clearCanvas() using PorterDuff.Mode.CLEAR, then
+//     the default super draw is called so the item snaps back cleanly.
+//   - Background: a ColorDrawable is stretched to fill the revealed area (itemView.right + dX to
+//     itemView.right). The backgroundColor field is commented out — the host fragment is expected
+//     to tint or replace the drawable externally, or the default transparent drawable is used.
+//   - Icon: the trash-can icon (ic_baseline_delete_forever) is centred vertically within the row
+//     and right-aligned with a margin equal to (itemHeight - iconHeight) / 2.
+//
+// Drag-and-drop: onMove returns true (unlike SwipeDecoratorCallback) but no drag logic is
+// implemented — concrete subclasses should override if drag reordering is needed.
+//
+// Related files:
+//   - SwipeDecoratorCallback — preferred alternative that uses the RecyclerViewSwipeDecorator
+//     library for richer visuals (background colour, label, icon in one call)
+//   - FASavedViewPagerAdapter — selects which callback to attach per RecyclerView page
 package org.apphatchery.gatbreferenceguide.ui.adapters
 
 import android.content.Context
@@ -22,6 +43,7 @@ abstract class SwipeToDeleteCallback(context: Context) :
     private val background = ColorDrawable()
 //    private val backgroundColor = Color.parseColor("#f44336")
 
+    // Used to erase the swipe background when the gesture is cancelled / item snaps back
     private val clearPaint = Paint().apply { xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR) }
 
 
@@ -38,6 +60,7 @@ abstract class SwipeToDeleteCallback(context: Context) :
         val itemHeight = itemView.bottom - itemView.top
         val isCanceled = dX == 0f && !isCurrentlyActive
 
+        // If the swipe was cancelled (finger lifted without completing), clear the drawn background
         if (isCanceled) {
             clearCanvas(
                 canvas,

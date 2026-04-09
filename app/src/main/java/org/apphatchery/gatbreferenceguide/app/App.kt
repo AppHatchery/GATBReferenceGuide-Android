@@ -1,3 +1,19 @@
+// GA-TB Reference Guide application class — the first code that runs when the app process starts.
+// @HiltAndroidApp makes this the ROOT of the Hilt DI graph; removing it breaks every @Inject and
+// @HiltViewModel throughout the entire app, so this annotation must never be removed or changed.
+//
+// attachBaseContext(): locks fontScale to 1.0f before any view inflates. Without this, users who
+// enable "Large Text" in Android Accessibility settings would break the guide's HTML WebView
+// layouts, which are designed for a fixed scale. Must override attachBaseContext (not onCreate)
+// because resources are resolved from the base context before onCreate() runs.
+//
+// onCreate(): initializes process-wide SDKs in dependency order: FirebaseApp first (required
+// before any Analytics/Crashlytics usage), then night-mode preference (applied before the first
+// Activity frame so there is no visible light/dark flash on cold start), then Pendo analytics.
+//
+// Add new process-wide SDK inits here only if they must run before any Activity is created.
+// Theme preference is written by SettingsFragment (R.string.theme_key / R.array.theme_values).
+// Related: di/AppModule.kt (Hilt providers), ui/MainActivity.kt (first Activity after this runs).
 package org.apphatchery.gatbreferenceguide.app
 
 import android.app.Application
@@ -21,7 +37,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        
+
         FirebaseApp.initializeApp(this)
 
         val themeValue: Array<String> = resources.getStringArray(R.array.theme_values)

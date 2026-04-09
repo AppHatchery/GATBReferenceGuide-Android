@@ -1,3 +1,20 @@
+// Compatibility map that translates stale bookmark/note IDs to current IDs after content updates.
+// When guide editors rename or renumber a chapter section or reference table, any user who had
+// saved a bookmark or note with the old ID would silently lose it on the next app update.
+// This object provides the redirect maps that fix those IDs before the user sees their saved list.
+//
+// CHART_REDIRECTS: maps old "table_*" chart IDs to their new names. Chart IDs are derived from
+// the JSON filenames: lowercased, spaces replaced with underscores, prefixed with "table_".
+// When chart JSON files are renumbered in the guide (e.g. table_10 → table_9), add the mapping
+// here and release the app update. The entry above the map shows the most recent renaming batch.
+//
+// SUBCHAPTER_REDIRECTS: maps old subchapter IDs/titles. Currently empty — populate it when any
+// subchapter identifier changes between app versions.
+//
+// redirectBookmarkId(bookmarkId): called during startup migration from SavedFragment and
+// LegacyNotesMigrator. Routes to the correct map using the "table_" prefix as a discriminator.
+// redirectSubChapterKey(): used by LegacyNotesMigrator to fix note target IDs the same way.
+// Related: BookmarkDao.repairRedirect(), LegacyNotesMigrator.kt, SavedFragment, FASavedViewModel.
 package org.apphatchery.gatbreferenceguide.utils
 
 /**

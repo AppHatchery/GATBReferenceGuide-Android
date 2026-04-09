@@ -1,3 +1,18 @@
+// ListAdapter rendering the public TB-contact list in ContactFragment's RecyclerView.
+// Each row uses FragmentContactItemBinding and shows the contact's full name. Contacts are
+// expected to arrive pre-sorted alphabetically (by ContactDao); this adapter adds a floating
+// alphabetic section label (textViewLabel) above the first contact of each letter group.
+//
+// Section-label logic: the adapter tracks the most-recently-seen first letter in currentLabel.
+// When a new contact's initial differs, labelFlag is set true and the label becomes visible;
+// otherwise it is hidden. Because this state is stored at the adapter level (not per-ViewHolder),
+// fast scrolling or RecyclerView recycling can occasionally produce stale labels — acceptable
+// for this use case since the list is small and fully pre-sorted.
+//
+// Related files:
+//   - Contact (db/entities) — data class with id, fullName, phone, etc.
+//   - ContactFragment — attaches this adapter; also hosts FAPrivateContactAdapter for private contacts
+//   - FAContactViewPagerAdapter — wraps this adapter inside the contacts ViewPager
 package org.apphatchery.gatbreferenceguide.ui.adapters
 
 import android.view.LayoutInflater
@@ -44,6 +59,7 @@ class FAContactAdapter : ListAdapter<Contact, FAContactViewHolder>(DiffUtilCallB
         getItem(position)?.let { holder.bind(it) }
     }
 
+    // Tracks the last-seen first letter so consecutive contacts with the same initial share one label
     private var currentLabel = ""
     private var labelFlag = true
     private var firstLetter = ""
@@ -55,6 +71,7 @@ class FAContactAdapter : ListAdapter<Contact, FAContactViewHolder>(DiffUtilCallB
             fullNameTextView.text = contact.fullName
             firstLetter = contact.fullName.substring(0, 1).uppercase()
 
+            // Show the letter header only when the initial changes from the previous contact
             labelFlag = if (firstLetter != currentLabel) {
                 currentLabel = firstLetter
                 true

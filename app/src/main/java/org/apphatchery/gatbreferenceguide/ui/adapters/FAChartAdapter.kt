@@ -1,3 +1,14 @@
+// ListAdapter rendering the full chart/table list in ChartFragment's RecyclerView.
+// Each row displays the title of a ChartAndSubChapter item (chartEntity.chartTitle) using the
+// shared FragmentWithRecyclerviewItemBinding layout (a simple single-TextView row).
+//
+// The ALPHABET constant is imported but not used by this adapter directly — it is used by
+// FASubChapterAdapter for alphabetic prefixing. It appears here due to a shared import pattern.
+//
+// Related files:
+//   - ChartAndSubChapter (db/data) — the joined data class combining ChartEntity + SubChapterEntity
+//   - FAChartFragment — attaches this adapter and handles itemClickCallback to open chart content
+//   - FragmentWithRecyclerviewItemBinding — shared single-row layout used by several adapters
 package org.apphatchery.gatbreferenceguide.ui.adapters
 
 import android.view.LayoutInflater
@@ -13,6 +24,10 @@ class FAChartAdapter :
     ListAdapter<ChartAndSubChapter, FAChartAdapter.ViewHolder>(DiffUtilCallBack()) {
 
 
+    /**
+     * Identifies items by chartEntity.id; compares contents by hashCode so that any field change
+     * in ChartAndSubChapter triggers a rebind.
+     */
     class DiffUtilCallBack : DiffUtil.ItemCallback<ChartAndSubChapter>() {
         override fun areItemsTheSame(oldItem: ChartAndSubChapter, newItem: ChartAndSubChapter) =
             newItem.chartEntity.id == oldItem.chartEntity.id

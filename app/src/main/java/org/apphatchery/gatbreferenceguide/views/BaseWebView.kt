@@ -1,3 +1,22 @@
+// Custom WebView that pre-applies all TB guide rendering requirements in one place,
+// so every BodyFragment/ChartFragment instance gets consistent behaviour without
+// repeating setup code.
+//
+// Key setup performed in init{}:
+//   • JavaScript enabled  — required by UIkit components in the guide HTML.
+//   • File/content access — allows loading from cacheDir via file:// URLs.
+//   • Zoom controls       — pinch-zoom on; overlay buttons hidden (displayZoomControls=false).
+//   • LOAD_NO_CACHE       — always reads from cacheDir, not the WebView HTTP cache, so
+//                           content updates are reflected immediately after a re-copy.
+//   • Force-dark          — honours Android night-mode for pages that don't ship their own
+//                           dark CSS; uses the deprecated WebSettingsCompat API because the
+//                           replacement (algorithmic darkening) is not available on API <29.
+//   • Find listener       — bridges WebView.findAllAsync() results to [setOnSearchResultListener]
+//                           so ExpandableSearchWidget can display "2 / 5" match counters.
+//
+// applyFontSize() reads the user's font preference (R.string.font_key, set in SettingsFragment)
+// and maps 0/1/2/3 to WebSettings.TextSize values.
+// Related: BodyFragment (primary host), ExpandableSearchWidget.kt, UserPrefs/SettingsFragment.
 package org.apphatchery.gatbreferenceguide.views
 
 import android.annotation.SuppressLint
@@ -79,6 +98,10 @@ class BaseWebView(context: Context, attributeSet: AttributeSet?) : WebView(conte
     }
 
 
+    /**
+     * Resets the page scale to 1 and enables overview mode so wide tables fit within the
+     * viewport. Called by BodyFragment when the user taps the "zoom out" toolbar button.
+     */
     fun onZoomOut() {
         setInitialScale(1)
         with(settings) {

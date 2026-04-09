@@ -1,3 +1,17 @@
+// Fragment rendering a single TB guide page (subchapter or chart/table) in a WebView.
+// Receives a BodyUrl (ChapterEntity + SubChapterEntity + optional search highlight string)
+// and an optional ChartAndSubChapter via SafeArgs (BodyFragmentArgs).
+//
+// Key features:
+//   - Bookmark: setupBookmark() observes FABodyViewModel.getBookmarkById() to show the
+//     current bookmark state; the bookmark button toggles a BookmarkEntity in the DB.
+//   - Notes: FANoteAdapter/FANoteColorAdapter manage per-page user notes with color tagging.
+//   - Font sizing: updateFont() reads the SharedPreferences font index (0–3) and applies
+//     WebView.textZoom + JavaScript CSS overrides to scale content and inline SVG icons.
+//   - In-page search: a slide-down search bar highlights matches via window.find() calls.
+//   - Implements OnToolbarBackPressed so the WebView can consume browser back-history steps.
+//   - Page views and bookmark events are logged to Firebase Analytics and Pendo.
+// Related: FABodyViewModel, FANoteAdapter, BodyUrl, BookmarkEntity, SubChapterEntity.
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.animation.Animator
@@ -154,6 +168,11 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
     lateinit var firebaseAnalytics: FirebaseAnalytics
 
 
+    /**
+     * Observes the bookmark state for the given content [id]. If a BookmarkEntity exists,
+     * the toolbar bookmark icon shows the "bookmarked" state; otherwise shows the empty icon.
+     * The cached [bookmarkEntity] is reused when the user taps to delete the existing bookmark.
+     */
     private fun setupBookmark(id: String) {
         viewModel.getBookmarkById(id).observe(viewLifecycleOwner) {
             if (it != null) {
@@ -176,6 +195,12 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
         // }, 3000)
     }
 
+    /**
+     * Reads the current font size index from SharedPreferences and applies it to the WebView:
+     * sets WebView.textZoom (100/125/150/175%), then runs JavaScript to scale inline chapter
+     * and chart SVG icons proportionally and fix the .uk-paragraph decorative line dimensions.
+     * Must be called after the WebView has loaded content so evaluateJavascript() takes effect.
+     */
     private fun updateFont() {
         val fontIndex =
             sharedPreferences.getString(getString(R.string.font_key), "1")?.toInt() ?: 1
@@ -376,6 +401,11 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
                 }
     }
 
+    /**
+     * Inflates and displays the font-size picker dialog (dialog_font_settings layout) with a
+     * slider. Slider changes are immediately persisted to SharedPreferences and applied to the
+     * WebView via [updateFont], so the user sees a live preview without leaving the page.
+     */
     private fun showFontDialog() {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_font_settings, null)
         val fontSettingsSlider: Slider = dialogView.findViewById(R.id.font_size_slider)

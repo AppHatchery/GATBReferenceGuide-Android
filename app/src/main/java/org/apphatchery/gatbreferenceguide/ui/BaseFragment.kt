@@ -1,3 +1,15 @@
+// Abstract base class for all TB guide fragments. Defines the shared lifecycle contract:
+// every subclass must implement onViewCreated(). Provides helpers that forward action bar
+// control requests to MainActivity (which implements ActionBarController), keeping fragments
+// decoupled from the Activity's concrete toolbar implementation.
+//
+// Shared capabilities:
+//   - setActionBarTitle/setActionBarConfig: update the custom toolbar title and back-button state
+//   - voiceSearchListener / voiceSearchForActivityResult: launch and handle Android voice
+//     recognition (used by GlobalSearchFragment for hands-free search input)
+//
+// All screen-specific fragments (ChapterFragment, BodyFragment, etc.) extend BaseFragment.
+// Related: ActionBarController, MainActivity, OnToolbarBackPressed.
 package org.apphatchery.gatbreferenceguide.ui
 
 import android.content.Intent
@@ -35,6 +47,10 @@ abstract class BaseFragment(@LayoutRes layoutRes: Int) : Fragment(layoutRes) {
         (requireActivity() as? ActionBarController)?.setupActionBarSearch(onSearchAction, onSearchIconClick)
     }
 
+    /**
+     * Launches the Android speech recognition Intent via [resultLauncher].
+     * Used by GlobalSearchFragment to populate the search field via voice input.
+     */
     fun voiceSearchListener(resultLauncher: ActivityResultLauncher<Intent>) =
         resultLauncher.launch(
             Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).also {
@@ -45,6 +61,10 @@ abstract class BaseFragment(@LayoutRes layoutRes: Int) : Fragment(layoutRes) {
             })
 
 
+    /**
+     * Extracts the top-ranked speech recognition result from [activityResult] and passes
+     * it to [activityResultCallback] so the calling fragment can populate its search field.
+     */
     fun voiceSearchForActivityResult(
         activityResult: ActivityResult,
         activityResultCallback: (String) -> Unit

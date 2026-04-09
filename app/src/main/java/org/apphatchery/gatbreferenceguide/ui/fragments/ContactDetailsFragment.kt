@@ -1,3 +1,13 @@
+// Fragment displaying read-only details for a public TB Contact (seeded from guide data).
+// The user sees all fields (name, cell, email, address, office phone, fax, notes) and can
+// tap "Copy to My Contacts" to save this public contact as a personal PrivateContact.
+//
+// Data flow: receives a Contact object via SafeArgs (ContactDetailsFragmentArgs.contact).
+// Fields are populated directly from the args object — no LiveData observation required.
+// The "Copy" action calls viewModel.copyPublicToPrivateContact(PrivateContact(...)) then
+// navigates back to ContactFragment via action_contactDetailsFragment_to_contactFragment.
+//
+// Related: FAContactViewModel, ContactFragment, MyContactDetailsFragment, Contact, PrivateContact.
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.app.AlertDialog

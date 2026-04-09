@@ -1,3 +1,16 @@
+// Fragment providing full-text search across all TB guide chapters and charts/tables.
+// The user types a query; results stream from FAGlobalSearchViewModel.getGlobalSearchEntity
+// (a MutableStateFlow-backed LiveData driven by SQLite FTS MATCH queries) and are displayed
+// in a RecyclerView via FAGlobalSearchAdapter. Three tabs filter results: All / Chapters / Charts.
+//
+// Key behaviours:
+//   - sanitizeForFTS() strips characters that would break SQLite FTS MATCH syntax (e.g. quotes).
+//   - Recent searches are stored locally and shown via FASearchRecentAdapter before a query.
+//   - Quick-search chips (Regimens, Pregnancy, Rifampin) pre-fill the search field.
+//   - Result click: builds a BodyUrl + optional ChartAndSubChapter and navigates to BodyFragment
+//     via GlobalSearchFragmentDirections.actionGlobalSearchFragmentToBodyFragment().
+//   - Search events are logged to both Firebase Analytics and Pendo.
+// Related: FAGlobalSearchViewModel, FAGlobalSearchAdapter, FASearchRecentAdapter, BodyFragment.
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.annotation.SuppressLint
@@ -80,7 +93,10 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
 
     private var searchJob: Job? = null
 
-    // Sanitize user input for SQLite FTS MATCH queries to avoid malformed expressions and crashes when user enters " in the search query
+    /**
+     * Strips characters that are illegal in SQLite FTS5 MATCH expressions (e.g. double-quotes,
+     * special operators) to prevent query crashes. Collapses whitespace and trims the result.
+     */
     private fun sanitizeForFTS(input: String): String {
         // Keep only letters, numbers and whitespace; replace other chars with spaces
         val cleaned = input.replace(Regex("[^\\p{L}\\p{N}\\s]"), " ")
@@ -461,6 +477,11 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
         }
     }
 
+    /**
+     * Maps each GlobalSearchEntity to a copy where the title, subchapter, and body-text
+     * fields contain HTML <span> highlight tags around the matched search words.
+     * Runs on Dispatchers.IO to keep the main thread responsive during large result sets.
+     */
     private fun highlightSearchResults(results: List<GlobalSearchEntity>): List<GlobalSearchEntity> {
         val search = viewModel.searchQuery.value ?: ""
         val searchWords = search.split(Regex("[\\s.,]+"))
@@ -499,6 +520,10 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
     }
 
 
+    /**
+     * Tells FAGlobalSearchAdapter which result subset to display based on the currently
+     * selected tab (0=All, 1=Chapters only, 2=Charts/tables only).
+     */
     private fun filterAndHighlightResults(){
       when (currentTab) {
             0 -> faGlobalSearchAdapter.filter(FAGlobalSearchAdapter.SearchResultType.ALL)

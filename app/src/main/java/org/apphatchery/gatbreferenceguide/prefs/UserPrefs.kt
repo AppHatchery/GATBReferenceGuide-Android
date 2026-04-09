@@ -1,3 +1,21 @@
+// Persistent user preferences for the GA-TB Reference Guide app.
+//
+// TWO storage backends are intentionally used:
+//   DataStore (Preferences)  — async, coroutine-safe; used for values that are observed as Flows
+//                              (BUILD_VERSION, PENDO_VISITOR_ID). Prefer this for new keys.
+//   SharedPreferences        — synchronous; used for values that must be read/written on the
+//                              main thread without a coroutine (isFirstLaunch, KEY_UPDATE_VALUE).
+//
+// BUILD_VERSION: compared against MainFragment.BUILD_VERSION (= 14) on every cold start.
+//   If they differ, firstLaunch() runs the full DB reseed + content-copy pipeline.
+//   Bumping BUILD_VERSION in MainFragment is the mechanism for forcing a reseed on all devices.
+//
+// isFirstLaunch: set to false after the first Firebase Remote Config fetch completes.
+//   The Remote Config listener uses this to suppress the "update available" popup on the
+//   very first install (before the user has seen any content).
+//
+// Related: MainFragment (reads getBuildVersion, writes setBuildVersion, reads isFirstLaunch),
+//          AppModule.kt (provides @Singleton UserPrefs via Hilt), App.kt (Hilt root).
 package org.apphatchery.gatbreferenceguide.prefs
 
 import android.content.Context

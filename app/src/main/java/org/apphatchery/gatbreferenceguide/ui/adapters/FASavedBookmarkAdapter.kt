@@ -1,3 +1,23 @@
+// ListAdapter rendering saved bookmarks in the Bookmarks tab of SavedFragment's RecyclerView.
+// Supports two distinct view types determined by the bookmarkId prefix:
+//   - TYPE_CHART  (bookmarkId starts with "table_"): uses FragmentChartBookmarkItemBinding,
+//     showing chartTitle and chartSource (from subChapter field).
+//   - TYPE_CHAPTER (all other IDs): uses FragmentBookmarkItemBinding, showing bookmarkTitle
+//     and chapterSource (also from subChapter).
+//
+// Both view types expose two tap targets:
+//   - Root card (itemClickCallback) — navigates to the bookmarked content in BodyFragment.
+//   - Edit icon (itemEditCallback, bookmarkEditIcon / chartEditIcon) — opens the rename/delete
+//     dialog for that bookmark.
+//
+// Left-swipe deletion is handled externally via SwipeDecoratorCallback attached to the host
+// RecyclerView in FASavedViewPagerAdapter; this adapter itself has no swipe logic.
+//
+// Related files:
+//   - BookmarkEntity (db/entities) — holds bookmarkId, bookmarkTitle, subChapter (display source)
+//   - SavedFragment — hosts the ViewPager; attaches swipe callback via FASavedViewPagerAdapter
+//   - FASavedViewPagerAdapter — wraps this adapter in a ViewPagerData and attaches ItemTouchHelper
+//   - SwipeDecoratorCallback — draws the red delete background on left-swipe
 package org.apphatchery.gatbreferenceguide.ui.adapters
 
 import android.view.LayoutInflater
@@ -28,7 +48,7 @@ class FASavedBookmarkAdapter :
     fun itemClickCallback(listener: ((BookmarkEntity) -> Unit)) {
         onItemClickListAdapter = listener
     }
-    
+
     fun itemEditCallback(listener: ((BookmarkEntity) -> Unit)) {
         onItemEditListAdapter = listener
     }
@@ -36,6 +56,8 @@ class FASavedBookmarkAdapter :
     private var onItemClickListAdapter: ((BookmarkEntity) -> Unit)? = null
     private var onItemEditListAdapter: ((BookmarkEntity) -> Unit)? = null
 
+    // Bookmarks whose ID starts with "table_" were created from chart/table pages; all others
+    // are chapter bookmarks. This prefix convention is set at bookmark creation time in BodyFragment.
     override fun getItemViewType(position: Int): Int {
         return if (getItem(position).bookmarkId.startsWith("table_")) {
             TYPE_CHART
@@ -44,6 +66,7 @@ class FASavedBookmarkAdapter :
         }
     }
 
+    /** ViewHolder for chapter bookmarks (FragmentBookmarkItemBinding). */
     inner class ChapterViewHolder(private val bind: FragmentBookmarkItemBinding) :
         RecyclerView.ViewHolder(bind.root) {
 
@@ -77,6 +100,7 @@ class FASavedBookmarkAdapter :
         }
     }
 
+    /** ViewHolder for chart/table bookmarks (FragmentChartBookmarkItemBinding). */
     inner class ChartViewHolder(private val bind: FragmentChartBookmarkItemBinding) :
         RecyclerView.ViewHolder(bind.root) {
 
@@ -96,7 +120,7 @@ class FASavedBookmarkAdapter :
                     }
                 }
             }
-            
+
             // Edit icon click - show edit dialog
             bind.chartEditIcon.setOnClickListener {
                 if (RecyclerView.NO_POSITION != adapterPosition) {

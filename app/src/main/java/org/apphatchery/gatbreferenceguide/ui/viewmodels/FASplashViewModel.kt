@@ -1,3 +1,19 @@
+// ViewModel backing SplashFragment — drives the legacy guide-seeding pipeline shown on first
+// launch. Orchestrates a multi-step sequence: dump chapters → dump charts → dump subchapters
+// → dumpHTMLInfo → bindHtmlWithChapter, with each step triggered by observing the previous
+// step's LiveData result in SplashFragment.
+//
+// taskFlowEvent (Flow<Callback>): one-shot channel events consumed by SplashFragment to advance
+//   the seeding sequence. Emits InsertHTMLInfoComplete and InsertGlobalSearchInfoComplete.
+// dumpChartDataObserve / dumpSubChapterDataObserver: boolean guards used by SplashFragment to
+//   ensure each LiveData observer fires only once and does not re-trigger on re-subscription.
+//
+// bindHtmlWithChapter(): final seeding step. Joins chapters, subchapters, and chart metadata
+//   with their plain-text HTML bodies (from HtmlInfoEntity) to build GlobalSearchEntity rows,
+//   then inserts them inside a Room transaction so global search is fully indexed.
+//
+// Note: FAMainViewModel.purgeAndSeedFromAssets() supersedes this pipeline for new installs.
+// Related files: SplashFragment, Repository, Database, GlobalSearchDao, HtmlInfoDao.
 package org.apphatchery.gatbreferenceguide.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
@@ -30,12 +46,21 @@ class FASplashViewModel @Inject constructor(
         repo.dumpSubChapterInfo(data).asLiveData()
 
 
+    /**
+     * Inserts pre-built [HtmlInfoEntity] records (plain-text extractions of guide HTML pages)
+     * into the database, then signals [Callback.InsertHTMLInfoComplete] to SplashFragment so
+     * the next seeding step (bindHtmlWithChapter) can begin.
+     */
     fun dumpHTMLInfo(data: ArrayList<HtmlInfoEntity>) = viewModelScope.launch {
         repo.db.htmlInfoDao().insert(data)
         taskFlowChannel.send(Callback.InsertHTMLInfoComplete)
     }
 
-
+    /**
+     * Builds and inserts [GlobalSearchEntity] rows by joining subchapter/chart metadata with
+     * the corresponding HtmlInfoEntity plain-text body. This populates the FTS search table.
+     * Runs inside a Room transaction; emits [Callback.InsertGlobalSearchInfoComplete] when done.
+     */
     fun bindHtmlWithChapter() = viewModelScope.launch {
 
         val globalSearch = ArrayList<GlobalSearchEntity>()

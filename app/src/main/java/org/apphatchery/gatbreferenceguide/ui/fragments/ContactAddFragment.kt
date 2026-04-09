@@ -1,3 +1,13 @@
+// Fragment for adding a new private (user-owned) contact to the TB Contacts directory.
+// The user fills in a form (name, cell, email, address, office phone, fax, notes) and
+// submits it to be saved as a PrivateContact via FAContactViewModel.
+//
+// Data flow: FAContactViewModel (Hilt-injected) handles persistence. The layout is bound
+// via FragmentContactAddBinding. Currently the form submission logic is not yet implemented
+// in onViewCreated — this is a stub/in-progress screen.
+//
+// Navigation: reached from ContactFragment via action_contactFragment_to_contactAddFragment.
+// Related: FAContactViewModel, ContactFragment, MyContactDetailsFragment, PrivateContact.
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.os.Bundle

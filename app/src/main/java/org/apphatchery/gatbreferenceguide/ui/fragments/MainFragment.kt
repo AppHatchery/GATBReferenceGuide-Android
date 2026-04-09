@@ -1,3 +1,16 @@
+// Home screen fragment and app startup coordinator for the GA-TB Reference Guide.
+// Shows two curated RecyclerViews: six featured chapters (e.g., Diagnosis of Active TB,
+// Treatment of LTBI) and six featured charts/tables (e.g., First Line TB Drugs for Adults).
+//
+// Startup flow: onViewCreated() checks if the stored BUILD_VERSION matches the current
+// constant. If not, firstLaunch() runs on a background thread: copies cached HTML assets,
+// runs LegacyNotesMigrator, seeds the DB (charts/chapters/subchapters/HTML info), then
+// saves the new BUILD_VERSION. init() is called on both paths to set up UI and adapters.
+// AppInitLock.mutex prevents concurrent seeding if the user navigates away mid-init.
+//
+// Navigation: chapter row -> SubChapterFragment; chart row -> BodyFragment (via BodyUrl +
+// ChartAndSubChapter). Firebase Dynamic Links are handled via setupDynamicLink/handleDynamicLink.
+// Related: FAMainViewModel, AppInitLock, LegacyNotesMigrator, SubChapterFragment, BodyFragment.
 package org.apphatchery.gatbreferenceguide.ui.fragments
 
 import android.content.Context
@@ -90,6 +103,11 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         null
     )
 
+    /**
+     * Sets up the home screen UI after DB seeding is confirmed. Builds the featured chapter
+     * and chart adapter lists (hardcoded indices into the DB result), wires item-click navigation,
+     * triggers the District TB Coordinator page download, and starts the Pendo session.
+     */
     private fun init() {
 
         lifecycleScope.launch {
@@ -293,6 +311,11 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         adapter = listAdapter
     }
 
+    /**
+     * Checks the launching Intent for a Firebase Dynamic Link. If present, extracts
+     * androidQueryId and androidIsPage parameters and calls handleDynamicLink() to deep-navigate
+     * to the appropriate chart or subchapter content in BodyFragment.
+     */
     private fun setupDynamicLink() {
         Firebase.dynamicLinks
             .getDynamicLink(requireActivity().intent)
@@ -426,6 +449,12 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     }
 
 
+   /**
+    * Runs on first install or after a BUILD_VERSION bump. Executes heavy I/O on Dispatchers.IO
+    * under AppInitLock.mutex: replaces cached web content, migrates legacy notes, seeds the DB
+    * from bundled assets, and saves the new BUILD_VERSION + Pendo visitor ID. Calls init() when
+    * complete. Disables bottom navigation during seeding to prevent premature navigation.
+    */
    private fun firstLaunch() {
     requireActivity().apply {
         // Mark initialization as started

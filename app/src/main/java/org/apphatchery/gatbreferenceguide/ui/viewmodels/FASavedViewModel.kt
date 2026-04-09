@@ -1,3 +1,20 @@
+// ViewModel backing SavedFragment — shows the user's bookmarks, notes, and recent history.
+// SavedFragment has three tabs; this ViewModel serves all three and uses savedItemCount to
+// track per-tab badge counts for the tab bar UI.
+//
+// Reactive LiveData:
+//   getBookmarkEntity  – all BookmarkEntity rows, ordered for display in the Bookmarks tab.
+//   getRecentEntity    – all RecentEntity rows, ordered by insertion (newest first) for Recents.
+//   getNoteEntity      – all NoteEntity rows for the Notes tab.
+// savedItemCount (StateFlow<SavedTypeData>): holds the per-tab count summary; updated by
+//   setSavedItemCount() when the fragment knows how many items are in each tab.
+//
+// Bookmark repair: repairRedirectedBookmark() updates a stored bookmark whose URL was renamed
+//   in a content update, preserving the user's bookmark without requiring them to re-bookmark.
+// OrNull variants (getChapterInfoOrNull, getSubChapterInfoOrNull, etc.) return null instead of
+//   throwing when an ID no longer exists — used during bookmark repair validation.
+//
+// Related files: SavedFragment, BookmarkDao, NoteDao, RecentDao, BookmarkEntity, Database.
 package org.apphatchery.gatbreferenceguide.ui.viewmodels
 
 import android.util.Log
@@ -50,6 +67,12 @@ class FASavedViewModel @Inject constructor(
         db.bookmarkDao().update(data)
     }
 
+    /**
+     * Repairs a bookmark whose content URL was renamed in a guide content update.
+     * Updates the stored [oldId] to [newId] along with the new title and subchapter label,
+     * so the bookmark continues to navigate correctly without user intervention.
+     * Delegates to BookmarkDao.repairRedirect() which runs a targeted UPDATE query.
+     */
     fun repairRedirectedBookmark(
         oldId: String,
         newId: String,

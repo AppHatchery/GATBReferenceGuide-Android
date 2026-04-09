@@ -1,3 +1,18 @@
+// ViewModel backing GlobalSearchFragment — full-text search across all TB guide content.
+// Drives a two-stage query pipeline: raw user input → normalised terms → SQLite FTS query.
+//
+// searchQuery (MutableStateFlow<String>): written by GlobalSearchFragment's search bar.
+// getGlobalSearchEntity (LiveData<List<GlobalSearchWithMatchInfo>>): result list observed by
+//   GlobalSearchFragment; emits an empty list when the query is blank (no "show all" on open).
+//
+// Query pipeline (all inside the ViewModel — no logic in the DAO layer):
+//   1. Split input on whitespace, commas, and periods to get individual terms.
+//   2. Wrap each term with FTS GLOB wildcards: "tb" → "*tb*".
+//   3. Join terms with " OR " to produce the final SQLite FTS expression.
+// This allows partial-word matches (e.g. "treat" matches "treatment") without requiring exact terms.
+//
+// getSubChapterById(id): one-shot lookup used after the user taps a search result to navigate.
+// Related files: GlobalSearchFragment, GlobalSearchDao, GlobalSearchEntity, Database.
 package org.apphatchery.gatbreferenceguide.ui.viewmodels
 
 import android.content.SharedPreferences

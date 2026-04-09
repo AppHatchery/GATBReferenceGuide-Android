@@ -1,3 +1,20 @@
+// Hilt dependency module — wires all process-wide singleton services into the injection graph.
+// @InstallIn(SingletonComponent) means every @Provides method here lives for the app's full lifetime.
+// This is the only place where external libraries (Room, Glide, Firebase) are constructed and
+// configured, keeping that complexity out of ViewModels and fragments.
+//
+// providesRoomDB(): builds "ga_tb_reference_guide.db" with Room and registers MIGRATION_1_2.
+//   MIGRATION_1_2 (schema v1 → v2): adds the Contact table for the user contact directory.
+//   Uses raw SQL CREATE TABLE (not fallbackToDestructiveMigration) so ALL existing user data
+//   (bookmarks, notes, recents) is preserved across the upgrade. If the schema changes again,
+//   add a new Migration(2, 3) object and append it to addMigrations().
+//
+// providesGlide(): creates a Glide RequestManager with a placeholder drawable. Injected into
+// adapters that load user contact photos or other images asynchronously off the main thread.
+//
+// providesFirebaseAnalytics(): exposes FirebaseAnalytics as an injectable singleton, keeping
+// ViewModels and fragments decoupled from a direct Context dependency for analytics calls.
+// Related: App.kt (@HiltAndroidApp root), Database.kt (schema), Repository.kt (DB consumers).
 package org.apphatchery.gatbreferenceguide.di
 
 import android.content.Context
