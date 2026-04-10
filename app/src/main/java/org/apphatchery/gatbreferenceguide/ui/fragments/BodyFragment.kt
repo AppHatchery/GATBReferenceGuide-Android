@@ -96,6 +96,7 @@ import androidx.activity.OnBackPressedCallback
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import org.apphatchery.gatbreferenceguide.BuildConfig
 import org.apphatchery.gatbreferenceguide.utils.toShortTableTitle
 
 @AndroidEntryPoint
@@ -104,7 +105,6 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
     private val TAG = "MyFragmentLifecycle"
 
     companion object {
-        const val DOMAIN_LINK = "https://gatbreferenceguide.page.link"
         const val LOGO_URL =
             "https://raw.githubusercontent.com/AppHatchery/GA-TB-Reference-Guide-Web/main/assets/logo.jpg"
     }
@@ -1416,10 +1416,18 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
         val androidIsPage = if (isBookmarkCheck()) 0 else 1
         val iosHtmlFile = if (isBookmarkCheck()) chartAndSubChapter!!.chartEntity.id else
             subChapterEntity.url
+        val domainUriPrefix = BuildConfig.DYNAMIC_LINK_DOMAIN
+
+        val deepLink = Uri.parse(domainUriPrefix)
+            .buildUpon()
+            .appendQueryParameter("androidQueryId", androidQueryId)
+            .appendQueryParameter("androidIsPage", androidIsPage.toString())
+            .appendQueryParameter("chapterID", iosHtmlFile)
+            .build()
 
         FirebaseDynamicLinks.getInstance().createDynamicLink()
-            .setLink(Uri.parse("$DOMAIN_LINK?androidQueryId=$androidQueryId&androidIsPage=$androidIsPage&chapterID=$iosHtmlFile"))
-            .setDomainUriPrefix(DOMAIN_LINK)
+            .setLink(deepLink)
+            .setDomainUriPrefix(domainUriPrefix)
             .setAndroidParameters(DynamicLink.AndroidParameters.Builder().build())
             .setIosParameters(
                 DynamicLink.IosParameters

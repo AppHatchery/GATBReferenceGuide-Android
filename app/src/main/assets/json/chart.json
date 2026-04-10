@@ -59,7 +59,7 @@
     "id": "table_9_pediatric_dosage_isoniazid_in_children_(birth_to_15_years)",
     "subChapterTitle": "Special Clinical Situations",
     "subChapterId": 24,
-    "chartTitle": "Table 9: Pediatric dosage - isoniazid in children (birth to 15 years)",
+    "chartTitle": "Table 9: Pediatric Dosage in Children ( birth to 15 years)",
     "chartHomePosition": 0
   },
   {
@@ -123,6 +123,13 @@
     "subChapterTitle": "Adjunctive Use of Corticosteroid Therapy",
     "subChapterId": 32,
     "chartTitle": "Table 18: Grady Hospital TB Isolation Policy",
+    "chartHomePosition": 0
+  },
+  {
+    "id": "fig1_factors_to_be_considered",
+    "subChapterTitle": "Considerations",
+    "subChapterId": 22,
+    "chartTitle": "Figure 1: Factors to be considered in deciding to initiate treatment empirically for active tuberculosis (TB) (prior to microbiologic confirmation)",
     "chartHomePosition": 0
   }
 ]

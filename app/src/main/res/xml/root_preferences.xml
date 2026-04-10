@@ -33,11 +33,11 @@
             android:layout="@layout/preference_item_custom"
             app:title="Contact Us" />
 
-        <Preference
-            app:iconSpaceReserved="false"
-            app:key="give_feedback_key"
-            android:layout="@layout/preference_item_custom"
-            app:title="Give Feedback" />
+<!--        <Preference-->
+<!--            app:iconSpaceReserved="false"-->
+<!--            app:key="give_feedback_key"-->
+<!--            android:layout="@layout/preference_item_custom"-->
+<!--            app:title="Give Feedback" />-->
 
         <Preference
             app:iconSpaceReserved="false"
@@ -66,5 +66,6 @@
             app:title="Clear App Content" />
 
     </PreferenceCategory>
+
 
 </PreferenceScreen>

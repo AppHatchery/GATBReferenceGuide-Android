@@ -114,7 +114,9 @@ fun Int.noItemFound(recyclerview: View, searchView: View) {
 
 
 fun Context.html2text(file: String): String {
-    return Jsoup.parse(assets.open(file), null, "").text()
+    val doc = Jsoup.parse(assets.open(file), null, "")
+    doc.select("style, script").remove()
+    return doc.text()
 }
 
 

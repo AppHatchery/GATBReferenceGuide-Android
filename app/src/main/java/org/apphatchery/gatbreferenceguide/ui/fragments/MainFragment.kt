@@ -47,8 +47,8 @@ import javax.inject.Inject
 import org.apphatchery.gatbreferenceguide.db.Database
 
 
-private const val BUILD_VERSION = 13
-private const val PENDO_RELEASE_VERSION = "Oct-25-"
+private const val BUILD_VERSION = 15
+private const val PENDO_RELEASE_VERSION = "Apr-26-"
 
 @AndroidEntryPoint
 class MainFragment : BaseFragment(R.layout.fragment_main) {
@@ -79,9 +79,9 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     lateinit var db: Database
 
     companion object {
-        //const val VISITOR_ID = ""
-//        const val ACCOUNT_ID = "GTRG"
-        const val ACCOUNT_ID = "Test"
+        const val VISITOR_ID = ""
+        const val ACCOUNT_ID = "GTRG"
+//        const val ACCOUNT_ID = "Test"
     }
     private fun setupPendo() = Pendo.startSession(
         visitor_id,
@@ -169,8 +169,8 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                         data[10].chartEntity.id to "IV Therapy Drugs",
                         data[11].chartEntity.id to "Alternative Regimens",
                         data[4].chartEntity.id to "Dosages for LTBI Regimens",
-                        data[16].chartEntity.id to "Treatment of Extra- pulmonary TB",
-                        data[15].chartEntity.id to "TB drugs in Special Situations"
+                        data[15].chartEntity.id to "Treatment of Extra- pulmonary TB",
+                        data[16].chartEntity.id to "TB drugs in Special Situations"
                     )
                     adapter.setTitleOverrides(chartTitleOverrides)
 
