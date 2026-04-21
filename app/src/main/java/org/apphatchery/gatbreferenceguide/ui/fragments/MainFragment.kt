@@ -40,6 +40,7 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChartAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAMainViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
+import org.apphatchery.gatbreferenceguide.utils.navigateSafe
 import sdk.pendo.io.Pendo
 import java.util.UUID
 import javax.inject.Inject
@@ -79,9 +80,9 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     lateinit var db: Database
 
     companion object {
-        const val VISITOR_ID = ""
-        const val ACCOUNT_ID = "GTRG"
-//        const val ACCOUNT_ID = "Test"
+        // const val VISITOR_ID = ""
+        // const val ACCOUNT_ID = "GTRG"
+       const val ACCOUNT_ID = "Test"
     }
     private fun setupPendo() = Pendo.startSession(
         visitor_id,
@@ -139,11 +140,11 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
                 adapter.itemClickCallback { chapterEntity ->
                     if (chapterEntity.chapterTitle == "All Chapters>") {
-                        findNavController().navigate(R.id.action_mainFragment_to_chapterFragment)
+                        findNavController().navigateSafe(R.id.action_mainFragment_to_chapterFragment)
                     } else {
                         MainFragmentDirections.actionMainFragmentToSubChapterFragment(chapterEntity)
                             .apply {
-                                findNavController().navigate(this)
+                                findNavController().navigateSafe(this)
                             }
                     }
                 }
@@ -193,7 +194,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                             ?: chartAndSubChapter.chartEntity.chartTitle
 
                     if (displayTitle == "All Tables>" || displayTitle == "All Charts>") {
-                        findNavController().navigate(R.id.action_mainFragment_to_chartFragment)
+                        findNavController().navigateSafe(R.id.action_mainFragment_to_chartFragment)
                     } else {
                         viewModel.getChapterInfo(chartAndSubChapter.subChapterEntity.chapterId)
                             .observe(viewLifecycleOwner) { chapterEntity ->
@@ -201,7 +202,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                                     BodyUrl(chapterEntity, chartAndSubChapter.subChapterEntity, ""),
                                     chartAndSubChapter
                                 ).apply {
-                                    findNavController().navigate(this)
+                                    findNavController().navigateSafe(this)
                                 }
                             }
                     }
@@ -233,9 +234,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             }
         }
         fragmentMainBinding.bookmark.setOnClickListener {
-            MainFragmentDirections.actionMainFragmentToSavedFragment().apply {
-                findNavController().navigate(this)
-            }
+            findNavController().navigateSafe(MainFragmentDirections.actionMainFragmentToSavedFragment())
         }
 
 
@@ -321,7 +320,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                                     MainFragmentDirections.actionMainFragmentToBodyFragmentDirect(
                                         BodyUrl(chapterEntity, subChapterEntity, ""), chartAndSubchapter
                                     ).apply {
-                                        findNavController().navigate(this)
+                                        findNavController().navigateSafe(this)
                                     }
                                 }
                         }
@@ -334,7 +333,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                             MainFragmentDirections.actionMainFragmentToBodyFragmentDirect(
                                 BodyUrl(chapterEntity, subChapterEntity,""), null
                             ).apply {
-                                findNavController().navigate(this)
+                                findNavController().navigateSafe(this)
                             }
                         }
                 }

@@ -21,6 +21,7 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FAChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAChapterViewModel
 import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
 import org.apphatchery.gatbreferenceguide.utils.isChecked
+import org.apphatchery.gatbreferenceguide.utils.navigateSafe
 import org.apphatchery.gatbreferenceguide.utils.searchState
 
 
@@ -59,9 +60,9 @@ class ChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
             }
         }
         faChapterAdapter.itemClickCallback {
-            ChapterFragmentDirections.actionChapterFragmentToSubChapterFragment(it).apply {
-                findNavController().navigate(this)
-            }
+            findNavController().navigateSafe(
+                ChapterFragmentDirections.actionChapterFragmentToSubChapterFragment(it)
+            )
         }
         requireActivity().getBottomNavigationView()?.isChecked(R.id.mainFragment)
     }

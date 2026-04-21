@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import org.apphatchery.gatbreferenceguide.utils.navigateSafe
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -63,7 +64,7 @@ class MyContactDetailsFragment : Fragment(R.layout.fragment_my_contact_details){
                     view, "Contact updated successfully",
                     Snackbar.LENGTH_SHORT
                 ).show()
-                view.findNavController().navigate(R.id.action_myContactDetailsFragment_to_contactFragment)
+                view.findNavController().navigateSafe(R.id.action_myContactDetailsFragment_to_contactFragment)
 
             } else {
                 Toast.makeText(context, "Please enter contact name and cellphone number", Toast.LENGTH_SHORT).show()

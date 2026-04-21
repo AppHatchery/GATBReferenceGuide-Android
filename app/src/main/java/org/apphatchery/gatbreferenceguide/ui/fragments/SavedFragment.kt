@@ -22,6 +22,7 @@ import org.apphatchery.gatbreferenceguide.ui.BaseFragment
 import org.apphatchery.gatbreferenceguide.ui.adapters.*
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FASavedViewModel
 import org.apphatchery.gatbreferenceguide.utils.LegacyRedirects
+import org.apphatchery.gatbreferenceguide.utils.navigateSafe
 import org.apphatchery.gatbreferenceguide.utils.snackBar
 
 @AndroidEntryPoint
@@ -144,15 +145,11 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
                     return@observe
                 }
 
-                SavedFragmentDirections.actionSavedFragmentToBodyFragment(
-                    BodyUrl(
-                        chapterEntity,
-                        subChapterEntity,
-                        ""
-                    ), null
-                ).apply {
-                    findNavController().navigate(this)
-                }
+                findNavController().navigateSafe(
+                    SavedFragmentDirections.actionSavedFragmentToBodyFragment(
+                        BodyUrl(chapterEntity, subChapterEntity, ""), null
+                    )
+                )
             }
     }
 
@@ -282,12 +279,12 @@ class SavedFragment : BaseFragment(R.layout.fragment_saved) {
                             return@observe
                         }
 
-                        SavedFragmentDirections.actionSavedFragmentToBodyFragment(
-                            BodyUrl(chapterEntity, chartAndSubChapter.subChapterEntity, ""),
-                            chartAndSubChapter
-                        ).apply {
-                            findNavController().navigate(this)
-                        }
+                        findNavController().navigateSafe(
+                            SavedFragmentDirections.actionSavedFragmentToBodyFragment(
+                                BodyUrl(chapterEntity, chartAndSubChapter.subChapterEntity, ""),
+                                chartAndSubChapter
+                            )
+                        )
                     }
             }
     }

@@ -97,6 +97,7 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import org.apphatchery.gatbreferenceguide.BuildConfig
+import org.apphatchery.gatbreferenceguide.utils.navigateSafe
 import org.apphatchery.gatbreferenceguide.utils.toShortTableTitle
 
 @AndroidEntryPoint
@@ -980,9 +981,10 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
             
             visitButton.setOnClickListener {
                 dismiss()
-                hideKeyboard() // Dismiss keyboard before navigating
-                // Navigate to bookmarks screen
-                findNavController().navigate(R.id.savedFragment)
+                hideKeyboard()
+                if (findNavController().currentDestination?.id == R.id.bodyFragment) {
+                    findNavController().navigate(R.id.savedFragment)
+                }
             }
             
             dismissButton.setOnClickListener {
@@ -1358,7 +1360,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
                                 BodyUrl(bodyFragmentArgs.bodyUrl.chapterEntity, subChapter, ""),
                                 null
                             )
-                        findNavController().navigate(subChapterFragmentDirections)
+                        findNavController().navigateSafe(subChapterFragmentDirections)
                     }
                 }
             }
@@ -1375,7 +1377,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
                 if (!comp) {
                     if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
                         .also {
-                            findNavController().navigate(it)
+                            findNavController().navigateSafe(it)
                         }
                 }
             }
@@ -1383,7 +1385,7 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
         } else {
             if (item.itemId == R.id.searchView) BodyFragmentDirections.actionGlobalGlobalSearchFragment()
                 .also {
-                    findNavController().navigate(it)
+                    findNavController().navigateSafe(it)
                 }
         }
 
@@ -2075,8 +2077,9 @@ class BodyFragment : BaseFragment(R.layout.fragment_body), org.apphatchery.gatbr
         
         visitButton.setOnClickListener {
             dismiss()
-            // Navigate to settings page
-            findNavController().navigate(R.id.settingsFragment)
+            if (findNavController().currentDestination?.id == R.id.bodyFragment) {
+                findNavController().navigate(R.id.settingsFragment)
+            }
         }
         
         dismissButton.setOnClickListener {

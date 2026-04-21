@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import org.apphatchery.gatbreferenceguide.utils.navigateSafe
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -56,7 +57,7 @@ class ContactDetailsFragment : Fragment(R.layout.fragment_contact_details){
                 view, "Contact copied successfully",
                 Snackbar.LENGTH_SHORT
             ).show()
-            view.findNavController().navigate(R.id.action_contactDetailsFragment_to_contactFragment)
+            view.findNavController().navigateSafe(R.id.action_contactDetailsFragment_to_contactFragment)
         }
 
 
