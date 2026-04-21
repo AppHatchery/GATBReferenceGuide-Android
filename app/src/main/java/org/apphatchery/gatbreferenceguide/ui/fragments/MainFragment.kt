@@ -80,9 +80,9 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     lateinit var db: Database
 
     companion object {
-        // const val VISITOR_ID = ""
-        // const val ACCOUNT_ID = "GTRG"
-       const val ACCOUNT_ID = "Test"
+        const val VISITOR_ID = ""
+        const val ACCOUNT_ID = "GTRG"
+    //    const val ACCOUNT_ID = "Test"
     }
     private fun setupPendo() = Pendo.startSession(
         visitor_id,
