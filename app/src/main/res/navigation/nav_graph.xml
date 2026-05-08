@@ -149,7 +149,7 @@
     <fragment
         android:id="@+id/chartFragment"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.ChartFragment"
-        android:label="All Charts"
+        android:label="All Tables"
         tools:layout="@layout/fragment_with_recyclerview">
         <action
             android:id="@+id/action_chartFragment_to_bodyFragment"
@@ -182,6 +182,13 @@
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.SettingsFragment"
         android:label="Settings">
         <action
+            android:id="@+id/action_settingsFragment_to_fontSizeFragment"
+            app:destination="@id/fontSizeFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
             android:id="@+id/action_settingsFragment_to_privacyPolicy"
             app:destination="@id/privacyPolicy"
             app:enterAnim="@anim/slide_in_right"
@@ -196,6 +203,10 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+    <fragment
+        android:id="@+id/fontSizeFragment"
+        android:name="org.apphatchery.gatbreferenceguide.ui.fragments.FontSizeFragment"
+        android:label="Font Size" />
     <fragment
         android:id="@+id/contactFragment"
         android:name="org.apphatchery.gatbreferenceguide.ui.fragments.ContactFragment"

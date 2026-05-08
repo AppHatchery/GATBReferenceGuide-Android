@@ -11,16 +11,18 @@ fun <ResultType, RequestType> networkBoundResource(
     shouldFetch: (RequestType) -> Boolean = { true }
 ) = flow {
     val data = query().first()
-    val flow = try {
+
+    val flow: Flow<Resource<RequestType>> = try {
         if (shouldFetch(data)) {
             emit(Resource.Loading(data))
             saveToDb(fetch())
-            query().map { Resource.Success(it) }
+            query().map { Resource.Success(it) as Resource<RequestType> }
         } else {
-            query().map { Resource.Skipped(it) }
+            query().map { Resource.Skipped(it) as Resource<RequestType> }
         }
     } catch (e: Exception) {
-        query().map { Resource.Error(e, it) }
+        query().map { Resource.Error(e, it) as Resource<RequestType> }
     }
+
     emitAll(flow)
 }

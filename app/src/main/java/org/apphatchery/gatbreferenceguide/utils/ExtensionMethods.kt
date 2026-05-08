@@ -1,15 +1,19 @@
 package org.apphatchery.gatbreferenceguide.utils
 
 import android.content.Context
+import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
@@ -88,5 +92,25 @@ fun EditText.toggleSoftKeyboard(context: Context, showSoftKeyboard: Boolean = tr
     }
 
 fun getActionBar(context: Context) = (context as AppCompatActivity).supportActionBar
+
+fun NavController.navigateSafe(directions: NavDirections) {
+    if (currentDestination?.getAction(directions.actionId) != null) navigate(directions)
+}
+
+fun NavController.navigateSafe(@IdRes actionId: Int, args: Bundle? = null) {
+    if (currentDestination?.getAction(actionId) != null) navigate(actionId, args)
+}
+
+// Extract compact table title from a full title like
+// "Table 3: High Prevalence and High-Risk Groups" -> "Table 3"
+private val TABLE_SHORT_TITLE_REGEX =
+    Regex("""\b(?:Table)\s*\d+[A-Za-z]?""", RegexOption.IGNORE_CASE)
+
+fun String.toShortTableTitle(): String {
+    val match = TABLE_SHORT_TITLE_REGEX.find(this) ?: return this
+    val token = match.value
+    // Ensure leading word has proper case
+    return if (token.first().isLowerCase()) token.replaceFirstChar { it.titlecase() } else token
+}
 
 

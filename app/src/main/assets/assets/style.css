@@ -1,30 +1,144 @@
 /* Import from the UIkit.css file */
 :root {
   color-scheme: light dark;
-  --background-color: #fff;
-  --body-color: #666;
-  --link-color: #ba6233;
-  --table-title-color: #8c352d;
+  --primary-color: #5182ff;
+  --white-color: #ffffff;
+  --yellow-color: #ffc107;
+  --green-color: #009c8e;
+  --background-color: #f7f7f7;
+  --background-color-secondary: var(--white-color);
+  --body-color: #747474;
+  --body-color-secondary: #000;
+  --body-color-alt: #343434;
+  --link-color: var(--primary-color);
+  --table-title-color: var(--primary-color);
   --titles-color: #333;
+  --inactive-tab-color: var(--white-color);
+  --inactive-tab-text-color: var(--body-color-secondary);
+  --active-tab-color: var(--primary-color);
+  --active-tab-text-color: var(--white-color);
+  --tab-radius: 5px;
+  --tab-box-shadow: 0px 0px 32px 0px rgba(187, 187, 187, 0.25);
+  --transition-duration: 500ms;
+  --list-title-color: var(--yellow-color);
+  --divider-color: #c6c6c8;
+  --last-updated-color: #636366;
 }
 
 @media screen and (prefers-color-scheme: dark) {
   :root {
-    --background-color: #202025;
-    --body-color: #fff;
-    --link-color: #f3a479;
-    --table-title-color: #d7958f;
-    --titles-color: #fff;
-    /* --title-color: #ff8080;
-    --subhead-color: #80ff80;
-    --link-color: #93d5ff; */
+    --primary-color: #7090fd;
+    --white-color: #ffffff;
+    --yellow-color: #ffc107;
+    --green-color: #009c8e;
+    --background-color: #2a2a2a;
+    --background-color-secondary: #343434;
+    --body-color: #d5d5d5;
+    --body-color-secondary: #f9f9f9;
+    --body-color-alt: #cbcbcb;
+    --link-color: var(--primary-color);
+    --table-title-color: var(--primary-color);
+    --titles-color: var(--white-color);
+    --inactive-tab-color: var(--background-color-secondary);
+    --inactive-tab-text-color: #ececec;
+    --active-tab-color: var(--primary-color);
+    --active-tab-text-color: #f9f9f9;
+    --tab-radius: 5px;
+    --tab-box-shadow: 0px 0px 32px 0px rgba(0, 0, 0, 0.2);
+    --transition-duration: 500ms;
+    --list-title-color: var(--yellow-color);
+    --divider-color: #c6c6c8;
+    --last-updated-color: #b9b9b9;
+  }
+}
+
+/* Keyframes + Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInTop {
+  from {
+    opacity: 0;
+    /* height: 0; */
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    /* height: auto; */
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOutTop {
+  from {
+    opacity: 1;
+    height: auto;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    height: 0;
+    transform: translateY(-20%);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-10%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-10%);
+  }
+}
+
+@keyframes slideInBottom {
+  from {
+    opacity: 0;
+    transform: translateY(10%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOutBottom {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10%);
   }
 }
 
 html {
   /* 1 */
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-size: 16px;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
   font-weight: normal;
   line-height: 1.5;
   /* 2 */
@@ -36,6 +150,9 @@ html {
 
 body {
   margin: 0;
+  line-height: 1.7;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 a:active,
@@ -48,6 +165,9 @@ a,
   color: #1e87f0;
   text-decoration: none;
   cursor: pointer;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 a:hover,
 .uk-link:hover,
@@ -66,6 +186,87 @@ strong {
   font-weight: bolder;
 }
 
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--titles-color);
+}
+
+ul {
+  list-style: disc;
+  font-style: normal !important;
+}
+
+img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+.ic_chapter_icon {
+  height: 24px !important;
+  width: 24px !important;
+  object-fit: fill !important;
+}
+
+.ic_title_icon {
+  height: 50px !important;
+  width: 50px !important;
+  object-fit: fill !important;
+}
+
+.chapter-header {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  margin: 0;
+  padding: 0;
+}
+
+.chapter-header .header-title .chapter-title {
+  font-size: 16px;
+  padding: 0;
+  margin: 0;
+}
+
+.header-title {
+  display: flex;
+  gap: 10px;
+  align-items: start;
+  justify-content: start;
+  margin-bottom: 16px;
+}
+
+.header-title > div {
+  flex: 0 0 auto;
+}
+
+.last-updated {
+  color: var(--last-updated-color);
+  font-size: 15px;
+  text-align: start;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 16px;
+  letter-spacing: -0.408px;
+  margin-top: 0;
+  padding-bottom: 16px;
+}
+
+hr {
+  border-color: var(--divider-color) !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+  margin: 0 !important;
+  padding: 16px 0 !important;
+}
+
 /* ========================================================================
    Component: Table
  ========================================================================== */
@@ -81,11 +282,12 @@ strong {
   /* 2 */
   width: 100%;
   /* 3 */
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
+  background-color: var(--background-color-secondary);
 }
 /* Add margin if adjacent element */
 * + .uk-table {
-  margin-top: 20px;
+  margin-top: 1.25rem;
 }
 /* Header cell
  ========================================================================== */
@@ -93,7 +295,7 @@ strong {
  * 1. Style
  */
 .uk-table th {
-  padding: 16px 12px;
+  padding: 1rem 0.75rem;
   text-align: left;
   vertical-align: bottom;
   /* 1 */
@@ -105,7 +307,7 @@ strong {
 /* Cell
  ========================================================================== */
 .uk-table td {
-  padding: 16px 12px;
+  padding: 1rem 0.75rem;
   vertical-align: top;
 }
 /*
@@ -171,11 +373,11 @@ strong {
  ========================================================================== */
 .uk-table-small th,
 .uk-table-small td {
-  padding: 10px 12px;
+  padding: 0.625rem 0.75rem;
 }
 .uk-table-large th,
 .uk-table-large td {
-  padding: 22px 12px;
+  padding: 1.375rem 0.75rem;
 }
 /* Justify modifier
  ========================================================================== */
@@ -193,7 +395,7 @@ strong {
   width: 1px;
 }
 .uk-table-expand {
-  min-width: 150px;
+  min-width: 9.375rem;
 }
 /* Cell link modifier
  ========================================================================== */
@@ -205,11 +407,462 @@ strong {
 }
 .uk-table-link > a {
   display: block;
-  padding: 16px 12px;
+  padding: 1rem 0.75rem;
 }
 .uk-table-small .uk-table-link > a {
-  padding: 10px 12px;
+  padding: 0.625rem 0.75rem;
 }
+
+.uk-table tbody tr {
+  transition: background-color 0.1s linear;
+}
+
+/* Wrap modifiers
+ ========================================================================== */
+/*
+ * Prevent text from wrapping onto multiple lines
+ */
+.uk-text-nowrap {
+  white-space: nowrap;
+}
+/*
+ * 1. Make sure a max-width is set after which truncation can occur
+ * 2. Prevent text from wrapping onto multiple lines, and truncate with an ellipsis
+ * 3. Fix for table cells
+ */
+.uk-text-truncate {
+  /* 1 */
+  max-width: 100%;
+  /* 2 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* 2 */
+th.uk-text-truncate,
+td.uk-text-truncate {
+  max-width: 0;
+}
+.uk-text-wrap {
+  white-space: wrap !important;
+}
+
+/* End of import from UIkit.css file */
+
+table,
+td,
+th {
+  border: 1px solid #adadad;
+}
+
+.res-width {
+  word-wrap: break-word;
+}
+
+.border-left-hidden {
+  border-left: hidden;
+}
+
+.border-right-hidden {
+  border-right: hidden;
+}
+
+.border-left-right-hidden {
+  border-right: hidden;
+  border-left: hidden;
+}
+
+.border-bottom-left-right-hidden {
+  border-right: hidden;
+  border-bottom: hidden;
+  border-left: hidden;
+}
+
+.reddish {
+  color: var(--table-title-color);
+}
+
+.orange {
+  color: var(--link-color);
+}
+
+a {
+  font-style: normal;
+  text-decoration: underline !important;
+  color: var(--link-color) !important;
+}
+
+.uk-table th {
+  padding: 1rem 0.75rem;
+  text-align: left;
+  vertical-align: bottom;
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--table-title-color);
+  text-transform: none;
+}
+
+.uk-table td {
+  color: var(--body-color-secondary);
+}
+
+.tab-content .uk-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+/* .tab-content .uk-table th.uk-text-wrap {
+  width: 32%;
+} */
+
+/* Tabs */
+
+.uk-tabs-container .tabs {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  /* justify-items: center; */
+  flex-wrap: wrap;
+  align-items: stretch;
+  align-content: start;
+  gap: 24px;
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tab,
+.tab-button {
+  display: inline-flex;
+  justify-items: center;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+  text-align: center;
+  vertical-align: bottom;
+  font-size: 0.87rem;
+  background-color: var(--inactive-tab-color);
+  color: var(--inactive-tab-text-color);
+  text-transform: capitalize;
+  cursor: pointer;
+  border: none;
+  border-radius: var(--tab-radius);
+  box-shadow: var(--tab-box-shadow);
+  min-width: 120px;
+  max-width: 200px;
+  width: auto;
+  height: auto;
+  white-space: normal;
+  word-wrap: break-word;
+  min-height: 70px;
+  box-sizing: border-box;
+}
+
+.tab.active-tab,
+.tab-button.active-option,
+.option.active-option {
+  background-color: var(--active-tab-color);
+  color: var(--active-tab-text-color);
+  box-shadow: var(--tab-box-shadow);
+}
+
+.tab-content,
+.option-content {
+  display: none;
+  border: none;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 0;
+  margin-top: 32px;
+  padding: 0;
+  opacity: 0;
+}
+
+.tab-content.active-tab,
+.option-content.active-option {
+  display: table;
+  opacity: 1;
+}
+
+th,
+td {
+  vertical-align: middle !important;
+}
+
+td {
+  animation: slideInBottom var(--transition-duration) ease-in-out;
+}
+
+td ul {
+  padding-left: 1.25rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+}
+
+h3.highlight {
+  margin-top: 1rem;
+  padding-top: 0;
+}
+
+.view-in-chapter-highlight {
+  color: var(--body-color-secondary);
+}
+
+.duration {
+  font-size: 1rem;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.nested-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.th-no-highlight {
+  color: var(--body-color-secondary) !important;
+  font-weight: 400 !important;
+}
+
+.uk-list {
+  padding-left: 1.5rem;
+  font-style: normal;
+}
+
+.uk-list.togglers-list {
+  padding-left: 0;
+}
+
+.uk-paragraph {
+  position: relative;
+  text-indent: 1em;
+  margin: 1rem 0;
+}
+
+.uk-paragraph::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -0.25rem;
+  height: 2rem;
+  width: 0.5rem;
+  background-color: var(--primary-color);
+  border-radius: 0.25rem;
+}
+
+.uk-list-title,
+.uk-table-title,
+.custom-table-title {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.uk-list-title::before,
+.uk-table-title::before,
+.custom-table-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -0.1875rem;
+  height: 2rem;
+  width: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.uk-list-title::before {
+  top: -0.125rem;
+  background-color: var(--list-title-color);
+}
+
+.custom-table-title::before {
+  background-color: var(--green-color);
+}
+
+.highlight {
+  color: var(--primary-color);
+}
+
+th.alt-color,
+td.alt-color,
+.alt-color {
+  color: var(--body-color-alt);
+  font-weight: 600;
+}
+
+.no-margin {
+  margin: 0;
+}
+
+.semibold {
+  font-weight: 600;
+}
+
+/* Togglers */
+.toggle-title {
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+  z-index: 10;
+  background-color: var(--background-color);
+  padding: 0.875rem 0;
+}
+
+.chevron-up {
+  transform: rotate(-180deg);
+  transition: transform var(--transition-duration) ease-in-out;
+  font-size: 1.5rem;
+}
+
+.chevron-up.active {
+  transform: rotate(0);
+  transition: transform var(--transition-duration) ease-in-out;
+}
+
+.item {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 800ms cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.item.active {
+  max-height: 5000px;
+  transition: max-height 800ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+.with-info-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.info-icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-family: serif;
+  font-size: 0.8rem;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  margin: 0 0rem;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.tooltip {
+  visibility: hidden;
+  position: absolute;
+  background-color: var(--primary-color);
+  font-weight: normal;
+  text-align: left;
+  border-radius: 6px;
+  padding: 10px;
+  /* font-size: 0.9em; */
+  line-height: 1.4;
+  bottom: 100%;
+  margin-bottom: 10px;
+  opacity: 0;
+  transition:
+    opacity 0.3s,
+    visibility 0.3s;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  white-space: normal;
+  word-wrap: break-word;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Open Sans",
+    "Helvetica Neue",
+    sans-serif;
+  width: max-content;
+  max-width: calc(100% + 200px);
+  z-index: 5000 !important;
+}
+
+/* Tooltip positioning variants */
+.tooltip-right {
+  left: 0px;
+  z-index: 5000 !important;
+}
+
+.tooltip-center {
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5000 !important;
+}
+
+.tooltip-left {
+  right: 0px;
+  left: auto;
+  z-index: 5000 !important;
+}
+
+.tooltip-bottom-center {
+  top: 100%;
+  bottom: auto;
+  left: auto;
+  transform: translateX(-50%);
+  margin-bottom: 0;
+  margin-top: 10px;
+  z-index: 5000 !important;
+}
+
+.tooltip-bottom-center-center {
+  top: 100%;
+  bottom: auto;
+  left: auto;
+  transform: translateX(20%);
+  margin-bottom: 0;
+  margin-top: 10px;
+  z-index: 5000 !important;
+}
+
+.tooltip-center-center {
+  bottom: -500px;
+  left: 30%;
+  margin-bottom: 0;
+  margin-top: 10px;
+  z-index: 5000 !important;
+}
+
+/* Tooltip arrow */
+/* .tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--primary-color) transparent transparent transparent;
+} */
+
+/* Show tooltip when active */
+.info-icon.active .tooltip {
+  visibility: visible;
+  opacity: 1;
+  overflow: scroll;
+  z-index: 5000 !important;
+}
+
 /* Responsive table
  ========================================================================== */
 /* Phone landscape and smaller */
@@ -247,87 +900,29 @@ strong {
     padding-left: 0;
     padding-right: 0;
   }
-}
-.uk-table tbody tr {
-  transition: background-color 0.1s linear;
+
+  .uk-tabs-container .tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-content: center;
+    width: 100%;
+  }
+
+  .tab,
+  .tab-button {
+    display: inline-block;
+    width: 100%;
+  }
 }
 
-/* Wrap modifiers
- ========================================================================== */
-/*
- * Prevent text from wrapping onto multiple lines
- */
-.uk-text-nowrap {
-  white-space: nowrap;
-}
-/*
- * 1. Make sure a max-width is set after which truncation can occur
- * 2. Prevent text from wrapping onto multiple lines, and truncate with an ellipsis
- * 3. Fix for table cells
- */
-.uk-text-truncate {
-  /* 1 */
-  max-width: 100%;
-  /* 2 */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-/* 2 */
-th.uk-text-truncate,
-td.uk-text-truncate {
-  max-width: 0;
+@media (max-width: 700px) {
+  .uk-tabs-container .tabs {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
-/* End of import from UIkit.css file */
-
-table, td, th {
-    border: 1px solid #adadad;
-}
-
-.res-width {
-  word-wrap: break-word;
-}
-
-.border-left-hidden {
-    border-left: hidden;
-}
-
-.border-right-hidden {
-    border-right: hidden;
-}
-
-.border-left-right-hidden {
-    border-right: hidden;
-    border-left: hidden;
-}
-
-.border-bottom-left-right-hidden {
-    border-right: hidden;
-    border-bottom: hidden;
-    border-left: hidden;
-}
-
-.reddish {
-    color: var(--table-title-color);
-}
-
-.orange {
-    color: var(--link-color);
-}
-
-a {
-    font-style: italic;
-    text-decoration: none !important;
-    color: var(--link-color) !important;
-}
-
-.uk-table th {
-    padding: 16px 12px;
-    text-align: left;
-    vertical-align: bottom;
-    font-size: 1rem;
-    font-weight: bold;
-    color: #ba6233;
-    text-transform: capitalize;
+@media (max-width: 500px) {
+  .uk-tabs-container .tabs {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

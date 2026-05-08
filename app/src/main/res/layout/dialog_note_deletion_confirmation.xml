@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="281dp"
+    android:layout_height="185dp"
+    android:layout_gravity="center"
+    android:background="@drawable/note_deletion_popup_background">
+
+
+    <!-- Message -->
+    <TextView
+        android:id="@+id/deletionMessage"
+        android:layout_width="243dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/delete_this_note"
+        android:textAppearance="@style/StateGuideTextStyle"
+        android:textColor="?attr/colorTextBlackWhite" />
+
+    <!-- Cancel Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/cancelButton"
+        android:layout_width="141dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bookmark_popup_visit_button_bg"
+        android:backgroundTint="@null"
+        android:text="Yes"
+        android:textColor="?attr/dialogButtonTextColor"
+        android:textSize="14sp"
+        android:textAllCaps="false" />
+
+    <!-- Yes Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/yesButton"
+        android:layout_width="140dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bookmark_popup_dismiss_button_bg"
+        android:backgroundTint="@null"
+        android:text="Cancel"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:textAllCaps="false" />
+
+</RelativeLayout>

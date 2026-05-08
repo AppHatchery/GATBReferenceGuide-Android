@@ -3,36 +3,32 @@ package org.apphatchery.gatbreferenceguide.ui.fragments
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
-import android.webkit.JavascriptInterface
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.Visibility
-import com.google.firebase.dynamiclinks.ktx.dynamicLinks
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.Firebase
+import com.google.firebase.dynamiclinks.dynamicLinks
 import com.google.firebase.remoteconfig.ConfigUpdate
 import com.google.firebase.remoteconfig.ConfigUpdateListener
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
-import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentMainBinding
 import org.apphatchery.gatbreferenceguide.db.data.ChartAndSubChapter
@@ -44,14 +40,16 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChapterAdapter
 import org.apphatchery.gatbreferenceguide.ui.adapters.FAMainFirst6ChartAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAMainViewModel
 import org.apphatchery.gatbreferenceguide.utils.*
+import org.apphatchery.gatbreferenceguide.utils.navigateSafe
 import sdk.pendo.io.Pendo
 import java.util.UUID
 import javax.inject.Inject
-import kotlin.coroutines.resume
+
+import org.apphatchery.gatbreferenceguide.db.Database
 
 
-private const val BUILD_VERSION = 11
-private const val PENDO_RELEASE_VERSION = "Sept-24-"
+private const val BUILD_VERSION = 16
+private const val PENDO_RELEASE_VERSION = "Apr-26-"
 
 @AndroidEntryPoint
 class MainFragment : BaseFragment(R.layout.fragment_main) {
@@ -59,8 +57,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private lateinit var fragmentMainBinding: FragmentMainBinding
     private lateinit var first6ChapterAdapter: FAMainFirst6ChapterAdapter
     private lateinit var first6ChartAdapter: FAMainFirst6ChartAdapter
-    private lateinit var predefinedChapterList: ArrayList<ChapterEntity>
-    private lateinit var predefinedChartList: ArrayList<ChartAndSubChapter>
     private val htmlInfoEntity = ArrayList<HtmlInfoEntity>()
     private val viewModel: FAMainViewModel by viewModels()
     private var visitor_id: String? = null
@@ -71,13 +67,22 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private val handler = Handler()
     private var initUpdateValue = 0
 
+    private var chartTitleOverrides: Map<String, String> = emptyMap()
+    
+    // Flags to track initialization state and prevent navigation during seeding
+    private var isInitializing = false
+    private var initializationComplete = false
+
     @Inject
     lateinit var userPrefs: UserPrefs
 
+    @Inject
+    lateinit var db: Database
+
     companion object {
-        //const val VISITOR_ID = ""
-//        const val ACCOUNT_ID = "GTRG"
-        const val ACCOUNT_ID = "Test"
+         const val VISITOR_ID = ""
+         const val ACCOUNT_ID = "GTRG"
+//       const val ACCOUNT_ID = "Test"
     }
     private fun setupPendo() = Pendo.startSession(
         visitor_id,
@@ -89,6 +94,17 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private fun init() {
 
         lifecycleScope.launch {
+            // Web content is stored under cacheDir; if user cleared cache it may be missing.
+            // Rebuild it even when BUILD_VERSION has not changed.
+            withContext(Dispatchers.IO) {
+                AppInitLock.mutex.withLock {
+                    val ctx = requireContext().applicationContext
+                    if (!ctx.isGuideWebContentPresent()) {
+                        ctx.replaceBundledGuideWebContent()
+                    }
+                }
+            }
+
             visitor_id = getVisitorId()
 
             with(fragmentMainBinding) {
@@ -97,32 +113,38 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             }
             searchState.exitSearchMode()
             requireActivity().getBottomNavigationView()?.toggleVisibility(true)
-
-            predefinedChapterList = ArrayList()
-            predefinedChartList = ArrayList()
             setupPendo()
 
             first6ChapterAdapter = FAMainFirst6ChapterAdapter().also { adapter ->
                 viewModel.getChapter.observe(viewLifecycleOwner) {
-                    with(predefinedChapterList) {
-                        clear()
-                        add(it[0].copy(chapterTitle = "See All Chapters"))
-                        add(it[3].copy(chapterTitle = "Diagnosis for Active TB"))
-                        add(it[4].copy(chapterTitle = "Treatment for Active TB"))
-                        add(it[1].copy(chapterTitle = "Diagnosis for LTBI"))
-                        add(it[2].copy(chapterTitle = "Treatment for LTBI"))
-                        add(it[14].copy(chapterTitle = "District TB Coordinators"))
-                        adapter.submitList(this)
+                    if (it.size < 16) {
+                        // Data not ready yet; keep loading state.
+                        fragmentMainBinding.progressBar.isVisible = true
+                        fragmentMainBinding.group.isVisible = false
+                        return@observe
                     }
+
+                    // IMPORTANT: never submit a mutable list that will be reused/mutated later.
+                    // DiffUtil runs asynchronously; if the same list instance is cleared/changed,
+                    // AsyncListDiffer can crash with IndexOutOfBoundsException.
+                    val predefinedChapterList = arrayListOf(
+                        it[0].copy(chapterTitle = "All Chapters>"),
+                        it[4].copy(chapterTitle = "Diagnosis of Active TB"),
+                        it[5].copy(chapterTitle = "Treatment of Active TB"),
+                        it[2].copy(chapterTitle = "Diagnosis of LTBI"),
+                        it[3].copy(chapterTitle = "Treatment of LTBI"),
+                        it[15].copy(chapterTitle = "District TB Coordinators"),
+                    )
+                    adapter.submitList(predefinedChapterList)
                 }
 
                 adapter.itemClickCallback { chapterEntity ->
-                    if (chapterEntity.chapterTitle == "See All Chapters") {
-                        findNavController().navigate(R.id.action_mainFragment_to_chapterFragment)
+                    if (chapterEntity.chapterTitle == "All Chapters>") {
+                        findNavController().navigateSafe(R.id.action_mainFragment_to_chapterFragment)
                     } else {
                         MainFragmentDirections.actionMainFragmentToSubChapterFragment(chapterEntity)
                             .apply {
-                                findNavController().navigate(this)
+                                findNavController().navigateSafe(this)
                             }
                     }
                 }
@@ -135,22 +157,44 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
             first6ChartAdapter = FAMainFirst6ChartAdapter().also { adapter ->
                 viewModel.getChart.observe(viewLifecycleOwner) { data ->
-                    with(predefinedChartList) {
-                        clear()
-                        add(data[0].copy(chartEntity = data[0].chartEntity.copy(chartTitle = "See All Charts")))
-                        add(data[7].copy(chartEntity = data[7].chartEntity.copy(chartTitle = "First Line TB Drugs for Adults")))
-                        add(data[13].copy(chartEntity = data[13].chartEntity.copy(chartTitle = "IV Therapy Drugs")))
-                        add(data[14].copy(chartEntity = data[14].chartEntity.copy(chartTitle = "Alternative Regimens")))
-                        add(data[4].copy(chartEntity = data[4].chartEntity.copy(chartTitle = "Dosages for LTBI Regimens")))
-                        add(data[18].copy(chartEntity = data[18].chartEntity.copy(chartTitle = "Treatment of Extra- pulmonary TB")))
-                        add(data[19].copy(chartEntity = data[19].chartEntity.copy(chartTitle = "TB drugs in Special Situations")))
-                        adapter.submitList(this)
+                    if (data.size < 18) {
+                        // Data not ready yet; keep loading state.
+                        fragmentMainBinding.progressBar.isVisible = true
+                        fragmentMainBinding.group.isVisible = false
+                        return@observe
                     }
+
+                    chartTitleOverrides = mapOf(
+                        data[0].chartEntity.id to "All Tables>",
+                        data[7].chartEntity.id to "First Line TB Drugs for Adults",
+                        data[10].chartEntity.id to "IV Therapy Drugs",
+                        data[11].chartEntity.id to "Alternative Regimens",
+                        data[4].chartEntity.id to "Dosages for LTBI Regimens",
+                        data[15].chartEntity.id to "Treatment of Extra- pulmonary TB",
+                        data[16].chartEntity.id to "TB drugs in Special Situations"
+                    )
+                    adapter.setTitleOverrides(chartTitleOverrides)
+
+                    // Submit a fresh list instance each time (avoid mutable reuse).
+                    val predefinedChartList = listOf(
+                        data[0],
+                        data[7],
+                        data[10],
+                        data[11],
+                        data[4],
+                        data[16],
+                        data[15],
+                    )
+                    adapter.submitList(predefinedChartList)
                 }
 
                 adapter.itemClickCallback { chartAndSubChapter ->
-                    if (chartAndSubChapter.chartEntity.chartTitle == "See All Charts") {
-                        findNavController().navigate(R.id.action_mainFragment_to_chartFragment)
+                    val displayTitle =
+                        chartTitleOverrides[chartAndSubChapter.chartEntity.id]
+                            ?: chartAndSubChapter.chartEntity.chartTitle
+
+                    if (displayTitle == "All Tables>" || displayTitle == "All Charts>") {
+                        findNavController().navigateSafe(R.id.action_mainFragment_to_chartFragment)
                     } else {
                         viewModel.getChapterInfo(chartAndSubChapter.subChapterEntity.chapterId)
                             .observe(viewLifecycleOwner) { chapterEntity ->
@@ -158,7 +202,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                                     BodyUrl(chapterEntity, chartAndSubChapter.subChapterEntity, ""),
                                     chartAndSubChapter
                                 ).apply {
-                                    findNavController().navigate(this)
+                                    findNavController().navigateSafe(this)
                                 }
                             }
                     }
@@ -181,19 +225,16 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         fragmentMainBinding = FragmentMainBinding.bind(view)
-        userPrefs.getBuildVersion.asLiveData().observe(viewLifecycleOwner) {
-            if (it != BUILD_VERSION)
-            {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val version = userPrefs.getBuildVersion.first()
+            if (version != BUILD_VERSION) {
                 firstLaunch()
-            }
-            else {
+            } else {
                 init()
             }
         }
         fragmentMainBinding.bookmark.setOnClickListener {
-            MainFragmentDirections.actionMainFragmentToSavedFragment().apply {
-                findNavController().navigate(this)
-            }
+            findNavController().navigateSafe(MainFragmentDirections.actionMainFragmentToSavedFragment())
         }
 
 
@@ -243,7 +284,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     }
 
 
-
     private fun RecyclerView.setupAdapter(
         listAdapter: RecyclerView.Adapter<*>,
         spanCount: Int = 2,
@@ -280,7 +320,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                                     MainFragmentDirections.actionMainFragmentToBodyFragmentDirect(
                                         BodyUrl(chapterEntity, subChapterEntity, ""), chartAndSubchapter
                                     ).apply {
-                                        findNavController().navigate(this)
+                                        findNavController().navigateSafe(this)
                                     }
                                 }
                         }
@@ -293,7 +333,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
                             MainFragmentDirections.actionMainFragmentToBodyFragmentDirect(
                                 BodyUrl(chapterEntity, subChapterEntity,""), null
                             ).apply {
-                                findNavController().navigate(this)
+                                findNavController().navigateSafe(this)
                             }
                         }
                 }
@@ -328,7 +368,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             viewModel.dumpChartData(it)
                 .observe(viewLifecycleOwner) { resource ->
                     when (resource) {
-                        is Resource.Success -> {
+                        is Resource.Success<*> -> {
 
                             if (viewModel.dumpChartDataObserve) {
                                 dumpChapterInfo()
@@ -352,7 +392,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             viewModel.dumpChapterData(it)
                 .observe(viewLifecycleOwner) { resource ->
                     when (resource) {
-                        is Resource.Success -> {
+                        is Resource.Success<*> -> {
                             dumpSubChapterInfo()
                         }
                         else -> {
@@ -371,7 +411,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             viewModel.dumpSubChapterData(it)
                 .observe(viewLifecycleOwner) { resource ->
                     when (resource) {
-                        is Resource.Success -> {
+                        is Resource.Success<*> -> {
                             if (viewModel.dumpSubChapterDataObserver) {
                                 dumpHTMLInfo()
                                 viewModel.dumpSubChapterDataObserver = false
@@ -385,33 +425,49 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     }
 
 
-    private fun firstLaunch() {
-        requireActivity().apply {
-            viewModel.purgeData()
-            getBottomNavigationView()?.toggleVisibility(false)
-            createHtmlAndAssetsDirectoryIfNotExists()
-            prepHtmlPlusAssets()
-            dumpChartData()
-        }
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.taskFlowEvent.collect {
+   private fun firstLaunch() {
+    requireActivity().apply {
+        // Mark initialization as started
+        isInitializing = true
+        initializationComplete = false
 
-                when (it) {
-                    FAMainViewModel.Callback.InsertHTMLInfoComplete -> {
-                        viewModel.bindHtmlWithChapter()
-                    }
-                    FAMainViewModel.Callback.InsertGlobalSearchInfoComplete -> {
-                        viewLifecycleOwner.lifecycleScope.launch {
-                            userPrefs.setBuildVersion(BUILD_VERSION)
-                            userPrefs.setPendoVisitorId(getVisitorId())
-                        }
-                        init()
-                    }
-                }
+        getBottomNavigationView()?.toggleVisibility(false)
+        
+        // Keep progress bar visible and hide content during initialization
+        fragmentMainBinding.progressBar.isVisible = true
+        fragmentMainBinding.group.isVisible = false
+
+        // moved the heavy I/O operations to a background thread to prevent WebView renderer crashes
+        // Use Fragment lifecycleScope so this work isn't cancelled on navigation.
+        lifecycleScope.launch(Dispatchers.IO) {
+            AppInitLock.mutex.withLock {
+                // Fully replace cached HTML/CSS/JS/images so app updates never show mixed old/new content.
+                applicationContext.replaceBundledGuideWebContent()
+
+                // One-time background migration: update saved notes to point to renamed/merged targets.
+                // Example: notes on old tables 10/11/12 -> new table 9.
+                LegacyNotesMigrator.migrateNoteTargets(db)
+
+                // Seed DB from bundled assets (purge+insert+global search in one transaction).
+                viewModel.purgeAndSeedFromAssets(applicationContext)
+
+                // Persist version only after seeding completes.
+                userPrefs.setBuildVersion(BUILD_VERSION)
+                userPrefs.setPendoVisitorId(getVisitorId())
+            }
+
+            withContext(Dispatchers.Main) {
+                // If user navigated away mid-seed, skip touching UI.
+                if (view == null) return@withContext
+
+                isInitializing = false
+                initializationComplete = true
+                requireActivity().getBottomNavigationView()?.isEnabled = true
+                init()
             }
         }
     }
-
+}
     private fun generatePendoVisitorId() = PENDO_RELEASE_VERSION + UUID.randomUUID().toString()
 
     private suspend fun getVisitorId(): String {
@@ -420,6 +476,16 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             val id = generatePendoVisitorId()
             userPrefs.setPendoVisitorId(id)
             id
+        }
+    }
+    
+    override fun onResume() {
+        super.onResume()
+        // Prevent navigation during initialization by disabling bottom navigation
+        if (isInitializing) {
+            requireActivity().getBottomNavigationView()?.isEnabled = false
+        } else if (initializationComplete) {
+            requireActivity().getBottomNavigationView()?.isEnabled = true
         }
     }
 }

@@ -12,6 +12,10 @@ import org.apphatchery.gatbreferenceguide.utils.ROMAN_NUMERALS
 class FAChapterAdapter :
     ListAdapter<ChapterEntity, FAChapterAdapter.ViewHolder>(DiffUtilCallBack()) {
 
+    private companion object {
+        const val UNNUMBERED_CHAPTER_ID = 18
+    }
+
 
     class DiffUtilCallBack : DiffUtil.ItemCallback<ChapterEntity>() {
         override fun areItemsTheSame(oldItem: ChapterEntity, newItem: ChapterEntity) =
@@ -33,9 +37,19 @@ class FAChapterAdapter :
 
         fun onBinding(chapterEntity: ChapterEntity, index: Int) =
             bind.apply {
-                (ROMAN_NUMERALS[index].uppercase() + ". " + chapterEntity.chapterTitle).also {
-                    textView.text = it
+                if (chapterEntity.chapterId == UNNUMBERED_CHAPTER_ID) {
+                    textView.text = chapterEntity.chapterTitle
+                    return@apply
                 }
+
+                // Number chapters using their position among numbered chapters only,
+                // so inserting an unnumbered item doesn't shift the Roman numerals.
+                val numberedIndex = currentList
+                    .subList(0, index + 1)
+                    .count { it.chapterId != UNNUMBERED_CHAPTER_ID } - 1
+
+                val roman = ROMAN_NUMERALS.getOrNull(numberedIndex)?.uppercase()
+                textView.text = if (roman != null) "$roman. ${chapterEntity.chapterTitle}" else chapterEntity.chapterTitle
 
 
             }

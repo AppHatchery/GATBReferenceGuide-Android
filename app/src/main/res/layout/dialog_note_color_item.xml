@@ -1,19 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:background="@drawable/shape_circle_border"
-    android:layout_height="wrap_content">
+    android:layout_height="40dp"
+    android:paddingTop="7dp"
+    android:paddingBottom="6dp"
+    android:paddingStart="4dp"
+    android:paddingEnd="4dp"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/color_schema"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_margin="5dp"
-        android:background="@drawable/shape_circle"
-        android:backgroundTint="@color/pink"
-        android:padding="50dp" />
+    <!-- Unselected tag circle -->
+    <View
+        android:id="@+id/unselected_tag"
+        android:layout_width="19dp"
+        android:layout_height="20dp"
+        android:layout_centerVertical="true"
+        android:layout_centerInParent="true"
+        android:background="@drawable/unselected_tag_circle"
+        android:visibility="visible" />
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+    <!-- Selected tag circle -->
+    <View
+        android:id="@+id/selected_tag"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/selected_tag_circle_border"
+        android:visibility="gone" />
 
+    <!-- Inner color circle for selected state -->
+    <View
+        android:id="@+id/selected_color_inner"
+        android:layout_width="19dp"
+        android:layout_height="20dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/unselected_tag_circle"
+        android:visibility="gone" />
 
-
+</RelativeLayout>

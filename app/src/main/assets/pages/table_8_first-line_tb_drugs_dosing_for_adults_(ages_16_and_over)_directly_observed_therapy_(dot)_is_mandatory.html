@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
-<!--    <meta content="width=device-width, initial-scale=1.0" name="viewport">-->
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>GA TB Reference Guide </title>
     <meta content="GA TB Reference Guide" name="description">
     <meta content="SitePoint" name="author">
@@ -15,126 +15,239 @@
 
 <body>
 <div class="uk-container">
-    
-    <p> View in chapter -> <a href="5_treatment_of_current_(active)_disease_therapy__c__special_clinical_situations.html#table8"> Special Clinical Situations </a></p>
+    <div class="chapter-header">
+        <div class="header-title">
+            <div>
+                <img src="../assets/ic_chart.svg"  class="ic_chapter_icon">
+            </div>
+            <p class="chapter-title">8. First-line TB Drugs: Dosing for Adults (ages 16 and over) Directly Observed Therapy (DOT) is mandatory</p>
+        </div>
+        <p> <span class="view-in-chapter-highlight"> View in chapter → <span> <a href="5_treatment_of_current_(active)_disease_therapy__b__standard_therapy_for_current_(active)_disease.html#table8">Standard Therapy for Current (Active) TB Disease</a></p>
+        <p class="last-updated"><i>Last Updated April 2026</i></p>
+    </div>
+    <hr>
     <div class="uk-overflow-auto"
          id="table_8_first-line_tb_drugs_dosing_for_adults_(ages_16_and_over)_directly_observed_therapy_(dot)_is_mandatory">
-        <table class="uk-table uk-table-small uk-table-divider">
-            <thead>
-            <tr>
-                <th rowspan="2">Drugs</th>
-                <th colspan="3">Adult Dose based on body weight in kilograms (kg)*
-                </th>
-                <th rowspan="2" class="uk-table-expand">Adverse Reactions</th>
-                <tr>
-                    <td class="uk-table-expand"><b>Daily</b></td>
-                    <td class="uk-text-nowrap"><b>Thrice-Weekly</b></td>
-                    <td class="uk-text-nowrap"><b>Twice-Weekly</b></td>
-                </tr>
-            </tr>
-            </thead>
-            <tr>
-                <td>Isoniazid</td>
-                <td>300 mg</td>
-                <td>900 mg</td>
-                <td>900 mg</td>
-                <td>
-                    <ul>
-                        <li>Gastrointestinal (GI) upset</li>
-                        <li>Liver enzyme elevation</li>
-                        <li>Hepatitis</li>
-                        <li>Mild effects on central nervous</li>
-                        <li>Drug interactions</li>
-                    </ul>
-                </td>
-            </tr>
-            <tr>
-                <td>Rifampin</td>
-                <td>600 mg</td>
-                <td>600 mg</td>
-                <td>600 mg</td>
-                <td rowspan="2">
-                    <ul>
-                        <li>Orange discoloration of body fluids and secretions</li>
-                        <li>Drug interactions</li>
-                        <li>GI upset</li>
-                        <li>Hepatitis</li>
-                        <li>Bleeding problems</li>
-                        <li>Influenze-like symptoms</li>
-                        <li>Rash</li>
-                        <li>Uveitis (rifabutin only)</li>
-                    </ul>
-                </td>
-            </tr>
-            <tr>
-                <td>Rifabutin</td>
-                <td>300 mg</td>
-                <td>Not recommended</td>
-                <td>Not recommended</td>
-            </tr>
-            <tr>
-                <td rowspan="3">Pyrazinamide**</td>
-                <td>40-55 kg: 1000 mg</td>
-                <td>40-55 kg: 1500 mg</td>
-                <td>40-55 kg: 2000 mg</td>
-                <td rowspan="3">
-                    <ul>
-                        <li>GI upset</li>
-                        <li>Joint aches</li>
-                        <li>Hepatitis</li>
-                        <li>Rash</li>
-                        <li>Hyperuricemia</li>
-                        <li>Gout (rare)</li>
-                    </ul>
-                </td>
-            </tr>
-            <tr>
-                <td>56-75 kg: 1500 mg</td>
-                <td>56-75 kg: 2500 mg</td>
-                <td>56-75 kg: 3000 mg</td>
-            </tr>
-            <tr>
-                <td>76+ kg: 2000 mg</td>
-                <td>76+ kg: 3000 mg</td>
-                <td>76+ kg: 4000 mg</td>
-            </tr>
-            <tr>
-                <td rowspan="3">Ethambutol**</td>
-                <td>40-55 kg: 800 mg</td>
-                <td>40-55 kg: 1200 mg</td>
-                <td>40-55 kg: 2000 mg</td>
-                <td rowspan="3">
-                    <ul>
-                        <li>Optic neuritis</li>
-                    </ul>
-                </td>
-            </tr>
-            <tr>
-                <td>56-75 kg: 1200 mg</td>
-                <td>56-75 kg: 2000 mg</td>
-                <td>56-75 kg: 2800 mg</td>
-            </tr>
-            <tr>
-                <td>76+ kg: 1600 mg</td>
-                <td>76+ kg: 2400 mg</td>
-                <td>76+ kg: 4000 mg</td>
-            </tr>
-        </table>
+         <div class="uk-tabs-container">
+            <ul class="tabs">
+                <li><button class="tab-button active-option" onclick="switchTab(0, event)"> Isoniazid</button></li>
+                <li><button class="tab-button" onclick="switchTab(1, event)"> Rifampin</button></li>
+                <li><button class="tab-button" onclick="switchTab(2, event)"> Rifabutin</button></li>
+                <li><button class="tab-button" onclick="switchTab(3, event)"> Pyrazinamide¹</button></li>
+                <li><button class="tab-button" onclick="switchTab(4, event)"> Ethambutol¹</button></li>
+            </ul>
+        </div>
+
+        <div id="content0" class="option-content active-option">
+            <table class="uk-table uk-table-small uk-table-divider">
+                <tbody>
+                    <tr>
+                        <th colspan="3">
+                           Principle: Initiation of therapy for active TB disease requires a multi-drug regimen, typically including Isoniazid, Rifampin, Pyrazinamide, and Ethambutol (for suspected or proven drug-susceptible TB disease).
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="uk-table-shrink">Frequency</th>
+                        <td>Daily</td>
+                        <td>Thrice-Weekly</td>
+                    </tr>
+                    <tr>
+                        <th class="uk-table-shrink">Standard Adult Dose </th>
+                        <td>300 mg</td>
+                        <td>900 mg</td>
+                    </tr>
+                    <tr>
+                        <th class="uk-table-shrink">Adverse Reactions</th>
+                        <td colspan="2">
+                            <ul>
+                                <li>Gastrointestinal (GI) upset</li>
+                                <li>Liver enzyme elevation</li>
+                                <li>Hepatitis</li>
+                                <li>Mild effects on central nervous</li>
+                                <li>Drug interactions</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="content1" class="option-content">
+            <table class="uk-table uk-table-small uk-table-divider">
+                <tbody>
+                    <tr>
+                        <th colspan="3">
+                           Principle: Initiation of therapy for active TB disease requires a multi-drug regimen, typically including Isoniazid, Rifampin, Pyrazinamide, and Ethambutol (for suspected or proven drug-susceptible TB disease).
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Note</th>
+                        <td colspan="2">Use Rifampin or Rifabutin, but not both.</td>
+                    </tr>
+                    <tr>
+                        <th class="uk-table-shrink">Frequency</th>
+                        <td>Daily</td>
+                        <td>Thrice-Weekly</td>
+                    </tr>
+                    <tr>
+                        <th class="uk-table-shrink">Standard Adult Dose </th>
+                        <td>600 mg</td>
+                        <td>600 mg</td>
+                    </tr>
+                    <tr>
+                        <th class="uk-table-shrink">Adverse Reactions</th>
+                        <td colspan="2">
+                            <ul>
+                                <li>Orange discoloration of body fluids and secretions</li>
+                                <li>Drug interactions</li>
+                                <li>GI upset</li>
+                                <li>Hepatitis</li>
+                                <li>Bleeding problems</li>
+                                <li>Influenze-like symptoms</li>
+                                <li>Rash</li>
+                                <li>Uveitis (rifabutin only)</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="content2" class="option-content">
+            <table class="uk-table uk-table-small uk-table-divider">
+                <tbody>
+                    <tr>
+                        <th colspan="3">
+                           Principle: Initiation of therapy for active TB disease requires a multi-drug regimen, typically including Isoniazid, Rifampin, Pyrazinamide, and Ethambutol (for suspected or proven drug-susceptible TB disease).
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Note</th>
+                        <td colspan="2">Use Rifampin or Rifabutin, but not both.</td>
+                    </tr>
+                    <tr>
+                        <th class="uk-table-shrink">Frequency</th>
+                        <td>Daily</td>
+                        <td>Thrice-Weekly</td>
+                    </tr>
+                    <tr>
+                        <th class="uk-table-shrink">Standard Adult Dose </th>
+                        <td>300 mg</td>
+                        <td>Not recommended</td>
+                    </tr>
+                    <tr>
+                        <th class="uk-table-shrink">Adverse Reactions</th>
+                        <td colspan="2">
+                            <ul>
+                                <li>Orange discoloration of body fluids and secretions</li>
+                                <li>Drug interactions</li>
+                                <li>GI upset</li>
+                                <li>Hepatitis</li>
+                                <li>Bleeding problems</li>
+                                <li>Influenze-like symptoms</li>
+                                <li>Rash</li>
+                                <li>Uveitis (rifabutin only)</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="content3" class="option-content">
+            <table class="uk-table uk-table-small uk-table-divider">
+                <tbody>
+                    <tr>
+                        <th colspan="3">
+                           Principle: Initiation of therapy for active TB disease requires a multi-drug regimen, typically including Isoniazid, Rifampin, Pyrazinamide, and Ethambutol (for suspected or proven drug-susceptible TB disease).
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="uk-table-shrink">Frequency</th>
+                        <td>Daily</td>
+                        <td>Thrice-Weekly</td>
+                    </tr>
+                    <tr>
+                        <th rowspan="3" class="uk-table-shrink">Adult Dose Based on Body Weight in Kilograms (kg) <span class="info-icon" data-tooltip="NOTE: Formula used to convert pounds to kilograms: Divide pounds by 2.2 to get kilograms.Example: Patient weighs 154 pounds ÷ 2.2 = 70 kilograms." data-tooltip-position="tooltip-right">i</span></th>
+                        <td>40-55 kg: 1000 mg</td>
+                        <td>40-55 kg: 1500 mg</td>
+                        <tr>
+                            <td>56-75 kg: 1500 mg</td>
+                            <td>56-75 kg: 2500 mg</td>
+                        </tr>
+                        <tr>
+                            <td>76+ kg: 2000 mg</td>
+                            <td>76+ kg: 3000 mg</td>
+                        </tr>
+                    </tr>
+                    <tr>
+                        <th class="uk-table-shrink">Adverse Reactions</th>
+                        <td colspan="2">
+                            <ul>
+                                <li>GI upset</li>
+                                <li>Joint aches</li>
+                                <li>Hepatitis</li>
+                                <li>Rash</li>
+                                <li>Hyperuricemia</li>
+                                <li>Gout (rare)</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="content4" class="option-content">
+            <table class="uk-table uk-table-small uk-table-divider">
+                <tbody>
+                    <tr>
+                        <th colspan="3">
+                           Principle: Initiation of therapy for active TB disease requires a multi-drug regimen, typically including Isoniazid, Rifampin, Pyrazinamide, and Ethambutol (for suspected or proven drug-susceptible TB disease).
+                        </th>
+                    </tr>
+                    <tr>
+                        <th class="uk-table-shrink">Frequency</th>
+                        <td>Daily</td>
+                        <td>Thrice-Weekly</td>
+                    </tr>
+                    <tr>
+                        <th rowspan="3" class="uk-table-shrink">Adult Dose Based on Body Weight in Kilograms (kg) <span class="info-icon" data-tooltip="NOTE: Formula used to convert pounds to kilograms: Divide pounds by 2.2 to get kilograms. Example: Patient weighs 154 pounds ÷ 2.2 = 70 kilograms." data-tooltip-position="tooltip-right">i</span></th>
+                        <td>40-55 kg: 800 mg</td>
+                        <td>40-55 kg: 1200 mg</td>
+                        <tr>
+                            <td>56-75 kg: 1200 mg</td>
+                            <td>56-75 kg: 2000 mg</td>
+                        </tr>
+                        <tr>
+                            <td>76+ kg: 1600 mg</td>
+                            <td>76+ kg: 2400 mg</td>
+                        </tr>
+                    </tr>
+                    <tr>
+                        <th class="uk-table-shrink">Adverse Reactions</th>
+                        <td colspan="2">
+                            <ul>
+                                <li>Optic neuritis</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <ol>
+            <li>Calculate pyrazinamide and ethambutol doses using actual body weight. Pyrazinamide and ethambutol dosage adjustment is needed in patients with estimated creatinine clearance less than 50 ml/min or those with end-stage renal disease on dialysis.</li>
+        </ol>
+
+        <p>Additional Note: Refer to current drug reference or drug package insert for a complete list of adverse drug reactions and drug interactions.</p>
         
         <p>Source: <a href="https://academic.oup.com/cid/article/63/7/e147/2196792?login=trueas">https://academic.oup.com/cid/article/63/7/e147/2196792?login=trueas</a></p>
-        
-        <p>*Formula used to convert pounds to kilograms: Divide pounds by 2.2 to get kilograms.</p>
-        <p>Example: Patient weighs 154 pounds ÷ 2.2 = 70 kilograms.</p>
-        <p>** Calculate pyrazinamide and ethambutol doses using actual body weight. Pyrazinamide and ethambutol dosage
-            adjustment is needed in patients with estimated creatinine clearance less than 50 ml/min or those with
-            end-stage renal disease on dialysis.</p>
-        <p>NOTE: Refer to current drug reference or drug package insert for a complete list of adverse drug reactions
-            and drug interactions.</p>
-
 
     </div>
 </div>
 </body>
 <script src="../assets/uikit.js" type="text/javascript"></script>
 <script src="../assets/uikit-icons.js" type="text/javascript"></script>
+<script src="../assets/main.js" type="text/javascript"></script>
+
 </html>

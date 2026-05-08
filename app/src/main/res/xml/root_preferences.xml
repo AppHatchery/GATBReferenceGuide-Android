@@ -2,64 +2,70 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <PreferenceCategory
+    <!-- <PreferenceCategory
         app:iconSpaceReserved="false"
-        app:title="Appearance">
-
-        <ListPreference
-            android:defaultValue="system"
-            android:dialogTitle="Choose theme"
-            android:entries="@array/theme_entries"
-            android:entryValues="@array/theme_values"
-            android:key="@string/theme_key"
-            android:title="@string/theme"
-            app:iconSpaceReserved="false" />
-
-
-        <ListPreference
-            android:defaultValue="1"
-            android:dialogTitle="Choose font"
-            android:entries="@array/font_entries"
-            android:entryValues="@array/font_values"
-            android:key="@string/font_key"
-            android:title="@string/font"
-            app:iconSpaceReserved="false" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        app:iconSpaceReserved="false"
-        app:title="More">
-
-        <PreferenceScreen
-            app:iconSpaceReserved="false"
-            app:key="@string/privacy_policy_key"
-            app:title="@string/privacy_policy" />
-
+        app:layout="@layout/preference_category_custom"
+        app:title="In-Chapter Accessibility">
 
         <Preference
-            app:iconSpaceReserved="false"
-            app:key="@string/about_us_key"
-            app:title="@string/about_us" />
+            android:key="@string/font_key"
+            android:title="Font Size"
+            android:layout="@layout/preference_item_custom"
+            app:iconSpaceReserved="false" />
 
+    </PreferenceCategory> -->
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:layout="@layout/preference_category_custom"
+        app:title="More">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="dark_mode_key"
+            android:title="Dark Mode"
+            android:layout="@layout/preference_switch_no_chevron"
+            app:iconSpaceReserved="false" />
 
         <Preference
             app:iconSpaceReserved="false"
             app:key="@string/contact_us_key"
-            app:title="@string/contact_us" />
+            android:layout="@layout/preference_item_custom"
+            app:title="Contact Us" />
+
+<!--        <Preference-->
+<!--            app:iconSpaceReserved="false"-->
+<!--            app:key="give_feedback_key"-->
+<!--            android:layout="@layout/preference_item_custom"-->
+<!--            app:title="Give Feedback" />-->
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/privacy_policy_key"
+            android:layout="@layout/preference_item_custom"
+            app:title="Legal" />
+
+        <Preference
+            app:iconSpaceReserved="false"
+            app:key="@string/about_us_key"
+            android:layout="@layout/preference_item_custom"
+            app:title="About" />
+
     </PreferenceCategory>
 
 
     <PreferenceCategory
         app:iconSpaceReserved="false"
+        app:layout="@layout/preference_category_custom"
         app:title="Reset">
 
         <Preference
             app:iconSpaceReserved="false"
             app:key="@string/reset_key"
-            app:summary="@string/reset_summary"
-            app:title="@string/reset_title" />
+            android:layout="@layout/preference_item_no_chevron"
+            app:title="Clear App Content" />
 
     </PreferenceCategory>
+
 
 </PreferenceScreen>

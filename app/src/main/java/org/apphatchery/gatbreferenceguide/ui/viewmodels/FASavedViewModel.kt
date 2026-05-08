@@ -31,8 +31,11 @@ class FASavedViewModel @Inject constructor(
     }
 
     fun getChapterInfo(id: Int) = db.chapterDao().getChapterById(id).asLiveData()
+    fun getChapterInfoOrNull(id: Int) = db.chapterDao().getChapterByIdOrNull(id).asLiveData()
     fun getChartAndSubChapterById(id: String) = db.chartDao().getChartAndSubChapterById(id).asLiveData()
+    fun getChartAndSubChapterByIdOrNull(id: String) = db.chartDao().getChartAndSubChapterByIdOrNull(id).asLiveData()
     fun getSubChapterInfo(id: String) = db.subChapterDao().getSubChapterById(id).asLiveData()
+    fun getSubChapterInfoOrNull(id: String) = db.subChapterDao().getSubChapterByIdOrNull(id).asLiveData()
 
     fun deleteBookmark(data: BookmarkEntity) = viewModelScope.launch {
         db.bookmarkDao().delete(data)
@@ -41,6 +44,24 @@ class FASavedViewModel @Inject constructor(
 
     fun insertBookmark(data: BookmarkEntity) = viewModelScope.launch {
         db.bookmarkDao().insert(data)
+    }
+
+    fun updateBookmark(data: BookmarkEntity) = viewModelScope.launch {
+        db.bookmarkDao().update(data)
+    }
+
+    fun repairRedirectedBookmark(
+        oldId: String,
+        newId: String,
+        newTitle: String,
+        newSubChapter: String,
+    ) = viewModelScope.launch {
+        db.bookmarkDao().repairRedirect(
+            oldId = oldId,
+            newId = newId,
+            newTitle = newTitle,
+            newSubChapter = newSubChapter,
+        )
     }
 
 

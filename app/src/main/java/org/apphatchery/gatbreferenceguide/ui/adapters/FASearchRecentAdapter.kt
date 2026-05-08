@@ -29,14 +29,13 @@ class FASearchRecentAdapter(
         recentSearches.addAll(recentSearchesString?.split(",")?.map { RecentSearchItem(it) } ?: emptyList())
     }
 
-    fun updateRecentSearches(newSearch : String){
-
+    fun updateRecentSearches(newSearch: String) {
         if (newSearch.trim().isNotEmpty()) {
             val item = RecentSearchItem(newSearch)
             if (!recentSearches.contains(item)) {
                 recentSearches.add(0, item)
                 if (recentSearches.size > 3) {
-                    recentSearches.removeLast()
+                    recentSearches.removeAt(recentSearches.lastIndex)
                 }
                 saveRecentSearches()
                 notifyDataSetChanged()

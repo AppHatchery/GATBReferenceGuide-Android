@@ -3,4 +3,5 @@
     <dimen name="tab_padding_small">4dp</dimen>
     <dimen name="tab_padding_medium">8dp</dimen>
     <dimen name="tab_padding_large">12dp</dimen>
+    <dimen name="bottom_nav_height">72dp</dimen>
 </resources>

@@ -27,6 +27,7 @@ import org.apphatchery.gatbreferenceguide.ui.viewmodels.MainActivityViewModel
 import org.apphatchery.gatbreferenceguide.utils.getActionBar
 import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
 import org.apphatchery.gatbreferenceguide.utils.isChecked
+import org.apphatchery.gatbreferenceguide.utils.navigateSafe
 import org.apphatchery.gatbreferenceguide.utils.searchState
 
 @AndroidEntryPoint
@@ -37,8 +38,10 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
     private val subChapterFragmentArgs: SubChapterFragmentArgs by navArgs()
     private lateinit var faSubChapterAdapter: FASubChapterAdapter
     private lateinit var chapterEntity: ChapterEntity
+    private var resolvedChapterEntity: ChapterEntity? = null
     private val viewModel: FASubChapterViewModel by viewModels()
     private val mainViewModel: MainActivityViewModel by activityViewModels()
+    private var hadData = false
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,9 +49,19 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
         chapterEntity = subChapterFragmentArgs.chapterEntity
         viewModel.chapterId = chapterEntity.chapterId
 
+        // Always set toolbar title from the DB-backed chapter name (not the Home shortcut label).
+        viewModel.getChapterInfo(chapterEntity.chapterId).observe(viewLifecycleOwner) { dbChapter ->
+            resolvedChapterEntity = dbChapter
+            setActionBarTitle(dbChapter.chapterTitle)
+        }
+
 
         faSubChapterAdapter = FASubChapterAdapter()
         viewModel.getSubChapterEntity.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) hadData = true
+            if (hadData && it.isEmpty()) {
+                Log.w("SubChapterFragment", "SubChapter list became empty after having data")
+            }
             bind.apply {
                 faSubChapterAdapter.submitList(it)
             }
@@ -56,18 +69,19 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
 
 
         faSubChapterAdapter.itemClickCallback {
+            val chapterForNav = resolvedChapterEntity ?: chapterEntity
             val subChapterFragmentDirections =
                 SubChapterFragmentDirections.actionSubChapterFragmentToBodyFragment(
-                    BodyUrl(chapterEntity, it, ""), null
+                    BodyUrl(chapterForNav, it, ""), null
                 )
 
-            findNavController().navigate(subChapterFragmentDirections)
+            findNavController().navigateSafe(subChapterFragmentDirections)
         }
 
 
         bind.apply {
 
-            getActionBar(requireActivity())?.title = chapterEntity.chapterTitle
+            // Title is set via DB observation above.
 
             recyclerview.apply {
                 layoutManager = LinearLayoutManager(requireContext())
@@ -76,6 +90,8 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
         }
 
 
+        // Removed this entire search menu block:
+        /*
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -86,29 +102,9 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
                 return handleMenuItemSelection(menuItem)
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+        */
 
         requireActivity().getBottomNavigationView()?.isChecked(R.id.mainFragment)
-    }
-
-    private fun handleMenuItemSelection(item: MenuItem): Boolean {
-                if(searchState.currentState.toString() == "IN_SEARCH"){
-            if (item.itemId == R.id.searchView) {
-                val comp =   findNavController().popBackStack(R.id.globalSearchFragment,false)
-                if(!comp){
-                    if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
-                        .also {
-                            findNavController().navigate(it)
-                        }
-                }
-            }
-        }else{
-            if (item.itemId == R.id.searchView) SubChapterFragmentDirections.actionGlobalGlobalSearchFragment()
-            .also {
-                findNavController().navigate(it)
-            }
-        }
-
-        return false
     }
 
 }

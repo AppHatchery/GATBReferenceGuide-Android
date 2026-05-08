@@ -7,27 +7,41 @@
     android:orientation="vertical"
     tools:context=".ui.fragments.SavedFragment">
 
-
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <!-- Bookmarks RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/bookmarks_recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:orientation="vertical"
+        android:paddingTop="42dp"
+        android:paddingBottom="@dimen/bottom_nav_height"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?savedTopBar"/>
+    <!-- No Bookmarks Layout -->
+    <include
+        android:id="@+id/no_bookmarks_layout"
+        layout="@layout/include_fragment_no_bookmark"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/view_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
-
+    <!-- Deletion confirmation card overlay -->
+    <include
+        android:id="@+id/delete_card_container"
+        layout="@layout/include_confirmation_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

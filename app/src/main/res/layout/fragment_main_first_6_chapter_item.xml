@@ -9,21 +9,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        app:cardCornerRadius="10dp">
-
+        app:cardCornerRadius="10dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="?attr/chapterBackgroundColorWhite">
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button"
-            style="@style/TextAppearance.AppCompat.Medium"
+             style="@style/body1Medium"
             android:layout_width="match_parent"
-            android:layout_height="77dp"
+            android:layout_height="wrap_content"
+            android:minHeight="77dp"
             android:background="@drawable/ic_shape_bg_chapter"
-            android:ellipsize="end"
+            android:ellipsize="none"
+            android:singleLine="false"
             android:foreground="?attr/selectableItemBackground"
-            android:gravity="center"
-            android:maxLines="3"
+            android:gravity="center_vertical|start"
+            android:maxLines="8"
+            android:breakStrategy="simple"
+            android:hyphenationFrequency="none"
             android:paddingHorizontal="20dp"
             android:textAllCaps="false"
-            android:textColor="@color/black"
+            android:drawableTop="@drawable/ic_baseline_chapter_1"
+            android:drawablePadding="11dp"
+            android:textColor="?attr/colorTextBlackWhite"
             tools:text="@string/app_name" />
     </androidx.cardview.widget.CardView>
 

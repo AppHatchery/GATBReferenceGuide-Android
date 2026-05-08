@@ -15,7 +15,7 @@ class PrivacyPolicy : BaseFragment(R.layout.fragment_web_view) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         bind = FragmentWebViewBinding.bind(view)
         val baseURL = "file://" + requireContext().cacheDir.toString() + "/"
-        bind.bodyWebView.loadUrl(baseURL + PAGES_DIR + "privacy_policy" + EXTENSION)
+        bind.bodyWebView.loadUrl(baseURL + PAGES_DIR + "georgia_tb_privacy_policy" + EXTENSION)
     }
 
 }

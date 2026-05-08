@@ -59,91 +59,77 @@
     "id": "table_9_pediatric_dosage_isoniazid_in_children_(birth_to_15_years)",
     "subChapterTitle": "Special Clinical Situations",
     "subChapterId": 24,
-    "chartTitle": "Table 9: Pediatric dosage - isoniazid in children (birth to 15 years)",
+    "chartTitle": "Table 9: Pediatric Dosage in Children ( birth to 15 years)",
     "chartHomePosition": 0
   },
   {
-    "id": "table_10_pediatric_dosages_rifampin_in_children_(birth_to_15_years)",
+    "id": "table_10_antituberculosis_antibiotics_in_adult_patients_with_renal_impairment",
     "subChapterTitle": "Special Clinical Situations",
     "subChapterId": 24,
-    "chartTitle": "Table 10: Pediatric dosages - rifampin in children (birth to 15 years) dose for either daily or twice weekly therapy",
+    "chartTitle": "Table 10: Antituberculosis Antibiotics in Adult Patients with Renal Impairment",
     "chartHomePosition": 0
   },
   {
-    "id": "table_11_pediatric_dosages_ethambutol_in_children_(birth_to_15_years)",
+    "id": "table_11_antituberculosis_medications_which_may_be_used_for_patients_who_have_contraindications_to_or_intolerance",
     "subChapterTitle": "Special Clinical Situations",
     "subChapterId": 24,
-    "chartTitle": "Table 11: Pediatric dosages - Ethambutol in children (birth to 15 years)\nEthambutol is available in 100mg and 400 mg tablets",
+    "chartTitle": "Table 11: Antituberculosis Medications for Patients who have Contraindications to or Intolerance of First Line Agents or require IV Therapy during Acute or Critical Illness",
     "chartHomePosition": 0
   },
   {
-    "id": "table_12_pediatric_dosages_pyrazinamide_in_children_(birth_to_15_years)",
+    "id": "table_12_clinical_situations_for_which_standard_therapy_cannot_be_given_or_is_not_well_tolerated",
     "subChapterTitle": "Special Clinical Situations",
     "subChapterId": 24,
-    "chartTitle": "Table 12: Pediatric Dosages - Pyrazinamide in children (birth to 15 years)\nPyrazinamide is available in 500 mg tablets which are scored and can be cut in ½.",
+    "chartTitle": "Table 12: Clinical Situations for which Standard Therapy cannot be given or is not well-tolerated or may not be effective: Potential Alternative Regimens (Dosing and/or Drugs)",
     "chartHomePosition": 0
   },
   {
-    "id": "table_13_antituberculosis_antibiotics_in_adult_patients_with_renal_impairment",
+    "id": "table_13_when_to_start_hiv_therapy",
     "subChapterTitle": "Special Clinical Situations",
     "subChapterId": 24,
-    "chartTitle": "Table 13: Antituberculosis antibiotics in adult patients with renal impairment",
+    "chartTitle": "Table 13: When to Start HIV Therapy",
     "chartHomePosition": 0
   },
   {
-    "id": "table_14_antituberculosis_medications_which_may_be_used_for_patients_who_have_contraindications_to_or_intolerance",
+    "id": "table_14_what_to_start_choice_of_tb_therapy_and_antiretroviral_therapy_(art)_when_treating_co-infected_patients",
     "subChapterTitle": "Special Clinical Situations",
     "subChapterId": 24,
-    "chartTitle": "Table 14: Antituberculosis medications which may be used for patients who have contraindications to or intolerance of first line agents or who require IV therapy during acute or critical illness",
+    "chartTitle": "Table 14: What to start: Choice of TB Therapy and Antiretroviral Therapy (ART) when treating Co-infected Patients",
     "chartHomePosition": 0
   },
   {
-    "id": "table_15_clinical_situations_for_which_standard_therapy_cannot_be_given_or_is_not_well_tolerated",
+    "id": "table_15_summary_of_recommendations_for_treatment_of_active_tb_disease_in_persons_with_hiv",
     "subChapterTitle": "Special Clinical Situations",
     "subChapterId": 24,
-    "chartTitle": "Table 15: Clinical Situations for which standard therapy cannot be given or is not well- tolerated or may not be effective: Potential Alternative Regimens (Dosing and/or Drugs)",
+    "chartTitle": "Table 15: Summary of Recommendations for Treatment of Active TB Disease in Persons with HIV",
     "chartHomePosition": 0
   },
   {
-    "id": "table_16_when_to_start_hiv_therapy",
+    "id": "table_16_guidelines_for_treatment_of_extrapulmonary_tuberculosis",
     "subChapterTitle": "Antiretroviral Therapy (ART) and Treatment of HIV Seropositive Patients with Active Tuberculosis Disease",
     "subChapterId": 28,
-    "chartTitle": "Table 16: HHS Panel Recommendations on treatment of Tuberculosis Disease with HIV co-infection: Timing of Antiretroviral Therapy (ART) Initiation relative to TB treatment",
+    "chartTitle": "Table 16: Guidelines for Treatment of Extrapulmonary Tuberculosis: Length of Therapy and Adjunctive Use of Corticosteroids\n\n",
     "chartHomePosition": 0
   },
   {
-    "id": "table_17_what_to_start_choice_of_tb_therapy_and_antiretroviral_therapy_(art)_when)treating_co-infected_patients",
+    "id": "table_17_use_of_anti-tb_medications_in_special_situations_pregnancy_tuberculosis_meningitis_and_renal_failure",
     "subChapterTitle": "Antiretroviral Therapy (ART) and Treatment of HIV Seropositive Patients with Active Tuberculosis Disease",
     "subChapterId": 28,
-    "chartTitle": "Table 17: What to start: Choice of TB therapy and Antiretroviral Therapy (ART) when treating co-infected patients",
+    "chartTitle": "Table 17: Use of Anti-TB Medications in Special Situations: Pregnancy, Tuberculosis Meningitis, and Renal Failures",
     "chartHomePosition": 0
   },
   {
-    "id": "table_18_dosage_adjustments_for_art_and_rifamycins_when_used_in_combination",
-    "subChapterTitle": "Antiretroviral Therapy (ART) and Treatment of HIV Seropositive Patients with Active Tuberculosis Disease",
-    "subChapterId": 28,
-    "chartTitle": "Table 18: Dosage Adjustments for ART and Rifamycins when used in Combination",
+    "id": "table_18_grady_hospital_tb_isolation_policy",
+    "subChapterTitle": "Adjunctive Use of Corticosteroid Therapy",
+    "subChapterId": 32,
+    "chartTitle": "Table 18: Grady Hospital TB Isolation Policy",
     "chartHomePosition": 0
   },
   {
-    "id": "table_19_guidelines_for_treatment_of_extrapulmonary_tuberculosis",
-    "subChapterTitle": "Adjunctive Use of Corticosteroid Therapy (Table 19)",
-    "subChapterId": 31,
-    "chartTitle": "Table 19: Guidelines for Treatment of Extrapulmonary* Tuberculosis: Length of therapy and Adjunctive Use of Corticosteroids",
-    "chartHomePosition": 0
-  },
-  {
-    "id": "table_20_use_of_anti-tb_medications_in_special_situations_pregnancy_tuberculosis_meningitis_and_renal_failure",
-    "subChapterTitle": "Treatment of Active TB in Pregnancy",
-    "subChapterId": 33,
-    "chartTitle": "Table 20: Use of Anti-TB Medications in Special Situations: Pregnancy, Tuberculous Meningitis and Renal Failure",
-    "chartHomePosition": 0
-  },
-  {
-    "id": "table_21_grady_hospital_tb_isolation_policy",
-    "subChapterTitle": "Surveillance for Health Care Workers",
-    "subChapterId": 40,
-    "chartTitle": "Table 21: Grady Hospital TB Isolation Policy",
+    "id": "fig1_factors_to_be_considered",
+    "subChapterTitle": "Considerations",
+    "subChapterId": 22,
+    "chartTitle": "Figure 1: Factors to be considered in deciding to initiate treatment empirically for active tuberculosis (TB) (prior to microbiologic confirmation)",
     "chartHomePosition": 0
   }
 ]

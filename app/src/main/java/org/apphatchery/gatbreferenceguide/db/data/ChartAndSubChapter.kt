@@ -9,10 +9,10 @@ import org.apphatchery.gatbreferenceguide.db.entities.SubChapterEntity
 
 @Parcelize
 data class ChartAndSubChapter(
-    @Embedded val chartEntity: ChartEntity,
-    @Relation(
-        parentColumn = "subChapterTitle",
-        entityColumn = "subChapterTitle"
-    )
-    val subChapterEntity: SubChapterEntity
+@Embedded val chartEntity: ChartEntity,
+@Relation(
+parentColumn = "subChapterId",
+entityColumn = "subChapterId"
+)
+val subChapterEntity: SubChapterEntity
 ) : Parcelable

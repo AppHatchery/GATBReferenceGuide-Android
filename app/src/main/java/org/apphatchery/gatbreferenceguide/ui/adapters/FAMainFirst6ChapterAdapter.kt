@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.databinding.FragmentMainFirst6ChapterItemBinding
 import org.apphatchery.gatbreferenceguide.db.entities.ChapterEntity
 
@@ -33,6 +34,14 @@ class FAMainFirst6ChapterAdapter :
         fun onBinding(chapterEntity: ChapterEntity) =
             first6ChapterItemBinding.apply {
                 button.text = chapterEntity.chapterTitle
+
+                if (chapterEntity.chapterTitle == "All Chapters>") {
+                    button.setBackgroundResource(R.drawable.ic_shape_bg_chapter_see_all_chapter)
+                    button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_see_all_content, 0, 0, 0)
+                } else {
+                    button.setBackgroundResource(R.drawable.ic_shape_bg_chapter)
+                    button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_baseline_chapter_1, 0, 0, 0)
+                }
             }
 
 

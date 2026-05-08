@@ -22,4 +22,7 @@ interface HtmlInfoDao {
     @Query("DELETE FROM HtmlInfoEntity")
     suspend fun deleteAll()
 
+    @Query("SELECT COUNT(*) FROM HtmlInfoEntity")
+    suspend fun count(): Int
+
 }

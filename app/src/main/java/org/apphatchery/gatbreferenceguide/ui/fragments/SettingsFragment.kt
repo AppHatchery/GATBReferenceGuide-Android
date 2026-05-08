@@ -4,18 +4,23 @@ import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.pm.PackageInfoCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreference
 import dagger.hilt.android.AndroidEntryPoint
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FASettingsViewModel
 import org.apphatchery.gatbreferenceguide.utils.dialog
+import org.apphatchery.gatbreferenceguide.utils.navigateSafe
 import org.apphatchery.gatbreferenceguide.utils.safeDialogShow
 import org.apphatchery.gatbreferenceguide.utils.toast
 import java.util.*
@@ -26,7 +31,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private val viewModel by viewModels<FASettingsViewModel>()
 
     companion object {
-        const val CONTACT_EMAIL = "morgan.greenleaf@emory.edu"
+        const val CONTACT_EMAIL = "support@apphatchery.org"
     }
 
     private fun composeEmail() = Intent(Intent.ACTION_VIEW).apply {
@@ -34,44 +39,84 @@ class SettingsFragment : PreferenceFragmentCompat() {
         startActivity(this)
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val prefView = super.onCreateView(inflater, container, savedInstanceState)
+        val wrapper = FrameLayout(requireContext()).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        }
+        wrapper.addView(prefView)
+        val footer = inflater.inflate(R.layout.settings_footer, wrapper, false)
+        val density = resources.displayMetrics.density
+        val params = FrameLayout.LayoutParams(
+            FrameLayout.LayoutParams.MATCH_PARENT,
+            FrameLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            gravity = android.view.Gravity.BOTTOM
+            bottomMargin = (25 * density).toInt()
+        }
+        footer.layoutParams = params
+        wrapper.addView(footer)
+
+        val versionName = try {
+            val info = context?.packageManager?.getPackageInfo(context?.packageName ?: "", 0)
+            val name = info?.versionName ?: "0"
+            val code = info?.let { PackageInfoCompat.getLongVersionCode(it) } ?: 0L
+            "$name.$code"
+        } catch (e: Exception) { "0.0" }
+        val year = Calendar.getInstance().get(Calendar.YEAR)
+        footer.findViewById<TextView>(R.id.version).text = "Version $versionName"
+        footer.findViewById<TextView>(R.id.powered_by).text = "Powered by AppHatchery $year"
+
+        return wrapper
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setDivider(null)
+        setDividerHeight(0)
+    }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
-        val themeValue: Array<String> =
-            requireActivity().resources.getStringArray(R.array.theme_values)
-        val fontValue: Array<String> =
-            requireActivity().resources.getStringArray(R.array.font_entries)
 
-        findPreference<ListPreference>(getString(R.string.theme_key))?.let {
-            it.summary =
-                if (it.value.toString() == themeValue[0]) "System default" else it.value.toString()
-                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+        // Font Size preference -> opens font settings page
+        findPreference<Preference>(getString(R.string.font_key))?.setOnPreferenceClickListener {
+            findNavController().navigateSafe(
+                SettingsFragmentDirections.actionSettingsFragmentToFontSizeFragment()
+            )
+            true
+        }
 
+        // Dark Mode switch
+        findPreference<SwitchPreference>("dark_mode_key")?.let {
+            // Set initial state based on current theme
+            val currentNightMode = AppCompatDelegate.getDefaultNightMode()
+            it.isChecked = currentNightMode == AppCompatDelegate.MODE_NIGHT_YES
+            
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                when {
-                    newValue.toString() == themeValue[1] -> {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    }
-                    newValue.toString() == themeValue[2] -> {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    }
-                    else -> {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                    }
+                val nightMode = if (newValue as Boolean) {
+                    AppCompatDelegate.MODE_NIGHT_YES
+                } else {
+                    AppCompatDelegate.MODE_NIGHT_NO
                 }
-                requireActivity().recreate()
+                
+                // Apply theme change with animation
+                view?.postDelayed({
+                    AppCompatDelegate.setDefaultNightMode(nightMode)
+                }, 200)
+                
                 true
             }
         }
 
-        findPreference<ListPreference>(getString(R.string.font_key))?.let {
-            it.summary = fontValue[it.value.toString().toInt()]
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                it.summary = fontValue[newValue.toString().toInt()]
-                true
-            }
-        }
-
-
+        // Contact Us
         findPreference<Preference>(getString(R.string.contact_us_key))?.let {
             it.setOnPreferenceClickListener {
                 composeEmail()
@@ -79,31 +124,36 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
         }
 
+        // Give Feedback
+        findPreference<Preference>("give_feedback_key")?.let {
+            it.setOnPreferenceClickListener {
+                // Navigate to feedback or open email
+                composeEmail()
+                true
+            }
+        }
 
-        /*Privacy Policy OnPreferenceClickListener*/
+        // Legal (Privacy Policy)
         findPreference<Preference>(getString(R.string.privacy_policy_key)).also {
             it?.setOnPreferenceClickListener {
-                findNavController().navigate(
-                    SettingsFragmentDirections
-                        .actionSettingsFragmentToPrivacyPolicy()
+                findNavController().navigateSafe(
+                    SettingsFragmentDirections.actionSettingsFragmentToPrivacyPolicy()
                 )
                 true
             }
         }
 
-
-        /*About Us OnPreferenceClickListener*/
+        // About
         findPreference<Preference>(getString(R.string.about_us_key)).also {
             it?.setOnPreferenceClickListener {
-                findNavController().navigate(
-                    SettingsFragmentDirections
-                        .actionSettingsFragmentToAbout()
+                findNavController().navigateSafe(
+                    SettingsFragmentDirections.actionSettingsFragmentToAbout()
                 )
                 true
             }
         }
 
-        /*Reset App OnPreferenceClickListener*/
+        // Clear App Content (Reset)
         findPreference<Preference>(getString(R.string.reset_key)).also {
             it?.setOnPreferenceClickListener {
                 with(Dialog(requireContext()).dialog()) {
@@ -111,19 +161,17 @@ class SettingsFragment : PreferenceFragmentCompat() {
                     val message = findViewById<TextView>(R.id.message)
                     val yesButton = findViewById<View>(R.id.yesButton)
                     val noButton = findViewById<View>(R.id.noButton)
-                    "Are you sure you want to reset all data ?".also { message.text = it }
+                    "Are you sure you want to clear all app content?".also { message.text = it }
                     noButton.setOnClickListener { dismiss() }
                     yesButton.setOnClickListener {
                         dismiss()
                         viewModel.resetInfo(requireContext())
-                        requireContext().toast("App data has been reset.")
+                        requireContext().toast("App content has been cleared.")
                     }
                     safeDialogShow()
                 }
                 true
             }
         }
-
-
     }
 }

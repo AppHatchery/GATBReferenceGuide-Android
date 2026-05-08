@@ -14,8 +14,9 @@ interface GlobalSearchDao {
     suspend fun insert(data: List<GlobalSearchEntity>)
 
     @Query(
-        """SELECT  * FROM  GlobalSearchEntity WHERE GlobalSearchEntity 
-            MATCH :keyword ORDER BY GlobalSearchEntity.chapterId ASC, GlobalSearchEntity.subChapterId ASC"""
+        """SELECT DISTINCT * FROM GlobalSearchEntity 
+            WHERE GlobalSearchEntity MATCH :keyword 
+            ORDER BY GlobalSearchEntity.chapterId ASC, GlobalSearchEntity.subChapterId ASC"""
     )
     fun getGlobalSearchEntity(keyword: String =""): Flow<List<GlobalSearchEntity>>
 
@@ -31,5 +32,8 @@ interface GlobalSearchDao {
 
     @Query("DELETE FROM GlobalSearchEntity")
     suspend fun deleteAll()
+
+    @Query("SELECT COUNT(*) FROM GlobalSearchEntity")
+    suspend fun count(): Int
 
 }

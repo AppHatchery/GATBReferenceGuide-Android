@@ -36,8 +36,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/shape_rec_radius_4"
             android:backgroundTint="?attr/colorBlackWhite"
-            android:drawableTint="?attr/colorWhiteBlack"
-            android:drawableStart="@drawable/ic_baseline_folder_outline"
+            android:drawableStart="@drawable/ic_baseline_folder_bookmarked"
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
             android:padding="8dp"
@@ -74,19 +73,36 @@
             android:layout_height="wrap_content">
 
 
-            <androidx.appcompat.widget.AppCompatTextView
+            <LinearLayout
                 android:id="@+id/textview_chapter"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="Chapters"
-                android:textSize="17sp"
-                android:textStyle="bold"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:paddingVertical="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/recyclerview_first_6_chapters"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="HardcodedText" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/textview_chapter_icon"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_baseline_lung_2"
+                    android:contentDescription="@string/app_name" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textview_chapter_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Chapters"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
 
 
 
@@ -104,19 +120,36 @@
 
 
 
-            <androidx.appcompat.widget.AppCompatTextView
+           <LinearLayout
                 android:id="@+id/textview_charts"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="Charts"
-                android:textSize="17sp"
-                android:textStyle="bold"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:paddingVertical="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/recyclerview_first_6_charts"
                 app:layout_constraintStart_toStartOf="@+id/recyclerview_first_6_chapters"
-                app:layout_constraintTop_toBottomOf="@+id/recyclerview_first_6_chapters"
-                tools:ignore="HardcodedText" />
+                app:layout_constraintTop_toBottomOf="@+id/recyclerview_first_6_chapters">
+
+                <ImageView
+                    android:id="@+id/textview_charts_icon"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_baseline_lung_2"
+                    android:contentDescription="@string/app_name" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/textview_charts_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Charts"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
+
+            </LinearLayout>
 
 
             <androidx.recyclerview.widget.RecyclerView

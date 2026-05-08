@@ -15,31 +15,51 @@
 <body>
 
 <div class="uk-container">
+    <div>
+        <div class="chapter-header">
+            <div class="header-title">
+                <div>
+                    <img src="../assets/ic_chapter.svg" width="16" height="16" class="ic_chapter_icon">
+                </div>
+                <p class="chapter-title">IV. Laboratory Diagnosis of Active Tuberculosis</p>
+            </div>
+            <p class="last-updated"><i>Last Updated April 2026</i></p>
+        </div>
+        <hr>
+    </div>
 
+    <p class="uk-paragraph">
+        Below are some selected Diagnosis Test Characteristics:
+    </p>
 
-    <ul class="uk-list uk-list-decimal">
-        <li>
-            AFB smear
-            <ul class="uk-list uk-list-disc">
-                <li>Turnaround time is usually < 1 day.</li>
-                <li>AFB positive smears are not specific for Mycobacterium
+    <img src="../assets/selected_diagnosis_image_1.png" alt="Selected Diagnosis Test" class="uk-align-center">
+
+    <b class="toggle-title" onclick="toggleItem(this)"><span>AFB smear</span><span class="chevron-up">⌃</span></b>
+    <div class="item">
+        <ul class="uk-list uk-list-disc">
+            <li>Turnaround time is usually < 1 day.</li>
+            <li>AFB positive smears are not specific for Mycobacterium
                     tuberculosis. Non-tuberculous mycobacteria can also lead
-                    to positive AFB smears.
+                    to positive AFB smear results.
                 </li>
             </ul>
-        </li>
-        <li>AFB culture
+        </div>
+        
+        <b class="toggle-title" onclick="toggleItem(this)"><span>AFB culture</span><span class="chevron-up">⌃</span></b>
+        <div class="item">
             <ul class="uk-list uk-list-disc">
                 <li>Most laboratories use both solid and liquid culture media.</li>
                 <li>Growth can be detected as late as 8 weeks in either media.</li>
                 <li>Average time to culture positivity in solid cultures is 3-4 weeks and 10-14 days in liquid
                     media.
                 </li>
-                <li>Positive cultures are required for phenotypic drugsusceptibility testing and genotyping.
+                <li>A positive culture for M. tuberculosis is required for phenotypic drug susceptibility testing and genotyping
                 </li>
             </ul>
-        </li>
-        <li>Nucleic acid amplification test (NAAT)
+        </div>
+        
+        <b class="toggle-title" onclick="toggleItem(this)"><span>Nucleic acid amplification test (NAAT)</span><span class="chevron-up">⌃</span></b>
+        <div class="item">
             <ul class="uk-list uk-list-disc">
                 <li>Turnaround time is usually < 1 day if the laboratory is able
                     to run the test frequently.
@@ -47,19 +67,19 @@
                 <li>Several FDA and non-FDA approved NAATs are available
                     and performance characteristics are variable.
                 </li>
-                <li>Cepheid Xpert MTB/RIF (“Xpert MTB/RIF”) and Hologic
-                    Amplified Mycobacteria Tuberculosis Direct (“MTD”)
-                    NAATs are endorsed by ATS/IDSA/CDC guidelines.
+                <li>
+                    Xpert MTB/RIF (Cepheid) and other NAATs are endorsed by the ATS/IDSA/CDC guidelines and FDA approved.
                 </li>
                 <li>A positive AFB smear with negative Xpert MTB/RIF or
-                    MTD NAAT usually indicates presence of non-tuberculous
+                    other NAAT  usually indicates presence of non-tuberculous
                     mycobacteria in the sample.
                 </li>
-                <li>Xpert MTB/RIF also tests for genotypic evidence of rifampin susceptibility.</li>
+                <li>Xpert MTB/RIF also tests for genotypic evidence of rifampin resistance.</li>
             </ul>
-        </li>
+        </div>
 
-        <li>Histopathology
+        <b class="toggle-title" onclick="toggleItem(this)"><span>Histopathology</span><span class="chevron-up">⌃</span></b>
+        <div class="item">
             <ul class="uk-list uk-list-disc">
                 <li>Necrotizing granulomas in the appropriate clinical scenario should prompt strong
                     consideration for TB.
@@ -71,13 +91,12 @@
                     prompt concern for inadequate sampling.
                 </li>
             </ul>
-
-        </li>
-    </ul>
+        </div>
 
 </div>
 </body>
 
 <script src="../assets/uikit.js" type="text/javascript"></script>
 <script src="../assets/uikit-icons.js" type="text/javascript"></script>
+<script src="../assets/main.js" type="text/javascript"></script>
 </html>

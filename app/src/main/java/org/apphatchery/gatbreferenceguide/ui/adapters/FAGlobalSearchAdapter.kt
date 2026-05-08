@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
+import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -99,31 +100,25 @@ class FAGlobalSearchAdapter @Inject constructor(
                             FROM_HTML_MODE_LEGACY
                         )
                         searchTitle.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
+                        // Set chart icon before title
+                        val icon = ContextCompat.getDrawable(root.context, org.apphatchery.gatbreferenceguide.R.drawable.ic_baseline_charts_2)
+                        searchTitle.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null)
+                        searchTitle.compoundDrawablePadding = 6
                     } else {
                         searchTitle.text = "$romanChapterID. ${HtmlCompat.fromHtml(globalSearchEntity.searchTitle,FROM_HTML_MODE_LEGACY)}"
                         subChapter.text = HtmlCompat.fromHtml(globalSearchEntity.subChapter,FROM_HTML_MODE_LEGACY)
+                        // Set chapter icon before title
+                        val icon = ContextCompat.getDrawable(root.context, org.apphatchery.gatbreferenceguide.R.drawable.ic_baseline_chapter_2)
+                        searchTitle.setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null)
+                        searchTitle.compoundDrawablePadding = 6
                     }
                     textInBody.text = HtmlCompat.fromHtml(globalSearchEntity.textInBody, FROM_HTML_MODE_LEGACY)
+                    // Programmatic start-ellipsis: show leading "..." for overflow
+                    textInBody.maxLines = 1
+                    textInBody.ellipsize = TextUtils.TruncateAt.START
                 }.invokeOnCompletion {
 
-                    val bodyWithTags = globalSearchEntity.textInBody
-                    val pattern = ".*<span style='background-color: yellow; color: black; font-weight: bold;'>(.*?)</span>.*".toRegex()
-                    val matchResult = pattern.find(bodyWithTags)
-                    val extractedSearchValue = matchResult?.groupValues?.get(1) ?: ""
-
-                    val locationOfTarget = textInBody.text.indexOf(extractedSearchValue)
-
-                    if (locationOfTarget != -1) {
-                        textInBody.maxLines = 2
-                        textInBody.ellipsize = TextUtils.TruncateAt.MARQUEE
-
-                        // Add 2ms delay using Handler
-                        textInBody.postDelayed({
-                            val line = textInBody.layout.getLineForOffset(locationOfTarget)
-                            val y = textInBody.layout.getLineTop(line)
-                            textInBody.scrollTo(0, y)
-                        }, 5)  // 2 milliseconds delay
-                    }
+                    // When using single-line start ellipsis we skip marquee/scroll logic
                 }
 
             }
