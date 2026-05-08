@@ -48,7 +48,7 @@ import javax.inject.Inject
 import org.apphatchery.gatbreferenceguide.db.Database
 
 
-private const val BUILD_VERSION = 15
+private const val BUILD_VERSION = 16
 private const val PENDO_RELEASE_VERSION = "Apr-26-"
 
 @AndroidEntryPoint
@@ -80,9 +80,9 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     lateinit var db: Database
 
     companion object {
-        const val VISITOR_ID = ""
-        const val ACCOUNT_ID = "GTRG"
-    //    const val ACCOUNT_ID = "Test"
+         const val VISITOR_ID = ""
+         const val ACCOUNT_ID = "GTRG"
+//       const val ACCOUNT_ID = "Test"
     }
     private fun setupPendo() = Pendo.startSession(
         visitor_id,
