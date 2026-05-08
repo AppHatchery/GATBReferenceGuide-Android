@@ -27,6 +27,7 @@ import org.apphatchery.gatbreferenceguide.ui.viewmodels.MainActivityViewModel
 import org.apphatchery.gatbreferenceguide.utils.getActionBar
 import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
 import org.apphatchery.gatbreferenceguide.utils.isChecked
+import org.apphatchery.gatbreferenceguide.utils.navigateSafe
 import org.apphatchery.gatbreferenceguide.utils.searchState
 
 @AndroidEntryPoint
@@ -74,7 +75,7 @@ class SubChapterFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
                     BodyUrl(chapterForNav, it, ""), null
                 )
 
-            findNavController().navigate(subChapterFragmentDirections)
+            findNavController().navigateSafe(subChapterFragmentDirections)
         }
 
 

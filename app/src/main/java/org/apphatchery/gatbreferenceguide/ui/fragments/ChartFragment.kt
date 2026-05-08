@@ -15,6 +15,7 @@ import org.apphatchery.gatbreferenceguide.ui.adapters.FAChartAdapter
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FAChartViewModel
 import org.apphatchery.gatbreferenceguide.utils.getBottomNavigationView
 import org.apphatchery.gatbreferenceguide.utils.isChecked
+import org.apphatchery.gatbreferenceguide.utils.navigateSafe
 
 @AndroidEntryPoint
 class ChartFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
@@ -40,14 +41,12 @@ class ChartFragment : BaseFragment(R.layout.fragment_with_recyclerview) {
             faChartAdapter.itemClickCallback {
                 viewModel.getChapterInfo(it.subChapterEntity.chapterId)
                     .observe(viewLifecycleOwner) { chapterEntity ->
-                        ChartFragmentDirections.actionChartFragmentToBodyFragment(
-                            BodyUrl(chapterEntity, it.subChapterEntity, ""),
-                            it
-                        ).apply {
-                            findNavController().navigate(this)
-                        }
+                        findNavController().navigateSafe(
+                            ChartFragmentDirections.actionChartFragmentToBodyFragment(
+                                BodyUrl(chapterEntity, it.subChapterEntity, ""), it
+                            )
+                        )
                     }
-
             }
         }
 

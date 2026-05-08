@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import org.apphatchery.gatbreferenceguide.utils.navigateSafe
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,7 +57,7 @@ class ContactFragment : BaseFragment(R.layout.fragment_contact) {
                     putParcelable("contact", it)
                 }
 
-                findNavController().navigate(
+                findNavController().navigateSafe(
                     R.id.action_contactFragment_to_myContactDetailsFragment, bundle
                 )
             }
@@ -73,7 +74,7 @@ class ContactFragment : BaseFragment(R.layout.fragment_contact) {
                     putParcelable("contact", it)
                 }
 
-                findNavController().navigate(
+                findNavController().navigateSafe(
                     R.id.action_contactFragment_to_contactDetailsFragment, bundle
                 )
             }

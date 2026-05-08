@@ -20,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.apphatchery.gatbreferenceguide.R
 import org.apphatchery.gatbreferenceguide.ui.viewmodels.FASettingsViewModel
 import org.apphatchery.gatbreferenceguide.utils.dialog
+import org.apphatchery.gatbreferenceguide.utils.navigateSafe
 import org.apphatchery.gatbreferenceguide.utils.safeDialogShow
 import org.apphatchery.gatbreferenceguide.utils.toast
 import java.util.*
@@ -87,9 +88,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         // Font Size preference -> opens font settings page
         findPreference<Preference>(getString(R.string.font_key))?.setOnPreferenceClickListener {
-            findNavController().navigate(
-                SettingsFragmentDirections
-                    .actionSettingsFragmentToFontSizeFragment()
+            findNavController().navigateSafe(
+                SettingsFragmentDirections.actionSettingsFragmentToFontSizeFragment()
             )
             true
         }
@@ -136,9 +136,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // Legal (Privacy Policy)
         findPreference<Preference>(getString(R.string.privacy_policy_key)).also {
             it?.setOnPreferenceClickListener {
-                findNavController().navigate(
-                    SettingsFragmentDirections
-                        .actionSettingsFragmentToPrivacyPolicy()
+                findNavController().navigateSafe(
+                    SettingsFragmentDirections.actionSettingsFragmentToPrivacyPolicy()
                 )
                 true
             }
@@ -147,9 +146,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // About
         findPreference<Preference>(getString(R.string.about_us_key)).also {
             it?.setOnPreferenceClickListener {
-                findNavController().navigate(
-                    SettingsFragmentDirections
-                        .actionSettingsFragmentToAbout()
+                findNavController().navigateSafe(
+                    SettingsFragmentDirections.actionSettingsFragmentToAbout()
                 )
                 true
             }

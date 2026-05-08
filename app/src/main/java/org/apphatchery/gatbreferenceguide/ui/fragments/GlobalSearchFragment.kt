@@ -153,15 +153,15 @@ class GlobalSearchFragment : BaseFragment(R.layout.fragment_global_search) {
                         )
                         val chartAndSubChapter = ChartAndSubChapter(chartEntity, subChapter)
 
-                        GlobalSearchFragmentDirections.actionGlobalSearchFragmentToBodyFragment(
-                            BodyUrl(
-                                ChapterEntity(it.chapterId, it.searchTitle),
-                                subChapter,
-                                cleanSearchString
-                            ), if(it.isChart) chartAndSubChapter else null
-                        ).also {
-                            findNavController().navigate(it)
-                        }
+                        findNavController().navigateSafe(
+                            GlobalSearchFragmentDirections.actionGlobalSearchFragmentToBodyFragment(
+                                BodyUrl(
+                                    ChapterEntity(it.chapterId, it.searchTitle),
+                                    subChapter,
+                                    cleanSearchString
+                                ), if(it.isChart) chartAndSubChapter else null
+                            )
+                        )
                         bind.searchKeyword.clearFocus()
                     }
                 recentSearchAdapter.updateRecentSearches(bind.searchKeyword.text.toString())
