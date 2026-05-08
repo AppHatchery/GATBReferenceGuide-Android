@@ -21,9 +21,26 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    private fun recreateGlobalSearchFts(db: SupportSQLiteDatabase) {
+        db.execSQL("DROP TABLE IF EXISTS `GlobalSearchEntity`")
+        db.execSQL(
+            """
+            CREATE VIRTUAL TABLE IF NOT EXISTS `GlobalSearchEntity` USING fts4(
+                `searchTitle` TEXT NOT NULL,
+                `subChapter` TEXT NOT NULL,
+                `textInBody` TEXT NOT NULL,
+                `fileName` TEXT NOT NULL,
+                `chapterId` INTEGER NOT NULL,
+                `subChapterId` INTEGER NOT NULL,
+                `isChart` INTEGER NOT NULL,
+                `chartId` TEXT NOT NULL
+            )
+            """.trimIndent()
+        )
+    }
+
     private val MIGRATION_1_2 = object : Migration(1, 2) {
         override fun migrate(db: SupportSQLiteDatabase) {
-            // v2 introduces the Contact table. Creating it preserves existing tables/data.
             db.execSQL(
                 """
                 CREATE TABLE IF NOT EXISTS `Contact` (
@@ -39,6 +56,15 @@ object AppModule {
                 )
                 """.trimIndent()
             )
+            recreateGlobalSearchFts(db)
+        }
+    }
+
+    // Users who reached v2 via the broken MIGRATION_1_2 (which skipped the FTS recreation)
+    // still have GlobalSearchEntity without chartId. This migration fixes their schema.
+    private val MIGRATION_2_3 = object : Migration(2, 3) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            recreateGlobalSearchFts(db)
         }
     }
 
@@ -54,7 +80,7 @@ object AppModule {
     fun providesRoomDB(
         @ApplicationContext context: Context
     ) = Room.databaseBuilder(context, Database::class.java, "ga_tb_reference_guide.db")
-        .addMigrations(MIGRATION_1_2)
+        .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
         .build()
 
     @Singleton
